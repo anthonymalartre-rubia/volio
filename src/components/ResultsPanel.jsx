@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Download,
   Trash2,
@@ -61,7 +61,6 @@ export default function ResultsPanel({
   const [tooltipId, setTooltipId] = useState(null);
 
   const filteredProspects = useMemo(() => {
-    setPage(0);
     return prospects.filter((prospect) => {
       const q = searchText.toLowerCase();
       const matchesSearch =
@@ -77,6 +76,11 @@ export default function ResultsPanel({
       return matchesSearch && matchesDept && matchesType;
     });
   }, [prospects, searchText, selectedDept, selectedType]);
+
+  // Reset page when filters change (outside useMemo to avoid setState during render)
+  useEffect(() => {
+    setPage(0);
+  }, [searchText, selectedDept, selectedType]);
 
   const stats = useMemo(() => {
     const total = prospects.length;

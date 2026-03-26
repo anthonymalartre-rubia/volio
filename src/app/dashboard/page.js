@@ -1,14 +1,36 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
-import OverviewPanel from '@/components/OverviewPanel';
-import SearchPanel from '@/components/SearchPanel';
-import ResultsPanel from '@/components/ResultsPanel';
-import ExportPanel from '@/components/ExportPanel';
 import { useRouter } from 'next/navigation';
+
+// Lazy load panels — only loaded when navigated to
+const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
+const SearchPanel = lazy(() => import('@/components/SearchPanel'));
+const ResultsPanel = lazy(() => import('@/components/ResultsPanel'));
+const ExportPanel = lazy(() => import('@/components/ExportPanel'));
+
+const MAX_LOGS = 100;
+
+function addLog(prev, message) {
+  const logs = prev.logs.length >= MAX_LOGS
+    ? [...prev.logs.slice(-MAX_LOGS + 1), message]
+    : [...prev.logs, message];
+  return { ...prev, logs };
+}
+
+// Escape CSV values to prevent injection (quotes, formulas)
+function escapeCSV(value) {
+  if (value == null) return '';
+  let str = String(value);
+  // Strip leading formula characters to prevent CSV injection
+  str = str.replace(/^[=+\-@\t\r]/, "'$&");
+  // Escape double quotes
+  str = str.replace(/"/g, '""');
+  return `"${str}"`;
+}
 
 export default function Dashboard() {
   const [prospects, setProspects] = useState([]);
@@ -19,26 +41,21 @@ export default function Dashboard() {
   const [isEnriching, setIsEnriching] = useState(false);
   const [user, setUser] = useState(null);
   const [searchProgress, setSearchProgress] = useState({
-    current: 0,
-    total: 0,
-    currentQuery: '',
-    logs: [],
+    current: 0, total: 0, currentQuery: '', logs: [],
   });
   const [enrichProgress, setEnrichProgress] = useState({
-    current: 0,
-    total: 0,
-    currentSite: '',
-    logs: [],
-    foundScrape: 0,
-    foundGuess: 0,
+    current: 0, total: 0, currentSite: '', logs: [],
+    foundScrape: 0, foundGuess: 0,
   });
   const [isDeepEnriching, setIsDeepEnriching] = useState(false);
   const [deepEnrichProgress, setDeepEnrichProgress] = useState({
-    current: 0,
-    total: 0,
-    currentSite: '',
-    logs: [],
+    current: 0, total: 0, currentSite: '', logs: [],
   });
+
+  // Refs to avoid stale closures in async loops
+  const stopSearchRef = useRef(false);
+  const stopEnrichRef = useRef(false);
+  const stopDeepEnrichRef = useRef(false);
 
   const supabase = getSupabase();
   const router = useRouter();
@@ -48,7 +65,6 @@ export default function Dashboard() {
     const initializeApp = async () => {
       if (!supabase) return;
 
-      // Get current user
       const { data: { user: currentUser } } = await supabase.auth.getUser();
       if (!currentUser) {
         router.push('/login');
@@ -56,25 +72,22 @@ export default function Dashboard() {
       }
       setUser(currentUser);
 
-      // Check if API is configured
+      // Health check (GET is still unauthenticated — just checks config)
       try {
-        const response = await fetch('/api/places?health_check=true');
+        const response = await fetch('/api/places');
         setApiKeySet(response.ok);
-      } catch (error) {
-        console.error('API health check failed:', error);
+      } catch {
         setApiKeySet(false);
       }
 
-      // Load existing prospects for this user (RLS filters automatically)
+      // Load existing prospects (RLS filters by user)
       try {
         const { data, error } = await supabase
           .from('prospects')
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error('Error loading prospects:', error);
-        } else if (data) {
+        if (!error && data) {
           setProspects(data);
         }
       } catch (error) {
@@ -86,19 +99,13 @@ export default function Dashboard() {
   }, []);
 
   // Start scraping function
-  const startScraping = async (depts, b2bCats, coproCats, customQueries) => {
+  const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries) => {
+    stopSearchRef.current = false;
     setIsSearching(true);
     setActiveView('search');
-    setSearchProgress({
-      current: 0,
-      total: 0,
-      currentQuery: '',
-      logs: [],
-    });
+    setSearchProgress({ current: 0, total: 0, currentQuery: '', logs: [] });
 
     const taskList = [];
-
-    // Build task list from all combinations
     for (const dept of depts) {
       for (const cat of b2bCats) {
         taskList.push({ dept, category: cat, type: 'b2b' });
@@ -107,9 +114,7 @@ export default function Dashboard() {
         taskList.push({ dept, category: cat, type: 'copro' });
       }
     }
-
-    // Add custom queries
-    if (customQueries && customQueries.length > 0) {
+    if (customQueries?.length > 0) {
       for (const query of customQueries) {
         taskList.push({ query, type: 'custom' });
       }
@@ -121,36 +126,27 @@ export default function Dashboard() {
     const newProspects = [];
     const seenPlaceIds = new Set(prospects.map((p) => p.place_id));
 
-    // Process each task
     for (let i = 0; i < taskList.length; i++) {
-      if (!isSearching) break;
+      if (stopSearchRef.current) break;
 
       const task = taskList[i];
-      let queryStr = '';
-
-      if (task.type === 'custom') {
-        queryStr = task.query;
-      } else {
-        queryStr = `${task.category} ${task.dept}`;
-      }
+      const queryStr = task.type === 'custom'
+        ? task.query
+        : `${task.category} ${task.dept}`;
 
       setSearchProgress((prev) => ({
-        ...prev,
+        ...addLog(prev, `Searching: ${queryStr}`),
         current: i + 1,
         currentQuery: queryStr,
-        logs: [...prev.logs, `Searching: ${queryStr}`],
       }));
 
       try {
-        const params = new URLSearchParams();
-        params.append('query', queryStr);
-        if (task.type === 'b2b') {
-          params.append('type', 'b2b');
-        } else if (task.type === 'copro') {
-          params.append('type', 'copro');
-        }
-
-        const response = await fetch(`/api/places?${params.toString()}`);
+        // POST to places API with query + dept
+        const response = await fetch('/api/places', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: queryStr, dept: task.dept || depts[0] }),
+        });
         const data = await response.json();
 
         if (data.places && Array.isArray(data.places)) {
@@ -159,15 +155,17 @@ export default function Dashboard() {
               seenPlaceIds.add(place.place_id);
               newProspects.push({
                 place_id: place.place_id,
-                nom: place.name,
-                adresse: place.address,
-                telephone: place.phone,
-                site_web: place.website,
+                nom: place.nom,
+                adresse: place.adresse,
+                telephone: place.telephone,
+                site_web: place.site_web,
+                note: place.note,
+                nb_avis: place.nb_avis,
                 email: null,
                 email_method: null,
+                type: task.type,
                 departement: task.dept || null,
                 category: task.category || null,
-                query: queryStr,
                 user_id: user?.id,
                 created_at: new Date().toISOString(),
               });
@@ -175,36 +173,23 @@ export default function Dashboard() {
           }
         }
       } catch (error) {
-        console.error(`Error scraping ${queryStr}:`, error);
-        setSearchProgress((prev) => ({
-          ...prev,
-          logs: [...prev.logs, `Error: ${queryStr} - ${error.message}`],
-        }));
+        setSearchProgress((prev) => addLog(prev, `Error: ${queryStr} - ${error.message}`));
       }
 
-      // Add small delay to respect rate limits
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    // Save new prospects to state and Supabase
-    if (newProspects.length > 0) {
+    if (newProspects.length > 0 && supabase) {
       try {
-        const { error } = supabase ? await supabase
+        const { error } = await supabase
           .from('prospects')
-          .upsert(newProspects, { onConflict: 'place_id' }) : {};
+          .upsert(newProspects, { onConflict: 'place_id' });
 
         if (error) {
-          console.error('Error saving prospects to Supabase:', error);
-          setSearchProgress((prev) => ({
-            ...prev,
-            logs: [...prev.logs, `Error saving to database: ${error.message}`],
-          }));
+          setSearchProgress((prev) => addLog(prev, `Error saving: ${error.message}`));
         } else {
           setProspects((prev) => [...prev, ...newProspects]);
-          setSearchProgress((prev) => ({
-            ...prev,
-            logs: [...prev.logs, `Saved ${newProspects.length} new prospects`],
-          }));
+          setSearchProgress((prev) => addLog(prev, `Saved ${newProspects.length} new prospects`));
         }
       } catch (error) {
         console.error('Error upserting prospects:', error);
@@ -212,28 +197,20 @@ export default function Dashboard() {
     }
 
     setIsSearching(false);
-  };
+  }, [prospects, user, supabase]);
 
-  // Stop scraping function
-  const stopScraping = () => {
+  const stopScraping = useCallback(() => {
+    stopSearchRef.current = true;
     setIsSearching(false);
-  };
+  }, []);
 
-  // Start enrichment function
-  const startEnrichment = async () => {
+  // Enrichment
+  const startEnrichment = useCallback(async () => {
+    stopEnrichRef.current = false;
     setIsEnriching(true);
-    setEnrichProgress({
-      current: 0,
-      total: 0,
-      currentSite: '',
-      logs: [],
-      foundScrape: 0,
-      foundGuess: 0,
-    });
+    setEnrichProgress({ current: 0, total: 0, currentSite: '', logs: [], foundScrape: 0, foundGuess: 0 });
 
-    // Filter prospects that need enrichment
     const prospectsToEnrich = prospects.filter((p) => p.site_web && !p.email);
-
     const total = prospectsToEnrich.length;
     setEnrichProgress((prev) => ({ ...prev, total }));
 
@@ -241,15 +218,13 @@ export default function Dashboard() {
     let foundGuess = 0;
 
     for (let i = 0; i < prospectsToEnrich.length; i++) {
-      if (!isEnriching) break;
+      if (stopEnrichRef.current) break;
 
       const prospect = prospectsToEnrich[i];
-
       setEnrichProgress((prev) => ({
-        ...prev,
+        ...addLog(prev, `Enriching: ${prospect.nom}`),
         current: i + 1,
         currentSite: prospect.site_web,
-        logs: [...prev.logs, `Enriching: ${prospect.name}`],
       }));
 
       try {
@@ -261,15 +236,10 @@ export default function Dashboard() {
         const data = await response.json();
 
         if (data.email) {
-          const emailMethod = data.method || (data.scraped ? 'scraped' : 'guess');
+          const emailMethod = data.method || 'guess';
+          if (emailMethod === 'scrape') foundScrape++;
+          else if (emailMethod === 'guess') foundGuess++;
 
-          if (emailMethod === 'scraped') {
-            foundScrape += 1;
-          } else if (emailMethod === 'guess') {
-            foundGuess += 1;
-          }
-
-          // Update prospect in state
           setProspects((prev) =>
             prev.map((p) =>
               p.id === prospect.id
@@ -278,67 +248,49 @@ export default function Dashboard() {
             )
           );
 
-          // Update in Supabase
           if (supabase) {
-            try {
-              await supabase
-                .from('prospects')
-                .update({ email: data.email, email_method: emailMethod })
-                .eq('id', prospect.id);
-            } catch (error) {
-              console.error(`Error updating prospect ${prospect.id}:`, error);
-            }
+            await supabase
+              .from('prospects')
+              .update({ email: data.email, email_method: emailMethod })
+              .eq('id', prospect.id);
           }
 
           setEnrichProgress((prev) => ({
-            ...prev,
+            ...addLog(prev, `Found: ${data.email} (${emailMethod})`),
             foundScrape,
             foundGuess,
-            logs: [
-              ...prev.logs,
-              `Found: ${data.email} (${emailMethod})`,
-            ],
           }));
         } else {
-          setEnrichProgress((prev) => ({
-            ...prev,
-            logs: [...prev.logs, `No email found: ${prospect.name}`],
-          }));
+          setEnrichProgress((prev) => addLog(prev, `No email: ${prospect.nom}`));
         }
       } catch (error) {
-        console.error(`Error enriching ${prospect.name}:`, error);
-        setEnrichProgress((prev) => ({
-          ...prev,
-          logs: [...prev.logs, `Error: ${prospect.name} - ${error.message}`],
-        }));
+        setEnrichProgress((prev) => addLog(prev, `Error: ${prospect.nom} - ${error.message}`));
       }
 
-      // Add small delay to respect rate limits
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
     setIsEnriching(false);
-  };
+  }, [prospects, supabase]);
 
-  // Deep enrichment function (pattern detection + SMTP verification)
-  const startDeepEnrichment = async () => {
+  // Deep enrichment
+  const startDeepEnrichment = useCallback(async () => {
+    stopDeepEnrichRef.current = false;
     setIsDeepEnriching(true);
     setDeepEnrichProgress({ current: 0, total: 0, currentSite: '', logs: [] });
 
-    // Get prospects with a website (regardless of existing email)
     const prospectsToEnrich = prospects.filter((p) => p.site_web);
     const total = prospectsToEnrich.length;
     setDeepEnrichProgress((prev) => ({ ...prev, total }));
 
     for (let i = 0; i < prospectsToEnrich.length; i++) {
-      if (!isDeepEnriching) break;
+      if (stopDeepEnrichRef.current) break;
 
       const prospect = prospectsToEnrich[i];
       setDeepEnrichProgress((prev) => ({
-        ...prev,
+        ...addLog(prev, `Deep scan: ${prospect.nom}`),
         current: i + 1,
         currentSite: prospect.site_web,
-        logs: [...prev.logs, `Deep scan: ${prospect.nom}`],
       }));
 
       try {
@@ -349,25 +301,20 @@ export default function Dashboard() {
         });
         const data = await response.json();
 
-        // Collect all found emails (scraped + generated)
         const allEmails = [
-          ...(data.scrapedEmails || []).map((e) => ({ ...e, method: e.type === 'personal' ? 'scrape' : 'scrape' })),
+          ...(data.scrapedEmails || []).map((e) => ({ ...e, method: 'scrape' })),
           ...(data.generatedEmails || []).map((e) => ({
             email: e.email,
             method: e.verified ? 'deep-verified' : 'deep-pattern',
-            firstName: e.firstName,
-            lastName: e.lastName,
           })),
         ];
 
-        // Pick the best email: prefer scraped personal > deep-verified > scraped generic > deep-pattern
         const bestEmail = allEmails.find((e) => e.type === 'personal') ||
           allEmails.find((e) => e.method === 'deep-verified') ||
           allEmails.find((e) => e.source === 'scrape') ||
           allEmails.find((e) => e.method === 'deep-pattern');
 
-        if (bestEmail && bestEmail.email) {
-          // Update prospect in state
+        if (bestEmail?.email) {
           setProspects((prev) =>
             prev.map((p) =>
               p.id === prospect.id
@@ -375,22 +322,15 @@ export default function Dashboard() {
                 : p
             )
           );
-
-          // Update in Supabase
           if (supabase) {
             await supabase
               .from('prospects')
               .update({ email: bestEmail.email, email_method: bestEmail.method })
               .eq('id', prospect.id);
           }
-
-          setDeepEnrichProgress((prev) => ({
-            ...prev,
-            logs: [...prev.logs, `✓ ${bestEmail.email} (${bestEmail.method})`],
-          }));
-        } else {
-          // Fallback to contact@ guess if no email at all
-          if (!prospect.email) {
+          setDeepEnrichProgress((prev) => addLog(prev, `+ ${bestEmail.email} (${bestEmail.method})`));
+        } else if (!prospect.email) {
+          try {
             const domain = new URL(prospect.site_web).hostname.replace(/^www\./, '');
             const guessEmail = `contact@${domain}`;
             setProspects((prev) =>
@@ -406,102 +346,79 @@ export default function Dashboard() {
                 .update({ email: guessEmail, email_method: 'guess' })
                 .eq('id', prospect.id);
             }
-          }
-
-          const namesFound = data.names?.length || 0;
-          setDeepEnrichProgress((prev) => ({
-            ...prev,
-            logs: [...prev.logs, `— ${prospect.nom} (${namesFound} noms trouvés, pas d'email vérifié)`],
-          }));
+          } catch {}
+          setDeepEnrichProgress((prev) => addLog(prev, `~ ${prospect.nom} (fallback guess)`));
+        } else {
+          setDeepEnrichProgress((prev) => addLog(prev, `- ${prospect.nom} (no new email)`));
         }
       } catch (error) {
-        setDeepEnrichProgress((prev) => ({
-          ...prev,
-          logs: [...prev.logs, `✗ ${prospect.nom}: ${error.message}`],
-        }));
+        setDeepEnrichProgress((prev) => addLog(prev, `x ${prospect.nom}: ${error.message}`));
       }
 
-      // Delay between requests
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
     setIsDeepEnriching(false);
-  };
+  }, [prospects, supabase]);
 
-  // Stop enrichment function
-  const stopEnrichment = () => {
+  const stopEnrichment = useCallback(() => {
+    stopEnrichRef.current = true;
+    stopDeepEnrichRef.current = true;
     setIsEnriching(false);
     setIsDeepEnriching(false);
-  };
+  }, []);
 
-  // Delete all prospects function
-  const deleteAllProspects = async () => {
-    if (!confirm('Êtes-vous sûr ? Tous les prospects seront supprimés.')) {
-      return;
-    }
-
+  // Delete all prospects
+  const deleteAllProspects = useCallback(async () => {
     try {
-      if (supabase) {
+      if (supabase && user) {
         const { error } = await supabase
           .from('prospects')
           .delete()
-          .neq('id', '');
+          .eq('user_id', user.id);
         if (error) console.error('Error deleting prospects:', error);
       }
       setProspects([]);
     } catch (error) {
       console.error('Error deleting all prospects:', error);
     }
-  };
+  }, [supabase, user]);
 
-  // Download CSV function
-  const downloadCSV = (format) => {
-    if (prospects.length === 0) {
-      alert('Aucun prospect à exporter');
-      return;
-    }
+  // CSV export with injection protection
+  const downloadCSV = useCallback((format) => {
+    if (prospects.length === 0) return;
 
-    let csv = '';
-    const headers =
-      format === 'zoho'
-        ? ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Website', 'Address']
-        : ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
+    const headers = format === 'zoho'
+      ? ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Website', 'Address']
+      : ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
 
-    csv += headers.join(',') + '\n';
-
-    for (const prospect of prospects) {
-      let row = [];
-
+    const rows = prospects.map((prospect) => {
       if (format === 'zoho') {
         const nameParts = (prospect.nom || '').split(' ');
-        const firstName = nameParts[0] || '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-
-        row = [
-          `"${firstName}"`,
-          `"${lastName}"`,
-          `"${prospect.email || ''}"`,
-          `"${prospect.telephone || ''}"`,
-          `"${prospect.nom || ''}"`,
-          `"${prospect.site_web || ''}"`,
-          `"${prospect.adresse || ''}"`,
-        ];
-      } else {
-        row = [
-          `"${prospect.nom || ''}"`,
-          `"${prospect.email || ''}"`,
-          `"${prospect.telephone || ''}"`,
-          `"${prospect.site_web || ''}"`,
-          `"${prospect.adresse || ''}"`,
-          `"${prospect.departement || ''}"`,
-          `"${prospect.category || ''}"`,
-        ];
+        return [
+          escapeCSV(nameParts[0] || ''),
+          escapeCSV(nameParts.slice(1).join(' ') || ''),
+          escapeCSV(prospect.email),
+          escapeCSV(prospect.telephone),
+          escapeCSV(prospect.nom),
+          escapeCSV(prospect.site_web),
+          escapeCSV(prospect.adresse),
+        ].join(',');
       }
+      return [
+        escapeCSV(prospect.nom),
+        escapeCSV(prospect.email),
+        escapeCSV(prospect.telephone),
+        escapeCSV(prospect.site_web),
+        escapeCSV(prospect.adresse),
+        escapeCSV(prospect.departement),
+        escapeCSV(prospect.category),
+      ].join(',');
+    });
 
-      csv += row.join(',') + '\n';
-    }
-
-    const blob = new Blob([csv], { type: 'text/csv' });
+    // Add BOM for Excel UTF-8 compatibility
+    const csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n') + '\n';
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -510,54 +427,14 @@ export default function Dashboard() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  };
+  }, [prospects]);
 
-  // Render active panel
-  const renderPanel = () => {
-    switch (activeView) {
-      case 'overview':
-        return (
-          <OverviewPanel
-            prospects={prospects}
-            onNavigate={setActiveView}
-          />
-        );
-      case 'search':
-        return (
-          <SearchPanel
-            apiKeySet={apiKeySet}
-            isSearching={isSearching}
-            searchProgress={searchProgress}
-            onStartScraping={startScraping}
-            onStopScraping={stopScraping}
-          />
-        );
-      case 'results':
-        return (
-          <ResultsPanel
-            prospects={prospects}
-            isEnriching={isEnriching}
-            isDeepEnriching={isDeepEnriching}
-            enrichProgress={enrichProgress}
-            deepEnrichProgress={deepEnrichProgress}
-            onStartEnrichment={startEnrichment}
-            onStartDeepEnrichment={startDeepEnrichment}
-            onStopEnrichment={stopEnrichment}
-            onDeleteAll={deleteAllProspects}
-            onDownloadCSV={downloadCSV}
-          />
-        );
-      case 'export':
-        return (
-          <ExportPanel
-            prospects={prospects}
-            onDownloadCSV={downloadCSV}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  // Panel loading fallback
+  const panelFallback = (
+    <div className="flex items-center justify-center py-24">
+      <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#09090b] text-[#fafafa]">
@@ -579,7 +456,37 @@ export default function Dashboard() {
 
         <main className="flex-1 min-h-[calc(100vh-3.5rem)] p-6">
           <div className="max-w-6xl mx-auto">
-            {renderPanel()}
+            <Suspense fallback={panelFallback}>
+              {activeView === 'overview' && (
+                <OverviewPanel prospects={prospects} onNavigate={setActiveView} />
+              )}
+              {activeView === 'search' && (
+                <SearchPanel
+                  apiKeySet={apiKeySet}
+                  isSearching={isSearching}
+                  searchProgress={searchProgress}
+                  onStartScraping={startScraping}
+                  onStopScraping={stopScraping}
+                />
+              )}
+              {activeView === 'results' && (
+                <ResultsPanel
+                  prospects={prospects}
+                  isEnriching={isEnriching}
+                  isDeepEnriching={isDeepEnriching}
+                  enrichProgress={enrichProgress}
+                  deepEnrichProgress={deepEnrichProgress}
+                  onStartEnrichment={startEnrichment}
+                  onStartDeepEnrichment={startDeepEnrichment}
+                  onStopEnrichment={stopEnrichment}
+                  onDeleteAll={deleteAllProspects}
+                  onDownloadCSV={downloadCSV}
+                />
+              )}
+              {activeView === 'export' && (
+                <ExportPanel prospects={prospects} onDownloadCSV={downloadCSV} />
+              )}
+            </Suspense>
           </div>
         </main>
       </div>

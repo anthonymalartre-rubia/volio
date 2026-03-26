@@ -433,23 +433,31 @@ async function deepEnrich(url) {
 
 // ─── API Route ───────────────────────────────────────────
 
+import { getAuthenticatedUser } from '@/lib/auth';
+import { validateUrl } from '@/lib/url-validation';
+
 export async function POST(request) {
+  // Auth check
+  const { user } = await getAuthenticatedUser();
+  if (!user) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { url } = await request.json();
 
-    if (!url) {
-      return Response.json(
-        { error: 'Missing required field: url' },
-        { status: 400 }
-      );
+    // SSRF validation
+    const validation = validateUrl(url);
+    if (!validation.valid) {
+      return Response.json({ error: validation.error }, { status: 400 });
     }
 
-    const result = await deepEnrich(url);
+    const result = await deepEnrich(validation.url);
     return Response.json(result);
   } catch (error) {
     console.error('Deep enrich error:', error);
     return Response.json(
-      { error: error.message || 'Internal server error' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

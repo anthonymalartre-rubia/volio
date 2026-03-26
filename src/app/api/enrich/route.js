@@ -1,3 +1,6 @@
+import { getAuthenticatedUser } from '@/lib/auth';
+import { validateUrl } from '@/lib/url-validation';
+
 const BLOCKED_DOMAINS = [
   'example.com',
   'sentry.io',
@@ -21,21 +24,9 @@ const BLOCKED_DOMAINS = [
 ];
 
 const BLOCKED_EXTENSIONS = [
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.gif',
-  '.webp',
-  '.svg',
-  '.css',
-  '.js',
-  '.json',
-  '.xml',
-  '.pdf',
-  '.doc',
-  '.docx',
-  '.xlsx',
-  '.zip',
+  '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg',
+  '.css', '.js', '.json', '.xml', '.pdf', '.doc',
+  '.docx', '.xlsx', '.zip',
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -50,20 +41,17 @@ const COMMON_PATHS = [
 function extractEmailsFromHtml(html) {
   const emails = new Set();
 
-  // Extract from mailto: links
   const mailtoRegex = /mailto:([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/gi;
   let match;
   while ((match = mailtoRegex.exec(html)) !== null) {
     emails.add(match[1].toLowerCase());
   }
 
-  // Extract from regex
   const matches = html.matchAll(EMAIL_REGEX);
   for (const m of matches) {
     emails.add(m[0].toLowerCase());
   }
 
-  // Extract obfuscated patterns
   const obfuscatedRegex =
     /([a-zA-Z0-9._%+\-]+)\s*[\[\(\{](at|dot)[\]\)\}]\s*([a-zA-Z0-9.\-]+\s*[\[\(\{](com|fr|eu)[\]\)\}])/gi;
   while ((match = obfuscatedRegex.exec(html)) !== null) {
@@ -79,93 +67,44 @@ function extractEmailsFromHtml(html) {
 
 function isValidEmail(email) {
   if (!email) return false;
-
   const [localPart, domain] = email.split('@');
-
-  // Check blocked domains
-  if (BLOCKED_DOMAINS.includes(domain.toLowerCase())) {
-    return false;
-  }
-
-  // Check blocked extensions in local part
-  if (
-    BLOCKED_EXTENSIONS.some((ext) =>
-      localPart.toLowerCase().endsWith(ext)
-    )
-  ) {
-    return false;
-  }
-
-  // Check noreply/mailer-daemon
-  if (
-    localPart.toLowerCase().includes('noreply') ||
-    localPart.toLowerCase().includes('mailer-daemon')
-  ) {
-    return false;
-  }
-
+  if (!localPart || !domain) return false;
+  if (BLOCKED_DOMAINS.includes(domain.toLowerCase())) return false;
+  if (BLOCKED_EXTENSIONS.some((ext) => localPart.toLowerCase().endsWith(ext))) return false;
+  if (localPart.toLowerCase().includes('noreply') || localPart.toLowerCase().includes('mailer-daemon')) return false;
   return true;
 }
 
 function scoreEmail(email, domain) {
   if (!email) return 0;
-
   const [localPart, emailDomain] = email.split('@');
   let score = 0;
-
-  // Domain match (highest priority)
-  if (emailDomain.includes(domain)) {
-    score += 100;
-  }
-
-  // Contact/info prefix
-  const contactPrefixes = [
-    'contact',
-    'info',
-    'support',
-    'hello',
-    'business',
-  ];
-  if (
-    contactPrefixes.some((prefix) =>
-      localPart.toLowerCase().startsWith(prefix)
-    )
-  ) {
-    score += 80;
-  }
-
-  // Professional domain (not generic)
+  if (emailDomain.includes(domain)) score += 100;
+  const contactPrefixes = ['contact', 'info', 'support', 'hello', 'business'];
+  if (contactPrefixes.some((prefix) => localPart.toLowerCase().startsWith(prefix))) score += 80;
   const genericDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'];
   if (!genericDomains.includes(emailDomain.toLowerCase())) {
     score += 60;
   } else {
-    score += 20; // Generic email gets some points but much lower
+    score += 20;
   }
-
   return score;
 }
 
 async function fetchUrl(url, timeout = 10000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
       },
       signal: controller.signal,
     });
-
-    if (!response.ok) {
-      return null;
-    }
-
+    if (!response.ok) return null;
     return await response.text();
-  } catch (error) {
-    console.error(`Error fetching ${url}:`, error.message);
+  } catch {
     return null;
   } finally {
     clearTimeout(timeoutId);
@@ -174,8 +113,7 @@ async function fetchUrl(url, timeout = 10000) {
 
 function extractDomain(url) {
   try {
-    const urlObj = new URL(url);
-    return urlObj.hostname.replace('www.', '');
+    return new URL(url).hostname.replace('www.', '');
   } catch {
     return null;
   }
@@ -183,16 +121,12 @@ function extractDomain(url) {
 
 async function enrichEmail(url) {
   const domain = extractDomain(url);
-  if (!domain) {
-    return { email: '', method: '' };
-  }
+  if (!domain) return { email: '', method: '' };
 
-  // Fetch homepage
   let html = await fetchUrl(url);
   let emails = html ? extractEmailsFromHtml(html) : [];
   let validEmails = emails.filter(isValidEmail);
 
-  // If no valid emails, try common paths
   if (validEmails.length === 0) {
     for (const path of COMMON_PATHS) {
       const pathUrl = url.endsWith('/') ? `${url}${path.slice(1)}` : `${url}${path}`;
@@ -200,46 +134,45 @@ async function enrichEmail(url) {
       if (html) {
         emails = extractEmailsFromHtml(html);
         validEmails = emails.filter(isValidEmail);
-        if (validEmails.length > 0) {
-          break;
-        }
+        if (validEmails.length > 0) break;
       }
     }
   }
 
-  // Pick best email
   if (validEmails.length > 0) {
     const scoredEmails = validEmails.map((email) => ({
       email,
       score: scoreEmail(email, domain),
     }));
-
     scoredEmails.sort((a, b) => b.score - a.score);
     return { email: scoredEmails[0].email, method: 'scrape' };
   }
 
-  // Generate probable email
-  const probableEmail = `contact@${domain}`;
-  return { email: probableEmail, method: 'guess' };
+  return { email: `contact@${domain}`, method: 'guess' };
 }
 
 export async function POST(request) {
+  // Auth check
+  const { user } = await getAuthenticatedUser();
+  if (!user) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { url } = await request.json();
 
-    if (!url) {
-      return Response.json(
-        { error: 'Missing required field: url' },
-        { status: 400 }
-      );
+    // SSRF validation
+    const validation = validateUrl(url);
+    if (!validation.valid) {
+      return Response.json({ error: validation.error }, { status: 400 });
     }
 
-    const result = await enrichEmail(url);
+    const result = await enrichEmail(validation.url);
     return Response.json(result);
   } catch (error) {
     console.error('Enrich API route error:', error);
     return Response.json(
-      { error: error.message || 'Internal server error' },
+      { error: 'Internal server error' },
       { status: 500 }
     );
   }

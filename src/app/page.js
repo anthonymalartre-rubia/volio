@@ -1,8 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { getSupabase } from '@/lib/supabase';
 import {
   Search,
   Mail,
@@ -10,31 +6,19 @@ import {
   Shield,
   Zap,
   Globe,
-  ArrowRight,
-  CheckCircle2,
   MapPin,
   Building2,
   Users,
   BarChart3,
-  ChevronRight,
-  Star,
 } from 'lucide-react';
+import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
+
+export const metadata = {
+  title: 'Lead Generator — Prospection automatisée DOM-TOM',
+  description: 'Générez des leads B2B et copropriétés qualifiés en Guadeloupe, Martinique, Guyane et La Réunion. Enrichissement email automatique.',
+};
 
 export default function LandingPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const supabase = getSupabase();
-    if (supabase) {
-      supabase.auth.getUser().then(({ data: { user } }) => {
-        setIsLoggedIn(!!user);
-      });
-    }
-  }, []);
-
-  const ctaHref = isLoggedIn ? '/dashboard' : '/signup';
-  const ctaText = isLoggedIn ? 'Accéder au dashboard' : 'Commencer gratuitement';
-
   return (
     <div className="min-h-screen bg-[#09090b] text-[#fafafa] overflow-hidden">
       {/* Navigation */}
@@ -47,36 +31,13 @@ export default function LandingPage() {
             <span className="text-lg font-semibold">Lead Generator</span>
           </div>
           <div className="flex items-center gap-3">
-            {isLoggedIn ? (
-              <Link
-                href="/dashboard"
-                className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium transition-all"
-              >
-                Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="px-4 py-2 text-sm text-[#a1a1aa] hover:text-white transition"
-                >
-                  Se connecter
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium transition-all"
-                >
-                  Essai gratuit
-                </Link>
-              </>
-            )}
+            <NavAuth />
           </div>
         </div>
       </nav>
 
       {/* Hero */}
       <section className="relative pt-32 pb-24 px-6">
-        {/* Background effects */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-indigo-600/15 rounded-full blur-[120px]" />
           <div className="absolute top-40 left-1/4 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
@@ -103,13 +64,7 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href={ctaHref}
-              className="group flex items-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-base font-semibold transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-500/40"
-            >
-              {ctaText}
-              <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            <HeroCTA />
             <Link
               href="#features"
               className="flex items-center gap-2 px-8 py-3.5 rounded-xl border border-[#1e1e24] hover:border-[#3f3f46] text-base font-medium text-[#a1a1aa] hover:text-white transition-all"
@@ -118,7 +73,6 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Trust indicators */}
           <div className="flex items-center justify-center gap-8 mt-14 text-sm text-[#52525b]">
             <div className="flex items-center gap-2">
               <Shield size={16} className="text-green-500" />
@@ -135,10 +89,9 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Hero visual — Dashboard mockup */}
+        {/* Dashboard mockup */}
         <div className="relative max-w-5xl mx-auto mt-20">
           <div className="rounded-2xl border border-[#1e1e24] bg-[#111114] shadow-2xl shadow-black/50 overflow-hidden">
-            {/* Window chrome */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1e1e24] bg-[#0a0a0c]">
               <div className="w-3 h-3 rounded-full bg-[#ef4444]/80" />
               <div className="w-3 h-3 rounded-full bg-[#eab308]/80" />
@@ -149,9 +102,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            {/* Mockup content */}
             <div className="p-6">
-              {/* Stats row */}
               <div className="grid grid-cols-4 gap-4 mb-6">
                 {[
                   { label: 'Prospects', value: '2,847', color: 'text-indigo-400' },
@@ -165,7 +116,6 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-              {/* Table preview */}
               <div className="bg-[#0a0a0c] border border-[#1e1e24] rounded-xl overflow-hidden">
                 <div className="grid grid-cols-5 gap-4 px-4 py-2 text-xs text-[#52525b] border-b border-[#1e1e24] bg-[#111114]">
                   <span>Nom</span><span>Email</span><span>Téléphone</span><span>Ville</span><span>Type</span>
@@ -186,12 +136,11 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          {/* Glow under mockup */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 bg-indigo-600/20 blur-[60px]" />
         </div>
       </section>
 
-      {/* Logos / Regions */}
+      {/* Regions */}
       <section className="py-16 border-t border-b border-[#1e1e24]">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-center text-sm text-[#52525b] mb-8 uppercase tracking-wider font-medium">
@@ -199,15 +148,14 @@ export default function LandingPage() {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             {[
-              { code: '971', name: 'Guadeloupe', icon: '🏝️' },
-              { code: '972', name: 'Martinique', icon: '🌴' },
-              { code: '973', name: 'Guyane', icon: '🌿' },
-              { code: '974', name: 'La Réunion', icon: '🌋' },
+              { code: '971', name: 'Guadeloupe' },
+              { code: '972', name: 'Martinique' },
+              { code: '973', name: 'Guyane' },
+              { code: '974', name: 'La Réunion' },
             ].map((dept) => (
               <div key={dept.code} className="flex flex-col items-center gap-2 p-6 rounded-xl border border-[#1e1e24] bg-[#111114]/50 hover:border-indigo-600/30 transition">
-                <span className="text-3xl">{dept.icon}</span>
                 <span className="text-sm font-semibold text-[#fafafa]">{dept.name}</span>
-                <span className="text-xs text-[#52525b]">{dept.code}</span>
+                <span className="text-xs font-mono text-[#52525b]">{dept.code}</span>
               </div>
             ))}
           </div>
@@ -229,47 +177,14 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                icon: Search,
-                title: 'Recherche Google Places',
-                desc: 'Interroge automatiquement l\'API Google Places pour chaque combinaison département × catégorie. Des milliers de résultats en quelques minutes.',
-                color: 'from-blue-500 to-cyan-500',
-              },
-              {
-                icon: Mail,
-                title: 'Enrichissement email',
-                desc: 'Scraping intelligent des sites web : pages contact, mentions légales, patterns mailto. Scoring et validation automatique des emails trouvés.',
-                color: 'from-green-500 to-emerald-500',
-              },
-              {
-                icon: Building2,
-                title: '13 catégories B2B',
-                desc: 'Hôtels, restaurants, garages, cliniques, pharmacies, architectes... Toutes les catégories clés pour la prospection dans les DOM.',
-                color: 'from-indigo-500 to-violet-500',
-              },
-              {
-                icon: Users,
-                title: '6 catégories Copro',
-                desc: 'Syndics, administrateurs de biens, gestionnaires immobiliers. Ciblez le marché de la copropriété avec précision.',
-                color: 'from-purple-500 to-pink-500',
-              },
-              {
-                icon: Download,
-                title: 'Export CSV & Zoho',
-                desc: 'Exportez en CSV standard ou au format Zoho CRM. Intégrez directement vos leads dans votre pipeline commercial.',
-                color: 'from-amber-500 to-orange-500',
-              },
-              {
-                icon: Shield,
-                title: 'Données privées & sécurisées',
-                desc: 'Chaque utilisateur a son espace dédié. Vos prospects sont isolés et accessibles uniquement par vous.',
-                color: 'from-rose-500 to-red-500',
-              },
+              { icon: Search, title: 'Recherche Google Places', desc: "Interroge automatiquement l'API Google Places pour chaque combinaison département x catégorie. Des milliers de résultats en quelques minutes.", color: 'from-blue-500 to-cyan-500' },
+              { icon: Mail, title: 'Enrichissement email', desc: 'Scraping intelligent des sites web : pages contact, mentions légales, patterns mailto. Scoring et validation automatique des emails trouvés.', color: 'from-green-500 to-emerald-500' },
+              { icon: Building2, title: '13 catégories B2B', desc: 'Hôtels, restaurants, garages, cliniques, pharmacies, architectes... Toutes les catégories clés pour la prospection dans les DOM.', color: 'from-indigo-500 to-violet-500' },
+              { icon: Users, title: '6 catégories Copro', desc: 'Syndics, administrateurs de biens, gestionnaires immobiliers. Ciblez le marché de la copropriété avec précision.', color: 'from-purple-500 to-pink-500' },
+              { icon: Download, title: 'Export CSV & Zoho', desc: 'Exportez en CSV standard ou au format Zoho CRM. Intégrez directement vos leads dans votre pipeline commercial.', color: 'from-amber-500 to-orange-500' },
+              { icon: Shield, title: 'Données privées & sécurisées', desc: 'Chaque utilisateur a son espace dédié. Vos prospects sont isolés et accessibles uniquement par vous.', color: 'from-rose-500 to-red-500' },
             ].map((feature) => (
-              <div
-                key={feature.title}
-                className="group relative p-6 rounded-2xl border border-[#1e1e24] bg-[#111114] hover:border-[#3f3f46] transition-all duration-300"
-              >
+              <div key={feature.title} className="group relative p-6 rounded-2xl border border-[#1e1e24] bg-[#111114] hover:border-[#3f3f46] transition-all duration-300">
                 <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color} mb-4`}>
                   <feature.icon size={22} className="text-white" />
                 </div>
@@ -285,35 +200,15 @@ export default function LandingPage() {
       <section className="py-24 px-6 bg-[#0a0a0c]">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Comment ça marche
-            </h2>
-            <p className="text-[#a1a1aa] text-lg">
-              3 étapes simples pour remplir votre pipeline commercial
-            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Comment ça marche</h2>
+            <p className="text-[#a1a1aa] text-lg">3 étapes simples pour remplir votre pipeline commercial</p>
           </div>
-
           <div className="space-y-12">
             {[
-              {
-                step: '01',
-                title: 'Sélectionnez vos cibles',
-                desc: 'Choisissez les départements et les catégories de prospects qui vous intéressent. B2B, copropriété, ou requêtes personnalisées.',
-                icon: MapPin,
-              },
-              {
-                step: '02',
-                title: 'Lancez la recherche',
-                desc: 'Notre moteur interroge Google Places et collecte automatiquement tous les établissements correspondants : nom, adresse, téléphone, site web.',
-                icon: Search,
-              },
-              {
-                step: '03',
-                title: 'Enrichissez et exportez',
-                desc: 'L\'enrichissement automatique scrape les sites web pour trouver les emails. Exportez le tout en CSV ou directement dans Zoho CRM.',
-                icon: Download,
-              },
-            ].map((item, i) => (
+              { step: '01', title: 'Sélectionnez vos cibles', desc: 'Choisissez les départements et les catégories de prospects qui vous intéressent. B2B, copropriété, ou requêtes personnalisées.', icon: MapPin },
+              { step: '02', title: 'Lancez la recherche', desc: 'Notre moteur interroge Google Places et collecte automatiquement tous les établissements correspondants : nom, adresse, téléphone, site web.', icon: Search },
+              { step: '03', title: 'Enrichissez et exportez', desc: "L'enrichissement automatique scrape les sites web pour trouver les emails. Exportez le tout en CSV ou directement dans Zoho CRM.", icon: Download },
+            ].map((item) => (
               <div key={item.step} className="flex gap-8 items-start">
                 <div className="flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-2xl border border-indigo-500/30 bg-indigo-500/10">
                   <span className="text-xl font-bold text-indigo-400 font-mono">{item.step}</span>
@@ -335,7 +230,7 @@ export default function LandingPage() {
             {[
               { value: '19', label: 'Catégories de recherche', suffix: '' },
               { value: '4', label: 'Départements couverts', suffix: '' },
-              { value: '67', label: 'Taux d\'enrichissement email', suffix: '%' },
+              { value: '67', label: "Taux d'enrichissement email", suffix: '%' },
               { value: '100', label: 'Données isolées par user', suffix: '%' },
             ].map((stat) => (
               <div key={stat.label} className="text-center p-8 rounded-2xl border border-[#1e1e24] bg-[#111114]">
@@ -353,28 +248,13 @@ export default function LandingPage() {
       <section className="py-24 px-6 bg-[#0a0a0c]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Pour qui est Lead Generator ?
-            </h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Pour qui est Lead Generator ?</h2>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              {
-                title: 'Commerciaux terrain',
-                desc: 'Préparez vos tournées avec des listes de prospects qualifiés et leurs coordonnées complètes.',
-                icon: BarChart3,
-              },
-              {
-                title: 'Agences immobilières',
-                desc: 'Identifiez tous les syndics et gestionnaires de copropriétés dans votre zone.',
-                icon: Building2,
-              },
-              {
-                title: 'Prestataires B2B',
-                desc: 'Trouvez vos futurs clients parmi les hôtels, restaurants, garages et commerces des DOM.',
-                icon: Users,
-              },
+              { title: 'Commerciaux terrain', desc: 'Préparez vos tournées avec des listes de prospects qualifiés et leurs coordonnées complètes.', icon: BarChart3 },
+              { title: 'Agences immobilières', desc: 'Identifiez tous les syndics et gestionnaires de copropriétés dans votre zone.', icon: Building2 },
+              { title: 'Prestataires B2B', desc: 'Trouvez vos futurs clients parmi les hôtels, restaurants, garages et commerces des DOM.', icon: Users },
             ].map((useCase) => (
               <div key={useCase.title} className="p-8 rounded-2xl border border-[#1e1e24] bg-[#111114] text-center">
                 <div className="inline-flex p-4 rounded-2xl bg-indigo-500/10 mb-6">
@@ -392,7 +272,6 @@ export default function LandingPage() {
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="relative p-12 rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-500/10 to-transparent overflow-hidden">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-50" />
             <div className="relative">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
                 Prêt à booster votre prospection ?
@@ -400,13 +279,7 @@ export default function LandingPage() {
               <p className="text-[#a1a1aa] text-lg mb-8 max-w-xl mx-auto">
                 Créez votre compte en 30 secondes et commencez à générer des leads qualifiés dans les DOM-TOM.
               </p>
-              <Link
-                href={ctaHref}
-                className="group inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-lg font-semibold transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-500/40"
-              >
-                {ctaText}
-                <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+              <FooterCTA />
               <p className="text-xs text-[#52525b] mt-4">
                 Aucune carte bancaire requise
               </p>
@@ -431,7 +304,7 @@ export default function LandingPage() {
             <span>La Réunion</span>
           </div>
           <p className="text-xs text-[#52525b]">
-            &copy; {new Date().getFullYear()} Lead Generator. Tous droits réservés.
+            &copy; 2026 Lead Generator. Tous droits réservés.
           </p>
         </div>
       </footer>
