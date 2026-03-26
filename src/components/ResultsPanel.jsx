@@ -15,6 +15,7 @@ import {
   ChevronRight,
   FileSpreadsheet,
   Inbox,
+  Radar,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 
@@ -33,8 +34,11 @@ export default function ResultsPanel({
   prospects = [],
   onStartEnrichment,
   onStopEnrichment,
+  onStartDeepEnrichment,
   isEnriching,
+  isDeepEnriching,
   enrichProgress,
+  deepEnrichProgress,
   onDownloadCSV,
   onDeleteAll,
 }) {
@@ -125,16 +129,27 @@ export default function ResultsPanel({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl border border-[#1e1e24] bg-[#111114]">
         {/* Enrichment */}
-        {!isEnriching ? (
-          <button
-            onClick={onStartEnrichment}
-            disabled={prospects.length === 0}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-[#1e1e24] disabled:text-[#3f3f46] text-white text-xs font-semibold transition disabled:cursor-not-allowed"
-          >
-            <Zap size={14} />
-            Enrichir emails
-          </button>
-        ) : (
+        {!isEnriching && !isDeepEnriching ? (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onStartEnrichment}
+              disabled={prospects.length === 0}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-[#1e1e24] disabled:text-[#3f3f46] text-white text-xs font-semibold transition disabled:cursor-not-allowed"
+            >
+              <Zap size={14} />
+              Enrichir emails
+            </button>
+            <button
+              onClick={onStartDeepEnrichment}
+              disabled={prospects.length === 0}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:bg-[#1e1e24] disabled:text-[#3f3f46] text-white text-xs font-semibold transition disabled:cursor-not-allowed"
+              title="Crawl approfondi + détection pattern + vérification SMTP"
+            >
+              <Radar size={14} />
+              Deep Enrich
+            </button>
+          </div>
+        ) : (isEnriching || isDeepEnriching) ? (
           <div className="flex items-center gap-3">
             <button
               onClick={onStopEnrichment}
@@ -146,16 +161,21 @@ export default function ResultsPanel({
             <div className="flex items-center gap-2">
               <div className="w-24 h-1.5 bg-[#1e1e24] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-green-500 transition-all duration-300 rounded-full"
-                  style={{ width: `${enrichProgress_pct}%` }}
+                  className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-300 rounded-full"
+                  style={{ width: `${isDeepEnriching ? (deepEnrichProgress?.total > 0 ? (deepEnrichProgress.current / deepEnrichProgress.total) * 100 : 0) : enrichProgress_pct}%` }}
                 />
               </div>
               <span className="text-[10px] font-mono text-[#52525b]">
-                {enrichProgress?.current}/{enrichProgress?.total}
+                {isDeepEnriching ? `${deepEnrichProgress?.current || 0}/${deepEnrichProgress?.total || 0}` : `${enrichProgress?.current}/${enrichProgress?.total}`}
               </span>
             </div>
+            {isDeepEnriching && deepEnrichProgress?.currentSite && (
+              <span className="text-[10px] text-purple-400/60 truncate max-w-[150px] hidden sm:block">
+                {deepEnrichProgress.currentSite}
+              </span>
+            )}
           </div>
-        )}
+        ) : null}
 
         <div className="flex-1" />
 
@@ -249,9 +269,17 @@ export default function ResultsPanel({
                   <td className="px-4 py-2.5 text-[#a1a1aa] font-mono">{p.telephone || <span className="text-[#27272a]">—</span>}</td>
                   <td className="px-4 py-2.5">
                     {p.email ? (
-                      <span className={p.email_method === 'scrape' ? 'text-green-400' : p.email_method === 'guess' ? 'text-amber-400' : 'text-[#a1a1aa]'}>
+                      <span className={
+                        p.email_method === 'scrape' ? 'text-green-400' :
+                        p.email_method === 'deep-verified' ? 'text-purple-400' :
+                        p.email_method === 'deep-pattern' ? 'text-purple-400/70' :
+                        p.email_method === 'guess' ? 'text-amber-400' :
+                        'text-[#a1a1aa]'
+                      }>
                         {p.email}
                         {p.email_method === 'guess' && <span className="ml-1 text-[10px] opacity-50">~</span>}
+                        {p.email_method === 'deep-verified' && <span className="ml-1 text-[10px] opacity-50">✓</span>}
+                        {p.email_method === 'deep-pattern' && <span className="ml-1 text-[10px] opacity-50">≈</span>}
                       </span>
                     ) : (
                       <span className="text-[#27272a]">—</span>

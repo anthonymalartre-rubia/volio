@@ -32,6 +32,13 @@ export default function Dashboard() {
     foundScrape: 0,
     foundGuess: 0,
   });
+  const [isDeepEnriching, setIsDeepEnriching] = useState(false);
+  const [deepEnrichProgress, setDeepEnrichProgress] = useState({
+    current: 0,
+    total: 0,
+    currentSite: '',
+    logs: [],
+  });
 
   const supabase = getSupabase();
   const router = useRouter();
@@ -313,9 +320,118 @@ export default function Dashboard() {
     setIsEnriching(false);
   };
 
+  // Deep enrichment function (pattern detection + SMTP verification)
+  const startDeepEnrichment = async () => {
+    setIsDeepEnriching(true);
+    setDeepEnrichProgress({ current: 0, total: 0, currentSite: '', logs: [] });
+
+    // Get prospects with a website (regardless of existing email)
+    const prospectsToEnrich = prospects.filter((p) => p.site_web);
+    const total = prospectsToEnrich.length;
+    setDeepEnrichProgress((prev) => ({ ...prev, total }));
+
+    for (let i = 0; i < prospectsToEnrich.length; i++) {
+      if (!isDeepEnriching) break;
+
+      const prospect = prospectsToEnrich[i];
+      setDeepEnrichProgress((prev) => ({
+        ...prev,
+        current: i + 1,
+        currentSite: prospect.site_web,
+        logs: [...prev.logs, `Deep scan: ${prospect.nom}`],
+      }));
+
+      try {
+        const response = await fetch('/api/enrich-deep', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: prospect.site_web }),
+        });
+        const data = await response.json();
+
+        // Collect all found emails (scraped + generated)
+        const allEmails = [
+          ...(data.scrapedEmails || []).map((e) => ({ ...e, method: e.type === 'personal' ? 'scrape' : 'scrape' })),
+          ...(data.generatedEmails || []).map((e) => ({
+            email: e.email,
+            method: e.verified ? 'deep-verified' : 'deep-pattern',
+            firstName: e.firstName,
+            lastName: e.lastName,
+          })),
+        ];
+
+        // Pick the best email: prefer scraped personal > deep-verified > scraped generic > deep-pattern
+        const bestEmail = allEmails.find((e) => e.type === 'personal') ||
+          allEmails.find((e) => e.method === 'deep-verified') ||
+          allEmails.find((e) => e.source === 'scrape') ||
+          allEmails.find((e) => e.method === 'deep-pattern');
+
+        if (bestEmail && bestEmail.email) {
+          // Update prospect in state
+          setProspects((prev) =>
+            prev.map((p) =>
+              p.id === prospect.id
+                ? { ...p, email: bestEmail.email, email_method: bestEmail.method }
+                : p
+            )
+          );
+
+          // Update in Supabase
+          if (supabase) {
+            await supabase
+              .from('prospects')
+              .update({ email: bestEmail.email, email_method: bestEmail.method })
+              .eq('id', prospect.id);
+          }
+
+          setDeepEnrichProgress((prev) => ({
+            ...prev,
+            logs: [...prev.logs, `✓ ${bestEmail.email} (${bestEmail.method})`],
+          }));
+        } else {
+          // Fallback to contact@ guess if no email at all
+          if (!prospect.email) {
+            const domain = new URL(prospect.site_web).hostname.replace(/^www\./, '');
+            const guessEmail = `contact@${domain}`;
+            setProspects((prev) =>
+              prev.map((p) =>
+                p.id === prospect.id
+                  ? { ...p, email: guessEmail, email_method: 'guess' }
+                  : p
+              )
+            );
+            if (supabase) {
+              await supabase
+                .from('prospects')
+                .update({ email: guessEmail, email_method: 'guess' })
+                .eq('id', prospect.id);
+            }
+          }
+
+          const namesFound = data.names?.length || 0;
+          setDeepEnrichProgress((prev) => ({
+            ...prev,
+            logs: [...prev.logs, `— ${prospect.nom} (${namesFound} noms trouvés, pas d'email vérifié)`],
+          }));
+        }
+      } catch (error) {
+        setDeepEnrichProgress((prev) => ({
+          ...prev,
+          logs: [...prev.logs, `✗ ${prospect.nom}: ${error.message}`],
+        }));
+      }
+
+      // Delay between requests
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    }
+
+    setIsDeepEnriching(false);
+  };
+
   // Stop enrichment function
   const stopEnrichment = () => {
     setIsEnriching(false);
+    setIsDeepEnriching(false);
   };
 
   // Delete all prospects function
@@ -421,8 +537,11 @@ export default function Dashboard() {
           <ResultsPanel
             prospects={prospects}
             isEnriching={isEnriching}
+            isDeepEnriching={isDeepEnriching}
             enrichProgress={enrichProgress}
+            deepEnrichProgress={deepEnrichProgress}
             onStartEnrichment={startEnrichment}
+            onStartDeepEnrichment={startDeepEnrichment}
             onStopEnrichment={stopEnrichment}
             onDeleteAll={deleteAllProspects}
             onDownloadCSV={downloadCSV}
