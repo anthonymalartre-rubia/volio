@@ -189,21 +189,29 @@ export default function Dashboard() {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
+    setSearchProgress((prev) => addLog(prev, `Recherche terminée: ${newProspects.length} nouveaux prospects`));
+
     if (newProspects.length > 0 && supabase) {
       try {
-        const { error } = await supabase
-          .from('prospects')
-          .upsert(newProspects, { onConflict: 'place_id' });
+        // Insert in batches of 50 to avoid payload limits
+        for (let i = 0; i < newProspects.length; i += 50) {
+          const batch = newProspects.slice(i, i + 50);
+          const { error } = await supabase
+            .from('prospects')
+            .upsert(batch, { onConflict: 'place_id' });
 
-        if (error) {
-          setSearchProgress((prev) => addLog(prev, `Error saving: ${error.message}`));
-        } else {
-          setProspects((prev) => [...prev, ...newProspects]);
-          setSearchProgress((prev) => addLog(prev, `Saved ${newProspects.length} new prospects`));
+          if (error) {
+            setSearchProgress((prev) => addLog(prev, `DB error: ${error.message} (code: ${error.code})`));
+            break;
+          }
         }
+        setProspects((prev) => [...prev, ...newProspects]);
+        setSearchProgress((prev) => addLog(prev, `✓ ${newProspects.length} prospects sauvegardés`));
       } catch (error) {
-        console.error('Error upserting prospects:', error);
+        setSearchProgress((prev) => addLog(prev, `Exception: ${error.message}`));
       }
+    } else if (newProspects.length === 0) {
+      setSearchProgress((prev) => addLog(prev, `Aucun nouveau prospect (tous déjà existants)`));
     }
 
     setIsSearching(false);
