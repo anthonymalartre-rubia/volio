@@ -177,9 +177,6 @@ export default function Dashboard() {
                 email_method: null,
                 type: task.type,
                 departement: task.dept || null,
-                category: task.category || null,
-                user_id: user?.id,
-                created_at: new Date().toISOString(),
               });
             }
           }
@@ -390,7 +387,7 @@ export default function Dashboard() {
         const { error } = await supabase
           .from('prospects')
           .delete()
-          .eq('user_id', user.id);
+          .neq('id', '00000000-0000-0000-0000-000000000000');
         if (error) console.error('Error deleting prospects:', error);
       }
       setProspects([]);
