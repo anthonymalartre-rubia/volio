@@ -246,10 +246,11 @@ export default function Dashboard() {
       }));
 
       try {
-        const params = new URLSearchParams();
-        params.append('site', prospect.site_web);
-
-        const response = await fetch(`/api/enrich?${params.toString()}`);
+        const response = await fetch('/api/enrich', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: prospect.site_web }),
+        });
         const data = await response.json();
 
         if (data.email) {
