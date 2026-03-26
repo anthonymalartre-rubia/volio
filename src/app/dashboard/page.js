@@ -156,10 +156,15 @@ export default function Dashboard() {
           continue;
         }
 
+        const placesCount = data.places?.length || 0;
+        setSearchProgress((prev) => addLog(prev, `→ ${placesCount} résultats trouvés`));
+
         if (data.places && Array.isArray(data.places)) {
+          let added = 0;
           for (const place of data.places) {
             if (!seenPlaceIds.has(place.place_id)) {
               seenPlaceIds.add(place.place_id);
+              added++;
               newProspects.push({
                 place_id: place.place_id,
                 nom: place.nom,
@@ -177,6 +182,9 @@ export default function Dashboard() {
                 created_at: new Date().toISOString(),
               });
             }
+          }
+          if (added < placesCount) {
+            setSearchProgress((prev) => addLog(prev, `   (${placesCount - added} doublons ignorés)`));
           }
         }
       } catch (error) {
