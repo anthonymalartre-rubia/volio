@@ -1,4 +1,3 @@
-import { getAuthenticatedUser } from '@/lib/auth';
 import { validateUrl } from '@/lib/url-validation';
 
 const BLOCKED_DOMAINS = [
@@ -152,12 +151,6 @@ async function enrichEmail(url) {
 }
 
 export async function POST(request) {
-  // Auth check
-  const { user } = await getAuthenticatedUser();
-  if (!user) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
     const { url } = await request.json();
 

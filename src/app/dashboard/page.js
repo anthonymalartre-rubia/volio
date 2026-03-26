@@ -151,6 +151,11 @@ export default function Dashboard() {
         });
         const data = await response.json();
 
+        if (!response.ok) {
+          setSearchProgress((prev) => addLog(prev, `API error (${response.status}): ${data.error || 'Unknown'}`));
+          continue;
+        }
+
         if (data.places && Array.isArray(data.places)) {
           for (const place of data.places) {
             if (!seenPlaceIds.has(place.place_id)) {

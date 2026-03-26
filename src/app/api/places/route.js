@@ -1,8 +1,7 @@
 import { DEPTS, PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
-import { getAuthenticatedUser } from '@/lib/auth';
 
 export async function GET() {
-  // Health check — no auth needed, just checks if API key is set
+  // Health check — just checks if API key is set
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey) {
     return Response.json({ configured: false }, { status: 503 });
@@ -11,12 +10,6 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  // Auth check
-  const { user } = await getAuthenticatedUser();
-  if (!user) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
     const { query, dept } = await request.json();
 
