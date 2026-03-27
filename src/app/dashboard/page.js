@@ -560,13 +560,13 @@ export default function Dashboard() {
   });
   const stopWaterfallRef = useRef(false);
 
-  const startWaterfallEnrichment = useCallback(async () => {
+  const startWaterfallEnrichment = useCallback(async (customList = null) => {
     stopWaterfallRef.current = false;
     setIsWaterfallEnriching(true);
     const initStats = { scrape: 0, serper: 0, apollo: 0, enrichly: 0, anymail: 0, findymail: 0, guess: 0 };
     setWaterfallProgress({ current: 0, total: 0, currentSite: '', logs: [], stats: initStats });
 
-    const prospectsToEnrich = prospects.filter((p) => !p.email && p.site_web);
+    const prospectsToEnrich = customList || prospects.filter((p) => !p.email && p.site_web);
     const total = prospectsToEnrich.length;
     setWaterfallProgress((prev) => ({ ...prev, total }));
 
@@ -643,6 +643,13 @@ export default function Dashboard() {
     setIsDeepEnriching(false);
     setIsWaterfallEnriching(false);
   }, []);
+
+  const handleBulkEnrich = async (folderId) => {
+    let toEnrich = prospects.filter(p => !p.email && p.site_web);
+    if (folderId) toEnrich = toEnrich.filter(p => p.folder_id === folderId);
+    if (toEnrich.length === 0) return;
+    startWaterfallEnrichment(toEnrich);
+  };
 
   // Delete all prospects (optionally scoped to folder)
   const deleteAllProspects = useCallback(async (folderId) => {
@@ -780,6 +787,7 @@ export default function Dashboard() {
                   onStartDeepEnrichment={startDeepEnrichment}
                   onStartWaterfallEnrichment={startWaterfallEnrichment}
                   onStopEnrichment={stopEnrichment}
+                  onBulkEnrich={handleBulkEnrich}
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}
                   tags={tags}

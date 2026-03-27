@@ -128,6 +128,7 @@ export default function ResultsPanel({
   onCreateTag,
   onDeleteTag,
   onToggleProspectTag,
+  onBulkEnrich,
 }) {
   const [searchText, setSearchText] = useState("");
   const [selectedDept, setSelectedDept] = useState("all");
@@ -171,6 +172,10 @@ export default function ResultsPanel({
     const emails = folderProspects.filter((p) => p.email).length;
     const websites = folderProspects.filter((p) => p.site_web).length;
     return { total, phones, emails, websites };
+  }, [folderProspects]);
+
+  const prospectsWithoutEmail = useMemo(() => {
+    return folderProspects.filter((p) => p.site_web && !p.email).length;
   }, [folderProspects]);
 
   const totalPages = Math.ceil(filteredProspects.length / PAGE_SIZE);
@@ -423,6 +428,15 @@ export default function ResultsPanel({
             </span>
           </div>
         )}
+
+        <button
+          onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder)}
+          disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        >
+          <Zap className="h-3.5 w-3.5" />
+          Enrichir tout ({prospectsWithoutEmail})
+        </button>
 
         <div className="flex-1" />
 
