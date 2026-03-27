@@ -794,7 +794,10 @@ export default function Dashboard() {
           <div className="max-w-6xl mx-auto">
             <Suspense fallback={panelFallback}>
               {activeView === 'overview' && (
-                <OverviewPanel prospects={prospects} onNavigate={setActiveView} />
+                <OverviewPanel
+                  prospects={prospects}
+                  searchHistory={searchHistory}
+                />
               )}
               {activeView === 'search' && (
                 <SearchPanel
