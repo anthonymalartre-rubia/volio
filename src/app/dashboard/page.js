@@ -383,24 +383,26 @@ export default function Dashboard() {
     setIsDeepEnriching(false);
   }, [prospects, supabase]);
 
-  // Apollo premium enrichment
-  const [isApolloEnriching, setIsApolloEnriching] = useState(false);
-  const [apolloProgress, setApolloProgress] = useState({
+  // Waterfall enrichment (scrape → Apollo → Enrichly → Anymail → Findymail → guess)
+  const [isWaterfallEnriching, setIsWaterfallEnriching] = useState(false);
+  const [waterfallProgress, setWaterfallProgress] = useState({
     current: 0, total: 0, currentSite: '', logs: [],
+    stats: { scrape: 0, apollo: 0, enrichly: 0, anymail: 0, findymail: 0, guess: 0 },
   });
-  const stopApolloRef = useRef(false);
+  const stopWaterfallRef = useRef(false);
 
-  const startApolloEnrichment = useCallback(async () => {
-    stopApolloRef.current = false;
-    setIsApolloEnriching(true);
-    setApolloProgress({ current: 0, total: 0, currentSite: '', logs: [] });
+  const startWaterfallEnrichment = useCallback(async () => {
+    stopWaterfallRef.current = false;
+    setIsWaterfallEnriching(true);
+    const initStats = { scrape: 0, apollo: 0, enrichly: 0, anymail: 0, findymail: 0, guess: 0 };
+    setWaterfallProgress({ current: 0, total: 0, currentSite: '', logs: [], stats: initStats });
 
     const prospectsToEnrich = prospects.filter((p) => !p.email && p.site_web);
     const total = prospectsToEnrich.length;
-    setApolloProgress((prev) => ({ ...prev, total }));
+    setWaterfallProgress((prev) => ({ ...prev, total }));
 
     for (let i = 0; i < prospectsToEnrich.length; i++) {
-      if (stopApolloRef.current) break;
+      if (stopWaterfallRef.current) break;
 
       const prospect = prospectsToEnrich[i];
       let domain = '';
@@ -408,59 +410,64 @@ export default function Dashboard() {
         domain = new URL(prospect.site_web).hostname.replace(/^www\./, '');
       } catch {}
 
-      setApolloProgress((prev) => ({
-        ...addLog(prev, `Apollo: ${prospect.nom}`),
+      setWaterfallProgress((prev) => ({
+        ...addLog(prev, `🔍 ${prospect.nom} (${domain})`),
         current: i + 1,
         currentSite: domain,
       }));
 
       try {
-        const response = await fetch('/api/enrich-apollo', {
+        const response = await fetch('/api/enrich-waterfall', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: prospect.nom,
-            domain,
-            organization: prospect.nom,
-          }),
+          body: JSON.stringify({ url: prospect.site_web, name: prospect.nom }),
         });
         const data = await response.json();
 
         if (data.email) {
+          const method = data.source === 'guess' ? 'guess' : data.source;
           setProspects((prev) =>
             prev.map((p) =>
               p.id === prospect.id
-                ? { ...p, email: data.email, email_method: 'apollo' }
+                ? { ...p, email: data.email, email_method: method }
                 : p
             )
           );
           if (supabase) {
             await supabase
               .from('prospects')
-              .update({ email: data.email, email_method: 'apollo' })
+              .update({ email: data.email, email_method: method })
               .eq('id', prospect.id);
           }
-          setApolloProgress((prev) => addLog(prev, `✓ ${data.email}`));
+
+          // Build step summary
+          const steps = (data.waterfall || []).map((s) =>
+            `${s.found ? '✓' : '✗'} ${s.label}`
+          ).join(' → ');
+          setWaterfallProgress((prev) => ({
+            ...addLog(prev, `  ${data.source === 'guess' ? '~' : '✓'} ${data.email} (${data.source}) [${steps}]`),
+            stats: { ...prev.stats, [data.source]: (prev.stats[data.source] || 0) + 1 },
+          }));
         } else {
-          setApolloProgress((prev) => addLog(prev, `— pas d'email trouvé`));
+          setWaterfallProgress((prev) => addLog(prev, `  — aucun email trouvé`));
         }
       } catch (error) {
-        setApolloProgress((prev) => addLog(prev, `✗ ${error.message}`));
+        setWaterfallProgress((prev) => addLog(prev, `  ✗ erreur: ${error.message}`));
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
-    setIsApolloEnriching(false);
+    setIsWaterfallEnriching(false);
   }, [prospects, supabase]);
 
   const stopEnrichment = useCallback(() => {
     stopEnrichRef.current = true;
     stopDeepEnrichRef.current = true;
-    stopApolloRef.current = true;
+    stopWaterfallRef.current = true;
     setIsEnriching(false);
     setIsDeepEnriching(false);
-    setIsApolloEnriching(false);
+    setIsWaterfallEnriching(false);
   }, []);
 
   // Delete all prospects
@@ -569,13 +576,13 @@ export default function Dashboard() {
                   prospects={prospects}
                   isEnriching={isEnriching}
                   isDeepEnriching={isDeepEnriching}
-                  isApolloEnriching={isApolloEnriching}
+                  isWaterfallEnriching={isWaterfallEnriching}
                   enrichProgress={enrichProgress}
                   deepEnrichProgress={deepEnrichProgress}
-                  apolloProgress={apolloProgress}
+                  waterfallProgress={waterfallProgress}
                   onStartEnrichment={startEnrichment}
                   onStartDeepEnrichment={startDeepEnrichment}
-                  onStartApolloEnrichment={startApolloEnrichment}
+                  onStartWaterfallEnrichment={startWaterfallEnrichment}
                   onStopEnrichment={stopEnrichment}
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}

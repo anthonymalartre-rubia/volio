@@ -38,7 +38,10 @@ const EMAIL_METHOD_INFO = {
   scrape: { label: "Trouvé sur le site", color: "text-green-400" },
   "deep-verified": { label: "Vérifié (MX + pattern)", color: "text-purple-400" },
   "deep-pattern": { label: "Généré par pattern", color: "text-purple-400/70" },
-  apollo: { label: "Apollo.io (premium)", color: "text-orange-400" },
+  apollo: { label: "Apollo.io", color: "text-orange-400" },
+  enrichly: { label: "Enrichly", color: "text-cyan-400" },
+  anymail: { label: "Anymail Finder", color: "text-teal-400" },
+  findymail: { label: "Findymail", color: "text-sky-400" },
   guess: { label: "Email probable (contact@)", color: "text-amber-400" },
 };
 
@@ -47,13 +50,13 @@ export default function ResultsPanel({
   onStartEnrichment,
   onStopEnrichment,
   onStartDeepEnrichment,
-  onStartApolloEnrichment,
+  onStartWaterfallEnrichment,
   isEnriching,
   isDeepEnriching,
-  isApolloEnriching,
+  isWaterfallEnriching,
   enrichProgress,
   deepEnrichProgress,
-  apolloProgress,
+  waterfallProgress,
   onDownloadCSV,
   onDeleteAll,
 }) {
@@ -171,7 +174,7 @@ export default function ResultsPanel({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl border border-[#1e1e24] bg-[#111114]">
         {/* Enrichment */}
-        {!isEnriching && !isDeepEnriching && !isApolloEnriching ? (
+        {!isEnriching && !isDeepEnriching && !isWaterfallEnriching ? (
           <div className="flex items-center gap-2">
             <div className="relative group/tip">
               <button
@@ -205,17 +208,24 @@ export default function ResultsPanel({
             </div>
             <div className="relative group/tip">
               <button
-                onClick={onStartApolloEnrichment}
+                onClick={onStartWaterfallEnrichment}
                 disabled={prospects.length === 0}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 disabled:bg-[#1e1e24] disabled:from-[#1e1e24] disabled:to-[#1e1e24] disabled:text-[#3f3f46] text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed shadow-lg shadow-orange-600/10"
               >
                 <Crown size={14} />
-                Apollo Premium
+                Waterfall Pro
               </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[#1e1e24] border border-[#27272a] rounded-xl text-[10px] text-[#a1a1aa] w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
-                <div className="font-semibold text-orange-400 mb-1">Apollo.io API</div>
-                Base de données B2B mondiale. Trouve les emails professionnels vérifiés, titres, LinkedIn et infos entreprise.
-                <div className="text-[#3f3f46] mt-1">Premium • Très fiable</div>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-[#1e1e24] border border-[#27272a] rounded-xl text-[10px] text-[#a1a1aa] w-64 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
+                <div className="font-semibold text-orange-400 mb-1">Enrichissement cascade</div>
+                <div className="space-y-0.5">
+                  <div>1. Scraping site web (gratuit)</div>
+                  <div>2. Apollo.io ($79/mo)</div>
+                  <div>3. Enrichly ($59/mo)</div>
+                  <div>4. Anymail Finder</div>
+                  <div>5. Findymail</div>
+                  <div>6. Email deviné (fallback)</div>
+                </div>
+                <div className="text-[#3f3f46] mt-1">S'arrête dès qu'un email est trouvé</div>
               </div>
             </div>
           </div>
@@ -231,22 +241,22 @@ export default function ResultsPanel({
             <div className="flex items-center gap-2">
               <div className="w-24 h-1.5 bg-[#1e1e24] rounded-full overflow-hidden">
                 <div
-                  className={`h-full transition-all duration-300 rounded-full ${isApolloEnriching ? 'bg-gradient-to-r from-orange-500 to-amber-500' : 'bg-gradient-to-r from-purple-500 to-indigo-500'}`}
+                  className={`h-full transition-all duration-300 rounded-full ${isWaterfallEnriching ? 'bg-gradient-to-r from-orange-500 to-amber-500' : 'bg-gradient-to-r from-purple-500 to-indigo-500'}`}
                   style={{ width: `${
-                    isApolloEnriching ? (apolloProgress?.total > 0 ? (apolloProgress.current / apolloProgress.total) * 100 : 0) :
+                    isWaterfallEnriching ? (waterfallProgress?.total > 0 ? (waterfallProgress.current / waterfallProgress.total) * 100 : 0) :
                     isDeepEnriching ? (deepEnrichProgress?.total > 0 ? (deepEnrichProgress.current / deepEnrichProgress.total) * 100 : 0) :
                     enrichProgress_pct
                   }%` }}
                 />
               </div>
               <span className="text-[10px] font-mono text-[#52525b] tabular-nums">
-                {isApolloEnriching ? `${apolloProgress?.current || 0}/${apolloProgress?.total || 0}` :
+                {isWaterfallEnriching ? `${waterfallProgress?.current || 0}/${waterfallProgress?.total || 0}` :
                  isDeepEnriching ? `${deepEnrichProgress?.current || 0}/${deepEnrichProgress?.total || 0}` :
                  `${enrichProgress?.current}/${enrichProgress?.total}`}
               </span>
             </div>
-            <span className="text-[10px] truncate max-w-[150px] hidden sm:block" style={{ color: isApolloEnriching ? '#f97316' : '#a78bfa' }}>
-              {isApolloEnriching ? (apolloProgress?.currentSite || '') :
+            <span className="text-[10px] truncate max-w-[150px] hidden sm:block" style={{ color: isWaterfallEnriching ? '#f97316' : '#a78bfa' }}>
+              {isWaterfallEnriching ? (waterfallProgress?.currentSite || '') :
                isDeepEnriching ? (deepEnrichProgress?.currentSite || '') :
                (enrichProgress?.currentSite || '')}
             </span>
