@@ -25,7 +25,7 @@ import {
   X,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
-import { getScoreLabel } from "@/lib/scoring";
+import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 
 const shortUrl = (url) => {
   if (!url) return "";
@@ -612,7 +612,7 @@ export default function ResultsPanel({
                       <span className="font-mono text-[#52525b]">{p.departement}</span>
                     </td>
                     {(() => {
-                      const score = p.lead_score || 0;
+                      const score = p.lead_score || computeLeadScore(p);
                       const scoreInfo = getScoreLabel(score);
                       return (
                         <td className="px-3 py-2">
