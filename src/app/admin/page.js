@@ -25,7 +25,7 @@ export default function AdminPage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { router.push('/login'); return; }
 
-    // Check admin status
+    // Check admin via DB
     const { data: profile } = await supabase
       .from('user_profiles')
       .select('is_admin')
