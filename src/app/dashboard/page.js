@@ -59,6 +59,7 @@ export default function Dashboard() {
   });
   const [tags, setTags] = useState([]);
   const [prospectTagMap, setProspectTagMap] = useState({});
+  const [searchHistory, setSearchHistory] = useState([]);
 
   // Refs to avoid stale closures in async loops
   const stopSearchRef = useRef(false);
@@ -155,6 +156,14 @@ export default function Dashboard() {
       } catch (error) {
         console.error('Error fetching prospects:', error);
       }
+
+      // Load search history
+      const { data: sessions } = await supabase
+        .from('search_sessions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setSearchHistory(sessions || []);
     };
 
     initializeApp();
@@ -272,6 +281,22 @@ export default function Dashboard() {
     const total = taskList.length;
     setSearchProgress((prev) => ({ ...prev, total }));
 
+    // Save search session to DB
+    let session = null;
+    if (supabase && user) {
+      const { data: sessionData } = await supabase.from('search_sessions').insert({
+        user_id: user.id,
+        departments: depts,
+        categories: { b2b: b2bCats, copro: coproCats, custom: customQueries },
+        query_count: taskList.length,
+        results_count: 0,
+        status: 'running',
+        label: `Recherche ${new Date().toLocaleDateString('fr-FR')}`,
+        folder_id: folderId || null,
+      }).select().single();
+      session = sessionData;
+    }
+
     const newProspects = [];
     const seenPlaceIds = new Set(prospects.map((p) => p.place_id));
 
@@ -370,6 +395,17 @@ export default function Dashboard() {
       }
     } else if (newProspects.length === 0) {
       setSearchProgress((prev) => addLog(prev, `Aucun nouveau prospect (tous déjà existants)`));
+    }
+
+    // Update session status
+    if (session?.id && supabase) {
+      await supabase.from('search_sessions')
+        .update({ status: 'completed', results_count: newProspects.length })
+        .eq('id', session.id);
+      setSearchHistory(prev => [
+        { ...session, status: 'completed', results_count: newProspects.length },
+        ...prev.slice(0, 19),
+      ]);
     }
 
     setIsSearching(false);
@@ -745,6 +781,7 @@ export default function Dashboard() {
             isOpen={sidebarOpen}
             prospectCount={prospects.length}
             folders={folders}
+            searchHistory={searchHistory}
           />
           <UsageBanner
             plan={userPlan}

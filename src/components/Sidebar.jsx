@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { id: 'export', label: 'Exporter', icon: Download, description: 'CSV & Zoho' },
 ];
 
-export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount }) {
+export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory }) {
   return (
     <>
       {/* Mobile overlay */}
@@ -87,6 +87,29 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
               );
             })}
           </nav>
+
+          {/* Search history */}
+          <div className="mt-6">
+            <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-[#52525b] mb-2">
+              Historique
+            </h3>
+            <div className="space-y-0.5 max-h-48 overflow-y-auto">
+              {(searchHistory || []).slice(0, 10).map(session => (
+                <div
+                  key={session.id}
+                  className="px-3 py-2 rounded-lg text-xs text-[#a1a1aa] hover:bg-[#1e1e24] hover:text-[#fafafa] transition-colors"
+                >
+                  <div className="font-medium truncate">{session.label || 'Recherche'}</div>
+                  <div className="text-[10px] text-[#52525b] mt-0.5">
+                    {session.results_count || 0} resultats &middot; {new Date(session.created_at).toLocaleDateString('fr-FR')}
+                  </div>
+                </div>
+              ))}
+              {(!searchHistory || searchHistory.length === 0) && (
+                <div className="px-3 py-2 text-xs text-[#52525b]">Aucun historique</div>
+              )}
+            </div>
+          </div>
 
           {/* Bottom info */}
           <div className="mt-auto">
