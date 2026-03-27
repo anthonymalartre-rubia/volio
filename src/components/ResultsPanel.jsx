@@ -25,6 +25,7 @@ import {
   X,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
+import { getScoreLabel } from "@/lib/scoring";
 
 const shortUrl = (url) => {
   if (!url) return "";
@@ -54,6 +55,56 @@ const folderColorClass = (color) => {
   return map[color] || map.indigo;
 };
 
+function TagDropdown({ tags, activeTags, onToggle, onCreate }) {
+  const [open, setOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-5 h-5 rounded-full bg-[#1e1e24] hover:bg-[#2a2a32] text-[#71717a] hover:text-[#fafafa] flex items-center justify-center text-xs transition-colors"
+      >
+        +
+      </button>
+      {open && (
+        <div className="absolute z-50 top-7 left-0 w-48 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl p-2 space-y-1">
+          {tags.map(tag => (
+            <button
+              key={tag.id}
+              onClick={() => { onToggle(tag.id); setOpen(false); }}
+              className={`w-full text-left px-2 py-1.5 rounded text-xs flex items-center gap-2 hover:bg-[#1e1e24] transition-colors ${
+                activeTags.includes(tag.id) ? 'text-[#fafafa]' : 'text-[#a1a1aa]'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-violet-500" />
+              {tag.name}
+              {activeTags.includes(tag.id) && <span className="ml-auto text-violet-400">&#10003;</span>}
+            </button>
+          ))}
+          <div className="border-t border-[#1e1e24] pt-1 mt-1">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (newName.trim()) {
+                onCreate?.(newName.trim(), 'violet');
+                setNewName('');
+                setOpen(false);
+              }
+            }}>
+              <input
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                placeholder="Nouveau tag..."
+                className="w-full px-2 py-1.5 rounded text-xs bg-[#09090b] border border-[#1e1e24] text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+              />
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ResultsPanel({
   prospects = [],
   folders = [],
@@ -72,6 +123,11 @@ export default function ResultsPanel({
   waterfallProgress,
   onDownloadCSV,
   onDeleteAll,
+  tags,
+  prospectTagMap,
+  onCreateTag,
+  onDeleteTag,
+  onToggleProspectTag,
 }) {
   const [searchText, setSearchText] = useState("");
   const [selectedDept, setSelectedDept] = useState("all");
@@ -477,6 +533,8 @@ export default function ResultsPanel({
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Site</th>
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Note</th>
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Dept</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Score</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Tags</th>
               </tr>
             </thead>
             <tbody>
@@ -552,6 +610,41 @@ export default function ResultsPanel({
                     </td>
                     <td className="px-4 py-2.5">
                       <span className="font-mono text-[#52525b]">{p.departement}</span>
+                    </td>
+                    {(() => {
+                      const score = p.lead_score || 0;
+                      const scoreInfo = getScoreLabel(score);
+                      return (
+                        <td className="px-3 py-2">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${scoreInfo.bg} ${scoreInfo.color}`}>
+                            {score}
+                          </span>
+                        </td>
+                      );
+                    })()}
+                    <td className="px-3 py-2">
+                      <div className="flex flex-wrap gap-1 items-center">
+                        {(prospectTagMap?.[p.id] || []).map(tagId => {
+                          const tag = tags?.find(t => t.id === tagId);
+                          if (!tag) return null;
+                          return (
+                            <span
+                              key={tagId}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400 cursor-pointer hover:opacity-70"
+                              onClick={() => onToggleProspectTag?.(p.id, tagId)}
+                              title="Cliquer pour retirer"
+                            >
+                              {tag.name}
+                            </span>
+                          );
+                        })}
+                        <TagDropdown
+                          tags={tags || []}
+                          activeTags={prospectTagMap?.[p.id] || []}
+                          onToggle={(tagId) => onToggleProspectTag?.(p.id, tagId)}
+                          onCreate={onCreateTag}
+                        />
+                      </div>
                     </td>
                   </tr>
                 );

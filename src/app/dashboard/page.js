@@ -57,6 +57,8 @@ export default function Dashboard() {
   const [deepEnrichProgress, setDeepEnrichProgress] = useState({
     current: 0, total: 0, currentSite: '', logs: [],
   });
+  const [tags, setTags] = useState([]);
+  const [prospectTagMap, setProspectTagMap] = useState({});
 
   // Refs to avoid stale closures in async loops
   const stopSearchRef = useRef(false);
@@ -122,6 +124,24 @@ export default function Dashboard() {
         console.error('Error fetching folders:', error);
       }
 
+      // Load tags
+      const { data: tagsData } = await supabase
+        .from('lead_tags')
+        .select('*')
+        .order('name');
+      setTags(tagsData || []);
+
+      // Load prospect-tag associations
+      const { data: ptData } = await supabase
+        .from('prospect_tags')
+        .select('prospect_id, tag_id');
+      const tagMap = {};
+      (ptData || []).forEach(pt => {
+        if (!tagMap[pt.prospect_id]) tagMap[pt.prospect_id] = [];
+        tagMap[pt.prospect_id].push(pt.tag_id);
+      });
+      setProspectTagMap(tagMap);
+
       // Load existing prospects (RLS filters by user)
       try {
         const { data, error } = await supabase
@@ -182,6 +202,49 @@ export default function Dashboard() {
       console.error('Error deleting folder:', error);
     }
   }, [supabase, activeFolder]);
+
+  // Tag CRUD
+  const createTag = async (name, color) => {
+    if (!supabase || !user) return null;
+    const { data } = await supabase
+      .from('lead_tags')
+      .insert({ user_id: user.id, name, color })
+      .select()
+      .single();
+    if (data) setTags(prev => [...prev, data]);
+    return data;
+  };
+
+  const deleteTag = async (tagId) => {
+    if (!supabase) return;
+    await supabase.from('lead_tags').delete().eq('id', tagId);
+    setTags(prev => prev.filter(t => t.id !== tagId));
+    setProspectTagMap(prev => {
+      const next = { ...prev };
+      Object.keys(next).forEach(pid => {
+        next[pid] = next[pid].filter(tid => tid !== tagId);
+      });
+      return next;
+    });
+  };
+
+  const toggleProspectTag = async (prospectId, tagId) => {
+    if (!supabase) return;
+    const current = prospectTagMap[prospectId] || [];
+    if (current.includes(tagId)) {
+      await supabase.from('prospect_tags').delete().eq('prospect_id', prospectId).eq('tag_id', tagId);
+      setProspectTagMap(prev => ({
+        ...prev,
+        [prospectId]: (prev[prospectId] || []).filter(t => t !== tagId),
+      }));
+    } else {
+      await supabase.from('prospect_tags').insert({ prospect_id: prospectId, tag_id: tagId });
+      setProspectTagMap(prev => ({
+        ...prev,
+        [prospectId]: [...(prev[prospectId] || []), tagId],
+      }));
+    }
+  };
 
   // Start scraping function — now accepts folderId
   const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries, folderId) => {
@@ -719,6 +782,11 @@ export default function Dashboard() {
                   onStopEnrichment={stopEnrichment}
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}
+                  tags={tags}
+                  prospectTagMap={prospectTagMap}
+                  onCreateTag={createTag}
+                  onDeleteTag={deleteTag}
+                  onToggleProspectTag={toggleProspectTag}
                 />
               )}
               {activeView === 'export' && (
