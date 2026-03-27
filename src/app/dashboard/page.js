@@ -5,6 +5,7 @@ import { getSupabase } from '@/lib/supabase';
 import { DEPTS } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
+import UsageBanner from '@/components/UsageBanner';
 import { useRouter } from 'next/navigation';
 
 // Lazy load panels — only loaded when navigated to
@@ -50,6 +51,8 @@ export default function Dashboard() {
     current: 0, total: 0, currentSite: '', logs: [],
     foundScrape: 0, foundGuess: 0,
   });
+  const [userPlan, setUserPlan] = useState(null);
+  const [userUsage, setUserUsage] = useState(null);
   const [isDeepEnriching, setIsDeepEnriching] = useState(false);
   const [deepEnrichProgress, setDeepEnrichProgress] = useState({
     current: 0, total: 0, currentSite: '', logs: [],
@@ -74,6 +77,29 @@ export default function Dashboard() {
         return;
       }
       setUser(currentUser);
+
+      // Load plan
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('plan, stripe_customer_id')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (profile) {
+        const { getPlan } = await import('@/lib/plans');
+        setUserPlan(getPlan(profile.plan));
+      }
+
+      // Load usage
+      const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+      const { data: usage } = await supabase
+        .from('usage_tracking')
+        .select('searches, enrichments, exports')
+        .eq('user_id', currentUser.id)
+        .eq('month', month)
+        .single();
+
+      setUserUsage(usage || { searches: 0, enrichments: 0, exports: 0 });
 
       // Health check (GET is still unauthenticated — just checks config)
       try {
@@ -209,6 +235,12 @@ export default function Dashboard() {
         });
         const data = await response.json();
 
+        if (response.status === 429) {
+          setSearchProgress((prev) => addLog(prev, `Limite atteinte: ${data.error || 'Limite atteinte'}`));
+          stopSearchRef.current = true;
+          break;
+        }
+
         if (!response.ok) {
           setSearchProgress((prev) => addLog(prev, `API error (${response.status}): ${data.error || 'Unknown'}`));
           continue;
@@ -279,6 +311,21 @@ export default function Dashboard() {
 
     setIsSearching(false);
   }, [prospects, user, supabase]);
+
+  const handleUpgrade = async (planId = 'pro') => {
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId }),
+      });
+      const { url, error } = await res.json();
+      if (url) window.location.href = url;
+      if (error) alert(error);
+    } catch (err) {
+      alert('Erreur lors de la redirection vers le paiement.');
+    }
+  };
 
   const stopScraping = useCallback(() => {
     stopSearchRef.current = true;
@@ -483,6 +530,12 @@ export default function Dashboard() {
         });
         const data = await response.json();
 
+        if (response.status === 429) {
+          setWaterfallProgress((prev) => addLog(prev, `Limite atteinte: ${data.error || 'Limite atteinte'}`));
+          stopWaterfallRef.current = true;
+          break;
+        }
+
         if (data.email) {
           const method = data.source === 'guess' ? 'guess' : data.source;
           setProspects((prev) =>
@@ -614,14 +667,21 @@ export default function Dashboard() {
       />
 
       <div className="flex">
-        <Sidebar
-          activeView={activeView}
-          onViewChange={setActiveView}
-          onClose={() => setSidebarOpen(false)}
-          isOpen={sidebarOpen}
-          prospectCount={prospects.length}
-          folders={folders}
-        />
+        <div className="flex flex-col">
+          <Sidebar
+            activeView={activeView}
+            onViewChange={setActiveView}
+            onClose={() => setSidebarOpen(false)}
+            isOpen={sidebarOpen}
+            prospectCount={prospects.length}
+            folders={folders}
+          />
+          <UsageBanner
+            plan={userPlan}
+            usage={userUsage}
+            onUpgrade={() => handleUpgrade('pro')}
+          />
+        </div>
 
         <main className="flex-1 min-h-[calc(100vh-3.5rem)] p-6">
           <div className="max-w-6xl mx-auto">
