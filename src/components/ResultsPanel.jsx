@@ -20,6 +20,9 @@ import {
   Check,
   AlertTriangle,
   Crown,
+  Folder,
+  FolderOpen,
+  X,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 
@@ -46,8 +49,17 @@ const EMAIL_METHOD_INFO = {
   guess: { label: "Email probable (contact@)", color: "text-amber-400" },
 };
 
+const folderColorClass = (color) => {
+  const map = { indigo: 'bg-indigo-500', blue: 'bg-blue-500', purple: 'bg-purple-500', green: 'bg-green-500', amber: 'bg-amber-500', rose: 'bg-rose-500' };
+  return map[color] || map.indigo;
+};
+
 export default function ResultsPanel({
   prospects = [],
+  folders = [],
+  activeFolder = 'all',
+  onActiveFolder,
+  onDeleteFolder,
   onStartEnrichment,
   onStopEnrichment,
   onStartDeepEnrichment,
@@ -69,8 +81,14 @@ export default function ResultsPanel({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [tooltipId, setTooltipId] = useState(null);
 
+  const folderProspects = useMemo(() => {
+    if (activeFolder === 'all') return prospects;
+    if (activeFolder === 'unassigned') return prospects.filter((p) => !p.folder_id);
+    return prospects.filter((p) => p.folder_id === activeFolder);
+  }, [prospects, activeFolder]);
+
   const filteredProspects = useMemo(() => {
-    return prospects.filter((prospect) => {
+    return folderProspects.filter((prospect) => {
       const q = searchText.toLowerCase();
       const matchesSearch =
         !searchText ||
@@ -84,7 +102,7 @@ export default function ResultsPanel({
 
       return matchesSearch && matchesDept && matchesType;
     });
-  }, [prospects, searchText, selectedDept, selectedType]);
+  }, [folderProspects, searchText, selectedDept, selectedType]);
 
   // Reset page when filters change (outside useMemo to avoid setState during render)
   useEffect(() => {
@@ -92,12 +110,12 @@ export default function ResultsPanel({
   }, [searchText, selectedDept, selectedType]);
 
   const stats = useMemo(() => {
-    const total = prospects.length;
-    const phones = prospects.filter((p) => p.telephone).length;
-    const emails = prospects.filter((p) => p.email).length;
-    const websites = prospects.filter((p) => p.site_web).length;
+    const total = folderProspects.length;
+    const phones = folderProspects.filter((p) => p.telephone).length;
+    const emails = folderProspects.filter((p) => p.email).length;
+    const websites = folderProspects.filter((p) => p.site_web).length;
     return { total, phones, emails, websites };
-  }, [prospects]);
+  }, [folderProspects]);
 
   const totalPages = Math.ceil(filteredProspects.length / PAGE_SIZE);
   const displayProspects = filteredProspects.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
@@ -125,16 +143,6 @@ export default function ResultsPanel({
     }
   }, []);
 
-  const handleDelete = () => {
-    if (showDeleteConfirm) {
-      onDeleteAll();
-      setShowDeleteConfirm(false);
-    } else {
-      setShowDeleteConfirm(true);
-      setTimeout(() => setShowDeleteConfirm(false), 3000);
-    }
-  };
-
   // Empty state
   if (prospects.length === 0) {
     return (
@@ -150,8 +158,103 @@ export default function ResultsPanel({
     );
   }
 
+  const [showFolderDelete, setShowFolderDelete] = useState(null);
+
+  const handleDeleteFolder = (folderId) => {
+    if (showFolderDelete === folderId) {
+      onDeleteFolder(folderId);
+      setShowFolderDelete(null);
+    } else {
+      setShowFolderDelete(folderId);
+      setTimeout(() => setShowFolderDelete(null), 3000);
+    }
+  };
+
+  const handleExport = (format) => {
+    onDownloadCSV(format, folderProspects);
+  };
+
+  const handleDeleteAll = () => {
+    if (showDeleteConfirm) {
+      onDeleteAll(activeFolder !== 'all' ? activeFolder : undefined);
+      setShowDeleteConfirm(false);
+    } else {
+      setShowDeleteConfirm(true);
+      setTimeout(() => setShowDeleteConfirm(false), 3000);
+    }
+  };
+
+  // Count prospects per folder
+  const folderCounts = useMemo(() => {
+    const counts = { all: prospects.length, unassigned: 0 };
+    for (const p of prospects) {
+      if (!p.folder_id) counts.unassigned++;
+      else counts[p.folder_id] = (counts[p.folder_id] || 0) + 1;
+    }
+    return counts;
+  }, [prospects]);
+
   return (
     <div className="space-y-4">
+      {/* Folder tabs */}
+      {folders.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <button
+            onClick={() => onActiveFolder('all')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium border whitespace-nowrap transition-all ${
+              activeFolder === 'all'
+                ? 'bg-[#1e1e24] border-[#27272a] text-[#fafafa]'
+                : 'border-transparent text-[#52525b] hover:text-[#a1a1aa] hover:bg-[#111114]'
+            }`}
+          >
+            <FolderOpen size={13} />
+            Tous
+            <span className="font-mono text-[10px] opacity-60">{folderCounts.all}</span>
+          </button>
+          {folders.map((f) => (
+            <div key={f.id} className="relative group/folder flex items-center">
+              <button
+                onClick={() => onActiveFolder(f.id)}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium border whitespace-nowrap transition-all ${
+                  activeFolder === f.id
+                    ? 'bg-[#1e1e24] border-[#27272a] text-[#fafafa]'
+                    : 'border-transparent text-[#52525b] hover:text-[#a1a1aa] hover:bg-[#111114]'
+                }`}
+              >
+                <div className={`w-2 h-2 rounded-full ${folderColorClass(f.color)}`} />
+                {f.name}
+                <span className="font-mono text-[10px] opacity-60">{folderCounts[f.id] || 0}</span>
+              </button>
+              <button
+                onClick={() => handleDeleteFolder(f.id)}
+                className={`ml-0.5 p-1 rounded-md transition-all ${
+                  showFolderDelete === f.id
+                    ? 'bg-red-600/20 text-red-400'
+                    : 'opacity-0 group-hover/folder:opacity-100 text-[#3f3f46] hover:text-red-400 hover:bg-red-600/10'
+                }`}
+                title={showFolderDelete === f.id ? 'Confirmer la suppression' : 'Supprimer la liste'}
+              >
+                {showFolderDelete === f.id ? <AlertTriangle size={11} /> : <X size={11} />}
+              </button>
+            </div>
+          ))}
+          {prospects.some((p) => !p.folder_id) && (
+            <button
+              onClick={() => onActiveFolder('unassigned')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium border whitespace-nowrap transition-all ${
+                activeFolder === 'unassigned'
+                  ? 'bg-[#1e1e24] border-[#27272a] text-[#fafafa]'
+                  : 'border-transparent text-[#3f3f46] hover:text-[#71717a] hover:bg-[#111114]'
+              }`}
+            >
+              <Folder size={13} />
+              Non classes
+              <span className="font-mono text-[10px] opacity-60">{folderCounts.unassigned}</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
@@ -269,8 +372,8 @@ export default function ResultsPanel({
 
         {/* Export */}
         <button
-          onClick={() => onDownloadCSV("standard")}
-          disabled={prospects.length === 0}
+          onClick={() => handleExport("standard")}
+          disabled={folderProspects.length === 0}
           className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#1e1e24] hover:bg-[#1e1e24] text-[#71717a] hover:text-[#fafafa] text-xs font-medium transition disabled:opacity-30"
           title="Exporter en CSV standard"
         >
@@ -278,8 +381,8 @@ export default function ResultsPanel({
           <span className="hidden sm:inline">CSV</span>
         </button>
         <button
-          onClick={() => onDownloadCSV("zoho")}
-          disabled={prospects.length === 0}
+          onClick={() => handleExport("zoho")}
+          disabled={folderProspects.length === 0}
           className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#1e1e24] hover:bg-[#1e1e24] text-[#71717a] hover:text-[#fafafa] text-xs font-medium transition disabled:opacity-30"
           title="Exporter au format Zoho CRM"
         >
@@ -287,14 +390,14 @@ export default function ResultsPanel({
           <span className="hidden sm:inline">Zoho</span>
         </button>
         <button
-          onClick={handleDelete}
-          disabled={prospects.length === 0}
+          onClick={handleDeleteAll}
+          disabled={folderProspects.length === 0}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition disabled:opacity-30 ${
             showDeleteConfirm
               ? 'border-red-600/50 bg-red-600/20 text-red-400'
               : 'border-red-600/20 hover:bg-red-600/10 text-red-400/60 hover:text-red-400'
           }`}
-          title={showDeleteConfirm ? "Cliquez pour confirmer" : "Supprimer tous les prospects"}
+          title={showDeleteConfirm ? "Cliquez pour confirmer" : "Supprimer les prospects"}
         >
           {showDeleteConfirm ? (
             <>

@@ -35,6 +35,8 @@ function escapeCSV(value) {
 
 export default function Dashboard() {
   const [prospects, setProspects] = useState([]);
+  const [folders, setFolders] = useState([]);
+  const [activeFolder, setActiveFolder] = useState('all'); // 'all' | folder id
   const [activeView, setActiveView] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [apiKeySet, setApiKeySet] = useState(false);
@@ -81,6 +83,19 @@ export default function Dashboard() {
         setApiKeySet(false);
       }
 
+      // Load folders
+      try {
+        const { data: foldersData, error: foldersError } = await supabase
+          .from('lead_folders')
+          .select('*')
+          .order('created_at', { ascending: true });
+        if (!foldersError && foldersData) {
+          setFolders(foldersData);
+        }
+      } catch (error) {
+        console.error('Error fetching folders:', error);
+      }
+
       // Load existing prospects (RLS filters by user)
       try {
         const { data, error } = await supabase
@@ -99,8 +114,51 @@ export default function Dashboard() {
     initializeApp();
   }, []);
 
-  // Start scraping function
-  const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries) => {
+  // Create folder
+  const createFolder = useCallback(async (name, color) => {
+    if (!supabase) return null;
+    try {
+      const { data, error } = await supabase
+        .from('lead_folders')
+        .insert({ name, color })
+        .select()
+        .single();
+      if (error) {
+        console.error('Error creating folder:', error);
+        return null;
+      }
+      setFolders((prev) => [...prev, data]);
+      return data;
+    } catch (error) {
+      console.error('Error creating folder:', error);
+      return null;
+    }
+  }, [supabase]);
+
+  // Delete folder (moves prospects to unassigned)
+  const deleteFolder = useCallback(async (folderId) => {
+    if (!supabase) return;
+    try {
+      // Unassign prospects first
+      await supabase
+        .from('prospects')
+        .update({ folder_id: null })
+        .eq('folder_id', folderId);
+      // Delete folder
+      await supabase
+        .from('lead_folders')
+        .delete()
+        .eq('id', folderId);
+      setFolders((prev) => prev.filter((f) => f.id !== folderId));
+      setProspects((prev) => prev.map((p) => p.folder_id === folderId ? { ...p, folder_id: null } : p));
+      if (activeFolder === folderId) setActiveFolder('all');
+    } catch (error) {
+      console.error('Error deleting folder:', error);
+    }
+  }, [supabase, activeFolder]);
+
+  // Start scraping function — now accepts folderId
+  const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries, folderId) => {
     stopSearchRef.current = false;
     setIsSearching(true);
     setActiveView('search');
@@ -175,6 +233,7 @@ export default function Dashboard() {
                 nb_avis: place.nb_avis || 0,
                 type: task.type,
                 departement: task.dept || '971',
+                folder_id: folderId || null,
               });
             }
           }
@@ -383,7 +442,7 @@ export default function Dashboard() {
     setIsDeepEnriching(false);
   }, [prospects, supabase]);
 
-  // Waterfall enrichment (scrape → Apollo → Enrichly → Anymail → Findymail → guess)
+  // Waterfall enrichment
   const [isWaterfallEnriching, setIsWaterfallEnriching] = useState(false);
   const [waterfallProgress, setWaterfallProgress] = useState({
     current: 0, total: 0, currentSite: '', logs: [],
@@ -440,7 +499,6 @@ export default function Dashboard() {
               .eq('id', prospect.id);
           }
 
-          // Build step summary
           const steps = (data.waterfall || []).map((s) =>
             `${s.found ? '✓' : '✗'} ${s.label}`
           ).join(' → ');
@@ -470,31 +528,39 @@ export default function Dashboard() {
     setIsWaterfallEnriching(false);
   }, []);
 
-  // Delete all prospects
-  const deleteAllProspects = useCallback(async () => {
+  // Delete all prospects (optionally scoped to folder)
+  const deleteAllProspects = useCallback(async (folderId) => {
     try {
       if (supabase && user) {
-        const { error } = await supabase
-          .from('prospects')
-          .delete()
-          .neq('id', '00000000-0000-0000-0000-000000000000');
+        let query = supabase.from('prospects').delete();
+        if (folderId && folderId !== 'all') {
+          query = query.eq('folder_id', folderId);
+        } else {
+          query = query.neq('id', '00000000-0000-0000-0000-000000000000');
+        }
+        const { error } = await query;
         if (error) console.error('Error deleting prospects:', error);
       }
-      setProspects([]);
+      if (folderId && folderId !== 'all') {
+        setProspects((prev) => prev.filter((p) => p.folder_id !== folderId));
+      } else {
+        setProspects([]);
+      }
     } catch (error) {
       console.error('Error deleting all prospects:', error);
     }
   }, [supabase, user]);
 
   // CSV export with injection protection
-  const downloadCSV = useCallback((format) => {
-    if (prospects.length === 0) return;
+  const downloadCSV = useCallback((format, filteredList) => {
+    const list = filteredList || prospects;
+    if (list.length === 0) return;
 
     const headers = format === 'zoho'
       ? ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Website', 'Address']
       : ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
 
-    const rows = prospects.map((prospect) => {
+    const rows = list.map((prospect) => {
       if (format === 'zoho') {
         const nameParts = (prospect.nom || '').split(' ');
         return [
@@ -554,6 +620,7 @@ export default function Dashboard() {
           onClose={() => setSidebarOpen(false)}
           isOpen={sidebarOpen}
           prospectCount={prospects.length}
+          folders={folders}
         />
 
         <main className="flex-1 min-h-[calc(100vh-3.5rem)] p-6">
@@ -569,11 +636,17 @@ export default function Dashboard() {
                   searchProgress={searchProgress}
                   onStartScraping={startScraping}
                   onStopScraping={stopScraping}
+                  folders={folders}
+                  onCreateFolder={createFolder}
                 />
               )}
               {activeView === 'results' && (
                 <ResultsPanel
                   prospects={prospects}
+                  folders={folders}
+                  activeFolder={activeFolder}
+                  onActiveFolder={setActiveFolder}
+                  onDeleteFolder={deleteFolder}
                   isEnriching={isEnriching}
                   isDeepEnriching={isDeepEnriching}
                   isWaterfallEnriching={isWaterfallEnriching}
