@@ -686,6 +686,39 @@ export default function Dashboard() {
     }
   }, [supabase, user]);
 
+  // Update a single prospect
+  const updateProspect = useCallback(async (id, updates) => {
+    try {
+      setProspects((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, ...updates } : p))
+      );
+      if (supabase) {
+        const { error } = await supabase
+          .from('prospects')
+          .update(updates)
+          .eq('id', id);
+        if (error) console.error('Error updating prospect:', error);
+      }
+    } catch (error) {
+      console.error('Error updating prospect:', error);
+    }
+  }, [supabase]);
+
+  // Delete a single prospect
+  const deleteProspect = useCallback(async (id) => {
+    try {
+      setProspects((prev) => prev.filter((p) => p.id !== id));
+      if (supabase) {
+        // Delete related tags first
+        await supabase.from('prospect_tags').delete().eq('prospect_id', id);
+        const { error } = await supabase.from('prospects').delete().eq('id', id);
+        if (error) console.error('Error deleting prospect:', error);
+      }
+    } catch (error) {
+      console.error('Error deleting prospect:', error);
+    }
+  }, [supabase]);
+
   // CSV export with injection protection
   const downloadCSV = useCallback(async (format, filteredList) => {
     const list = filteredList || prospects;
@@ -848,6 +881,8 @@ export default function Dashboard() {
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}
                   userPlan={userPlan}
+                  onUpdateProspect={updateProspect}
+                  onDeleteProspect={deleteProspect}
                   tags={tags}
                   prospectTagMap={prospectTagMap}
                   onCreateTag={createTag}

@@ -25,6 +25,9 @@ import {
   X,
   ChevronDown,
   Lock,
+  Pencil,
+  Save,
+  MoreVertical,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
@@ -132,6 +135,8 @@ export default memo(function ResultsPanel({
   onToggleProspectTag,
   onBulkEnrich,
   userPlan,
+  onUpdateProspect,
+  onDeleteProspect,
 }) {
   const [searchText, setSearchText] = useState("");
   const [selectedDept, setSelectedDept] = useState("all");
@@ -141,6 +146,43 @@ export default memo(function ResultsPanel({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [tooltipId, setTooltipId] = useState(null);
   const [showEnrichDropdown, setShowEnrichDropdown] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [actionMenuId, setActionMenuId] = useState(null);
+
+  const startEdit = (prospect) => {
+    setEditingId(prospect.id);
+    setEditData({
+      nom: prospect.nom || '',
+      email: prospect.email || '',
+      telephone: prospect.telephone || '',
+      site_web: prospect.site_web || '',
+      adresse: prospect.adresse || '',
+    });
+    setActionMenuId(null);
+  };
+
+  const saveEdit = () => {
+    if (editingId && onUpdateProspect) {
+      onUpdateProspect(editingId, editData);
+    }
+    setEditingId(null);
+    setEditData({});
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditData({});
+  };
+
+  const confirmDelete = (id) => {
+    if (onDeleteProspect) {
+      onDeleteProspect(id);
+    }
+    setDeleteConfirmId(null);
+    setActionMenuId(null);
+  };
 
   const isEnterprise = userPlan?.id === 'enterprise';
 
@@ -618,25 +660,64 @@ export default memo(function ResultsPanel({
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Dept</th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Score</th>
                 <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Tags</th>
+                <th className="px-3 py-2 text-center text-[10px] font-medium text-[#3f3f46] uppercase tracking-wider w-10"></th>
               </tr>
             </thead>
             <tbody>
               {displayProspects.map((p) => {
                 const methodInfo = EMAIL_METHOD_INFO[p.email_method];
+                const isEditing = editingId === p.id;
                 return (
-                  <tr key={p.id} className="border-b border-[#1e1e24]/50 hover:bg-[#16161a] transition-colors">
+                  <tr key={p.id} className={`border-b border-[#1e1e24]/50 transition-colors ${isEditing ? 'bg-[#1a1a2e]' : 'hover:bg-[#16161a]'}`}>
                     <td className="px-4 py-2.5">
                       <span className={`inline-block px-2 py-0.5 rounded border text-[10px] font-semibold uppercase ${getTypeStyle(p.type)}`}>
                         {p.type}
                       </span>
                     </td>
                     <td className="px-4 py-2.5">
-                      <div className="text-[#fafafa] font-medium">{p.nom}</div>
-                      <div className="text-[10px] text-[#3f3f46] truncate max-w-[200px]">{p.adresse}</div>
+                      {isEditing ? (
+                        <div className="space-y-1">
+                          <input
+                            value={editData.nom}
+                            onChange={(e) => setEditData({ ...editData, nom: e.target.value })}
+                            className="w-full px-2 py-1 bg-[#09090b] border border-[#27272a] rounded text-xs text-[#fafafa] focus:outline-none focus:border-indigo-500"
+                            placeholder="Nom"
+                          />
+                          <input
+                            value={editData.adresse}
+                            onChange={(e) => setEditData({ ...editData, adresse: e.target.value })}
+                            className="w-full px-2 py-1 bg-[#09090b] border border-[#27272a] rounded text-[10px] text-[#a1a1aa] focus:outline-none focus:border-indigo-500"
+                            placeholder="Adresse"
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="text-[#fafafa] font-medium">{p.nom}</div>
+                          <div className="text-[10px] text-[#3f3f46] truncate max-w-[200px]">{p.adresse}</div>
+                        </>
+                      )}
                     </td>
-                    <td className="px-4 py-2.5 text-[#a1a1aa] font-mono">{p.telephone || <span className="text-[#27272a]">—</span>}</td>
                     <td className="px-4 py-2.5">
-                      {p.email ? (
+                      {isEditing ? (
+                        <input
+                          value={editData.telephone}
+                          onChange={(e) => setEditData({ ...editData, telephone: e.target.value })}
+                          className="w-full px-2 py-1 bg-[#09090b] border border-[#27272a] rounded text-xs text-[#a1a1aa] font-mono focus:outline-none focus:border-indigo-500"
+                          placeholder="Telephone"
+                        />
+                      ) : (
+                        <span className="text-[#a1a1aa] font-mono">{p.telephone || <span className="text-[#27272a]">—</span>}</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-2.5">
+                      {isEditing ? (
+                        <input
+                          value={editData.email}
+                          onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                          className="w-full px-2 py-1 bg-[#09090b] border border-[#27272a] rounded text-xs text-[#a1a1aa] focus:outline-none focus:border-indigo-500"
+                          placeholder="Email"
+                        />
+                      ) : p.email ? (
                         <div className="group/email flex items-center gap-1.5 relative">
                           <span
                             className={`cursor-default ${methodInfo?.color || 'text-[#a1a1aa]'}`}
@@ -659,7 +740,6 @@ export default memo(function ResultsPanel({
                               <Copy size={12} className="text-[#3f3f46]" />
                             )}
                           </button>
-                          {/* Tooltip */}
                           {tooltipId === p.id && methodInfo && (
                             <div className="absolute bottom-full left-0 mb-1 px-2 py-1 bg-[#1e1e24] border border-[#27272a] rounded-lg text-[10px] text-[#a1a1aa] whitespace-nowrap z-10 shadow-lg">
                               {methodInfo.label}
@@ -671,7 +751,14 @@ export default memo(function ResultsPanel({
                       )}
                     </td>
                     <td className="px-4 py-2.5">
-                      {p.site_web ? (
+                      {isEditing ? (
+                        <input
+                          value={editData.site_web}
+                          onChange={(e) => setEditData({ ...editData, site_web: e.target.value })}
+                          className="w-full px-2 py-1 bg-[#09090b] border border-[#27272a] rounded text-xs text-[#a1a1aa] focus:outline-none focus:border-indigo-500"
+                          placeholder="https://..."
+                        />
+                      ) : p.site_web ? (
                         <a href={p.site_web} target="_blank" rel="noopener noreferrer" className="text-indigo-400/70 hover:text-indigo-400 flex items-center gap-1 transition">
                           {shortUrl(p.site_web)}
                           <ExternalLink size={10} />
@@ -728,6 +815,69 @@ export default memo(function ResultsPanel({
                           onCreate={onCreateTag}
                         />
                       </div>
+                    </td>
+                    {/* Actions */}
+                    <td className="px-2 py-2 text-center">
+                      {isEditing ? (
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={saveEdit}
+                            className="p-1 rounded hover:bg-green-500/20 text-green-400 transition"
+                            title="Sauvegarder"
+                          >
+                            <Save size={13} />
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            className="p-1 rounded hover:bg-[#1e1e24] text-[#52525b] transition"
+                            title="Annuler"
+                          >
+                            <X size={13} />
+                          </button>
+                        </div>
+                      ) : deleteConfirmId === p.id ? (
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => confirmDelete(p.id)}
+                            className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-600/20 text-red-400 hover:bg-red-600/30 transition"
+                          >
+                            Oui
+                          </button>
+                          <button
+                            onClick={() => setDeleteConfirmId(null)}
+                            className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#1e1e24] text-[#71717a] hover:bg-[#27272a] transition"
+                          >
+                            Non
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <button
+                            onClick={() => setActionMenuId(actionMenuId === p.id ? null : p.id)}
+                            className="p-1 rounded hover:bg-[#1e1e24] text-[#3f3f46] hover:text-[#a1a1aa] transition"
+                          >
+                            <MoreVertical size={14} />
+                          </button>
+                          {actionMenuId === p.id && (
+                            <div className="absolute z-50 right-0 top-full mt-1 w-36 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl py-1">
+                              <button
+                                onClick={() => startEdit(p)}
+                                className="w-full text-left px-3 py-1.5 text-xs text-[#a1a1aa] hover:bg-[#1e1e24] hover:text-[#fafafa] flex items-center gap-2 transition"
+                              >
+                                <Pencil size={12} />
+                                Modifier
+                              </button>
+                              <button
+                                onClick={() => { setDeleteConfirmId(p.id); setActionMenuId(null); }}
+                                className="w-full text-left px-3 py-1.5 text-xs text-red-400/70 hover:bg-red-600/10 hover:text-red-400 flex items-center gap-2 transition"
+                              >
+                                <Trash2 size={12} />
+                                Supprimer
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </td>
                   </tr>
                 );
