@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3 } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
-import ThemeToggle from '@/components/ThemeToggle';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import InteractiveDemo from '@/components/InteractiveDemo';
@@ -81,7 +80,6 @@ export default function LandingPage() {
             <Link href="#faq" className="text-sm text-zinc-500 hover:text-white transition">FAQ</Link>
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <NavAuth />
           </div>
         </div>
