@@ -45,9 +45,9 @@ const FAQ_ITEMS = [
       "Oui, sans engagement. Vous pouvez annuler votre abonnement Pro ou Enterprise a tout moment depuis votre compte. Vos donnees et leads restent accessibles meme apres l'annulation, tant que votre compte existe.",
   },
   {
-    question: "Quelle est la difference avec Apollo.io ?",
+    question: "Quelle est la difference avec Apollo.io, Hunter ou Lusha ?",
     answer:
-      "Prospectia est 92% moins cher qu'Apollo pour la prospection en France. Notre avantage : la recherche Google Places integree (absente d'Apollo), la couverture des 101 departements francais, et un enrichissement multi-sources qui inclut Apollo comme l'une des 7 sources, pas la seule.",
+      "Ces outils ne proposent qu'une seule source d'enrichissement et facturent entre 36€ et 99€/mois. Prospectia est un agregateur : nous combinons 7 sources (dont Apollo lui-meme) en une recherche unique, avec scoring de confiance, pour 49€/mois. En plus, nous proposons la recherche Google Places integree, 150+ categories et la couverture des 101 departements francais — des fonctionnalites absentes chez Apollo, Hunter, Lusha, Snov.io et Dropcontact.",
   },
   {
     question: "Comment fonctionne la recherche en langage naturel ?",

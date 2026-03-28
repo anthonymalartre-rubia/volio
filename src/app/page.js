@@ -1,14 +1,16 @@
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3 } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import ThemeToggle from '@/components/ThemeToggle';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import InteractiveDemo from '@/components/InteractiveDemo';
+import TypewriterText from '@/components/TypewriterText';
+import MouseParticles from '@/components/MouseParticles';
 
 export const metadata = {
-  title: 'Prospectia.ai — Trouvez vos prospects partout en France',
-  description: 'La plateforme de prospection B2B la plus abordable en France. 101 departements, recherche Google Places + enrichissement email en cascade. 92% moins cher que la concurrence.',
+  title: 'Prospectia.ai — L\'agrégateur de prospection B2B le moins cher de France',
+  description: 'Agrégateur all-in-one : Apollo, Serper, Enrichly, Anymail, Findymail réunis en une seule plateforme. 150+ catégories, 101 départements, scoring IA. À partir de 49€/mois — 5x moins cher que la concurrence.',
 };
 
 function formatPrice(cents) {
@@ -51,6 +53,14 @@ const PLAN_FEATURES = {
   ],
 };
 
+const COMPETITORS = [
+  { name: 'Apollo.io', price: '99', enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '~30' },
+  { name: 'Hunter.io', price: '49', enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '0' },
+  { name: 'Lusha', price: '36', enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '0' },
+  { name: 'Snov.io', price: '39', enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '~20' },
+  { name: 'Dropcontact', price: '24', enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '0' },
+];
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#08080c] text-white overflow-hidden">
@@ -66,7 +76,7 @@ export default function LandingPage() {
           </Link>
           <div className="hidden sm:flex items-center gap-8">
             <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">Fonctionnalités</Link>
-            <Link href="#how-it-works" className="text-sm text-zinc-500 hover:text-white transition">Comment ça marche</Link>
+            <Link href="#vs-concurrence" className="text-sm text-zinc-500 hover:text-white transition">vs Concurrence</Link>
             <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">Pricing</Link>
             <Link href="#faq" className="text-sm text-zinc-500 hover:text-white transition">FAQ</Link>
           </div>
@@ -79,36 +89,49 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative pt-32 pb-28 px-6 overflow-hidden">
+        {/* Interactive particle background */}
+        <MouseParticles />
         {/* Background glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-violet-600/15 via-indigo-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-20 right-[10%] w-72 h-72 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-40 left-[5%] w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto text-center relative">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs text-zinc-400 mb-8 backdrop-blur-sm">
-            <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            France entière &mdash; 101 départements couverts
+            <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            5x moins cher qu&apos;Apollo &mdash; 7 sources intégrées en 1 clic
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-8">
-            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Générez des leads qualifiés</span>
+            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Prospectez avec</span>
             <br />
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">partout en France.</span>
+            <TypewriterText />
           </h1>
-          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Prospection B2B automatisée sur les 101 départements français.
-            Recherche Google Places, enrichissement email en cascade, export en 1 clic.
+          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-6 leading-relaxed">
+            L&apos;agrégateur de prospection B2B qui combine <strong className="text-zinc-200">7 sources d&apos;enrichissement</strong> (Apollo, Serper, Enrichly, Anymail, Findymail) en une seule recherche.
+            Scoring de confiance IA, 150+ catégories, 101 départements.
+          </p>
+          <p className="text-sm text-violet-400 font-semibold mb-10">
+            À partir de 49&euro;/mois &mdash; là où Apollo facture 99&euro; pour une seule source.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <HeroCTA />
             <Link
-              href="#features"
+              href="#vs-concurrence"
               className="text-sm text-zinc-500 hover:text-zinc-300 transition flex items-center gap-1"
             >
-              Voir comment ça marche
+              Comparer avec la concurrence
               <ArrowRight size={14} />
             </Link>
+          </div>
+
+          {/* Source logos ribbon */}
+          <div className="mt-14 flex items-center justify-center gap-6 flex-wrap">
+            <span className="text-[11px] text-zinc-600 uppercase tracking-wider">Sources intégrées :</span>
+            {['Google Places', 'Apollo.io', 'Serper', 'Enrichly', 'Anymail Finder', 'Findymail', 'Scraping'].map((s) => (
+              <span key={s} className="text-xs text-zinc-500 px-3 py-1 rounded-full border border-white/[0.06] bg-white/[0.02]">{s}</span>
+            ))}
           </div>
         </div>
       </section>
@@ -116,48 +139,94 @@ export default function LandingPage() {
       {/* Interactive Demo */}
       <InteractiveDemo />
 
+      {/* Why an aggregator */}
+      <section className="py-24 px-6 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold text-violet-400 mb-3">Pourquoi un agrégateur ?</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Un outil ne suffit pas. Nous les combinons tous.
+            </h2>
+            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">
+              Apollo trouve 40% des emails. Hunter en trouve 30% d&apos;autres. Snov.io complète le reste.
+              En utilisant <strong className="text-zinc-300">une seule source, vous passez à côté de 60% de vos leads</strong>.
+              Prospectia interroge 7 sources en cascade pour maximiser votre taux de couverture.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 text-center">
+              <div className="text-5xl font-bold font-mono bg-gradient-to-b from-red-400 to-red-600 bg-clip-text text-transparent mb-2">~40%</div>
+              <p className="text-sm text-zinc-500">Taux de couverture moyen avec <strong className="text-zinc-400">1 seule source</strong> (Apollo, Hunter, etc.)</p>
+            </div>
+            <div className="p-6 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.08] to-transparent text-center">
+              <div className="text-5xl font-bold font-mono bg-gradient-to-b from-violet-400 to-violet-600 bg-clip-text text-transparent mb-2">~85%</div>
+              <p className="text-sm text-zinc-500">Taux de couverture avec le <strong className="text-violet-400">waterfall 7 sources</strong> de Prospectia</p>
+            </div>
+            <div className="p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 text-center">
+              <div className="text-5xl font-bold font-mono bg-gradient-to-b from-green-400 to-green-600 bg-clip-text text-transparent mb-2">-80%</div>
+              <p className="text-sm text-zinc-500">Coût par lead vs. <strong className="text-zinc-400">abonnements séparés</strong> à chaque outil</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">Fonctionnalités</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Tout ce qu&apos;il faut pour prospecter
+              Ce que vous obtenez pour 49&euro;/mois
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Une plateforme complète pour trouver, enrichir et exporter vos leads en France.
+              Tout ce que font Apollo, Hunter, Lusha et Snov.io — combiné en une seule plateforme, pour une fraction du prix.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: Search,
-                title: 'Recherche Google Places',
-                desc: 'Interrogez l\'API Google Places par département et catégorie. 19 catégories B2B et copropriété prédéfinies.',
+                icon: Layers,
+                title: 'Waterfall 7 sources',
+                desc: 'Apollo, Serper, Enrichly, Anymail, Findymail, Scraping, Fallback — interrogés en cascade. On s\'arrête au premier email trouvé. Vous ne payez que ce qui est nécessaire.',
                 gradient: 'from-violet-500/20 to-indigo-500/20',
                 iconBg: 'from-violet-500 to-indigo-600',
               },
               {
-                icon: Mail,
-                title: 'Enrichissement email',
-                desc: 'Waterfall multi-sources : scraping, Serper, Apollo, Enrichly, Anymail, Findymail. S\'arrête au premier email trouvé.',
+                icon: Brain,
+                title: 'IA & recherche naturelle',
+                desc: 'Décrivez ce que vous cherchez en français : "restaurants italiens à Lyon". Notre IA convertit votre requête en recherche structurée automatiquement.',
                 gradient: 'from-indigo-500/20 to-blue-500/20',
                 iconBg: 'from-indigo-500 to-blue-600',
               },
               {
-                icon: Tag,
-                title: 'Lead scoring & tags',
-                desc: 'Scoring automatique des emails (domain match, contact@, pro, générique). Organisez vos leads par dossiers.',
+                icon: BarChart3,
+                title: 'Scoring de confiance',
+                desc: 'Chaque email reçoit un score de fiabilité : Vérifié (domaine exact), Apollo (base de données), Probable (pattern deviné). Sachez exactement à quoi vous fier.',
                 gradient: 'from-blue-500/20 to-cyan-500/20',
                 iconBg: 'from-blue-500 to-cyan-600',
               },
               {
-                icon: Download,
-                title: 'Export CSV & Zoho CRM',
-                desc: 'Exportez en CSV standard ou au format Zoho CRM (Last Name, Company, Email, Phone). Prêt pour l\'outreach.',
+                icon: Database,
+                title: '150+ catégories B2B',
+                desc: '12 secteurs B2B et 3 groupes copropriété. La base de données la plus complète pour la prospection en France — hôtellerie, santé, BTP, auto, tech, juridique...',
                 gradient: 'from-cyan-500/20 to-teal-500/20',
                 iconBg: 'from-cyan-500 to-teal-600',
+              },
+              {
+                icon: Globe,
+                title: '101 départements couverts',
+                desc: 'France entière : 96 départements métropolitains + 5 outre-mer. Sélection par région, par département, ou en un clic.',
+                gradient: 'from-teal-500/20 to-green-500/20',
+                iconBg: 'from-teal-500 to-green-600',
+              },
+              {
+                icon: Download,
+                title: 'Export CSV & Zoho CRM',
+                desc: 'Exportez en CSV standard ou au format Zoho CRM (Last Name, Company, Email, Phone). Prêt pour votre campagne d\'outreach en 1 clic.',
+                gradient: 'from-green-500/20 to-emerald-500/20',
+                iconBg: 'from-green-500 to-emerald-600',
               },
             ].map((feature) => (
               <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
@@ -181,10 +250,10 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">Comment ça marche</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              3 étapes, des centaines de leads
+              3 étapes, des centaines de leads qualifiés
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Pas de formulaires complexes. Répondez à quelques questions, Prospectia fait le travail.
+              Pas de formulaires complexes. Décrivez ce que vous cherchez ou sélectionnez vos critères. Prospectia fait le reste.
             </p>
           </div>
 
@@ -192,23 +261,23 @@ export default function LandingPage() {
             {[
               {
                 step: '01',
-                icon: MapPin,
-                title: 'Choisissez départements & catégories',
-                desc: 'Sélectionnez vos départements par région et les catégories B2B ou copropriété qui vous intéressent. Ou lancez une requête personnalisée.',
+                icon: Search,
+                title: 'Recherchez en langage naturel',
+                desc: 'Tapez "garages auto dans le Var" ou sélectionnez départements et catégories. L\'IA comprend votre intention et lance la recherche Google Places.',
                 gradient: 'from-violet-500 to-indigo-600',
               },
               {
                 step: '02',
                 icon: Zap,
-                title: 'Recherche & enrichissement automatiques',
-                desc: 'Prospectia interroge Google Places, déduplique les résultats et enrichit chaque prospect avec jusqu\'à 7 sources email différentes.',
+                title: 'Enrichissement waterfall automatique',
+                desc: 'Prospectia interroge 7 sources en cascade : Scraping, Serper, Apollo, Enrichly, Anymail, Findymail. S\'arrête au premier email trouvé, avec un score de confiance.',
                 gradient: 'from-indigo-500 to-blue-600',
               },
               {
                 step: '03',
                 icon: Download,
-                title: 'Exportez vos leads qualifiés',
-                desc: 'Filtrez par département, type ou recherche texte. Exportez en CSV standard ou format Zoho CRM, prêts pour votre campagne.',
+                title: 'Exportez et prospectez',
+                desc: 'Filtrez par score, département ou catégorie. Exportez en CSV ou format Zoho CRM. Vos leads sont prêts pour l\'outreach en quelques secondes.',
                 gradient: 'from-blue-500 to-cyan-600',
               },
             ].map((item) => (
@@ -233,23 +302,23 @@ export default function LandingPage() {
           <div className="mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">Enrichissement en cascade</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 max-w-lg">
-              7 sources. 1 clic. Le meilleur email.
+              7 sources. 1 clic. Le meilleur email avec score de confiance.
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl">
-              92% moins cher qu&apos;Apollo seul. Notre waterfall teste chaque source
-              et s&apos;arrête dès qu&apos;un email est trouvé.
+              Avec Apollo seul, vous payez 99&euro;/mois pour une seule source.
+              Avec Prospectia, vous accédez à <strong className="text-zinc-300">7 sources pour 49&euro;/mois</strong> — et chaque email reçoit un niveau de confiance.
             </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
             {[
-              { name: 'Scraping', tag: 'Gratuit', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
-              { name: 'Serper', tag: '$0.002', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
-              { name: 'Apollo', tag: '$79/mo', color: 'from-orange-500/20 to-red-500/20 border-orange-500/20', dot: 'bg-orange-400' },
-              { name: 'Enrichly', tag: '$59/mo', color: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/20', dot: 'bg-cyan-400' },
-              { name: 'Anymail', tag: 'API', color: 'from-teal-500/20 to-emerald-500/20 border-teal-500/20', dot: 'bg-teal-400' },
-              { name: 'Findymail', tag: 'API', color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/20', dot: 'bg-sky-400' },
-              { name: 'Fallback', tag: 'Deviné', color: 'from-zinc-500/20 to-zinc-600/20 border-zinc-500/20', dot: 'bg-zinc-400' },
+              { name: 'Scraping', tag: 'Gratuit', score: '100%', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
+              { name: 'Serper', tag: '$0.002/req', score: '90%', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
+              { name: 'Apollo', tag: 'Inclus', score: '85%', color: 'from-orange-500/20 to-red-500/20 border-orange-500/20', dot: 'bg-orange-400' },
+              { name: 'Enrichly', tag: 'Inclus', score: '80%', color: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/20', dot: 'bg-cyan-400' },
+              { name: 'Anymail', tag: 'Inclus', score: '75%', color: 'from-teal-500/20 to-emerald-500/20 border-teal-500/20', dot: 'bg-teal-400' },
+              { name: 'Findymail', tag: 'Inclus', score: '70%', color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/20', dot: 'bg-sky-400' },
+              { name: 'Fallback', tag: 'Pattern', score: '30%', color: 'from-zinc-500/20 to-zinc-600/20 border-zinc-500/20', dot: 'bg-zinc-400' },
             ].map((s, i) => (
               <div key={s.name} className={`relative p-4 rounded-xl bg-gradient-to-br ${s.color} border border-white/[0.06]`}>
                 <div className="flex items-center gap-2 mb-2">
@@ -257,7 +326,8 @@ export default function LandingPage() {
                   <span className="text-[10px] font-mono text-zinc-500">0{i + 1}</span>
                 </div>
                 <h4 className="text-sm font-semibold mb-1">{s.name}</h4>
-                <span className="text-[10px] text-zinc-500">{s.tag}</span>
+                <span className="text-[10px] text-zinc-500 block">{s.tag}</span>
+                <span className="text-[10px] text-zinc-600 block mt-1">Confiance : {s.score}</span>
               </div>
             ))}
           </div>
@@ -272,10 +342,10 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { value: '19', label: 'Catégories', sub: 'B2B & Copro' },
-              { value: '101', label: 'Départements', sub: 'France entière' },
-              { value: '7', label: 'Sources', sub: 'Enrichissement' },
-              { value: '-92%', label: 'vs Apollo', sub: 'Coût/lead' },
+              { value: '150+', label: 'Catégories', sub: 'B2B & Copropriété' },
+              { value: '101', label: 'Départements', sub: 'France entière + DOM-TOM' },
+              { value: '7', label: 'Sources', sub: 'Enrichissement waterfall' },
+              { value: '49€', label: 'vs 99€', sub: 'Apollo.io seul' },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">{stat.value}</div>
@@ -283,6 +353,113 @@ export default function LandingPage() {
                 <div className="text-[10px] text-zinc-600 mt-0.5">{stat.sub}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Full Competitor Comparison */}
+      <section id="vs-concurrence" className="py-24 px-6 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold text-violet-400 mb-3">Comparatif détaillé</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              Prospectia vs. la concurrence
+            </h2>
+            <p className="text-zinc-500 text-lg max-w-2xl mx-auto">
+              Pourquoi payer 99&euro;/mois pour Apollo, 49&euro; pour Hunter, ET 39&euro; pour Snov.io
+              quand Prospectia réunit tout en une seule plateforme ?
+            </p>
+          </div>
+
+          <div className="p-1 rounded-2xl bg-gradient-to-b from-violet-500/20 to-transparent">
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#0c0c12] border border-white/[0.04]">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-white/[0.08]">
+                      <th className="text-left py-4 px-4 font-medium text-zinc-600 min-w-[140px]"></th>
+                      <th className="text-center py-4 px-4 min-w-[120px]">
+                        <div className="font-bold text-violet-400 text-base">Prospectia</div>
+                        <div className="text-violet-400/60 text-xs mt-0.5">49&euro;/mois</div>
+                      </th>
+                      {COMPETITORS.map((c) => (
+                        <th key={c.name} className="text-center py-4 px-4 font-medium text-zinc-600 min-w-[100px]">
+                          <div>{c.name}</div>
+                          <div className="text-zinc-700 text-xs mt-0.5">{c.price}&euro;/mois</div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: 'Sources d\'enrichissement', prospectia: '7 sources', key: 'enrichments' },
+                      { label: 'Scoring de confiance', prospectia: true, key: 'scoring' },
+                      { label: 'Recherche IA (langage naturel)', prospectia: true, key: 'ai' },
+                      { label: '101 départements FR', prospectia: true, key: 'depts' },
+                      { label: 'Catégories B2B', prospectia: '150+', key: 'categories' },
+                      { label: 'Google Places intégré', prospectia: true, key: 'google', competitors: [false, false, false, false, false] },
+                      { label: 'Export Zoho CRM', prospectia: true, key: 'zoho', competitors: [false, false, false, false, false] },
+                    ].map((row) => (
+                      <tr key={row.label} className="border-b border-white/[0.04]">
+                        <td className="py-3.5 px-4 text-zinc-400">{row.label}</td>
+                        <td className="py-3.5 px-4 text-center">
+                          {typeof row.prospectia === 'boolean' ? (
+                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-violet-500/20">
+                              <Check size={14} className="text-violet-400" />
+                            </span>
+                          ) : (
+                            <span className="font-semibold text-white">{row.prospectia}</span>
+                          )}
+                        </td>
+                        {COMPETITORS.map((c) => {
+                          const val = row.competitors ? row.competitors[COMPETITORS.indexOf(c)] : c[row.key];
+                          return (
+                            <td key={c.name} className="py-3.5 px-4 text-center">
+                              {typeof val === 'boolean' ? (
+                                val ? <Check size={14} className="text-zinc-500 mx-auto" /> : <X size={14} className="text-zinc-800 mx-auto" />
+                              ) : (
+                                <span className="text-zinc-600">{val}</span>
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                    {/* Price row highlighted */}
+                    <tr className="border-t-2 border-white/[0.08]">
+                      <td className="py-4 px-4 text-zinc-300 font-semibold">Prix mensuel</td>
+                      <td className="py-4 px-4 text-center">
+                        <span className="text-2xl font-bold text-violet-400">49&euro;</span>
+                      </td>
+                      {COMPETITORS.map((c) => (
+                        <td key={c.name} className="py-4 px-4 text-center">
+                          <span className="text-lg text-zinc-600">{c.price}&euro;</span>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Economic argument */}
+          <div className="mt-10 p-6 rounded-2xl border border-green-500/20 bg-green-500/[0.04]">
+            <div className="flex flex-col sm:flex-row items-start gap-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                <TrendingDown size={18} className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Le calcul est simple</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">
+                  Apollo (99&euro;) + Hunter (49&euro;) + Snov.io (39&euro;) = <strong className="text-zinc-200">187&euro;/mois</strong> pour 3 sources séparées, sans déduplication, sans scoring.
+                  <br />
+                  Prospectia Pro = <strong className="text-violet-400">49&euro;/mois</strong> pour 7 sources intégrées, waterfall automatique, scoring de confiance IA, et 150+ catégories.
+                  <br />
+                  <span className="text-green-400 font-semibold">Économie : 138&euro;/mois, soit 1&thinsp;656&euro;/an.</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -296,7 +473,7 @@ export default function LandingPage() {
               Le plus compétitif du marché
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Pas de crédits cachés. Pas de markup sur les API. Vous payez le coût réel.
+              Pas de crédits cachés. Pas de markup sur les API. 7 sources pour le prix d&apos;une seule chez la concurrence.
             </p>
           </div>
 
@@ -329,10 +506,11 @@ export default function LandingPage() {
             <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-surface-card/80 backdrop-blur-sm">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg shadow-violet-500/20 flex items-center gap-1.5">
                 <Crown size={12} />
-                Recommandé
+                Le plus populaire
               </div>
               <h3 className="text-lg font-semibold mb-1">{PLANS.pro.name}</h3>
-              <p className="text-sm text-zinc-500 mb-6">Pour les équipes commerciales</p>
+              <p className="text-sm text-zinc-500 mb-2">Pour les équipes commerciales</p>
+              <p className="text-xs text-green-400 font-medium mb-4">5x moins cher qu&apos;Apollo</p>
               <div className="flex items-baseline gap-1 mb-6">
                 <span className="text-4xl font-bold">{formatPrice(PLANS.pro.price)}&euro;</span>
                 <span className="text-zinc-600 text-sm">/mois</span>
@@ -377,43 +555,6 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-
-          {/* Comparison table */}
-          <div className="mt-16 p-8 rounded-2xl bg-surface-card/80 backdrop-blur-sm border border-white/[0.06]">
-            <h3 className="font-semibold mb-6 text-center text-zinc-300">Comparez avec la concurrence</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/[0.06]">
-                    <th className="text-left py-3 px-4 font-medium text-zinc-600"></th>
-                    <th className="text-center py-3 px-4 font-bold text-violet-400">Prospectia</th>
-                    <th className="text-center py-3 px-4 font-medium text-zinc-600">Apollo.io</th>
-                    <th className="text-center py-3 px-4 font-medium text-zinc-600">LeadQuest</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ['Prix/mois', `${formatPrice(PLANS.pro.price)}\u20AC`, '79\u20AC', '~99\u20AC'],
-                    ['Sources enrichissement', '7', '1', '?'],
-                    ['101 départements FR', '\u2713', '\u2717', '\u2717'],
-                    ['Google Places intégré', '\u2713', '\u2717', '\u2717'],
-                    ['Export Zoho CRM', '\u2713', '\u2717', '\u2717'],
-                    ['Interface conversationnelle', '\u2713', '\u2717', '\u2717'],
-                  ].map(([label, ...values], i) => (
-                    <tr key={i} className="border-b border-white/[0.04]">
-                      <td className="py-3 px-4 text-zinc-400">{label}</td>
-                      {values.map((v, j) => (
-                        <td key={j} className={`py-3 px-4 text-center ${j === 0 ? 'font-semibold text-white' : 'text-zinc-600'}`}>
-                          {v === '\u2713' ? <span className="text-violet-400 font-bold">&#10003;</span> :
-                           v === '\u2717' ? <span className="text-zinc-700">&#10005;</span> : v}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -425,10 +566,13 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto text-center relative">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Prêt à trouver vos prochains clients ?
+            Arrêtez de payer 3 outils. Passez à l&apos;agrégateur.
           </h2>
-          <p className="text-zinc-500 text-lg mb-8 max-w-xl mx-auto">
-            Créez votre compte en 30 secondes. Aucune carte bancaire requise.
+          <p className="text-zinc-500 text-lg mb-3 max-w-xl mx-auto">
+            7 sources, scoring IA, 150+ catégories, 101 départements.
+          </p>
+          <p className="text-sm text-violet-400 font-semibold mb-8">
+            Créez votre compte en 30 secondes &mdash; aucune carte bancaire requise.
           </p>
           <FooterCTA />
         </div>
