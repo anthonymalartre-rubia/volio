@@ -333,6 +333,14 @@ export async function POST(request) {
     const ctx = { url: validation.url, domain, name };
     const tried = [];
 
+    // ─── Fetch user preference for personal email filtering ───
+    const { data: userProfile } = await supabase
+      .from('user_profiles')
+      .select('filter_personal_emails')
+      .eq('id', user.id)
+      .single();
+    const filterPersonalEmails = userProfile?.filter_personal_emails !== false;
+
     // ─── Check opt-out list: never enrich emails that opted out ───
     async function isOptedOut(email) {
       if (!email) return false;
@@ -358,7 +366,7 @@ export async function POST(request) {
     for (const step of stepsToRun) {
       try {
         const result = await step.fn(ctx);
-        if (result?.email && isPersonalEmail(result.email)) {
+        if (filterPersonalEmails && result?.email && isPersonalEmail(result.email)) {
           tried.push({ step: step.name, label: step.label, found: true, skipped: 'email_personnel' });
           continue;
         }

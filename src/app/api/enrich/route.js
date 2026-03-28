@@ -82,18 +82,18 @@ function extractEmailsFromHtml(html) {
   return Array.from(emails);
 }
 
-function isValidEmail(email) {
+function isValidEmail(email, filterPersonal = true) {
   if (!email) return false;
   const [localPart, domain] = email.split('@');
   if (!localPart || !domain) return false;
   if (BLOCKED_DOMAINS.includes(domain.toLowerCase())) return false;
-  if (PERSONAL_DOMAINS.has(domain.toLowerCase())) return false;
+  if (filterPersonal && PERSONAL_DOMAINS.has(domain.toLowerCase())) return false;
   if (BLOCKED_EXTENSIONS.some((ext) => localPart.toLowerCase().endsWith(ext))) return false;
   if (localPart.toLowerCase().includes('noreply') || localPart.toLowerCase().includes('mailer-daemon')) return false;
   return true;
 }
 
-function scoreEmail(email, domain) {
+function scoreEmail(email, domain, filterPersonal = true) {
   if (!email) return 0;
   const [localPart, emailDomain] = email.split('@');
   if (!localPart || !emailDomain) return 0;
@@ -113,8 +113,8 @@ function scoreEmail(email, domain) {
   const contactPrefixes = ['contact', 'info', 'support', 'hello', 'business', 'accueil', 'reception'];
   if (contactPrefixes.some((prefix) => localPart.toLowerCase().startsWith(prefix))) score += 50;
 
-  // RGPD: personal email domains are rejected entirely
-  if (PERSONAL_DOMAINS.has(emailDomain.toLowerCase())) return -Infinity;
+  // RGPD: personal email domains penalized when filter is active
+  if (filterPersonal && PERSONAL_DOMAINS.has(emailDomain.toLowerCase())) return -Infinity;
 
   return score;
 }
@@ -147,13 +147,13 @@ function extractDomain(url) {
   }
 }
 
-async function enrichEmail(url) {
+async function enrichEmail(url, filterPersonal = true) {
   const domain = extractDomain(url);
   if (!domain) return { email: '', method: '' };
 
   let html = await fetchUrl(url);
   let emails = html ? extractEmailsFromHtml(html) : [];
-  let validEmails = emails.filter(isValidEmail);
+  let validEmails = emails.filter((e) => isValidEmail(e, filterPersonal));
 
   if (validEmails.length === 0) {
     // Fetch all common paths in parallel instead of sequentially (~4x faster)
@@ -164,7 +164,7 @@ async function enrichEmail(url) {
     for (const result of results) {
       if (result.status === 'fulfilled' && result.value) {
         emails = extractEmailsFromHtml(result.value);
-        validEmails = emails.filter(isValidEmail);
+        validEmails = emails.filter((e) => isValidEmail(e, filterPersonal));
         if (validEmails.length > 0) break;
       }
     }
@@ -173,7 +173,7 @@ async function enrichEmail(url) {
   if (validEmails.length > 0) {
     const scoredEmails = validEmails.map((email) => ({
       email,
-      score: scoreEmail(email, domain),
+      score: scoreEmail(email, domain, filterPersonal),
     }));
     scoredEmails.sort((a, b) => b.score - a.score);
     // Only return if the best email has a positive score (domain matches)
@@ -206,7 +206,15 @@ export async function POST(request) {
       return Response.json({ error: validation.error }, { status: 400 });
     }
 
-    const result = await enrichEmail(validation.url);
+    // Fetch user preference for personal email filtering
+    const { data: userProfile } = await supabase
+      .from('user_profiles')
+      .select('filter_personal_emails')
+      .eq('id', user.id)
+      .single();
+    const filterPersonal = userProfile?.filter_personal_emails !== false;
+
+    const result = await enrichEmail(validation.url, filterPersonal);
     await incrementUsage(supabase, user.id, 'enrichments');
     return Response.json(result);
   } catch (error) {

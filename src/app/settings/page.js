@@ -7,7 +7,7 @@ import { PLANS } from '@/lib/plans';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
   Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon,
-  BookOpen, BarChart3, ArrowUpRight,
+  BookOpen, BarChart3, ArrowUpRight, ShieldAlert, Filter,
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 
@@ -35,6 +35,10 @@ export default function SettingsPage() {
 
   // Usage data
   const [userUsage, setUserUsage] = useState(null);
+
+  // RGPD filter
+  const [filterPersonalEmails, setFilterPersonalEmails] = useState(true);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   // Delete account
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -72,6 +76,7 @@ export default function SettingsPage() {
       .single();
 
     setProfile(prof);
+    setFilterPersonalEmails(prof?.filter_personal_emails !== false);
 
     // Fetch usage data for current month
     const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
@@ -138,6 +143,29 @@ export default function SettingsPage() {
       showToast('Erreur reseau', 'error');
     }
     setPasswordLoading(false);
+  }
+
+  async function handleToggleFilter() {
+    setFilterLoading(true);
+    const newValue = !filterPersonalEmails;
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ filter_personal_emails: newValue })
+        .eq('id', user.id);
+      if (error) {
+        showToast('Erreur lors de la mise a jour', 'error');
+      } else {
+        setFilterPersonalEmails(newValue);
+        showToast(newValue
+          ? 'Filtrage des emails personnels active'
+          : 'Filtrage des emails personnels desactive — vous etes responsable de la conformite RGPD'
+        , newValue ? 'success' : 'error');
+      }
+    } catch {
+      showToast('Erreur reseau', 'error');
+    }
+    setFilterLoading(false);
   }
 
   async function handleManageBilling() {
@@ -382,6 +410,73 @@ export default function SettingsPage() {
               </div>
             </button>
           </div>
+        </div>
+
+        {/* === RGPD Email Filter Section === */}
+        <div className={`rounded-xl border ${filterPersonalEmails ? 'border-line' : 'border-amber-500/30'} bg-surface-card p-6`}>
+          <div className="flex items-center gap-3 mb-6">
+            <div className={`p-2 rounded-lg ${filterPersonalEmails ? 'bg-violet-500/20' : 'bg-amber-500/20'}`}>
+              <Filter className={`h-5 w-5 ${filterPersonalEmails ? 'text-violet-400' : 'text-amber-400'}`} />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold">Filtrage RGPD des emails</h2>
+              <p className="text-xs text-content-tertiary">Filtrer automatiquement les emails personnels (@gmail, @hotmail, etc.)</p>
+            </div>
+          </div>
+
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1">
+              <p className="text-sm font-medium mb-1">
+                {filterPersonalEmails ? 'Filtrage actif' : 'Filtrage desactive'}
+              </p>
+              <p className="text-xs text-content-tertiary leading-relaxed">
+                {filterPersonalEmails
+                  ? 'Les emails personnels (@gmail, @hotmail, @orange, @free, etc.) sont automatiquement exclus des resultats d\'enrichissement. Seuls les emails professionnels (domaine entreprise) sont retournes.'
+                  : 'Les emails personnels ne sont plus filtres. Tous les emails trouves seront retournes, y compris les @gmail, @hotmail, etc.'
+                }
+              </p>
+            </div>
+            <button
+              onClick={handleToggleFilter}
+              disabled={filterLoading}
+              className={`relative w-14 h-7 rounded-full transition-colors flex-shrink-0 ${
+                filterPersonalEmails ? 'bg-violet-600' : 'bg-surface-elevated'
+              }`}
+            >
+              {filterLoading ? (
+                <RefreshCw className="h-3.5 w-3.5 animate-spin text-content-tertiary absolute top-1.5 left-1/2 -translate-x-1/2" />
+              ) : (
+                <div className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                  filterPersonalEmails ? 'translate-x-7' : 'translate-x-1'
+                }`} />
+              )}
+            </button>
+          </div>
+
+          {/* RGPD Warning when disabled */}
+          {!filterPersonalEmails && (
+            <div className="mt-4 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <div className="flex items-start gap-3">
+                <ShieldAlert className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-400 mb-2">Avertissement RGPD</p>
+                  <p className="text-xs text-content-secondary leading-relaxed mb-2">
+                    En desactivant ce filtre, vous recevrez des emails personnels (type @gmail.com, @hotmail.com) dans vos resultats d&apos;enrichissement. Ces adresses sont des <strong className="text-content-primary">donnees personnelles</strong> au sens du RGPD.
+                  </p>
+                  <p className="text-xs text-content-secondary leading-relaxed mb-2">
+                    <strong className="text-content-primary">Obligations legales :</strong> Vous n&apos;avez <strong className="text-amber-400">pas le droit</strong> de contacter ces personnes sans avoir prealablement obtenu leur consentement explicite (opt-in). L&apos;envoi d&apos;emails commerciaux non sollicites a des adresses personnelles est une violation du RGPD (Art. 6) et de la directive ePrivacy, passible d&apos;amendes pouvant atteindre 20 millions d&apos;euros ou 4% du chiffre d&apos;affaires annuel.
+                  </p>
+                  <p className="text-xs text-content-secondary leading-relaxed mb-3">
+                    <strong className="text-content-primary">Responsabilite :</strong> En desactivant ce filtre, vous devenez seul responsable de la conformite RGPD de vos campagnes de prospection. Prospectia.ai ne pourra en aucun cas etre tenu responsable de l&apos;utilisation que vous faites de ces donnees personnelles.
+                  </p>
+                  <div className="flex items-center gap-2 text-[10px] text-amber-400/70 uppercase tracking-wider font-semibold">
+                    <ShieldAlert className="h-3 w-3" />
+                    Vous acceptez ces conditions en desactivant le filtre
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* === Onboarding Guide Section === */}
