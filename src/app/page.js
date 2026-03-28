@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
+import ThemeToggle from '@/components/ThemeToggle';
 import { PLANS } from '@/lib/plans';
 
 export const metadata = {
@@ -67,6 +68,7 @@ export default function LandingPage() {
             <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">Pricing</Link>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <NavAuth />
           </div>
         </div>
@@ -211,7 +213,7 @@ export default function LandingPage() {
                 iconBg: 'from-cyan-500 to-teal-600',
               },
             ].map((feature) => (
-              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
+              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative">
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.iconBg} flex items-center justify-center mb-4 shadow-lg`}>
@@ -353,7 +355,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Starter */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-1">{PLANS.free.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Pour tester la plateforme</p>
               <div className="flex items-baseline gap-1 mb-6">
@@ -377,7 +379,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pro — Recommended */}
-            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-[#111114]/80 backdrop-blur-sm">
+            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-surface-card/80 backdrop-blur-sm">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg shadow-violet-500/20 flex items-center gap-1.5">
                 <Crown size={12} />
                 Recommandé
@@ -405,7 +407,7 @@ export default function LandingPage() {
             </div>
 
             {/* Enterprise */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-1">{PLANS.enterprise.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Volume et sur-mesure</p>
               <div className="flex items-baseline gap-1 mb-6">
@@ -430,7 +432,7 @@ export default function LandingPage() {
           </div>
 
           {/* Comparison table */}
-          <div className="mt-16 p-8 rounded-2xl bg-[#111114]/80 backdrop-blur-sm border border-white/[0.06]">
+          <div className="mt-16 p-8 rounded-2xl bg-surface-card/80 backdrop-blur-sm border border-white/[0.06]">
             <h3 className="font-semibold mb-6 text-center text-zinc-300">Comparez avec la concurrence</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

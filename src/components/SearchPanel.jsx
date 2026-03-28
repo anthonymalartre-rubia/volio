@@ -23,9 +23,9 @@ function BotMessage({ children, icon: Icon, delay = 0 }) {
           <Sparkles size={13} className="text-white" />
         </div>
         <div className="flex gap-1 py-3">
-          <div className="w-1.5 h-1.5 bg-[#3f3f46] rounded-full animate-bounce [animation-delay:0ms]" />
-          <div className="w-1.5 h-1.5 bg-[#3f3f46] rounded-full animate-bounce [animation-delay:150ms]" />
-          <div className="w-1.5 h-1.5 bg-[#3f3f46] rounded-full animate-bounce [animation-delay:300ms]" />
+          <div className="w-1.5 h-1.5 bg-content-faint rounded-full animate-bounce [animation-delay:0ms]" />
+          <div className="w-1.5 h-1.5 bg-content-faint rounded-full animate-bounce [animation-delay:150ms]" />
+          <div className="w-1.5 h-1.5 bg-content-faint rounded-full animate-bounce [animation-delay:300ms]" />
         </div>
       </div>
     );
@@ -53,9 +53,9 @@ function UserMessage({ children }) {
 
 function OptionChips({ options, selected, onToggle, colorClass = "indigo" }) {
   const colors = {
-    indigo: { active: "bg-indigo-600/20 border-indigo-500/30 text-indigo-400", inactive: "border-[#27272a] text-[#71717a] hover:border-[#3f3f46] hover:text-[#a1a1aa]" },
-    blue: { active: "bg-blue-600/20 border-blue-500/30 text-blue-400", inactive: "border-[#27272a] text-[#71717a] hover:border-[#3f3f46] hover:text-[#a1a1aa]" },
-    purple: { active: "bg-purple-600/20 border-purple-500/30 text-purple-400", inactive: "border-[#27272a] text-[#71717a] hover:border-[#3f3f46] hover:text-[#a1a1aa]" },
+    indigo: { active: "bg-indigo-600/20 border-indigo-500/30 text-indigo-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
+    blue: { active: "bg-blue-600/20 border-blue-500/30 text-blue-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
+    purple: { active: "bg-purple-600/20 border-purple-500/30 text-purple-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
   };
   const c = colors[colorClass] || colors.indigo;
 
@@ -215,8 +215,8 @@ export default function SearchPanel({
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-[#fafafa] mb-1">Recherche</h2>
-        <p className="text-sm text-[#52525b]">Definissez votre cible en quelques etapes</p>
+        <h2 className="text-xl font-bold text-content-primary mb-1">Recherche</h2>
+        <p className="text-sm text-content-muted">Definissez votre cible en quelques etapes</p>
       </div>
 
       {!apiKeySet && (
@@ -224,8 +224,8 @@ export default function SearchPanel({
           <Sparkles size={18} className="text-amber-500 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-amber-400">Configuration requise</p>
-            <p className="text-xs text-[#71717a] mt-1">
-              Definissez <code className="px-1.5 py-0.5 rounded bg-[#1e1e24] text-[#a1a1aa] text-[11px]">GOOGLE_PLACES_API_KEY</code> dans les variables Vercel.
+            <p className="text-xs text-content-tertiary mt-1">
+              Definissez <code className="px-1.5 py-0.5 rounded bg-surface-elevated text-content-secondary text-[11px]">GOOGLE_PLACES_API_KEY</code> dans les variables Vercel.
             </p>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function SearchPanel({
 
       <div
         ref={scrollRef}
-        className="rounded-2xl border border-[#1e1e24] bg-[#111114] overflow-hidden"
+        className="rounded-2xl border border-line bg-surface-card overflow-hidden"
       >
         <div className="p-5 space-y-5 max-h-[calc(100vh-16rem)] overflow-y-auto">
 
@@ -246,21 +246,21 @@ export default function SearchPanel({
             <div className="flex flex-wrap gap-2 pl-10 animate-in fade-in duration-300">
               <button
                 onClick={() => handleTypeSelect('b2b')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#27272a] text-sm font-medium text-[#a1a1aa] hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-600/10 transition-all active:scale-[0.97]"
               >
                 <Building2 size={15} />
                 B2B — Entreprises
               </button>
               <button
                 onClick={() => handleTypeSelect('copro')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#27272a] text-sm font-medium text-[#a1a1aa] hover:border-purple-500/30 hover:text-purple-400 hover:bg-purple-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-purple-500/30 hover:text-purple-400 hover:bg-purple-600/10 transition-all active:scale-[0.97]"
               >
                 <Home size={15} />
                 Copropriete — Syndics
               </button>
               <button
                 onClick={() => handleTypeSelect('both')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#27272a] text-sm font-medium text-[#a1a1aa] hover:border-indigo-500/30 hover:text-indigo-400 hover:bg-indigo-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-indigo-400 hover:bg-indigo-600/10 transition-all active:scale-[0.97]"
               >
                 <Sparkles size={15} />
                 Les deux
@@ -279,7 +279,7 @@ export default function SearchPanel({
             <>
               <BotMessage icon={MapPin} delay={step === 1 ? 400 : 0}>
                 <div>
-                  Dans quels departements ? <span className="text-[#52525b]">(tous selectionnes par defaut)</span>
+                  Dans quels departements ? <span className="text-content-muted">(tous selectionnes par defaut)</span>
                 </div>
               </BotMessage>
 
@@ -294,7 +294,7 @@ export default function SearchPanel({
                   <button
                     onClick={confirmDepts}
                     disabled={selectedDepts.length === 0}
-                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-[#3f3f46] disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-content-faint disabled:cursor-not-allowed"
                   >
                     Continuer <ChevronRight size={14} />
                   </button>
@@ -314,7 +314,7 @@ export default function SearchPanel({
             <>
               <BotMessage icon={searchType === 'copro' ? Home : Building2} delay={step === 2 ? 400 : 0}>
                 <div>
-                  Quelles categories ? <span className="text-[#52525b]">(toutes selectionnees par defaut)</span>
+                  Quelles categories ? <span className="text-content-muted">(toutes selectionnees par defaut)</span>
                 </div>
               </BotMessage>
 
@@ -345,7 +345,7 @@ export default function SearchPanel({
                   <button
                     onClick={confirmCats}
                     disabled={selectedCats.length === 0}
-                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-[#3f3f46] disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-content-faint disabled:cursor-not-allowed"
                   >
                     Continuer <ChevronRight size={14} />
                   </button>
@@ -365,7 +365,7 @@ export default function SearchPanel({
           {step >= 3 && (
             <>
               <BotMessage icon={Search} delay={step === 3 ? 400 : 0}>
-                Voulez-vous ajouter des recherches personnalisees ? <span className="text-[#52525b]">(optionnel)</span>
+                Voulez-vous ajouter des recherches personnalisees ? <span className="text-content-muted">(optionnel)</span>
               </BotMessage>
 
               {step === 3 && (
@@ -377,12 +377,12 @@ export default function SearchPanel({
                       onChange={(e) => setCustomInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addCustom()}
                       placeholder="Ex: plombier Martinique, notaire 972..."
-                      className="flex-1 bg-[#0a0a0c] border border-[#1e1e24] rounded-xl px-4 py-2.5 text-sm text-[#fafafa] placeholder-[#3f3f46] focus:outline-none focus:border-indigo-500/40 transition"
+                      className="flex-1 bg-surface-deep border border-line rounded-xl px-4 py-2.5 text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/40 transition"
                     />
                     <button
                       onClick={addCustom}
                       disabled={!customInput.trim()}
-                      className="px-3 py-2.5 rounded-xl bg-[#1e1e24] hover:bg-[#27272a] text-[#a1a1aa] transition disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="px-3 py-2.5 rounded-xl bg-surface-elevated hover:bg-line-hover text-content-secondary transition disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       <Plus size={16} />
                     </button>
@@ -405,7 +405,7 @@ export default function SearchPanel({
                         Continuer <ChevronRight size={14} />
                       </button>
                     ) : (
-                      <button onClick={skipCustom} className="flex items-center gap-1.5 text-sm font-medium text-[#52525b] hover:text-[#a1a1aa] transition">
+                      <button onClick={skipCustom} className="flex items-center gap-1.5 text-sm font-medium text-content-muted hover:text-content-secondary transition">
                         Passer <ChevronRight size={14} />
                       </button>
                     )}
@@ -440,7 +440,7 @@ export default function SearchPanel({
                         <button
                           key={f.id}
                           onClick={() => selectFolder(f)}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#27272a] text-sm font-medium text-[#a1a1aa] hover:border-indigo-500/30 hover:text-[#e4e4e7] hover:bg-[#1e1e24] transition-all active:scale-[0.97]"
+                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-[#e4e4e7] hover:bg-surface-elevated transition-all active:scale-[0.97]"
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${folderColorClass(f.color)}`} />
                           {f.name}
@@ -453,13 +453,13 @@ export default function SearchPanel({
                   {!showNewFolder ? (
                     <button
                       onClick={() => setShowNewFolder(true)}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-[#27272a] text-sm font-medium text-[#52525b] hover:border-indigo-500/30 hover:text-indigo-400 transition-all active:scale-[0.97]"
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-line-hover text-sm font-medium text-content-muted hover:border-indigo-500/30 hover:text-indigo-400 transition-all active:scale-[0.97]"
                     >
                       <FolderPlus size={15} />
                       Creer une nouvelle liste
                     </button>
                   ) : (
-                    <div className="rounded-xl bg-[#0a0a0c] border border-[#1e1e24] p-4 space-y-3">
+                    <div className="rounded-xl bg-surface-deep border border-line p-4 space-y-3">
                       <input
                         type="text"
                         value={newFolderName}
@@ -467,14 +467,14 @@ export default function SearchPanel({
                         onKeyDown={(e) => e.key === 'Enter' && handleCreateFolder()}
                         placeholder="Nom de la liste..."
                         autoFocus
-                        className="w-full bg-transparent border border-[#1e1e24] rounded-lg px-3 py-2 text-sm text-[#fafafa] placeholder-[#3f3f46] focus:outline-none focus:border-indigo-500/40 transition"
+                        className="w-full bg-transparent border border-line rounded-lg px-3 py-2 text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/40 transition"
                       />
                       <div className="flex gap-2">
                         {FOLDER_COLORS.map((c) => (
                           <button
                             key={c.value}
                             onClick={() => setNewFolderColor(c.value)}
-                            className={`w-6 h-6 rounded-full ${c.class} transition-all ${newFolderColor === c.value ? 'ring-2 ring-offset-2 ring-offset-[#0a0a0c] ring-white/30 scale-110' : 'opacity-50 hover:opacity-80'}`}
+                            className={`w-6 h-6 rounded-full ${c.class} transition-all ${newFolderColor === c.value ? 'ring-2 ring-offset-2 ring-offset-surface-deep ring-white/30 scale-110' : 'opacity-50 hover:opacity-80'}`}
                             title={c.label}
                           />
                         ))}
@@ -490,7 +490,7 @@ export default function SearchPanel({
                         </button>
                         <button
                           onClick={() => { setShowNewFolder(false); setNewFolderName(''); }}
-                          className="px-3 py-1.5 rounded-lg text-xs text-[#52525b] hover:text-[#a1a1aa] transition"
+                          className="px-3 py-1.5 rounded-lg text-xs text-content-muted hover:text-content-secondary transition"
                         >
                           Annuler
                         </button>
@@ -516,30 +516,30 @@ export default function SearchPanel({
             <BotMessage icon={Sparkles} delay={400}>
               <div className="space-y-3">
                 <p>Votre recherche est prete.</p>
-                <div className="rounded-xl bg-[#0a0a0c] border border-[#1e1e24] p-4 space-y-2">
+                <div className="rounded-xl bg-surface-deep border border-line p-4 space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#52525b]">Departements</span>
-                    <span className="text-[#a1a1aa] font-mono">{selectedDepts.length}</span>
+                    <span className="text-content-muted">Departements</span>
+                    <span className="text-content-secondary font-mono">{selectedDepts.length}</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#52525b]">Categories</span>
-                    <span className="text-[#a1a1aa] font-mono">{selectedCats.length}</span>
+                    <span className="text-content-muted">Categories</span>
+                    <span className="text-content-secondary font-mono">{selectedCats.length}</span>
                   </div>
                   {customQueries.length > 0 && (
                     <div className="flex justify-between text-xs">
-                      <span className="text-[#52525b]">Custom</span>
-                      <span className="text-[#a1a1aa] font-mono">{customQueries.length}</span>
+                      <span className="text-content-muted">Custom</span>
+                      <span className="text-content-secondary font-mono">{customQueries.length}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#52525b]">Liste</span>
-                    <span className="text-[#a1a1aa] flex items-center gap-1.5">
+                    <span className="text-content-muted">Liste</span>
+                    <span className="text-content-secondary flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full ${folderColorClass(selectedFolder?.color)}`} />
                       {selectedFolder?.name}
                     </span>
                   </div>
-                  <div className="border-t border-[#1e1e24] pt-2 flex justify-between text-xs">
-                    <span className="text-[#71717a] font-medium">Total requetes</span>
+                  <div className="border-t border-line pt-2 flex justify-between text-xs">
+                    <span className="text-content-tertiary font-medium">Total requetes</span>
                     <span className="text-indigo-400 font-bold font-mono">{totalQueries}</span>
                   </div>
                 </div>
@@ -547,14 +547,14 @@ export default function SearchPanel({
                   <button
                     onClick={handleLaunch}
                     disabled={!apiKeySet}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-[#1e1e24] disabled:text-[#3f3f46] text-white font-semibold text-sm transition-all disabled:cursor-not-allowed shadow-lg shadow-indigo-600/20 disabled:shadow-none active:scale-[0.97]"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-surface-elevated disabled:text-content-faint text-white font-semibold text-sm transition-all disabled:cursor-not-allowed shadow-lg shadow-indigo-600/20 disabled:shadow-none active:scale-[0.97]"
                   >
                     <Play size={14} />
                     Lancer
                   </button>
                   <button
                     onClick={handleReset}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#27272a] text-sm text-[#52525b] hover:text-[#a1a1aa] hover:border-[#3f3f46] transition active:scale-[0.97]"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm text-content-muted hover:text-content-secondary hover:border-content-faint transition active:scale-[0.97]"
                   >
                     <RotateCcw size={14} />
                     Recommencer
@@ -570,17 +570,17 @@ export default function SearchPanel({
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                  <span className="text-[#a1a1aa]">
+                  <span className="text-content-secondary">
                     {searchProgress?.currentQuery || "Initialisation..."}
                   </span>
                 </div>
-                <div className="h-1.5 bg-[#1e1e24] rounded-full overflow-hidden">
+                <div className="h-1.5 bg-surface-elevated rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-indigo-600 to-purple-500 transition-all duration-300 rounded-full"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                <div className="flex items-center justify-between text-[10px] font-mono text-[#3f3f46]">
+                <div className="flex items-center justify-between text-[10px] font-mono text-content-faint">
                   <span>{searchProgress?.current}/{searchProgress?.total}</span>
                   <span>{Math.round(progress)}%</span>
                 </div>
@@ -601,13 +601,13 @@ export default function SearchPanel({
               <div className="space-y-3">
                 <p>Recherche terminee !</p>
                 {searchProgress?.logs?.length > 0 && (
-                  <p className="text-[#52525b] text-xs">
+                  <p className="text-content-muted text-xs">
                     {searchProgress.logs[searchProgress.logs.length - 1]}
                   </p>
                 )}
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-[#27272a] text-sm text-[#52525b] hover:text-[#a1a1aa] hover:border-[#3f3f46] transition active:scale-[0.97]"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-line-hover text-sm text-content-muted hover:text-content-secondary hover:border-content-faint transition active:scale-[0.97]"
                 >
                   <RotateCcw size={14} />
                   Nouvelle recherche
@@ -619,15 +619,15 @@ export default function SearchPanel({
 
         {/* Logs */}
         {isSearching && searchProgress?.logs?.length > 0 && (
-          <details className="border-t border-[#1e1e24]">
-            <summary className="px-5 py-2.5 text-[10px] uppercase tracking-wider text-[#3f3f46] font-semibold cursor-pointer hover:text-[#52525b]">
+          <details className="border-t border-line">
+            <summary className="px-5 py-2.5 text-[10px] uppercase tracking-wider text-content-faint font-semibold cursor-pointer hover:text-content-muted">
               Logs ({searchProgress.logs.length})
             </summary>
             <div className="px-5 pb-4 max-h-40 overflow-y-auto">
-              <div className="font-mono text-[11px] text-[#3f3f46] space-y-0.5">
+              <div className="font-mono text-[11px] text-content-faint space-y-0.5">
                 {searchProgress.logs.slice(-20).map((log, i) => (
                   <div key={i} className={log.startsWith('Error') ? 'text-red-400/60' : ''}>
-                    <span className="text-[#27272a] mr-2">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="text-content-dim mr-2">{String(i + 1).padStart(2, '0')}</span>
                     {log}
                   </div>
                 ))}

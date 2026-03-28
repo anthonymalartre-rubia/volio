@@ -52,11 +52,11 @@ export default function OnboardingOverlay({ onClose, onStartSearch }) {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md mx-4 rounded-2xl border border-[#27272a] bg-[#111114] shadow-2xl">
+      <div className="relative w-full max-w-md mx-4 rounded-2xl border border-line-hover bg-surface-card shadow-2xl">
         {/* Close / Skip button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-[#71717a] hover:text-[#fafafa] transition-colors"
+          className="absolute top-4 right-4 text-content-tertiary hover:text-content-primary transition-colors"
           aria-label="Fermer"
         >
           <X size={18} />
@@ -69,12 +69,12 @@ export default function OnboardingOverlay({ onClose, onStartSearch }) {
           </div>
 
           {/* Title */}
-          <h2 className="text-xl font-semibold text-[#fafafa] mb-2">
+          <h2 className="text-xl font-semibold text-content-primary mb-2">
             {current.title}
           </h2>
 
           {/* Description */}
-          <p className="text-sm text-[#a1a1aa] leading-relaxed max-w-xs">
+          <p className="text-sm text-content-secondary leading-relaxed max-w-xs">
             {current.description}
           </p>
 
@@ -88,7 +88,7 @@ export default function OnboardingOverlay({ onClose, onStartSearch }) {
                     ? 'w-6 bg-indigo-500'
                     : i < step
                       ? 'w-1.5 bg-indigo-500/50'
-                      : 'w-1.5 bg-[#27272a]'
+                      : 'w-1.5 bg-line-hover'
                 }`}
               />
             ))}
@@ -98,7 +98,7 @@ export default function OnboardingOverlay({ onClose, onStartSearch }) {
           <div className="flex items-center gap-3 w-full">
             <button
               onClick={handleClose}
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium text-[#71717a] hover:text-[#a1a1aa] border border-[#27272a] hover:border-[#3f3f46] transition-colors"
+              className="flex-1 py-2.5 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-secondary border border-line-hover hover:border-content-faint transition-colors"
             >
               Passer
             </button>

@@ -195,7 +195,7 @@ export default function AdminPage() {
   if (!isAdmin) return null;
 
   return (
-    <div className="min-h-screen bg-[#08080c] text-[#fafafa]">
+    <div className="min-h-screen bg-[#08080c] text-content-primary">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-lg animate-in fade-in slide-in-from-top-2 ${
@@ -211,32 +211,32 @@ export default function AdminPage() {
       {/* Confirm Dialog */}
       {confirmDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#111114] border border-[#1e1e24] rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+          <div className="bg-surface-card border border-line rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className={`p-2 rounded-lg ${confirmDialog.danger ? 'bg-red-500/20' : 'bg-violet-500/20'}`}>
                 {confirmDialog.danger ? <AlertTriangle className="h-5 w-5 text-red-400" /> : <KeyRound className="h-5 w-5 text-violet-400" />}
               </div>
               <h3 className="text-lg font-semibold">{confirmDialog.title}</h3>
             </div>
-            <p className="text-sm text-[#a1a1aa] mb-4">{confirmDialog.description}</p>
+            <p className="text-sm text-content-secondary mb-4">{confirmDialog.description}</p>
             {confirmDialog.email && (
-              <p className="text-xs font-mono bg-[#09090b] rounded-lg px-3 py-2 mb-4 text-[#71717a]">{confirmDialog.email}</p>
+              <p className="text-xs font-mono bg-surface-base rounded-lg px-3 py-2 mb-4 text-content-tertiary">{confirmDialog.email}</p>
             )}
 
             {confirmDialog.showPasswordInput && (
               <div className="mb-4">
-                <label className="text-xs text-[#71717a] mb-1.5 block">Nouveau mot de passe</label>
+                <label className="text-xs text-content-tertiary mb-1.5 block">Nouveau mot de passe</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}
                     placeholder="Min. 6 caracteres"
-                    className="w-full px-3 py-2 pr-10 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+                    className="w-full px-3 py-2 pr-10 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
                   />
                   <button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -247,7 +247,7 @@ export default function AdminPage() {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => { setConfirmDialog(null); setNewPassword(''); }}
-                className="px-4 py-2 rounded-lg text-sm bg-[#1e1e24] hover:bg-[#2a2a32] transition-colors"
+                className="px-4 py-2 rounded-lg text-sm bg-surface-elevated hover:bg-surface-active transition-colors"
               >
                 Annuler
               </button>
@@ -268,17 +268,17 @@ export default function AdminPage() {
       )}
 
       {/* Header */}
-      <div className="border-b border-[#1e1e24] bg-[#111114]">
+      <div className="border-b border-line bg-surface-card">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <button onClick={() => router.push('/dashboard')} className="p-2 rounded-lg hover:bg-[#1e1e24] transition-colors">
-              <ArrowLeft className="h-4 w-4 text-[#71717a]" />
+            <button onClick={() => router.push('/dashboard')} className="p-2 rounded-lg hover:bg-surface-elevated transition-colors">
+              <ArrowLeft className="h-4 w-4 text-content-tertiary" />
             </button>
             <Shield className="h-5 w-5 text-violet-400" />
             <h1 className="text-lg font-semibold">Administration</h1>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400">Admin</span>
           </div>
-          <button onClick={() => { loadUsers(); showToast('Donnees actualisees'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-[#1e1e24] hover:bg-[#2a2a32] transition-colors">
+          <button onClick={() => { loadUsers(); showToast('Donnees actualisees'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-surface-elevated hover:bg-surface-active transition-colors">
             <RefreshCw className="h-3.5 w-3.5" /> Actualiser
           </button>
         </div>
@@ -287,24 +287,24 @@ export default function AdminPage() {
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
+          <div className="rounded-xl border border-line bg-surface-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Users className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-[#71717a]">Utilisateurs</span>
+              <span className="text-xs text-content-tertiary">Utilisateurs</span>
             </div>
             <div className="text-2xl font-bold">{stats.totalUsers}</div>
           </div>
-          <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
+          <div className="rounded-xl border border-line bg-surface-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Mail className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-[#71717a]">Total prospects</span>
+              <span className="text-xs text-content-tertiary">Total prospects</span>
             </div>
             <div className="text-2xl font-bold">{stats.totalProspects}</div>
           </div>
-          <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
+          <div className="rounded-xl border border-line bg-surface-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <CreditCard className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-[#71717a]">Utilisateurs Pro</span>
+              <span className="text-xs text-content-tertiary">Utilisateurs Pro</span>
             </div>
             <div className="text-2xl font-bold">{stats.proUsers}</div>
           </div>
@@ -312,12 +312,12 @@ export default function AdminPage() {
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
           <input
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Rechercher par email, ID ou plan..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-[#111114] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-card border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
           />
         </div>
 
@@ -329,7 +329,7 @@ export default function AdminPage() {
             const isEmailConfirmed = !!u.email_confirmed_at;
 
             return (
-              <div key={u.id} className="rounded-xl border border-[#1e1e24] bg-[#111114] overflow-hidden transition-colors hover:border-[#2a2a32]">
+              <div key={u.id} className="rounded-xl border border-line bg-surface-card overflow-hidden transition-colors hover:border-[#2a2a32]">
                 {/* User row — clickable */}
                 <button
                   onClick={() => setExpandedUser(isExpanded ? null : u.id)}
@@ -352,8 +352,8 @@ export default function AdminPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-[11px] text-[#52525b] font-mono">{u.id.slice(0, 12)}...</span>
-                      <span className="text-[11px] text-[#52525b]">Inscrit {timeAgo(u.auth_created_at || u.created_at)}</span>
+                      <span className="text-[11px] text-content-muted font-mono">{u.id.slice(0, 12)}...</span>
+                      <span className="text-[11px] text-content-muted">Inscrit {timeAgo(u.auth_created_at || u.created_at)}</span>
                     </div>
                   </div>
 
@@ -361,44 +361,44 @@ export default function AdminPage() {
                   <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${
                     u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
                     u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
-                    'bg-[#1e1e24] text-[#71717a]'
+                    'bg-surface-elevated text-content-tertiary'
                   }`}>
                     {plan.name}
                   </span>
 
                   {/* Stats */}
-                  <div className="hidden sm:flex items-center gap-4 text-xs text-[#71717a] shrink-0">
+                  <div className="hidden sm:flex items-center gap-4 text-xs text-content-tertiary shrink-0">
                     <span>{u.prospectCount} leads</span>
                     <span>{u.usage?.searches || 0} rech.</span>
                   </div>
 
                   {/* Expand icon */}
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-[#52525b] shrink-0" /> : <ChevronDown className="h-4 w-4 text-[#52525b] shrink-0" />}
+                  {isExpanded ? <ChevronUp className="h-4 w-4 text-content-muted shrink-0" /> : <ChevronDown className="h-4 w-4 text-content-muted shrink-0" />}
                 </button>
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="border-t border-[#1e1e24] bg-[#0d0d10]">
+                  <div className="border-t border-line bg-surface-alt">
                     {/* Details grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5">
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Email</div>
-                        <div className="text-sm text-[#fafafa] break-all">{u.email}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email</div>
+                        <div className="text-sm text-content-primary break-all">{u.email}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">User ID</div>
-                        <div className="text-xs font-mono text-[#a1a1aa] break-all">{u.id}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">User ID</div>
+                        <div className="text-xs font-mono text-content-secondary break-all">{u.id}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Inscription</div>
-                        <div className="text-sm text-[#a1a1aa]">{formatDate(u.auth_created_at || u.created_at)}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Inscription</div>
+                        <div className="text-sm text-content-secondary">{formatDate(u.auth_created_at || u.created_at)}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Derniere connexion</div>
-                        <div className="text-sm text-[#a1a1aa]">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Derniere connexion</div>
+                        <div className="text-sm text-content-secondary">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Email confirme</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email confirme</div>
                         <div className="flex items-center gap-1.5">
                           {isEmailConfirmed
                             ? <><UserCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-sm text-emerald-400">Oui</span></>
@@ -407,16 +407,16 @@ export default function AdminPage() {
                         </div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Provider</div>
-                        <div className="text-sm text-[#a1a1aa] capitalize">{u.provider}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Provider</div>
+                        <div className="text-sm text-content-secondary capitalize">{u.provider}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Prospects</div>
-                        <div className="text-sm text-[#fafafa] font-medium">{u.prospectCount}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Prospects</div>
+                        <div className="text-sm text-content-primary font-medium">{u.prospectCount}</div>
                       </div>
                       <div>
-                        <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Usage (ce mois)</div>
-                        <div className="text-xs text-[#a1a1aa]">
+                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Usage (ce mois)</div>
+                        <div className="text-xs text-content-secondary">
                           {u.usage?.searches || 0} rech. / {u.usage?.enrichments || 0} enrich. / {u.usage?.exports || 0} exports
                         </div>
                       </div>
@@ -428,7 +428,7 @@ export default function AdminPage() {
                       <select
                         value={u.plan || 'free'}
                         onChange={e => adminAction('update_plan', u.id, { plan: e.target.value })}
-                        className="px-3 py-2 rounded-lg text-xs bg-[#09090b] border border-[#1e1e24] text-[#fafafa] focus:outline-none focus:border-violet-500 cursor-pointer"
+                        className="px-3 py-2 rounded-lg text-xs bg-surface-base border border-line text-content-primary focus:outline-none focus:border-violet-500 cursor-pointer"
                       >
                         <option value="free">Starter</option>
                         <option value="pro">Pro</option>
@@ -442,7 +442,7 @@ export default function AdminPage() {
                         className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors ${
                           u.is_admin
                             ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
-                            : 'bg-[#1e1e24] text-[#71717a] hover:text-[#fafafa] hover:bg-[#2a2a32]'
+                            : 'bg-surface-elevated text-content-tertiary hover:text-content-primary hover:bg-surface-active'
                         }`}
                       >
                         <Crown className="h-3.5 w-3.5" />
@@ -470,7 +470,7 @@ export default function AdminPage() {
                           danger: false,
                           onConfirm: () => adminAction('reset_password', u.id),
                         })}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-[#1e1e24] text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#2a2a32] transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
                       >
                         <Mail className="h-3.5 w-3.5" />
                         Envoyer reset email
@@ -486,7 +486,7 @@ export default function AdminPage() {
                           danger: false,
                           onConfirm: () => adminAction('set_password', u.id, { password: newPassword }),
                         })}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-[#1e1e24] text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#2a2a32] transition-colors"
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
                       >
                         <KeyRound className="h-3.5 w-3.5" />
                         Definir mdp
@@ -514,7 +514,7 @@ export default function AdminPage() {
           })}
 
           {filteredUsers.length === 0 && (
-            <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-8 text-center text-xs text-[#52525b]">
+            <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
               Aucun utilisateur trouve
             </div>
           )}

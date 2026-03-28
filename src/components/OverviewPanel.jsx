@@ -13,7 +13,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-[#fafafa]">Vue d'ensemble</h2>
+      <h2 className="text-lg font-semibold text-content-primary">Vue d'ensemble</h2>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -26,8 +26,8 @@ export default function OverviewPanel({ prospects, searchHistory }) {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Weekly trend */}
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
-          <h3 className="text-sm font-medium text-[#a1a1aa] mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-line bg-surface-card p-4">
+          <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4" /> Tendance hebdomadaire
           </h3>
           <div className="flex items-end gap-3 h-32">
@@ -36,9 +36,9 @@ export default function OverviewPanel({ prospects, searchHistory }) {
               const height = (w.count / maxCount) * 100;
               return (
                 <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <span className="text-[10px] text-[#71717a]">{w.count}</span>
+                  <span className="text-[10px] text-content-tertiary">{w.count}</span>
                   <div className="w-full rounded-t-md bg-violet-600/80" style={{ height: `${Math.max(4, height)}%` }} />
-                  <span className="text-[10px] text-[#52525b]">{w.label}</span>
+                  <span className="text-[10px] text-content-muted">{w.label}</span>
                 </div>
               );
             })}
@@ -46,8 +46,8 @@ export default function OverviewPanel({ prospects, searchHistory }) {
         </div>
 
         {/* By department */}
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
-          <h3 className="text-sm font-medium text-[#a1a1aa] mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-line bg-surface-card p-4">
+          <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <MapPin className="h-4 w-4" /> Par departement
           </h3>
           <div className="space-y-3">
@@ -56,10 +56,10 @@ export default function OverviewPanel({ prospects, searchHistory }) {
               return (
                 <div key={dept}>
                   <div className="flex justify-between text-xs mb-1">
-                    <span className="text-[#a1a1aa]">{DEPTS[dept]?.name || dept}</span>
-                    <span className="text-[#71717a]">{count}</span>
+                    <span className="text-content-secondary">{DEPTS[dept]?.name || dept}</span>
+                    <span className="text-content-tertiary">{count}</span>
                   </div>
-                  <div className="h-2 rounded-full bg-[#1e1e24] overflow-hidden">
+                  <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
                     <div className="h-full rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
@@ -71,8 +71,8 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
       {/* Score distribution & email methods */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
-          <h3 className="text-sm font-medium text-[#a1a1aa] mb-4">Qualite des leads</h3>
+        <div className="rounded-xl border border-line bg-surface-card p-4">
+          <h3 className="text-sm font-medium text-content-secondary mb-4">Qualite des leads</h3>
           <div className="space-y-2">
             {[
               { key: 'excellent', label: 'Excellent (80+)', color: 'bg-green-500' },
@@ -82,25 +82,25 @@ export default function OverviewPanel({ prospects, searchHistory }) {
             ].map(({ key, label, color }) => (
               <div key={key} className="flex items-center gap-3">
                 <div className={`w-2.5 h-2.5 rounded-full ${color}`} />
-                <span className="text-xs text-[#a1a1aa] flex-1">{label}</span>
-                <span className="text-xs font-medium text-[#fafafa]">{analytics.scoreDistribution[key]}</span>
+                <span className="text-xs text-content-secondary flex-1">{label}</span>
+                <span className="text-xs font-medium text-content-primary">{analytics.scoreDistribution[key]}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
-          <h3 className="text-sm font-medium text-[#a1a1aa] mb-4">Sources d'enrichissement</h3>
+        <div className="rounded-xl border border-line bg-surface-card p-4">
+          <h3 className="text-sm font-medium text-content-secondary mb-4">Sources d'enrichissement</h3>
           <div className="space-y-2">
             {Object.entries(analytics.byMethod).sort((a, b) => b[1] - a[1]).map(([method, count]) => (
               <div key={method} className="flex items-center gap-3">
                 <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />
-                <span className="text-xs text-[#a1a1aa] flex-1 capitalize">{method}</span>
-                <span className="text-xs font-medium text-[#fafafa]">{count}</span>
+                <span className="text-xs text-content-secondary flex-1 capitalize">{method}</span>
+                <span className="text-xs font-medium text-content-primary">{count}</span>
               </div>
             ))}
             {Object.keys(analytics.byMethod).length === 0 && (
-              <div className="text-xs text-[#52525b]">Aucun enrichissement</div>
+              <div className="text-xs text-content-muted">Aucun enrichissement</div>
             )}
           </div>
         </div>
@@ -111,13 +111,13 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
 function KpiCard({ icon: Icon, label, value, sub }) {
   return (
-    <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
+    <div className="rounded-xl border border-line bg-surface-card p-4">
       <div className="flex items-center gap-2 mb-2">
         <Icon className="h-4 w-4 text-violet-400" />
-        <span className="text-xs text-[#71717a]">{label}</span>
+        <span className="text-xs text-content-tertiary">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-[#fafafa]">{value}</div>
-      {sub && <div className="text-[10px] text-[#52525b] mt-1">{sub}</div>}
+      <div className="text-2xl font-bold text-content-primary">{value}</div>
+      {sub && <div className="text-[10px] text-content-muted mt-1">{sub}</div>}
     </div>
   );
 }

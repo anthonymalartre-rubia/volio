@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { LogOut, Menu, Loader2 } from 'lucide-react';
+import { LogOut, Menu, Loader2, Sun, Moon } from 'lucide-react';
+import { useTheme } from '@/lib/theme';
 
 export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching }) {
   const router = useRouter();
   const supabase = getSupabase();
   const [loggingOut, setLoggingOut] = useState(false);
+  const { theme, toggle } = useTheme();
 
   const handleLogout = async () => {
     setLoggingOut(true);
@@ -22,13 +24,13 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
     : 0;
 
   return (
-    <div className="sticky top-0 z-50 w-full border-b border-[#1e1e24] bg-[#09090b]/90 backdrop-blur-xl">
+    <div className="sticky top-0 z-50 w-full border-b border-line bg-surface-base/90 backdrop-blur-xl">
       <div className="flex h-14 items-center justify-between px-4">
         {/* Left: hamburger + logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleSidebar}
-            className="lg:hidden p-2.5 rounded-lg text-[#71717a] hover:text-[#fafafa] hover:bg-[#1e1e24] active:scale-95 transition-all"
+            className="lg:hidden p-2.5 rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
             aria-label="Ouvrir le menu"
           >
             <Menu size={20} />
@@ -37,54 +39,64 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
               <span className="text-xs font-bold text-white">P</span>
             </div>
-            <span className="text-sm font-semibold text-[#fafafa] hidden sm:block tracking-tight">Prospectia<span className="text-rose-400">.ai</span></span>
+            <span className="text-sm font-semibold text-content-primary hidden sm:block tracking-tight">Prospectia<span className="text-rose-400">.ai</span></span>
           </div>
         </div>
 
         {/* Center: progress indicator when searching */}
         {isSearching && (
           <div className="hidden sm:flex items-center gap-3 flex-1 max-w-md mx-8 animate-in fade-in">
-            <div className="flex-1 h-1.5 bg-[#1e1e24] rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-surface-elevated rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-xs text-[#52525b] font-mono whitespace-nowrap tabular-nums">
+            <span className="text-xs text-content-muted font-mono whitespace-nowrap tabular-nums">
               {searchProgress?.current}/{searchProgress?.total}
             </span>
           </div>
         )}
 
-        {/* Right: user */}
-        {user && (
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#111114] border border-[#1e1e24]">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-indigo-500/20">
-                <span className="text-[10px] font-bold text-white">
-                  {user.email?.charAt(0).toUpperCase()}
+        {/* Right: theme toggle + user */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggle}
+            className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
+            title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+            aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          {user && (
+            <>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-line">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-indigo-500/20">
+                  <span className="text-[10px] font-bold text-white">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-xs text-content-secondary hidden sm:block max-w-[160px] truncate" title={user.email}>
+                  {user.email}
                 </span>
               </div>
-              <span className="text-xs text-[#a1a1aa] hidden sm:block max-w-[160px] truncate" title={user.email}>
-                {user.email}
-              </span>
-            </div>
-            <button
-              onClick={handleLogout}
-              disabled={loggingOut}
-              className="p-2.5 rounded-lg text-[#52525b] hover:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all disabled:opacity-50"
-              title="Se déconnecter"
-              aria-label="Se déconnecter"
-            >
-              {loggingOut ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={16} />}
-            </button>
-          </div>
-        )}
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="p-2.5 rounded-lg text-content-muted hover:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all disabled:opacity-50"
+                title="Se déconnecter"
+                aria-label="Se déconnecter"
+              >
+                {loggingOut ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={16} />}
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Mobile progress bar */}
       {isSearching && (
-        <div className="sm:hidden h-1 bg-[#1e1e24]">
+        <div className="sm:hidden h-1 bg-surface-elevated">
           <div
             className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}

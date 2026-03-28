@@ -813,7 +813,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#fafafa]">
+    <div className="min-h-screen bg-surface-base text-content-primary">
       <TopBar
         user={user}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}

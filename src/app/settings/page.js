@@ -6,12 +6,14 @@ import { getSupabase } from '@/lib/supabase';
 import { PLANS } from '@/lib/plans';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
-  Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X
+  Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon
 } from 'lucide-react';
+import { useTheme } from '@/lib/theme';
 
 export default function SettingsPage() {
   const router = useRouter();
   const supabase = getSupabase();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -203,7 +205,7 @@ export default function SettingsPage() {
   const planId = profile?.plan || 'free';
 
   return (
-    <div className="min-h-screen bg-[#08080c] text-[#fafafa]">
+    <div className="min-h-screen bg-[#08080c] text-content-primary">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-lg animate-in fade-in slide-in-from-top-2 ${
@@ -219,23 +221,23 @@ export default function SettingsPage() {
       {/* Delete Confirm Dialog */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#111114] border border-[#1e1e24] rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+          <div className="bg-surface-card border border-line rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 rounded-lg bg-red-500/20">
                 <AlertTriangle className="h-5 w-5 text-red-400" />
               </div>
               <h3 className="text-lg font-semibold">Supprimer mon compte</h3>
             </div>
-            <p className="text-sm text-[#a1a1aa] mb-2">
+            <p className="text-sm text-content-secondary mb-2">
               Cette action est irreversible. Toutes vos donnees seront definitivement supprimees :
             </p>
-            <ul className="text-xs text-[#71717a] mb-4 space-y-1 ml-4 list-disc">
+            <ul className="text-xs text-content-tertiary mb-4 space-y-1 ml-4 list-disc">
               <li>Tous vos prospects</li>
               <li>Vos dossiers et tags</li>
               <li>Vos donnees d'utilisation</li>
               <li>Votre compte utilisateur</li>
             </ul>
-            <p className="text-sm text-[#a1a1aa] mb-3">
+            <p className="text-sm text-content-secondary mb-3">
               Tapez <span className="font-mono text-red-400 font-semibold">SUPPRIMER</span> pour confirmer :
             </p>
             <input
@@ -243,12 +245,12 @@ export default function SettingsPage() {
               value={deleteConfirmText}
               onChange={e => setDeleteConfirmText(e.target.value)}
               placeholder="SUPPRIMER"
-              className="w-full px-3 py-2 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-red-500 mb-4"
+              className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-red-500 mb-4"
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => { setShowDeleteConfirm(false); setDeleteConfirmText(''); }}
-                className="px-4 py-2 rounded-lg text-sm bg-[#1e1e24] hover:bg-[#2a2a32] transition-colors"
+                className="px-4 py-2 rounded-lg text-sm bg-surface-elevated hover:bg-surface-active transition-colors"
               >
                 Annuler
               </button>
@@ -265,10 +267,10 @@ export default function SettingsPage() {
       )}
 
       {/* Header */}
-      <div className="border-b border-[#1e1e24] bg-[#111114]">
+      <div className="border-b border-line bg-surface-card">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-3">
-          <button onClick={() => router.push('/dashboard')} className="p-2 rounded-lg hover:bg-[#1e1e24] transition-colors">
-            <ArrowLeft className="h-4 w-4 text-[#71717a]" />
+          <button onClick={() => router.push('/dashboard')} className="p-2 rounded-lg hover:bg-surface-elevated transition-colors">
+            <ArrowLeft className="h-4 w-4 text-content-tertiary" />
           </button>
           <User className="h-5 w-5 text-violet-400" />
           <h1 className="text-lg font-semibold">Parametres</h1>
@@ -278,53 +280,53 @@ export default function SettingsPage() {
       <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
 
         {/* === Profile Section === */}
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-6">
+        <div className="rounded-xl border border-line bg-surface-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-violet-500/20">
               <User className="h-5 w-5 text-violet-400" />
             </div>
             <div>
               <h2 className="text-base font-semibold">Profil</h2>
-              <p className="text-xs text-[#71717a]">Informations de votre compte</p>
+              <p className="text-xs text-content-tertiary">Informations de votre compte</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {/* Email */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block flex items-center gap-1.5">
+              <label className="text-xs text-content-tertiary mb-1.5 block flex items-center gap-1.5">
                 <Mail className="h-3.5 w-3.5" /> Email
               </label>
-              <div className="px-3 py-2.5 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#a1a1aa]">
+              <div className="px-3 py-2.5 rounded-lg bg-surface-base border border-line text-sm text-content-secondary">
                 {user?.email || '--'}
               </div>
             </div>
 
             {/* Created at */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block flex items-center gap-1.5">
+              <label className="text-xs text-content-tertiary mb-1.5 block flex items-center gap-1.5">
                 <Calendar className="h-3.5 w-3.5" /> Date d'inscription
               </label>
-              <div className="px-3 py-2.5 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#a1a1aa]">
+              <div className="px-3 py-2.5 rounded-lg bg-surface-base border border-line text-sm text-content-secondary">
                 {formatDate(user?.created_at)}
               </div>
             </div>
 
             {/* Plan badge */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block flex items-center gap-1.5">
+              <label className="text-xs text-content-tertiary mb-1.5 block flex items-center gap-1.5">
                 <Shield className="h-3.5 w-3.5" /> Plan actuel
               </label>
               <div className="flex items-center gap-2">
                 <span className={`px-3 py-1.5 rounded-full text-xs font-medium ${
                   planId === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
                   planId === 'pro' ? 'bg-violet-500/20 text-violet-400' :
-                  'bg-[#1e1e24] text-[#71717a]'
+                  'bg-surface-elevated text-content-tertiary'
                 }`}>
                   {currentPlan.name}
                 </span>
                 {currentPlan.price > 0 && (
-                  <span className="text-xs text-[#52525b]">
+                  <span className="text-xs text-content-muted">
                     {(currentPlan.price / 100).toFixed(0)} EUR/mois
                   </span>
                 )}
@@ -333,22 +335,56 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* === Appearance Section === */}
+        <div className="rounded-xl border border-line bg-surface-card p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-violet-500/20">
+              {theme === 'dark' ? <Moon className="h-5 w-5 text-violet-400" /> : <Sun className="h-5 w-5 text-violet-400" />}
+            </div>
+            <div>
+              <h2 className="text-base font-semibold">Apparence</h2>
+              <p className="text-xs text-content-tertiary">Personnalisez l'interface</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Theme</p>
+              <p className="text-xs text-content-tertiary mt-0.5">
+                {theme === 'dark' ? 'Mode sombre active' : 'Mode clair active'}
+              </p>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className={`relative w-14 h-7 rounded-full transition-colors ${
+                theme === 'light' ? 'bg-indigo-600' : 'bg-surface-elevated'
+              }`}
+            >
+              <div className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-sm transition-transform flex items-center justify-center ${
+                theme === 'light' ? 'translate-x-7' : 'translate-x-1'
+              }`}>
+                {theme === 'dark' ? <Moon size={10} className="text-gray-600" /> : <Sun size={10} className="text-amber-500" />}
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* === Change Password Section === */}
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-6">
+        <div className="rounded-xl border border-line bg-surface-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-violet-500/20">
               <Lock className="h-5 w-5 text-violet-400" />
             </div>
             <div>
               <h2 className="text-base font-semibold">Changer le mot de passe</h2>
-              <p className="text-xs text-[#71717a]">Mettez a jour votre mot de passe de connexion</p>
+              <p className="text-xs text-content-tertiary">Mettez a jour votre mot de passe de connexion</p>
             </div>
           </div>
 
           <form onSubmit={handleChangePassword} className="space-y-4">
             {/* Current password */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block">Mot de passe actuel</label>
+              <label className="text-xs text-content-tertiary mb-1.5 block">Mot de passe actuel</label>
               <div className="relative">
                 <input
                   type={showCurrentPassword ? 'text' : 'password'}
@@ -356,12 +392,12 @@ export default function SettingsPage() {
                   onChange={e => setCurrentPassword(e.target.value)}
                   placeholder="Votre mot de passe actuel"
                   required
-                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
                 >
                   {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -370,7 +406,7 @@ export default function SettingsPage() {
 
             {/* New password */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block">Nouveau mot de passe</label>
+              <label className="text-xs text-content-tertiary mb-1.5 block">Nouveau mot de passe</label>
               <div className="relative">
                 <input
                   type={showNewPassword ? 'text' : 'password'}
@@ -379,12 +415,12 @@ export default function SettingsPage() {
                   placeholder="Min. 6 caracteres"
                   required
                   minLength={6}
-                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
                 >
                   {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -398,7 +434,7 @@ export default function SettingsPage() {
                       <div
                         key={level}
                         className={`h-1 flex-1 rounded-full transition-colors ${
-                          passwordStrength >= level ? strengthColors[passwordStrength] : 'bg-[#1e1e24]'
+                          passwordStrength >= level ? strengthColors[passwordStrength] : 'bg-surface-elevated'
                         }`}
                       />
                     ))}
@@ -417,7 +453,7 @@ export default function SettingsPage() {
 
             {/* Confirm password */}
             <div>
-              <label className="text-xs text-[#71717a] mb-1.5 block">Confirmer le nouveau mot de passe</label>
+              <label className="text-xs text-content-tertiary mb-1.5 block">Confirmer le nouveau mot de passe</label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -426,12 +462,12 @@ export default function SettingsPage() {
                   placeholder="Repetez le mot de passe"
                   required
                   minLength={6}
-                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-[#09090b] border border-[#1e1e24] text-sm text-[#fafafa] placeholder-[#52525b] focus:outline-none focus:border-violet-500"
+                  className="w-full px-3 py-2.5 pr-10 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
                 >
                   {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -453,60 +489,60 @@ export default function SettingsPage() {
         </div>
 
         {/* === Plan & Billing Section === */}
-        <div className="rounded-xl border border-[#1e1e24] bg-[#111114] p-6">
+        <div className="rounded-xl border border-line bg-surface-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-violet-500/20">
               <CreditCard className="h-5 w-5 text-violet-400" />
             </div>
             <div>
               <h2 className="text-base font-semibold">Plan & Facturation</h2>
-              <p className="text-xs text-[#71717a]">Gerez votre abonnement et vos limites</p>
+              <p className="text-xs text-content-tertiary">Gerez votre abonnement et vos limites</p>
             </div>
           </div>
 
           {/* Current plan details */}
-          <div className="rounded-lg bg-[#09090b] border border-[#1e1e24] p-4 mb-6">
+          <div className="rounded-lg bg-surface-base border border-line p-4 mb-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                   planId === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
                   planId === 'pro' ? 'bg-violet-500/20 text-violet-400' :
-                  'bg-[#1e1e24] text-[#71717a]'
+                  'bg-surface-elevated text-content-tertiary'
                 }`}>
                   {currentPlan.name}
                 </span>
                 {currentPlan.price > 0 && (
-                  <span className="text-sm text-[#a1a1aa]">
+                  <span className="text-sm text-content-secondary">
                     {(currentPlan.price / 100).toFixed(0)} EUR/mois
                   </span>
                 )}
                 {currentPlan.price === 0 && (
-                  <span className="text-sm text-[#52525b]">Gratuit</span>
+                  <span className="text-sm text-content-muted">Gratuit</span>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 rounded-lg bg-[#111114] border border-[#1e1e24]">
-                <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Recherches/mois</div>
+              <div className="p-3 rounded-lg bg-surface-card border border-line">
+                <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Recherches/mois</div>
                 <div className="text-sm font-semibold">
                   {currentPlan.limits.searches_per_month === -1 ? 'Illimite' : currentPlan.limits.searches_per_month}
                 </div>
               </div>
-              <div className="p-3 rounded-lg bg-[#111114] border border-[#1e1e24]">
-                <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Enrichissements/mois</div>
+              <div className="p-3 rounded-lg bg-surface-card border border-line">
+                <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Enrichissements/mois</div>
                 <div className="text-sm font-semibold">
                   {currentPlan.limits.enrichments_per_month === -1 ? 'Illimite' : currentPlan.limits.enrichments_per_month}
                 </div>
               </div>
-              <div className="p-3 rounded-lg bg-[#111114] border border-[#1e1e24]">
-                <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Dossiers</div>
+              <div className="p-3 rounded-lg bg-surface-card border border-line">
+                <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Dossiers</div>
                 <div className="text-sm font-semibold">
                   {currentPlan.limits.folders === -1 ? 'Illimite' : currentPlan.limits.folders}
                 </div>
               </div>
-              <div className="p-3 rounded-lg bg-[#111114] border border-[#1e1e24]">
-                <div className="text-[10px] uppercase tracking-wider text-[#52525b] mb-1">Exports/mois</div>
+              <div className="p-3 rounded-lg bg-surface-card border border-line">
+                <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Exports/mois</div>
                 <div className="text-sm font-semibold">
                   {currentPlan.limits.exports_per_month === -1 ? 'Illimite' : currentPlan.limits.exports_per_month}
                 </div>
@@ -540,18 +576,18 @@ export default function SettingsPage() {
         </div>
 
         {/* === Danger Zone === */}
-        <div className="rounded-xl border border-red-500/20 bg-[#111114] p-6">
+        <div className="rounded-xl border border-red-500/20 bg-surface-card p-6">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 rounded-lg bg-red-500/20">
               <Trash2 className="h-5 w-5 text-red-400" />
             </div>
             <div>
               <h2 className="text-base font-semibold text-red-400">Zone dangereuse</h2>
-              <p className="text-xs text-[#71717a]">Actions irreversibles sur votre compte</p>
+              <p className="text-xs text-content-tertiary">Actions irreversibles sur votre compte</p>
             </div>
           </div>
 
-          <p className="text-sm text-[#a1a1aa] mb-4">
+          <p className="text-sm text-content-secondary mb-4">
             La suppression de votre compte est definitive. Toutes vos donnees (prospects, dossiers, tags, historique) seront supprimees.
           </p>
 

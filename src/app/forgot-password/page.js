@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -41,7 +42,8 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <ThemeToggle className="absolute top-4 right-4" />
         <div
           className={`w-full max-w-sm space-y-6 text-center transition-all duration-700 ease-out ${
             mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -51,10 +53,10 @@ export default function ForgotPasswordPage() {
             <CheckCircle2 className="h-7 w-7 text-white" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-[#fafafa]">Email envoyé</h1>
-            <p className="text-sm text-[#71717a] leading-relaxed">
+            <h1 className="text-2xl font-bold text-content-primary">Email envoyé</h1>
+            <p className="text-sm text-content-tertiary leading-relaxed">
               Un email de réinitialisation a été envoyé à{' '}
-              <span className="text-[#fafafa] font-medium">{email}</span>.
+              <span className="text-content-primary font-medium">{email}</span>.
               <br />
               Cliquez sur le lien pour définir un nouveau mot de passe.
             </p>
@@ -75,7 +77,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <ThemeToggle className="absolute top-4 right-4" />
       <div
         className={`w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -86,8 +89,8 @@ export default function ForgotPasswordPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
             <span className="text-lg font-bold text-white">P</span>
           </div>
-          <h1 className="mt-4 text-2xl font-bold text-[#fafafa]">Mot de passe oublié</h1>
-          <p className="mt-2 text-sm text-[#71717a]">
+          <h1 className="mt-4 text-2xl font-bold text-content-primary">Mot de passe oublié</h1>
+          <p className="mt-2 text-sm text-content-tertiary">
             Entrez votre email pour recevoir un lien de réinitialisation
           </p>
         </div>
@@ -102,18 +105,18 @@ export default function ForgotPasswordPage() {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#a1a1aa] mb-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-content-secondary mb-1.5">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] pl-10 pr-4 py-2.5 text-sm text-[#fafafa] placeholder-[#52525b] focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                className="w-full rounded-lg border border-line bg-surface-card pl-10 pr-4 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
                 placeholder="vous@exemple.com"
               />
             </div>
@@ -135,7 +138,7 @@ export default function ForgotPasswordPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-[#71717a]">
+        <p className="text-center text-sm text-content-tertiary">
           <Link
             href="/login"
             className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200"

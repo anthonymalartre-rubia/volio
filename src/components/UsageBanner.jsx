@@ -12,11 +12,11 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
   ];
 
   return (
-    <div className="mx-4 mt-4 rounded-xl border border-[#1e1e24] bg-[#111114] p-4">
+    <div className="mx-4 mt-4 rounded-xl border border-line bg-surface-card p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Zap className="h-4 w-4 text-violet-400" />
-          <span className="text-sm font-medium text-[#fafafa]">
+          <span className="text-sm font-medium text-content-primary">
             Plan {plan.name}
           </span>
         </div>
@@ -39,13 +39,13 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
           return (
             <div key={label}>
               <div className="flex items-center justify-between text-xs mb-1">
-                <span className="text-[#a1a1aa]">{label}</span>
-                <span className={isMaxed ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-[#71717a]'}>
+                <span className="text-content-secondary">{label}</span>
+                <span className={isMaxed ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-content-tertiary'}>
                   {current} / {isUnlimited ? '\u221e' : limit}
                 </span>
               </div>
               {!isUnlimited && (
-                <div className="h-1.5 rounded-full bg-[#1e1e24] overflow-hidden">
+                <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
                       isMaxed ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-violet-500'

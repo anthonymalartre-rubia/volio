@@ -2,8 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+/* ─── Theme CSS Variables (RGB channels for Tailwind alpha support) ─── */
+:root {
+  --c-bg-base: 9 9 11;          /* #09090b */
+  --c-bg-card: 17 17 20;        /* #111114 */
+  --c-bg-elevated: 30 30 36;    /* #1e1e24 */
+  --c-bg-deep: 10 10 12;        /* #0a0a0c */
+  --c-bg-input: 12 12 14;       /* #0c0c0e */
+  --c-bg-hover: 22 22 26;       /* #16161a */
+  --c-bg-alt: 13 13 16;         /* #0d0d10 */
+  --c-bg-edit: 26 26 46;        /* #1a1a2e */
+  --c-bg-active: 42 42 50;      /* #2a2a32 */
+  --c-border: 30 30 36;         /* #1e1e24 */
+  --c-border-hover: 39 39 42;   /* #27272a */
+  --c-text-primary: 250 250 250;     /* #fafafa */
+  --c-text-secondary: 161 161 170;   /* #a1a1aa */
+  --c-text-tertiary: 113 113 122;    /* #71717a */
+  --c-text-muted: 82 82 91;         /* #52525b */
+  --c-text-faint: 63 63 70;         /* #3f3f46 */
+  --c-text-dim: 39 39 42;           /* #27272a */
+  --c-scrollbar: 42 42 53;          /* #2a2a35 */
+  --c-scrollbar-hover: 82 82 91;    /* #52525b */
+  --c-scrollbar-active: 113 113 122; /* #71717a */
+  --c-skeleton-from: 30 30 36;      /* #1e1e24 */
+  --c-skeleton-via: 42 42 53;       /* #2a2a35 */
   color-scheme: dark;
+}
+
+.light {
+  --c-bg-base: 250 250 251;       /* #fafafb */
+  --c-bg-card: 255 255 255;       /* #ffffff */
+  --c-bg-elevated: 241 241 243;   /* #f1f1f3 */
+  --c-bg-deep: 245 245 247;       /* #f5f5f7 */
+  --c-bg-input: 255 255 255;      /* #ffffff */
+  --c-bg-hover: 241 241 243;      /* #f1f1f3 */
+  --c-bg-alt: 248 248 249;        /* #f8f8f9 */
+  --c-bg-edit: 238 242 255;       /* #eef2ff */
+  --c-bg-active: 228 228 231;     /* #e4e4e7 */
+  --c-border: 228 228 231;        /* #e4e4e7 */
+  --c-border-hover: 212 212 216;  /* #d4d4d8 */
+  --c-text-primary: 9 9 11;           /* #09090b */
+  --c-text-secondary: 63 63 70;       /* #3f3f46 */
+  --c-text-tertiary: 82 82 91;        /* #52525b */
+  --c-text-muted: 113 113 122;        /* #71717a */
+  --c-text-faint: 161 161 170;        /* #a1a1aa */
+  --c-text-dim: 212 212 216;          /* #d4d4d8 */
+  --c-scrollbar: 212 212 216;         /* #d4d4d8 */
+  --c-scrollbar-hover: 161 161 170;   /* #a1a1aa */
+  --c-scrollbar-active: 113 113 122;  /* #71717a */
+  --c-skeleton-from: 241 241 243;     /* #f1f1f3 */
+  --c-skeleton-via: 228 228 231;      /* #e4e4e7 */
+  color-scheme: light;
 }
 
 body {
@@ -18,7 +67,7 @@ body {
 
 /* Global focus-visible ring */
 *:focus-visible {
-  @apply ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#09090b] outline-none;
+  @apply ring-2 ring-indigo-500 ring-offset-2 ring-offset-surface-base outline-none;
 }
 
 /* Disable animations for users who prefer reduced motion */
@@ -37,12 +86,12 @@ body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a35;
+  background: rgb(var(--c-scrollbar));
   border-radius: 3px;
   transition: background 0.2s;
 }
-::-webkit-scrollbar-thumb:hover { background: #52525b; }
-::-webkit-scrollbar-thumb:active { background: #71717a; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-scrollbar-hover)); }
+::-webkit-scrollbar-thumb:active { background: rgb(var(--c-scrollbar-active)); }
 
 /* Toast animations */
 @keyframes toast-slide-in {
@@ -84,7 +133,7 @@ body {
 }
 
 .animate-skeleton {
-  background: linear-gradient(90deg, #1e1e24 25%, #2a2a35 50%, #1e1e24 75%);
+  background: linear-gradient(90deg, rgb(var(--c-skeleton-from)) 25%, rgb(var(--c-skeleton-via)) 50%, rgb(var(--c-skeleton-from)) 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }

@@ -5,6 +5,7 @@ import { getSupabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 function getPasswordStrength(password) {
   if (!password) return { score: 0, label: '', color: '' };
@@ -106,7 +107,8 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <ThemeToggle className="absolute top-4 right-4" />
         <div
           className={`w-full max-w-sm space-y-6 text-center transition-all duration-700 ease-out ${
             mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -116,10 +118,10 @@ export default function SignupPage() {
             <CheckCircle2 className="h-7 w-7 text-white" />
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-[#fafafa]">Vérifiez votre email</h1>
-            <p className="text-sm text-[#71717a] leading-relaxed">
+            <h1 className="text-2xl font-bold text-content-primary">Vérifiez votre email</h1>
+            <p className="text-sm text-content-tertiary leading-relaxed">
               Un lien de confirmation a été envoyé à{' '}
-              <span className="text-[#fafafa] font-medium">{email}</span>.
+              <span className="text-content-primary font-medium">{email}</span>.
               <br />
               Cliquez dessus pour activer votre compte.
             </p>
@@ -129,7 +131,7 @@ export default function SignupPage() {
             <button
               onClick={handleResendEmail}
               disabled={resending}
-              className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] px-4 py-2.5 text-sm font-medium text-[#a1a1aa] hover:bg-[#1e1e24] hover:text-[#fafafa] disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full rounded-lg border border-line bg-surface-card px-4 py-2.5 text-sm font-medium text-content-secondary hover:bg-surface-elevated hover:text-content-primary disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 flex items-center justify-center gap-2"
             >
               {resending ? (
                 <>
@@ -161,7 +163,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <ThemeToggle className="absolute top-4 right-4" />
       <div
         className={`w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -172,8 +175,8 @@ export default function SignupPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
             <span className="text-lg font-bold text-white">P</span>
           </div>
-          <h1 className="mt-4 text-2xl font-bold text-[#fafafa]">Créer un compte</h1>
-          <p className="mt-2 text-sm text-[#71717a]">
+          <h1 className="mt-4 text-2xl font-bold text-content-primary">Créer un compte</h1>
+          <p className="mt-2 text-sm text-content-tertiary">
             Commencez à générer des leads
           </p>
         </div>
@@ -188,29 +191,29 @@ export default function SignupPage() {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#a1a1aa] mb-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-content-secondary mb-1.5">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] pl-10 pr-4 py-2.5 text-sm text-[#fafafa] placeholder-[#52525b] focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                className="w-full rounded-lg border border-line bg-surface-card pl-10 pr-4 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
                 placeholder="vous@exemple.com"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-[#a1a1aa] mb-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-content-secondary mb-1.5">
               Mot de passe
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -218,13 +221,13 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] pl-10 pr-10 py-2.5 text-sm text-[#fafafa] placeholder-[#52525b] focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                className="w-full rounded-lg border border-line bg-surface-card pl-10 pr-10 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#a1a1aa] transition-colors duration-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-secondary transition-colors duration-200"
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -238,7 +241,7 @@ export default function SignupPage() {
                     <div
                       key={level}
                       className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                        level <= strength.score ? strength.color : 'bg-[#1e1e24]'
+                        level <= strength.score ? strength.color : 'bg-surface-elevated'
                       }`}
                     />
                   ))}
@@ -255,11 +258,11 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-[#a1a1aa] mb-1.5">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-content-secondary mb-1.5">
               Confirmer le mot de passe
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -267,13 +270,13 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={6}
-                className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] pl-10 pr-10 py-2.5 text-sm text-[#fafafa] placeholder-[#52525b] focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                className="w-full rounded-lg border border-line bg-surface-card pl-10 pr-10 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#a1a1aa] transition-colors duration-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-secondary transition-colors duration-200"
                 tabIndex={-1}
               >
                 {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -297,7 +300,7 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-[#71717a]">
+        <p className="text-center text-sm text-content-tertiary">
           Déjà un compte ?{' '}
           <Link href="/login" className="text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200">
             Se connecter
