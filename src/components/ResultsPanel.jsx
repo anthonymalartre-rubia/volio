@@ -28,6 +28,9 @@ import {
   Pencil,
   Save,
   MoreVertical,
+  Columns3,
+  CheckSquare,
+  SquareIcon,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
@@ -163,6 +166,60 @@ export default memo(function ResultsPanel({
   const [editData, setEditData] = useState({});
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [actionMenuId, setActionMenuId] = useState(null);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [showColumnPicker, setShowColumnPicker] = useState(false);
+  const [visibleCols, setVisibleCols] = useState(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('leadColumns');
+        if (saved) return JSON.parse(saved);
+      } catch {}
+    }
+    return { type: true, nom: true, telephone: true, email: true, site: true, note: true, dept: true, score: true, tags: true };
+  });
+
+  const COLUMNS = [
+    { key: 'type', label: 'Type', required: false },
+    { key: 'nom', label: 'Nom', required: true },
+    { key: 'telephone', label: 'Telephone', required: false },
+    { key: 'email', label: 'Email', required: true },
+    { key: 'site', label: 'Site web', required: false },
+    { key: 'note', label: 'Note Google', required: false },
+    { key: 'dept', label: 'Departement', required: false },
+    { key: 'score', label: 'Score', required: false },
+    { key: 'tags', label: 'Tags', required: false },
+  ];
+
+  const toggleColumn = (key) => {
+    const col = COLUMNS.find(c => c.key === key);
+    if (col?.required) return;
+    const next = { ...visibleCols, [key]: !visibleCols[key] };
+    setVisibleCols(next);
+    try { localStorage.setItem('leadColumns', JSON.stringify(next)); } catch {}
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === displayProspects.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(displayProspects.map(p => p.id)));
+    }
+  };
+
+  const deleteSelected = () => {
+    for (const id of selectedIds) {
+      onDeleteProspect?.(id);
+    }
+    setSelectedIds(new Set());
+  };
 
   const startEdit = (prospect) => {
     setEditingId(prospect.id);
@@ -602,6 +659,51 @@ export default memo(function ResultsPanel({
 
         <div className="flex-1" />
 
+        {/* Column picker */}
+        <div className="relative">
+          <button
+            onClick={() => setShowColumnPicker(!showColumnPicker)}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition ${
+              showColumnPicker
+                ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400'
+                : 'border-[#1e1e24] hover:bg-[#1e1e24] text-[#71717a] hover:text-[#fafafa]'
+            }`}
+            title="Choisir les colonnes"
+          >
+            <Columns3 size={14} />
+            <span className="hidden sm:inline">Colonnes</span>
+          </button>
+          {showColumnPicker && (
+            <div className="absolute z-50 top-full mt-1 right-0 w-52 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl py-1">
+              <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#52525b] font-semibold">
+                Colonnes visibles
+              </div>
+              {COLUMNS.map((col) => (
+                <button
+                  key={col.key}
+                  onClick={() => toggleColumn(col.key)}
+                  disabled={col.required}
+                  className={`w-full text-left px-3 py-1.5 text-xs flex items-center gap-2 transition-colors ${
+                    col.required
+                      ? 'opacity-50 cursor-not-allowed text-[#71717a]'
+                      : 'hover:bg-[#1e1e24] text-[#a1a1aa] cursor-pointer'
+                  }`}
+                >
+                  <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${
+                    visibleCols[col.key]
+                      ? 'bg-indigo-600 border-indigo-600 text-white'
+                      : 'border-[#3f3f46] bg-transparent'
+                  }`}>
+                    {visibleCols[col.key] && '✓'}
+                  </span>
+                  {col.label}
+                  {col.required && <span className="ml-auto text-[9px] text-[#3f3f46]">requis</span>}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Export */}
         <button
           onClick={() => handleExport("standard")}
@@ -700,33 +802,103 @@ export default memo(function ResultsPanel({
         ))}
       </div>
 
+      {/* Bulk action bar */}
+      {selectedIds.size > 0 && (
+        <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+          <span className="text-xs font-medium text-indigo-400">
+            {selectedIds.size} sélectionné{selectedIds.size > 1 ? 's' : ''}
+          </span>
+          <button
+            onClick={() => {
+              const ids = Array.from(selectedIds);
+              const withoutEmail = prospects.filter(p => ids.includes(p.id) && p.site_web && !p.email);
+              if (withoutEmail.length > 0) {
+                onBulkEnrich?.(null, null, ids);
+              }
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-medium transition"
+          >
+            <Zap size={12} />
+            Enrichir
+          </button>
+          <button
+            onClick={deleteSelected}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/10 border border-red-600/20 text-red-400 text-[11px] font-medium hover:bg-red-600/20 transition"
+          >
+            <Trash2 size={12} />
+            Supprimer
+          </button>
+          <button
+            onClick={() => setSelectedIds(new Set())}
+            className="ml-auto text-[11px] text-[#52525b] hover:text-[#a1a1aa] transition"
+          >
+            Désélectionner
+          </button>
+        </div>
+      )}
+
       {/* Table */}
       <div className="rounded-2xl border border-[#1e1e24] bg-[#111114] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-[#1e1e24] bg-[#0a0a0c]">
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
-                  <span className="flex items-center">Type<InfoTooltip text="B2B = entreprise, Copro = syndic/gestion immobiliere, Custom = recherche personnalisee" /></span>
+                {/* Select all checkbox */}
+                <th className="px-2 py-3 w-8">
+                  <button
+                    onClick={toggleSelectAll}
+                    className="p-0.5 rounded hover:bg-[#1e1e24] transition"
+                  >
+                    {selectedIds.size > 0 && selectedIds.size === displayProspects.length ? (
+                      <CheckSquare size={14} className="text-indigo-400" />
+                    ) : selectedIds.size > 0 ? (
+                      <div className="w-3.5 h-3.5 rounded border border-indigo-400 bg-indigo-400/20 flex items-center justify-center">
+                        <div className="w-1.5 h-0.5 bg-indigo-400 rounded-full" />
+                      </div>
+                    ) : (
+                      <SquareIcon size={14} className="text-[#3f3f46]" />
+                    )}
+                  </button>
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Nom</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Téléphone</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
-                  <span className="flex items-center">Email<InfoTooltip text="La couleur indique la source : vert = trouve sur le site, jaune = Google, orange = Apollo, ambre = devine (contact@). Survolez un email pour voir la source." wide /></span>
-                </th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Site</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
-                  <span className="flex items-center">Note<InfoTooltip text="Note moyenne Google Maps (sur 5) et nombre d'avis entre parentheses. Une note elevee avec beaucoup d'avis indique une entreprise active." wide /></span>
-                </th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
-                  <span className="flex items-center">Dept<InfoTooltip text="Departement d'outre-mer : 971 Guadeloupe, 972 Martinique, 973 Guyane, 974 La Reunion" /></span>
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
-                  <span className="flex items-center">Score<InfoTooltip text="Score de qualite du lead (0-100). Base sur : email verifie (+30), telephone (+20), site web (+15), bonne note Google (+15), avis (+10), adresse (+10). Plus le score est eleve, plus le lead est exploitable." wide /></span>
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
-                  <span className="flex items-center">Tags<InfoTooltip text="Etiquettes personnalisees pour organiser vos leads. Cliquez + pour ajouter un tag, cliquez sur un tag pour le retirer." /></span>
-                </th>
+                {visibleCols.type && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                    <span className="flex items-center">Type<InfoTooltip text="B2B = entreprise, Copro = syndic/gestion immobiliere, Custom = recherche personnalisee" /></span>
+                  </th>
+                )}
+                {visibleCols.nom && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Nom</th>
+                )}
+                {visibleCols.telephone && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Téléphone</th>
+                )}
+                {visibleCols.email && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                    <span className="flex items-center">Email<InfoTooltip text="La couleur indique la source : vert = trouve sur le site, jaune = Google, orange = Apollo, ambre = devine (contact@). Survolez un email pour voir la source." wide /></span>
+                  </th>
+                )}
+                {visibleCols.site && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Site</th>
+                )}
+                {visibleCols.note && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                    <span className="flex items-center">Note<InfoTooltip text="Note moyenne Google Maps (sur 5) et nombre d'avis entre parentheses. Une note elevee avec beaucoup d'avis indique une entreprise active." wide /></span>
+                  </th>
+                )}
+                {visibleCols.dept && (
+                  <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                    <span className="flex items-center">Dept<InfoTooltip text="Departement d'outre-mer : 971 Guadeloupe, 972 Martinique, 973 Guyane, 974 La Reunion" /></span>
+                  </th>
+                )}
+                {visibleCols.score && (
+                  <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
+                    <span className="flex items-center">Score<InfoTooltip text="Score de qualite du lead (0-100). Base sur : email verifie (+30), telephone (+20), site web (+15), bonne note Google (+15), avis (+10), adresse (+10). Plus le score est eleve, plus le lead est exploitable." wide /></span>
+                  </th>
+                )}
+                {visibleCols.tags && (
+                  <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
+                    <span className="flex items-center">Tags<InfoTooltip text="Etiquettes personnalisees pour organiser vos leads. Cliquez + pour ajouter un tag, cliquez sur un tag pour le retirer." /></span>
+                  </th>
+                )}
                 <th className="px-3 py-2 text-center text-[10px] font-medium text-[#3f3f46] uppercase tracking-wider w-10"></th>
               </tr>
             </thead>
@@ -737,15 +909,32 @@ export default memo(function ResultsPanel({
                 const hasNoEmail = !p.email;
                 return (
                   <tr key={p.id} className={`border-b border-[#1e1e24]/50 transition-colors ${
+                    selectedIds.has(p.id) ? 'bg-indigo-500/5' :
                     isEditing ? 'bg-[#1a1a2e]' :
                     hasNoEmail ? 'bg-red-950/5 hover:bg-red-950/10' :
                     idx % 2 === 0 ? 'hover:bg-[#16161a]' : 'bg-[#0d0d10] hover:bg-[#16161a]'
                   }`}>
+                    {/* Checkbox */}
+                    <td className="px-2 py-2.5 w-8">
+                      <button
+                        onClick={() => toggleSelect(p.id)}
+                        className="p-0.5 rounded hover:bg-[#1e1e24] transition"
+                      >
+                        {selectedIds.has(p.id) ? (
+                          <CheckSquare size={14} className="text-indigo-400" />
+                        ) : (
+                          <SquareIcon size={14} className="text-[#27272a] hover:text-[#52525b]" />
+                        )}
+                      </button>
+                    </td>
+                    {visibleCols.type && (
                     <td className="px-4 py-2.5">
                       <span className={`inline-block px-2 py-0.5 rounded border text-[10px] font-semibold uppercase ${getTypeStyle(p.type)}`}>
                         {p.type}
                       </span>
                     </td>
+                    )}
+                    {visibleCols.nom && (
                     <td className="px-4 py-2.5">
                       {isEditing ? (
                         <div className="space-y-1">
@@ -769,6 +958,8 @@ export default memo(function ResultsPanel({
                         </>
                       )}
                     </td>
+                    )}
+                    {visibleCols.telephone && (
                     <td className="px-4 py-2.5">
                       {isEditing ? (
                         <input
@@ -781,6 +972,8 @@ export default memo(function ResultsPanel({
                         <span className="text-[#a1a1aa] font-mono">{p.telephone || <span className="text-[#27272a]">—</span>}</span>
                       )}
                     </td>
+                    )}
+                    {visibleCols.email && (
                     <td className="px-4 py-2.5">
                       {isEditing ? (
                         <input
@@ -825,6 +1018,8 @@ export default memo(function ResultsPanel({
                         </span>
                       )}
                     </td>
+                    )}
+                    {visibleCols.site && (
                     <td className="px-4 py-2.5">
                       {isEditing ? (
                         <input
@@ -842,6 +1037,8 @@ export default memo(function ResultsPanel({
                         <span className="text-[#27272a]">—</span>
                       )}
                     </td>
+                    )}
+                    {visibleCols.note && (
                     <td className="px-4 py-2.5">
                       {p.note ? (
                         <div className="flex items-center gap-1">
@@ -853,10 +1050,13 @@ export default memo(function ResultsPanel({
                         <span className="text-[#27272a]">—</span>
                       )}
                     </td>
+                    )}
+                    {visibleCols.dept && (
                     <td className="px-4 py-2.5">
                       <span className="font-mono text-[#52525b]">{p.departement}</span>
                     </td>
-                    {(() => {
+                    )}
+                    {visibleCols.score && (() => {
                       const score = p.lead_score || computeLeadScore(p);
                       const scoreInfo = getScoreLabel(score);
                       return (
@@ -874,6 +1074,7 @@ export default memo(function ResultsPanel({
                         </td>
                       );
                     })()}
+                    {visibleCols.tags && (
                     <td className="px-3 py-2">
                       <div className="flex flex-wrap gap-1 items-center">
                         {(prospectTagMap?.[p.id] || []).map(tagId => {
@@ -898,6 +1099,7 @@ export default memo(function ResultsPanel({
                         />
                       </div>
                     </td>
+                    )}
                     {/* Actions */}
                     <td className="px-2 py-2 text-center">
                       {isEditing ? (
