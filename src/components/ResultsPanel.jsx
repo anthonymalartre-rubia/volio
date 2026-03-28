@@ -241,8 +241,10 @@ export default memo(function ResultsPanel({
     const total = folderProspects.length;
     const phones = folderProspects.filter((p) => p.telephone).length;
     const emails = folderProspects.filter((p) => p.email).length;
+    const verifiedEmails = folderProspects.filter((p) => p.email && p.email_method && p.email_method !== 'guess').length;
     const websites = folderProspects.filter((p) => p.site_web).length;
-    return { total, phones, emails, websites };
+    const emailPct = total > 0 ? Math.round((emails / total) * 100) : 0;
+    return { total, phones, emails, verifiedEmails, websites, emailPct };
   }, [folderProspects]);
 
   const prospectsWithoutEmail = useMemo(() => {
@@ -389,22 +391,58 @@ export default memo(function ResultsPanel({
 
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {[
-          { label: "Prospects", value: stats.total, icon: Search, color: "text-indigo-400", bgColor: "bg-indigo-500/10", border: "border-indigo-500/20", tip: "Nombre total d'entreprises trouvees via Google Places" },
-          { label: "Emails", value: stats.emails, icon: Mail, color: "text-green-400", bgColor: "bg-green-500/10", border: "border-[#1e1e24]", tip: "Leads ayant un email (trouve ou devine). La couleur de l'email indique la source" },
-          { label: "Téléphones", value: stats.phones, icon: Phone, color: "text-[#a1a1aa]", bgColor: "bg-[#1e1e24]", border: "border-[#1e1e24]", tip: "Leads ayant un numero de telephone fourni par Google" },
-          { label: "Sites web", value: stats.websites, icon: Globe, color: "text-blue-400", bgColor: "bg-blue-500/10", border: "border-[#1e1e24]", tip: "Leads ayant un site web. Necessaire pour l'enrichissement email" },
-        ].map((stat) => (
-          <div key={stat.label} className={`flex items-center gap-3 p-4 rounded-2xl border ${stat.border} bg-[#111114] hover:border-[#27272a] transition-colors`}>
-            <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-              <stat.icon size={16} className={stat.color} />
+        {/* Prospects */}
+        <div className="flex items-center gap-3 p-4 rounded-2xl border border-indigo-500/20 bg-[#111114] hover:border-indigo-500/30 transition-colors">
+          <div className="p-2 rounded-lg bg-indigo-500/10">
+            <Search size={16} className="text-indigo-400" />
+          </div>
+          <div>
+            <div className="text-xl font-bold font-mono text-indigo-400 tabular-nums">{stats.total}</div>
+            <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">Prospects<InfoTooltip text="Nombre total d'entreprises trouvees via Google Places" /></div>
+          </div>
+        </div>
+
+        {/* Emails — with completion bar */}
+        <div className="flex items-center gap-3 p-4 rounded-2xl border border-[#1e1e24] bg-[#111114] hover:border-[#27272a] transition-colors">
+          <div className="p-2 rounded-lg bg-green-500/10">
+            <Mail size={16} className="text-green-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-bold font-mono text-green-400 tabular-nums">{stats.emails}</span>
+              <span className="text-[10px] text-[#3f3f46] font-mono">({stats.emailPct}%)</span>
             </div>
-            <div>
-              <div className={`text-xl font-bold font-mono ${stat.color} tabular-nums`}>{stat.value}</div>
-              <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">{stat.label}<InfoTooltip text={stat.tip} /></div>
+            <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">
+              Emails
+              <InfoTooltip text={`${stats.verifiedEmails} verifies, ${stats.emails - stats.verifiedEmails} devines. La couleur de l'email indique la source.`} />
+            </div>
+            <div className="w-full h-1 bg-[#1e1e24] rounded-full mt-1.5 overflow-hidden">
+              <div className="h-full bg-green-500/60 rounded-full transition-all duration-500" style={{ width: `${stats.emailPct}%` }} />
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Telephones */}
+        <div className="flex items-center gap-3 p-4 rounded-2xl border border-[#1e1e24] bg-[#111114] hover:border-[#27272a] transition-colors">
+          <div className="p-2 rounded-lg bg-[#1e1e24]">
+            <Phone size={16} className="text-[#a1a1aa]" />
+          </div>
+          <div>
+            <div className="text-xl font-bold font-mono text-[#a1a1aa] tabular-nums">{stats.phones}</div>
+            <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">Telephones<InfoTooltip text="Leads ayant un numero de telephone fourni par Google" /></div>
+          </div>
+        </div>
+
+        {/* Sites web */}
+        <div className="flex items-center gap-3 p-4 rounded-2xl border border-[#1e1e24] bg-[#111114] hover:border-[#27272a] transition-colors">
+          <div className="p-2 rounded-lg bg-blue-500/10">
+            <Globe size={16} className="text-blue-400" />
+          </div>
+          <div>
+            <div className="text-xl font-bold font-mono text-blue-400 tabular-nums">{stats.websites}</div>
+            <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">Sites web<InfoTooltip text="Leads ayant un site web. Necessaire pour l'enrichissement email" /></div>
+          </div>
+        </div>
       </div>
 
       {/* Toolbar */}
@@ -693,11 +731,16 @@ export default memo(function ResultsPanel({
               </tr>
             </thead>
             <tbody>
-              {displayProspects.map((p) => {
+              {displayProspects.map((p, idx) => {
                 const methodInfo = EMAIL_METHOD_INFO[p.email_method];
                 const isEditing = editingId === p.id;
+                const hasNoEmail = !p.email;
                 return (
-                  <tr key={p.id} className={`border-b border-[#1e1e24]/50 transition-colors ${isEditing ? 'bg-[#1a1a2e]' : 'hover:bg-[#16161a]'}`}>
+                  <tr key={p.id} className={`border-b border-[#1e1e24]/50 transition-colors ${
+                    isEditing ? 'bg-[#1a1a2e]' :
+                    hasNoEmail ? 'bg-red-950/5 hover:bg-red-950/10' :
+                    idx % 2 === 0 ? 'hover:bg-[#16161a]' : 'bg-[#0d0d10] hover:bg-[#16161a]'
+                  }`}>
                     <td className="px-4 py-2.5">
                       <span className={`inline-block px-2 py-0.5 rounded border text-[10px] font-semibold uppercase ${getTypeStyle(p.type)}`}>
                         {p.type}
@@ -776,7 +819,10 @@ export default memo(function ResultsPanel({
                           )}
                         </div>
                       ) : (
-                        <span className="text-[#27272a]">—</span>
+                        <span className="inline-flex items-center gap-1 text-[10px] text-[#3f3f46] italic">
+                          <Mail size={10} className="text-[#27272a]" />
+                          Non enrichi
+                        </span>
                       )}
                     </td>
                     <td className="px-4 py-2.5">
@@ -815,9 +861,16 @@ export default memo(function ResultsPanel({
                       const scoreInfo = getScoreLabel(score);
                       return (
                         <td className="px-3 py-2">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${scoreInfo.bg} ${scoreInfo.color}`}>
-                            {score}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`inline-flex items-center justify-center w-8 text-center px-1 py-0.5 rounded-md text-xs font-bold font-mono ${scoreInfo.bg} ${scoreInfo.color}`}>
+                              {score}
+                            </span>
+                            <div className="w-10 h-1.5 bg-[#1e1e24] rounded-full overflow-hidden hidden sm:block">
+                              <div className={`h-full rounded-full transition-all ${
+                                score >= 80 ? 'bg-green-500' : score >= 60 ? 'bg-blue-500' : score >= 40 ? 'bg-amber-500' : 'bg-red-500'
+                              }`} style={{ width: `${score}%` }} />
+                            </div>
+                          </div>
                         </td>
                       );
                     })()}
@@ -917,10 +970,18 @@ export default memo(function ResultsPanel({
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-[#1e1e24] bg-[#0a0a0c]">
-          <span className="text-[10px] text-[#3f3f46]">
-            {filteredProspects.length} résultat{filteredProspects.length > 1 ? 's' : ''}
-            {filteredProspects.length !== prospects.length && ` sur ${prospects.length}`}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] text-[#3f3f46]">
+              {filteredProspects.length} résultat{filteredProspects.length > 1 ? 's' : ''}
+              {filteredProspects.length !== prospects.length && ` sur ${prospects.length}`}
+            </span>
+            {prospectsWithoutEmail > 0 && (
+              <span className="text-[10px] text-amber-500/70 flex items-center gap-1">
+                <Mail size={10} />
+                {prospectsWithoutEmail} sans email
+              </span>
+            )}
+          </div>
           {totalPages > 1 && (
             <div className="flex items-center gap-1">
               <button
