@@ -320,17 +320,23 @@ export async function POST(request) {
 
     const { url, name, method } = await request.json();
 
-    if (!url) {
-      return Response.json({ error: 'url required' }, { status: 400 });
+    if (!url && !name) {
+      return Response.json({ error: 'url or name required' }, { status: 400 });
     }
 
-    const validation = validateUrl(url);
-    if (!validation.valid) {
-      return Response.json({ error: validation.error }, { status: 400 });
+    let validatedUrl = null;
+    let domain = null;
+
+    if (url) {
+      const validation = validateUrl(url);
+      if (!validation.valid) {
+        return Response.json({ error: validation.error }, { status: 400 });
+      }
+      validatedUrl = validation.url;
+      domain = extractDomain(validatedUrl);
     }
 
-    const domain = extractDomain(validation.url);
-    const ctx = { url: validation.url, domain, name };
+    const ctx = { url: validatedUrl, domain, name };
     const tried = [];
 
     // ─── Fetch user preference for personal email filtering ───

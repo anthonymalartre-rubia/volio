@@ -700,7 +700,7 @@ export default function Dashboard() {
         const response = await fetch('/api/enrich-waterfall', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: prospect.site_web, name: prospect.nom, method: method || undefined }),
+          body: JSON.stringify({ url: prospect.site_web || undefined, name: prospect.nom, method: method || undefined }),
         });
         const data = await response.json();
 
@@ -755,9 +755,15 @@ export default function Dashboard() {
     setIsWaterfallEnriching(false);
   }, []);
 
-  const handleBulkEnrich = async (folderId, method = null) => {
-    let toEnrich = prospects.filter(p => !p.email && p.site_web);
-    if (folderId) toEnrich = toEnrich.filter(p => p.folder_id === folderId);
+  const handleBulkEnrich = async (folderId, method = null, selectedIds = null) => {
+    let toEnrich;
+    if (selectedIds && selectedIds.length > 0) {
+      // Enrich only selected prospects (even without site_web — waterfall can use name)
+      toEnrich = prospects.filter(p => selectedIds.includes(p.id) && !p.email);
+    } else {
+      toEnrich = prospects.filter(p => !p.email && p.site_web);
+      if (folderId) toEnrich = toEnrich.filter(p => p.folder_id === folderId);
+    }
     if (toEnrich.length === 0) return;
     startWaterfallEnrichment(toEnrich, method);
   };

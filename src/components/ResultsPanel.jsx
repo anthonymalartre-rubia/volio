@@ -1267,7 +1267,7 @@ export default memo(function ResultsPanel({
             <button
               onClick={() => {
                 const ids = Array.from(selectedIds);
-                const withoutEmail = prospects.filter(p => ids.includes(p.id) && p.site_web && !p.email);
+                const withoutEmail = prospects.filter(p => ids.includes(p.id) && !p.email);
                 if (withoutEmail.length > 0) {
                   onBulkEnrich?.(null, null, ids);
                 }
