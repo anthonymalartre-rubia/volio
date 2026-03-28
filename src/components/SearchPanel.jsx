@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { DEPTS, B2B_CATS, COPRO_CATS } from "@/lib/constants";
+import { DEPTS, REGIONS, B2B_CATS, COPRO_CATS } from "@/lib/constants";
 import {
   Send, Square, Sparkles, MapPin, Building2, Home, Search,
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder,
@@ -118,9 +118,34 @@ export default function SearchPanel({
     }
   }, [step, searchType, selectedDepts, selectedCats, customQueries, confirmed, isSearching, showNewFolder]);
 
+  const [deptSearch, setDeptSearch] = useState('');
+  const [expandedRegions, setExpandedRegions] = useState(new Set());
+
+  const toggleRegion = (regionKey) => {
+    const region = REGIONS[regionKey];
+    if (!region) return;
+    const allSelected = region.depts.every(d => selectedDepts.includes(d));
+    if (allSelected) {
+      setSelectedDepts(prev => prev.filter(d => !region.depts.includes(d)));
+    } else {
+      setSelectedDepts(prev => [...new Set([...prev, ...region.depts])]);
+    }
+  };
+
+  const toggleRegionExpand = (regionKey) => {
+    setExpandedRegions(prev => {
+      const next = new Set(prev);
+      if (next.has(regionKey)) next.delete(regionKey); else next.add(regionKey);
+      return next;
+    });
+  };
+
+  const selectAllDepts = () => setSelectedDepts(Object.keys(DEPTS));
+  const clearAllDepts = () => setSelectedDepts([]);
+
   const handleTypeSelect = (type) => {
     setSearchType(type);
-    setSelectedDepts(Object.keys(DEPTS));
+    setSelectedDepts([]);
     setStep(1);
   };
 
@@ -279,18 +304,96 @@ export default function SearchPanel({
             <>
               <BotMessage icon={MapPin} delay={step === 1 ? 400 : 0}>
                 <div>
-                  Dans quels departements ? <span className="text-content-muted">(tous selectionnes par defaut)</span>
+                  Dans quels departements ? <span className="text-content-muted">Selectionnez par region ou individuellement</span>
                 </div>
               </BotMessage>
 
               {step === 1 && (
                 <div className="pl-10 space-y-3">
-                  <OptionChips
-                    options={Object.entries(DEPTS).map(([code, d]) => ({ value: code, label: `${code} ${d.name}` }))}
-                    selected={selectedDepts}
-                    onToggle={toggleDept}
-                    colorClass="indigo"
-                  />
+                  {/* Search + quick actions */}
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex-1">
+                      <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-content-faint" />
+                      <input
+                        type="text"
+                        value={deptSearch}
+                        onChange={(e) => setDeptSearch(e.target.value)}
+                        placeholder="Rechercher un departement..."
+                        className="w-full pl-8 pr-3 py-2 bg-surface-card border border-line rounded-lg text-xs text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/30 transition"
+                      />
+                    </div>
+                    <button onClick={selectAllDepts} className="px-2.5 py-2 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
+                      Tout
+                    </button>
+                    <button onClick={clearAllDepts} className="px-2.5 py-2 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
+                      Aucun
+                    </button>
+                  </div>
+                  {/* Selected count */}
+                  {selectedDepts.length > 0 && (
+                    <div className="text-[10px] text-indigo-400 font-medium">
+                      {selectedDepts.length} departement{selectedDepts.length > 1 ? 's' : ''} selectionne{selectedDepts.length > 1 ? 's' : ''}
+                    </div>
+                  )}
+                  {/* Regions */}
+                  <div className="max-h-64 overflow-y-auto space-y-1 pr-1">
+                    {Object.entries(REGIONS).map(([key, region]) => {
+                      const q = deptSearch.toLowerCase();
+                      const matchingDepts = region.depts.filter(code => {
+                        const d = DEPTS[code];
+                        if (!d) return false;
+                        if (!q) return true;
+                        return code.includes(q) || d.name.toLowerCase().includes(q) || region.name.toLowerCase().includes(q);
+                      });
+                      if (matchingDepts.length === 0) return null;
+                      const allSelected = matchingDepts.every(d => selectedDepts.includes(d));
+                      const someSelected = matchingDepts.some(d => selectedDepts.includes(d));
+                      const isExpanded = expandedRegions.has(key) || deptSearch.length > 0;
+                      return (
+                        <div key={key} className="rounded-lg border border-line overflow-hidden">
+                          <div className="flex items-center gap-2 px-3 py-2 bg-surface-card hover:bg-surface-hover transition cursor-pointer"
+                            onClick={() => toggleRegionExpand(key)}>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); toggleRegion(key); }}
+                              className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] transition ${
+                                allSelected ? 'bg-indigo-600 border-indigo-600 text-white' :
+                                someSelected ? 'bg-indigo-600/30 border-indigo-500 text-white' :
+                                'border-content-faint bg-transparent'
+                              }`}
+                            >
+                              {allSelected ? '✓' : someSelected ? '−' : ''}
+                            </button>
+                            <span className="text-xs font-medium text-content-primary flex-1">{region.name}</span>
+                            <span className="text-[10px] text-content-muted font-mono">
+                              {matchingDepts.filter(d => selectedDepts.includes(d)).length}/{matchingDepts.length}
+                            </span>
+                            <ChevronRight size={12} className={`text-content-faint transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                          </div>
+                          {isExpanded && (
+                            <div className="flex flex-wrap gap-1.5 px-3 py-2 bg-surface-base border-t border-line">
+                              {matchingDepts.map(code => {
+                                const d = DEPTS[code];
+                                const isSelected = selectedDepts.includes(code);
+                                return (
+                                  <button
+                                    key={code}
+                                    onClick={() => toggleDept(code)}
+                                    className={`px-2 py-1 rounded-md border text-[10px] font-medium transition ${
+                                      isSelected
+                                        ? 'bg-indigo-600/20 border-indigo-500/30 text-indigo-400'
+                                        : 'border-line text-content-muted hover:border-content-faint hover:text-content-secondary'
+                                    }`}
+                                  >
+                                    {code} {d.name}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                   <button
                     onClick={confirmDepts}
                     disabled={selectedDepts.length === 0}
@@ -303,7 +406,9 @@ export default function SearchPanel({
 
               {step > 1 && (
                 <UserMessage>
-                  {selectedDepts.map((d) => DEPTS[d]?.name).join(', ')}
+                  {selectedDepts.length > 10
+                    ? `${selectedDepts.length} departements selectionnes`
+                    : selectedDepts.map((d) => DEPTS[d]?.name).join(', ')}
                 </UserMessage>
               )}
             </>
@@ -376,7 +481,7 @@ export default function SearchPanel({
                       value={customInput}
                       onChange={(e) => setCustomInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addCustom()}
-                      placeholder="Ex: plombier Martinique, notaire 972..."
+                      placeholder="Ex: plombier Paris, notaire Lyon, garage 33..."
                       className="flex-1 bg-surface-deep border border-line rounded-xl px-4 py-2.5 text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/40 transition"
                     />
                     <button

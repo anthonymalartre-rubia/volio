@@ -1,6 +1,6 @@
-# Scraping Prospects DOM — EZDrive
+# Prospectia.ai — Prospection B2B automatisée en France
 
-Outil de prospection B2B et copropriété pour les départements d'outre-mer (971 Guadeloupe, 972 Martinique, 973 Guyane, 974 La Réunion).
+Plateforme de prospection B2B et copropriété couvrant la France entière (101 départements : métropole + outre-mer).
 
 ## Stack technique
 
@@ -16,25 +16,31 @@ Outil de prospection B2B et copropriété pour les départements d'outre-mer (97
 ```
 src/
 ├── app/
-│   ├── layout.js          # Layout racine (metadata, fonts)
-│   ├── page.js            # Page principale (state management, logique métier)
-│   ├── globals.css         # Tailwind + styles custom
+│   ├── layout.js          # Layout racine (metadata, fonts, ThemeProvider)
+│   ├── page.js            # Landing page marketing
+│   ├── globals.css         # Tailwind + CSS variables (dark/light theme)
+│   ├── dashboard/
+│   │   └── page.js        # Dashboard principal (state management, logique métier)
 │   └── api/
 │       ├── places/route.js # Proxy Google Places API (New) — côté serveur
 │       └── enrich/route.js # Enrichissement email — scraping côté serveur
 ├── components/
-│   ├── TopBar.jsx          # Barre de navigation sticky
-│   ├── SearchPanel.jsx     # Panneau recherche (départements, catégories, requêtes custom)
-│   └── ResultsPanel.jsx    # Panneau résultats (stats, tableau, filtres, exports)
+│   ├── TopBar.jsx          # Barre de navigation sticky + theme toggle
+│   ├── Sidebar.jsx         # Navigation latérale + historique recherches
+│   ├── SearchPanel.jsx     # Panneau recherche (régions, départements, catégories)
+│   ├── ResultsPanel.jsx    # Panneau résultats (stats, tableau, filtres, exports)
+│   ├── ThemeToggle.jsx     # Bouton bascule clair/sombre
+│   └── OnboardingOverlay.jsx # Overlay d'accueil nouvel utilisateur
 └── lib/
-    ├── constants.js        # DEPTS, B2B_CATS, COPRO_CATS, API URLs
+    ├── constants.js        # DEPTS (101), REGIONS (14), B2B_CATS, COPRO_CATS, API URLs
+    ├── theme.js            # ThemeProvider context (dark/light + localStorage)
     └── supabase.js         # Client Supabase (lazy-init)
 ```
 
 ## Base de données Supabase
 
 ### Table `prospects`
-Colonnes : id (UUID), place_id (TEXT UNIQUE), nom, adresse, telephone, email, email_method ('scrape'|'guess'), site_web, note (NUMERIC), nb_avis (INT), type ('b2b'|'copro'|'custom'), departement ('971'|'972'|'973'|'974'), search_session_id (FK), created_at, updated_at.
+Colonnes : id (UUID), place_id (TEXT UNIQUE), nom, adresse, telephone, email, email_method ('scrape'|'guess'), site_web, note (NUMERIC), nb_avis (INT), type ('b2b'|'copro'|'custom'), departement (TEXT — code INSEE, ex: '75', '33', '971'), search_session_id (FK), created_at, updated_at.
 
 ### Table `search_sessions`
 Colonnes : id (UUID), created_at, departments (TEXT[]), categories (JSONB), query_count, results_count, status ('running'|'completed'|'stopped').
@@ -51,18 +57,22 @@ Configurées dans Vercel > Project Settings > Environment Variables.
 
 ## Fonctionnalités
 
-- **Recherche Google Places** : interroge l'API Places (New) REST pour chaque combinaison département × catégorie. Déduplication par `place_id`.
+- **101 départements** : métropole (96) + outre-mer (5), organisés en 14 régions avec sélection par région, recherche par nom/code.
+- **Recherche Google Places** : interroge l'API Places (New) REST pour chaque combinaison département × catégorie. Déduplication par `place_id`. LocationBias par cercle (lat/lng/rayon) par département.
 - **Catégories B2B** : 13 catégories (hôtel, restaurant, centre commercial, concessionnaire, supermarché, clinique, location voiture, pharmacie, station service, bureau études, électricien, architecte, garage).
 - **Catégories Copro** : 6 catégories (syndic, administrateur de biens, gestionnaire immobilier, gestion immobilière, agence immobilière gestion, cabinet syndic).
 - **Enrichissement email** : scraping côté serveur (homepage + pages contact/mentions légales), extraction regex + mailto + patterns obfusqués, scoring (domain match=100, contact@=80, pro=60, generic=20), fallback email probable (`contact@domain.com`).
 - **Persistance Supabase** : tous les prospects sont sauvegardés et rechargés au lancement.
 - **Export CSV** : format standard ou format Zoho CRM (Last Name, Company, Email, Phone, etc.).
 - **Filtres** : recherche texte, département, type (B2B/Copro/Custom).
+- **Thème clair/sombre** : bascule via CSS variables, persisté en localStorage, détection préférence OS.
+- **Multi-sélection** : sélection par lots dans le tableau de leads avec actions groupées.
+- **Visibilité colonnes** : choix des colonnes affichées, persisté en localStorage.
 
 ## Conventions de code
 
 - Composants React en JSX avec `'use client'` directive
-- Tailwind pour le styling — thème dark avec palette custom (#09090b, #111114, #1e1e24, accent indigo)
+- Tailwind pour le styling — thème dark/light via CSS custom properties (semantic tokens: `surface-*`, `content-*`, `line-*`)
 - Pas de TypeScript (JS uniquement)
 - Fonctions async/await pour les appels API
 - Client Supabase via `getSupabase()` (null-safe, lazy-init)

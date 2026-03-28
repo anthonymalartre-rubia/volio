@@ -8,7 +8,7 @@ const STEPS = [
     icon: Sparkles,
     title: 'Bienvenue',
     description:
-      'Bienvenue sur Prospect IA ! G\u00e9n\u00e9rez des leads B2B qualifi\u00e9s dans les DOM-TOM en quelques clics.',
+      'Bienvenue sur Prospectia.ai ! Générez des leads B2B qualifiés partout en France en quelques clics.',
   },
   {
     icon: Search,

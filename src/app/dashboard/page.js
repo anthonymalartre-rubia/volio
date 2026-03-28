@@ -330,7 +330,7 @@ export default function Dashboard() {
                 note: place.note || null,
                 nb_avis: place.nb_avis || 0,
                 type: task.type,
-                departement: task.dept || '971',
+                departement: task.dept || '75',
                 folder_id: folderId || null,
               });
             }

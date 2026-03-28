@@ -15,8 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: 'Prospectia.ai — Prospection automatisée DOM-TOM',
-  description: 'La plateforme de prospection B2B la plus abordable pour les DOM-TOM. Recherche Google Places, enrichissement email en cascade, export CSV et Zoho CRM.',
+  title: 'Prospectia.ai — Prospection B2B automatisée en France',
+  description: 'La plateforme de prospection B2B la plus abordable en France. 101 départements, recherche Google Places, enrichissement email en cascade, export CSV et Zoho CRM.',
 };
 
 export default function RootLayout({ children }) {

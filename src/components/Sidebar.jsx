@@ -146,19 +146,8 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
           {/* Bottom info */}
           <div className="mt-auto">
             <div className="p-4 rounded-xl bg-gradient-to-br from-surface-card to-surface-alt border border-line">
-              <p className="text-[10px] uppercase tracking-wider text-content-faint font-semibold mb-2">DOM-TOM</p>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { code: '971', name: 'GLP' },
-                  { code: '972', name: 'MTQ' },
-                  { code: '973', name: 'GUF' },
-                  { code: '974', name: 'REU' },
-                ].map((dept) => (
-                  <span key={dept.code} className="text-[10px] px-2 py-1 rounded-md bg-surface-elevated text-content-muted font-mono hover:text-content-tertiary transition-colors">
-                    {dept.code}
-                  </span>
-                ))}
-              </div>
+              <p className="text-[10px] uppercase tracking-wider text-content-faint font-semibold mb-2">France entiere</p>
+              <p className="text-[10px] text-content-muted leading-relaxed">101 departements · Metropole + Outre-mer</p>
             </div>
           </div>
         </div>

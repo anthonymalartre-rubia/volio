@@ -5,8 +5,8 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { PLANS } from '@/lib/plans';
 
 export const metadata = {
-  title: 'Prospectia.ai — Vos prospects DOM-TOM, trouvés par l\'IA',
-  description: 'La plateforme de prospection B2B la plus abordable pour les DOM-TOM. Recherche Google Places + enrichissement email en cascade. 92% moins cher que la concurrence.',
+  title: 'Prospectia.ai — Trouvez vos prospects partout en France',
+  description: 'La plateforme de prospection B2B la plus abordable en France. 101 departements, recherche Google Places + enrichissement email en cascade. 92% moins cher que la concurrence.',
 };
 
 function formatPrice(cents) {
@@ -27,7 +27,7 @@ const PLAN_FEATURES = {
     `${formatLimit(PLANS.free.limits.folders)} dossiers`,
     'Scraping email gratuit',
     'Export CSV standard',
-    '4 départements DOM-TOM',
+    '101 départements (France entière)',
   ],
   pro: [
     'Recherches illimitées',
@@ -85,16 +85,16 @@ export default function LandingPage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs text-zinc-400 mb-8 backdrop-blur-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            Spécialisé DOM-TOM &mdash; 971 &middot; 972 &middot; 973 &middot; 974
+            France entière &mdash; 101 départements couverts
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-8">
             <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Générez des leads qualifiés</span>
             <br />
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">dans les DOM-TOM.</span>
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">partout en France.</span>
           </h1>
           <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Prospection B2B automatisée en Guadeloupe, Martinique, Guyane et La Réunion.
+            Prospection B2B automatisée sur les 101 départements français.
             Recherche Google Places, enrichissement email en cascade, export en 1 clic.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -149,7 +149,7 @@ export default function LandingPage() {
                 <p className="text-sm text-zinc-300">Dans quels départements ?</p>
               </div>
               <div className="flex gap-2 pl-9 flex-wrap">
-                {['971 Guadeloupe', '972 Martinique', '973 Guyane', '974 La Réunion'].map((d) => (
+                {['75 Paris', '69 Rhône', '13 Bouches-du-Rhône', '33 Gironde', '59 Nord'].map((d) => (
                   <span key={d} className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">{d}</span>
                 ))}
               </div>
@@ -178,7 +178,7 @@ export default function LandingPage() {
               Tout ce qu&apos;il faut pour prospecter
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Une plateforme complète pour trouver, enrichir et exporter vos leads DOM-TOM.
+              Une plateforme complète pour trouver, enrichir et exporter vos leads en France.
             </p>
           </div>
 
@@ -247,7 +247,7 @@ export default function LandingPage() {
                 step: '01',
                 icon: MapPin,
                 title: 'Choisissez départements & catégories',
-                desc: 'Sélectionnez vos départements (971-974) et les catégories B2B ou copropriété qui vous intéressent. Ou lancez une requête personnalisée.',
+                desc: 'Sélectionnez vos départements par région et les catégories B2B ou copropriété qui vous intéressent. Ou lancez une requête personnalisée.',
                 gradient: 'from-violet-500 to-indigo-600',
               },
               {
@@ -326,7 +326,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
               { value: '19', label: 'Catégories', sub: 'B2B & Copro' },
-              { value: '4', label: 'Départements', sub: 'DOM-TOM' },
+              { value: '101', label: 'Départements', sub: 'France entière' },
               { value: '7', label: 'Sources', sub: 'Enrichissement' },
               { value: '-92%', label: 'vs Apollo', sub: 'Coût/lead' },
             ].map((stat) => (
@@ -448,7 +448,7 @@ export default function LandingPage() {
                   {[
                     ['Prix/mois', `${formatPrice(PLANS.pro.price)}\u20AC`, '79\u20AC', '~99\u20AC'],
                     ['Sources enrichissement', '7', '1', '?'],
-                    ['Focus DOM-TOM', '\u2713', '\u2717', '\u2717'],
+                    ['101 départements FR', '\u2713', '\u2717', '\u2717'],
                     ['Google Places intégré', '\u2713', '\u2717', '\u2717'],
                     ['Export Zoho CRM', '\u2713', '\u2717', '\u2717'],
                     ['Interface conversationnelle', '\u2713', '\u2717', '\u2717'],
@@ -495,10 +495,9 @@ export default function LandingPage() {
             <span className="text-violet-400 text-[10px] font-semibold">.ai</span>
           </div>
           <div className="flex items-center gap-6 text-xs text-zinc-600">
-            <span>Guadeloupe</span>
-            <span>Martinique</span>
-            <span>Guyane</span>
-            <span>La Réunion</span>
+            <span>Métropole</span>
+            <span>Outre-mer</span>
+            <span>101 départements</span>
           </div>
           <p className="text-[11px] text-zinc-700">
             &copy; 2026 Prospectia.ai

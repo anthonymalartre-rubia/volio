@@ -886,7 +886,7 @@ export default memo(function ResultsPanel({
                 )}
                 {visibleCols.dept && (
                   <th className="px-4 py-3 text-left font-medium text-content-faint uppercase tracking-wider text-[10px]">
-                    <span className="flex items-center">Dept<InfoTooltip text="Departement d'outre-mer : 971 Guadeloupe, 972 Martinique, 973 Guyane, 974 La Reunion" /></span>
+                    <span className="flex items-center">Dept<InfoTooltip text="Departement francais (code INSEE). 101 departements couverts : metropole + outre-mer." /></span>
                   </th>
                 )}
                 {visibleCols.score && (
