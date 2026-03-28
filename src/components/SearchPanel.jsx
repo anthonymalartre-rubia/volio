@@ -6,8 +6,17 @@ import {
   Send, Square, Sparkles, MapPin, Building2, Home, Search, PenLine, Loader2,
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder, Zap,
   UtensilsCrossed, Briefcase, Building, Hotel, HardHat, ShoppingBag, ArrowRight,
-  Lightbulb,
+  Lightbulb, Globe, User, Users, ExternalLink, Mail, Phone, Crown, Link2,
 } from "lucide-react";
+
+// LinkedIn SVG icon (lucide-react doesn't include brand icons)
+function LinkedInIcon({ size = 16, className = '' }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} fill="currentColor">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  );
+}
 
 function BotMessage({ children, icon: Icon, delay = 0 }) {
   const [visible, setVisible] = useState(delay === 0);
@@ -200,13 +209,22 @@ export default function SearchPanel({
   const [confirmed, setConfirmed] = useState(false);
   const scrollRef = useRef(null);
 
+  // ─── Company & LinkedIn search state ───────────────────
+  const [companySearchMode, setCompanySearchMode] = useState(null); // 'company' | 'linkedin' | null
+  const [companyName, setCompanyName] = useState('');
+  const [companyDomain, setCompanyDomain] = useState('');
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [companySearching, setCompanySearching] = useState(false);
+  const [companyResults, setCompanyResults] = useState(null);
+  const [companyError, setCompanyError] = useState('');
+
   useEffect(() => {
     if (scrollRef.current) {
       setTimeout(() => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       }, 50);
     }
-  }, [step, searchType, selectedDepts, selectedCats, customQueries, confirmed, isSearching, showNewFolder]);
+  }, [step, searchType, selectedDepts, selectedCats, customQueries, confirmed, isSearching, showNewFolder, companySearchMode, companyResults]);
 
   const [deptSearch, setDeptSearch] = useState('');
   const [expandedRegions, setExpandedRegions] = useState(new Set());
@@ -396,6 +414,60 @@ export default function SearchPanel({
     setConfirmed(false);
   };
 
+  // ─── Company contacts / LinkedIn search ─────────────────
+  const handleCompanySearch = async () => {
+    if (companySearchMode === 'linkedin') {
+      if (!linkedinUrl.trim()) return;
+      // Validate LinkedIn URL
+      if (!linkedinUrl.includes('linkedin.com/in/')) {
+        setCompanyError('URL LinkedIn invalide. Format attendu : https://linkedin.com/in/nom-prenom');
+        return;
+      }
+    } else {
+      if (!companyName.trim() && !companyDomain.trim()) return;
+    }
+
+    setCompanySearching(true);
+    setCompanyError('');
+    setCompanyResults(null);
+
+    try {
+      const body = companySearchMode === 'linkedin'
+        ? { linkedin_url: linkedinUrl.trim() }
+        : {
+          company_name: companyName.trim() || undefined,
+          company_domain: companyDomain.trim() || undefined,
+        };
+
+      const res = await fetch('/api/company-contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setCompanyError(data.error || `Erreur ${res.status}`);
+        return;
+      }
+
+      setCompanyResults(data);
+    } catch (err) {
+      setCompanyError(err.message || 'Erreur de connexion');
+    } finally {
+      setCompanySearching(false);
+    }
+  };
+
+  const resetCompanySearch = () => {
+    setCompanySearchMode(null);
+    setCompanyName('');
+    setCompanyDomain('');
+    setLinkedinUrl('');
+    setCompanyResults(null);
+    setCompanyError('');
+  };
+
   const handlePresetSearch = (preset) => {
     const depts = preset.depts === 'ALL' ? Object.keys(DEPTS) : preset.depts;
     let cats;
@@ -563,6 +635,254 @@ export default function SearchPanel({
               </div>
               {nlError && (
                 <p className="text-xs text-red-400">{nlError}</p>
+              )}
+            </div>
+          )}
+
+          {/* ─── Company & LinkedIn direct search ─────────────── */}
+          {step === 0 && !searchType && (
+            <div className="pl-2 sm:pl-10 space-y-3 animate-in fade-in duration-500">
+              <div className="flex items-center gap-3 pt-1">
+                <div className="flex-1 h-px bg-line" />
+                <span className="text-[10px] text-content-faint uppercase tracking-wider font-medium">Prospection ciblee</span>
+                <div className="flex-1 h-px bg-line" />
+              </div>
+
+              {!companySearchMode && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setCompanySearchMode('company')}
+                    className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all active:scale-[0.97] text-left"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition">
+                      <Building2 size={15} className="text-emerald-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-content-primary">Recherche entreprise</div>
+                      <div className="text-[10px] text-content-muted">Trouver les contacts cles</div>
+                    </div>
+                    <ArrowRight size={14} className="text-emerald-500/40 group-hover:text-emerald-400 transition flex-shrink-0" />
+                  </button>
+                  <button
+                    onClick={() => setCompanySearchMode('linkedin')}
+                    className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border border-blue-500/20 bg-blue-500/5 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all active:scale-[0.97] text-left"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500/20 transition">
+                      <LinkedInIcon size={15} className="text-blue-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-content-primary">Profil LinkedIn</div>
+                      <div className="text-[10px] text-content-muted">Enrichir un profil LinkedIn</div>
+                    </div>
+                    <ArrowRight size={14} className="text-blue-500/40 group-hover:text-blue-400 transition flex-shrink-0" />
+                  </button>
+                </div>
+              )}
+
+              {/* Company search form */}
+              {companySearchMode === 'company' && (
+                <div className="space-y-3 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2">
+                    <Building2 size={14} className="text-emerald-400" />
+                    <span className="text-xs font-semibold text-emerald-400">Recherche entreprise</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="relative">
+                      <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-faint" />
+                      <input
+                        type="text"
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleCompanySearch()}
+                        placeholder="Nom de l'entreprise (ex: Decathlon, BNP Paribas...)"
+                        className="w-full pl-9 pr-4 py-2.5 min-h-[44px] rounded-xl border border-line-hover bg-surface-input text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-emerald-500/40 transition"
+                      />
+                    </div>
+                    <div className="relative">
+                      <Globe size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-faint" />
+                      <input
+                        type="text"
+                        value={companyDomain}
+                        onChange={(e) => setCompanyDomain(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleCompanySearch()}
+                        placeholder="Domaine (ex: decathlon.fr) — optionnel"
+                        className="w-full pl-9 pr-4 py-2.5 min-h-[44px] rounded-xl border border-line-hover bg-surface-input text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-emerald-500/40 transition"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleCompanySearch}
+                      disabled={(!companyName.trim() && !companyDomain.trim()) || companySearching}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-sm font-semibold transition active:scale-[0.97] disabled:cursor-not-allowed"
+                    >
+                      {companySearching ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />}
+                      {companySearching ? 'Recherche...' : 'Trouver les contacts'}
+                    </button>
+                    <button
+                      onClick={resetCompanySearch}
+                      className="px-3 py-2.5 min-h-[44px] rounded-xl border border-line-hover text-content-muted hover:text-content-secondary transition"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* LinkedIn search form */}
+              {companySearchMode === 'linkedin' && (
+                <div className="space-y-3 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2">
+                    <LinkedInIcon size={14} className="text-blue-400" />
+                    <span className="text-xs font-semibold text-blue-400">Enrichissement profil LinkedIn</span>
+                  </div>
+                  <div className="relative">
+                    <LinkedInIcon size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-faint" />
+                    <input
+                      type="url"
+                      value={linkedinUrl}
+                      onChange={(e) => setLinkedinUrl(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleCompanySearch()}
+                      placeholder="https://linkedin.com/in/prenom-nom"
+                      className="w-full pl-9 pr-4 py-2.5 min-h-[44px] rounded-xl border border-line-hover bg-surface-input text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-blue-500/40 transition"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleCompanySearch}
+                      disabled={!linkedinUrl.trim() || companySearching}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-sm font-semibold transition active:scale-[0.97] disabled:cursor-not-allowed"
+                    >
+                      {companySearching ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />}
+                      {companySearching ? 'Recherche...' : 'Enrichir le profil'}
+                    </button>
+                    <button
+                      onClick={resetCompanySearch}
+                      className="px-3 py-2.5 min-h-[44px] rounded-xl border border-line-hover text-content-muted hover:text-content-secondary transition"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Error */}
+              {companyError && (
+                <p className="text-xs text-red-400 pl-1">{companyError}</p>
+              )}
+
+              {/* Results */}
+              {companyResults && (
+                <div className="space-y-3 animate-in fade-in duration-300">
+                  {/* Company info card */}
+                  {companyResults.company && (
+                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Building2 size={14} className="text-emerald-400" />
+                        <span className="text-sm font-semibold text-emerald-400">{companyResults.company.name || 'Entreprise'}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-content-secondary">
+                        {companyResults.company.industry && (
+                          <span>Secteur: {companyResults.company.industry}</span>
+                        )}
+                        {companyResults.company.employees && (
+                          <span>Employes: ~{companyResults.company.employees}</span>
+                        )}
+                        {companyResults.company.domain && (
+                          <span className="flex items-center gap-1">
+                            <Globe size={10} />
+                            {companyResults.company.domain}
+                          </span>
+                        )}
+                        {companyResults.company.linkedin_url && (
+                          <a
+                            href={companyResults.company.linkedin_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-blue-400 hover:text-blue-300 transition"
+                          >
+                            <LinkedInIcon size={10} />
+                            LinkedIn
+                            <ExternalLink size={9} />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Contacts list */}
+                  {companyResults.contacts?.length > 0 ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Users size={13} className="text-content-muted" />
+                        <span className="text-[10px] uppercase tracking-wider text-content-faint font-semibold">
+                          {companyResults.contacts.length} contact{companyResults.contacts.length > 1 ? 's' : ''} trouve{companyResults.contacts.length > 1 ? 's' : ''}
+                        </span>
+                      </div>
+                      {companyResults.contacts.map((contact, i) => (
+                        <div key={i} className="rounded-xl border border-line bg-surface-card p-3 space-y-1.5">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+                                <User size={13} className="text-indigo-400" />
+                              </div>
+                              <div>
+                                <div className="text-sm font-medium text-content-primary">
+                                  {contact.name || 'Contact'}
+                                </div>
+                                {contact.title && (
+                                  <div className="text-[10px] text-content-muted">{contact.title}</div>
+                                )}
+                              </div>
+                            </div>
+                            {contact.linkedin_url && (
+                              <a
+                                href={contact.linkedin_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-1.5 rounded-lg text-blue-400 hover:bg-blue-500/10 transition"
+                              >
+                                <LinkedInIcon size={14} />
+                              </a>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-2 text-[11px]">
+                            {contact.email && (
+                              <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                                <Mail size={10} />
+                                {contact.email}
+                              </span>
+                            )}
+                            {contact.phone && (
+                              <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-violet-400">
+                                <Phone size={10} />
+                                {contact.phone}
+                              </span>
+                            )}
+                          </div>
+                          {contact.company && (
+                            <div className="text-[10px] text-content-faint">
+                              {contact.company}{contact.company_domain ? ` (${contact.company_domain})` : ''}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4 text-sm text-content-muted">
+                      Aucun contact trouve. Essayez avec un nom d'entreprise different ou ajoutez le domaine.
+                    </div>
+                  )}
+
+                  {/* New search button */}
+                  <button
+                    onClick={resetCompanySearch}
+                    className="flex items-center gap-2 text-sm text-content-muted hover:text-content-secondary transition"
+                  >
+                    <RotateCcw size={13} />
+                    Nouvelle recherche
+                  </button>
+                </div>
               )}
             </div>
           )}
