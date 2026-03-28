@@ -25,6 +25,17 @@ function addLog(prev, message) {
   return { ...prev, logs };
 }
 
+// Extract root domain from a URL for deduplication (e.g. "https://www.road.io/foo" → "road.io")
+function extractDomain(url) {
+  if (!url) return null;
+  try {
+    const hostname = new URL(url).hostname.replace(/^www\./, '');
+    return hostname || null;
+  } catch {
+    return null;
+  }
+}
+
 // Escape CSV values to prevent injection (quotes, formulas)
 function escapeCSV(value) {
   if (value == null) return '';
@@ -333,6 +344,7 @@ export default function Dashboard() {
 
     const newProspects = [];
     const seenPlaceIds = new Set(prospects.map((p) => p.place_id));
+    const seenDomains = new Set(prospects.map((p) => extractDomain(p.site_web)).filter(Boolean));
 
     for (let i = 0; i < taskList.length; i++) {
       if (stopSearchRef.current) break;
@@ -373,27 +385,55 @@ export default function Dashboard() {
 
         if (data.places && Array.isArray(data.places)) {
           let added = 0;
+          let dupes = 0;
           for (const place of data.places) {
-            if (!seenPlaceIds.has(place.place_id)) {
-              seenPlaceIds.add(place.place_id);
-              added++;
-              newProspects.push({
-                user_id: user.id,
-                place_id: place.place_id,
-                nom: place.nom,
-                adresse: place.adresse || '',
-                telephone: place.telephone || '',
-                site_web: place.site_web || '',
-                note: place.note || null,
-                nb_avis: place.nb_avis || 0,
-                type: task.type,
-                departement: task.dept || '75',
-                folder_id: folderId || null,
-              });
+            if (seenPlaceIds.has(place.place_id)) { dupes++; continue; }
+
+            // Deduplicate by website domain — keep the one with most reviews
+            const domain = extractDomain(place.site_web);
+            if (domain && seenDomains.has(domain)) {
+              // Check if the new one is better (more reviews or higher rating)
+              const existing = newProspects.find((p) => extractDomain(p.site_web) === domain);
+              if (existing) {
+                const existScore = (existing.nb_avis || 0) * 10 + (existing.note || 0);
+                const newScore = (place.nb_avis || 0) * 10 + (place.note || 0);
+                if (newScore > existScore) {
+                  // Replace with the better one
+                  Object.assign(existing, {
+                    place_id: place.place_id,
+                    nom: place.nom,
+                    adresse: place.adresse || '',
+                    telephone: place.telephone || existing.telephone,
+                    site_web: place.site_web || '',
+                    note: place.note || null,
+                    nb_avis: place.nb_avis || 0,
+                  });
+                  seenPlaceIds.add(place.place_id);
+                }
+              }
+              dupes++;
+              continue;
             }
+
+            seenPlaceIds.add(place.place_id);
+            if (domain) seenDomains.add(domain);
+            added++;
+            newProspects.push({
+              user_id: user.id,
+              place_id: place.place_id,
+              nom: place.nom,
+              adresse: place.adresse || '',
+              telephone: place.telephone || '',
+              site_web: place.site_web || '',
+              note: place.note || null,
+              nb_avis: place.nb_avis || 0,
+              type: task.type,
+              departement: task.dept || '75',
+              folder_id: folderId || null,
+            });
           }
-          if (added < placesCount) {
-            setSearchProgress((prev) => addLog(prev, `   (${placesCount - added} doublons ignorés)`));
+          if (dupes > 0) {
+            setSearchProgress((prev) => addLog(prev, `   (${dupes} doublons fusionnés)`));
           }
         }
       } catch (error) {

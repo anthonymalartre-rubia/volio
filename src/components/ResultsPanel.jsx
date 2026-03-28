@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useRef, memo } from "react";
+import { createPortal } from "react-dom";
 import {
   Download,
   Trash2,
@@ -43,15 +44,44 @@ import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 import { Info, Lightbulb } from "lucide-react";
 
-// Reusable tooltip on hover
+// Reusable tooltip on hover — rendered via portal into document.body to escape all overflow containers
 function InfoTooltip({ text, wide }) {
+  const [show, setShow] = useState(false);
+  const [style, setStyle] = useState({});
+  const wrapRef = useRef(null);
+  const tipRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
+
+  function handleEnter() {
+    if (!wrapRef.current) return;
+    const rect = wrapRef.current.getBoundingClientRect();
+    const tipW = wide ? 224 : 176; // w-56 = 224px, w-44 = 176px
+    const tipH = 60; // approximate height
+    // Clamp horizontal so tooltip stays in viewport
+    let left = Math.min(Math.max(rect.left + rect.width / 2, tipW / 2 + 8), window.innerWidth - tipW / 2 - 8);
+    // Show above if not enough room below (e.g. near bottom of viewport)
+    const showAbove = rect.bottom + tipH + 8 > window.innerHeight;
+    const top = showAbove ? rect.top - tipH - 6 : rect.bottom + 6;
+    setStyle({ position: 'fixed', top, left, transform: 'translateX(-50%)' });
+    setShow(true);
+  }
+
   return (
-    <div className="relative group/info inline-flex ml-1 cursor-help">
-      <Info size={11} className="text-content-faint group-hover/info:text-content-tertiary transition-colors" />
-      <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 bg-surface-elevated border border-line-hover rounded-lg text-[10px] text-content-secondary leading-relaxed opacity-0 group-hover/info:opacity-100 pointer-events-none transition-opacity z-30 shadow-xl whitespace-normal ${wide ? 'w-56' : 'w-44'}`}>
-        {text}
-      </div>
-    </div>
+    <span ref={wrapRef} className="inline-flex ml-1 cursor-help" onMouseEnter={handleEnter} onMouseLeave={() => setShow(false)}>
+      <Info size={11} className="text-content-faint hover:text-content-tertiary transition-colors" />
+      {show && mounted && createPortal(
+        <div
+          ref={tipRef}
+          style={style}
+          className={`px-2.5 py-1.5 bg-zinc-900 border border-zinc-700 rounded-lg text-[10px] text-zinc-200 leading-relaxed pointer-events-none z-[99999] shadow-2xl whitespace-normal ${wide ? 'w-56' : 'w-44'}`}
+        >
+          {text}
+        </div>,
+        document.body
+      )}
+    </span>
   );
 }
 

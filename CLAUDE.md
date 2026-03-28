@@ -1,12 +1,16 @@
-# Prospectia.ai — Prospection B2B automatisée en France
+# Prospectia.ai — Agrégateur de prospection B2B en France
 
-Plateforme de prospection B2B et copropriété couvrant la France entière (101 départements : métropole + outre-mer).
+Plateforme SaaS de prospection B2B automatisée couvrant la France entière (101 départements). Agrège 7 sources d'enrichissement email (Apollo, Serper, Enrichly, Anymail, Findymail, Scraping, Fallback) en une seule recherche waterfall avec scoring de confiance.
 
 ## Stack technique
 
 - **Frontend** : Next.js 14 (App Router) + React 18 + Tailwind CSS 3
 - **Backend** : API Routes Next.js (serverless sur Vercel)
-- **Base de données** : Supabase (projet EZData `nlnosnymkganuahagytx`)
+- **Base de données** : Supabase (projet `kqrarrrojdtxijkhejhg`)
+- **Paiements** : Stripe (3 plans : Free, Pro 49€/mo, Enterprise 149€/mo)
+- **IA** : Anthropic SDK (Claude) pour recherche en langage naturel
+- **Emails transactionnels** : Resend API
+- **Analytics** : Vercel Analytics + Speed Insights
 - **Déploiement** : Vercel (auto-deploy sur push `main`)
 - **Repo GitHub** : `Anthonyezdrive/scraping-dom-ezdrive`
 - **URL production** : https://scraping-dom-ezdrive.vercel.app
@@ -16,58 +20,119 @@ Plateforme de prospection B2B et copropriété couvrant la France entière (101 
 ```
 src/
 ├── app/
-│   ├── layout.js          # Layout racine (metadata, fonts, ThemeProvider)
-│   ├── page.js            # Landing page marketing
-│   ├── globals.css         # Tailwind + CSS variables (dark/light theme)
+│   ├── layout.js              # Layout racine (ThemeProvider, CookieConsent, Analytics)
+│   ├── page.js                # Landing page marketing (typewriter, particules, comparatif)
+│   ├── globals.css            # Tailwind + CSS variables (dark/light theme)
+│   ├── middleware.js           # Rate limiting auth routes
+│   ├── error.js               # Error boundary global
+│   ├── not-found.js           # Page 404
 │   ├── dashboard/
-│   │   └── page.js        # Dashboard principal (state management, logique métier)
+│   │   ├── page.js            # Dashboard principal (state management, logique métier)
+│   │   ├── error.js           # Error boundary dashboard
+│   │   └── loading.js         # Skeleton loading
+│   ├── settings/
+│   │   └── page.js            # Paramètres (profil, mot de passe, plan, usage, filtre RGPD)
+│   ├── login/page.js          # Connexion (email + Google OAuth)
+│   ├── signup/page.js         # Inscription (email + Google OAuth)
+│   ├── forgot-password/page.js
+│   ├── reset-password/page.js
+│   ├── opt-out/page.js        # Page opt-out publique RGPD
+│   ├── cgu/page.js            # Conditions générales d'utilisation
+│   ├── confidentialite/page.js # Politique de confidentialité
+│   ├── rgpd/page.js           # Page droits RGPD
 │   └── api/
-│       ├── places/route.js # Proxy Google Places API (New) — côté serveur
-│       └── enrich/route.js # Enrichissement email — scraping côté serveur
+│       ├── places/route.js        # Proxy Google Places API (New)
+│       ├── enrich/route.js        # Enrichissement email simple (scraping)
+│       ├── enrich-waterfall/route.js # Enrichissement waterfall 7 sources
+│       ├── enrich-apollo/route.js # Enrichissement Apollo direct
+│       ├── enrich-deep/route.js   # Enrichissement deep
+│       ├── parse-search/route.js  # LLM parsing recherche naturelle (Anthropic)
+│       ├── opt-out/route.js       # API opt-out RGPD (service role)
+│       ├── report-error/route.js  # Error reporting
+│       ├── stripe/
+│       │   ├── checkout/route.js  # Création session Stripe
+│       │   ├── portal/route.js    # Portail client Stripe
+│       │   └── webhook/route.js   # Webhook Stripe (paiements, annulations)
+│       └── auth/
+│           └── callback/route.js  # OAuth callback (Google)
 ├── components/
-│   ├── TopBar.jsx          # Barre de navigation sticky + theme toggle
-│   ├── Sidebar.jsx         # Navigation latérale + historique recherches
-│   ├── SearchPanel.jsx     # Panneau recherche (régions, départements, catégories)
-│   ├── ResultsPanel.jsx    # Panneau résultats (stats, tableau, filtres, exports)
-│   ├── ThemeToggle.jsx     # Bouton bascule clair/sombre
-│   └── OnboardingOverlay.jsx # Overlay d'accueil nouvel utilisateur
+│   ├── Sidebar.jsx            # Navigation latérale + historique recherches
+│   ├── SearchPanel.jsx        # Panneau recherche (régions, départements, catégories, NL)
+│   ├── ResultsPanel.jsx       # Panneau résultats (stats, tableau, filtres, exports)
+│   ├── TopBar.jsx             # Barre de navigation sticky
+│   ├── ThemeToggle.jsx        # Bouton bascule clair/sombre
+│   ├── OnboardingOverlay.jsx  # Overlay d'accueil 5 étapes
+│   ├── CookieConsent.jsx      # Bandeau cookies
+│   ├── UpgradeBanner.jsx      # CTA upgrade contextuel (80%/100% usage)
+│   ├── AuthCTA.jsx            # Composants CTA auth (NavAuth, HeroCTA, FooterCTA)
+│   ├── TypewriterText.jsx     # Effet typewriter hero landing
+│   ├── MouseParticles.jsx     # Particules interactives canvas
+│   ├── FAQSection.jsx         # FAQ accordion
+│   └── InteractiveDemo.jsx    # Démo interactive landing
 └── lib/
-    ├── constants.js        # DEPTS (101), REGIONS (14), B2B_CATS, COPRO_CATS, API URLs
-    ├── theme.js            # ThemeProvider context (dark/light + localStorage)
-    └── supabase.js         # Client Supabase (lazy-init)
+    ├── constants.js           # DEPTS (101), REGIONS (14), B2B_GROUPS (12), COPRO_GROUPS (3)
+    ├── plans.js               # Définition plans (Free, Pro, Enterprise) avec limites
+    ├── theme.js               # ThemeProvider context (dark/light + localStorage)
+    ├── supabase.js            # Client Supabase (lazy-init)
+    ├── auth.js                # getAuthenticatedUser() helper
+    ├── usage.js               # checkLimit(), incrementUsage(), alertes email seuils
+    ├── email.js               # sendEmail() via Resend
+    ├── emailTemplates.js      # Templates HTML (welcome, usage warning, payment, etc.)
+    ├── rateLimit.js           # Rate limiting in-memory (5 tentatives/15min)
+    ├── errorReporting.js      # reportError() utility
+    └── url-validation.js      # validateUrl() anti-SSRF
 ```
 
 ## Base de données Supabase
 
 ### Table `prospects`
-Colonnes : id (UUID), place_id (TEXT UNIQUE), nom, adresse, telephone, email, email_method ('scrape'|'guess'), site_web, note (NUMERIC), nb_avis (INT), type ('b2b'|'copro'|'custom'), departement (TEXT — code INSEE, ex: '75', '33', '971'), search_session_id (FK), created_at, updated_at.
+Colonnes : id (UUID), place_id (TEXT UNIQUE), nom, adresse, telephone, email, email_method ('scrape'|'guess'|'waterfall'|'apollo'|'deep'|'manual'), site_web, note (NUMERIC), nb_avis (INT), type ('b2b'|'copro'|'custom'), departement (TEXT — regex `^(0[1-9]|[1-8][0-9]|9[0-5]|2[AB]|97[1-6])$`), search_session_id (FK), created_at, updated_at.
 
 ### Table `search_sessions`
 Colonnes : id (UUID), created_at, departments (TEXT[]), categories (JSONB), query_count, results_count, status ('running'|'completed'|'stopped').
 
+### Table `user_profiles`
+Colonnes : id (UUID, FK auth.users), plan ('free'|'pro'|'enterprise'), stripe_customer_id, stripe_subscription_id, filter_personal_emails (BOOL, default true), is_admin (BOOL), created_at, updated_at.
+
+### Table `usage_tracking`
+Colonnes : user_id, month (TEXT 'YYYY-MM'), searches, enrichments, exports.
+
+### Table `opt_out_list`
+Colonnes : id (UUID), email (TEXT UNIQUE), company, reason, requested_at.
+
 ## Variables d'environnement
 
 ```
-GOOGLE_PLACES_API_KEY=       # Clé API Google Cloud avec "Places API (New)" activée
-NEXT_PUBLIC_SUPABASE_URL=    # URL du projet Supabase
-NEXT_PUBLIC_SUPABASE_ANON_KEY= # Clé anon publique Supabase
+NEXT_PUBLIC_SUPABASE_URL=        # URL projet Supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=   # Clé anon publique
+SUPABASE_SERVICE_ROLE_KEY=       # Clé service role (opt-out API)
+GOOGLE_PLACES_API_KEY=           # API Google Places (New)
+ANTHROPIC_API_KEY=               # Claude API (parse-search)
+STRIPE_SECRET_KEY=               # Stripe secret key
+STRIPE_WEBHOOK_SECRET=           # Stripe webhook signing secret
+STRIPE_PRO_PRICE_ID=             # ID prix Stripe plan Pro
+STRIPE_ENTERPRISE_PRICE_ID=      # ID prix Stripe plan Enterprise
+SERPER_API_KEY=                  # Serper.dev (recherche Google)
+APOLLO_API_KEY=                  # Apollo.io (enrichissement)
+ENRICHLY_API_KEY=                # Enrichly
+ANYMAIL_API_KEY=                 # Anymail Finder
+FINDYMAIL_API_KEY=               # Findymail
+RESEND_API_KEY=                  # Resend (emails transactionnels)
 ```
-
-Configurées dans Vercel > Project Settings > Environment Variables.
 
 ## Fonctionnalités
 
-- **101 départements** : métropole (96) + outre-mer (5), organisés en 14 régions avec sélection par région, recherche par nom/code.
-- **Recherche Google Places** : interroge l'API Places (New) REST pour chaque combinaison département × catégorie. Déduplication par `place_id`. LocationBias par cercle (lat/lng/rayon) par département.
-- **Catégories B2B** : 150+ catégories organisées en 12 secteurs (Hôtellerie & Restauration, Commerce & Distribution, Automobile & Transport, Santé & Bien-être, BTP & Construction, Services aux entreprises, Immobilier, Industrie & Artisanat, Finance & Assurance, Éducation & Culture, Technologie & Digital, Agriculture & Alimentation).
-- **Catégories Copro** : 27 catégories organisées en 3 groupes (Syndics & Gestion, Expertise & Conseil, Entretien & Services).
-- **Enrichissement email** : scraping côté serveur (homepage + pages contact/mentions légales), extraction regex + mailto + patterns obfusqués, scoring (domain match=100, contact@=80, pro=60, generic=20), fallback email probable (`contact@domain.com`).
-- **Persistance Supabase** : tous les prospects sont sauvegardés et rechargés au lancement.
-- **Export CSV** : format standard ou format Zoho CRM (Last Name, Company, Email, Phone, etc.).
-- **Filtres** : recherche texte, département, type (B2B/Copro/Custom).
-- **Thème clair/sombre** : bascule via CSS variables, persisté en localStorage, détection préférence OS.
-- **Multi-sélection** : sélection par lots dans le tableau de leads avec actions groupées.
-- **Visibilité colonnes** : choix des colonnes affichées, persisté en localStorage.
+- **101 départements** : métropole (96) + outre-mer (5), organisés en 14 régions
+- **150+ catégories B2B** : 12 secteurs (B2B_GROUPS) + 3 groupes copropriété (COPRO_GROUPS)
+- **Recherche en langage naturel** : via Anthropic Claude, convertit une description en termes Google Places
+- **Enrichissement waterfall 7 sources** : Scraping → Serper → Apollo → Enrichly → Anymail → Findymail → Fallback
+- **Scoring de confiance** : Vérifié (domain match), Apollo (base de données), Probable (pattern deviné)
+- **Filtrage RGPD emails personnels** : 28 domaines bloqués (@gmail, @hotmail, etc.), activable/désactivable par utilisateur avec avertissement juridique
+- **Opt-out RGPD** : page publique /opt-out, suppression automatique + blocklist permanente
+- **Export CSV** : format standard ou Zoho CRM
+- **Stripe billing** : 3 plans avec limites, portail client, webhooks
+- **Emails transactionnels** : welcome, usage warning (80%), limit reached (100%), payment, cancellation
+- **Landing page** : typewriter effect, particules interactives, comparatif concurrents, FAQ
 
 ## Conventions de code
 
@@ -76,6 +141,7 @@ Configurées dans Vercel > Project Settings > Environment Variables.
 - Pas de TypeScript (JS uniquement)
 - Fonctions async/await pour les appels API
 - Client Supabase via `getSupabase()` (null-safe, lazy-init)
+- Landing page toujours en mode sombre (pas de theme toggle)
 
 ## Commandes
 
@@ -88,4 +154,4 @@ npm run lint     # Linting ESLint
 
 ## Déploiement
 
-Push sur `main` → GitHub → Vercel auto-deploy. Pas de configuration supplémentaire nécessaire.
+Push sur `main` → GitHub → Vercel auto-deploy. Toutes les env vars sont configurées sur Vercel (Production + Development).
