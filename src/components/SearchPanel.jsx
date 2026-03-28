@@ -527,7 +527,7 @@ export default function SearchPanel({
         ref={scrollRef}
         className="rounded-2xl border border-line bg-surface-card overflow-hidden"
       >
-        <div className="p-3 sm:p-5 space-y-4 sm:space-y-5 max-h-[calc(100vh-16rem)] overflow-y-auto">
+        <div className="p-3 sm:p-5 space-y-4 sm:space-y-5 max-h-[calc(100vh-9rem)] overflow-y-auto">
 
           {/* Step 1: Type */}
           <BotMessage>
