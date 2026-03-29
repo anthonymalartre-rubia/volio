@@ -170,13 +170,23 @@ export async function POST(request) {
     const serperKey = process.env.SERPER_API_KEY;
     let contacts = [];
     let companyInfo = null;
+    // Track discovered domain — may be provided or discovered during search
+    let discoveredDomain = company_domain || null;
+
+    // ── Helper: extract root domain from a URL ──────────────────────
+    function extractDomain(url) {
+      try {
+        const hostname = new URL(url.startsWith('http') ? url : `https://${url}`).hostname;
+        return hostname.replace(/^www\./, '');
+      } catch { return null; }
+    }
 
     // Step 1: Try Serper first (cheaper) — search for employees + emails on Google
     if (serperKey) {
       try {
         // 1a: Search for emails on Google
-        const emailQuery = company_domain
-          ? `"@${company_domain}" OR "${company_domain}" email contact`
+        const emailQuery = discoveredDomain
+          ? `"@${discoveredDomain}" OR "${discoveredDomain}" email contact`
           : `"${company_name}" email contact dirigeant`;
 
         const emailRes = await fetchWithTimeout('https://google.serper.dev/search', {
@@ -195,13 +205,18 @@ export async function POST(request) {
           foundEmails = foundEmails.filter(e => {
             const emailDomain = e.split('@')[1];
             if (PERSONAL_DOMAINS.has(emailDomain)) return false;
-            if (company_domain) return emailDomain === company_domain || emailDomain.endsWith(`.${company_domain}`);
+            if (discoveredDomain) return emailDomain === discoveredDomain || emailDomain.endsWith(`.${discoveredDomain}`);
             return true;
           }).slice(0, 5);
+
+          // If no domain was provided, infer from found emails
+          if (!discoveredDomain && foundEmails.length > 0) {
+            discoveredDomain = foundEmails[0].split('@')[1];
+          }
         }
 
         // 1b: Search for employee LinkedIn profiles
-        const searchTerm = company_name || company_domain;
+        const searchTerm = company_name || discoveredDomain;
         const linkedinPeopleQuery = `site:linkedin.com/in "${searchTerm}"`;
         const linkedinPeopleRes = await fetchWithTimeout('https://google.serper.dev/search', {
           method: 'POST',
@@ -227,7 +242,7 @@ export async function POST(request) {
 
         // 1c: Merge emails + LinkedIn profiles into contacts
         if (linkedinProfiles.length > 0) {
-          const domain = company_domain || '';
+          const domain = discoveredDomain || '';
           contacts = linkedinProfiles.map((profile, i) => {
             // Try to match an email with this person
             let email = null;
@@ -257,7 +272,7 @@ export async function POST(request) {
               linkedin_url: profile.linkedin_url,
               phone: null,
               company: company_name || null,
-              company_domain: company_domain || (email ? email.split('@')[1] : null),
+              company_domain: discoveredDomain || (email ? email.split('@')[1] : null),
             };
           });
         } else if (foundEmails.length > 0) {
@@ -269,11 +284,11 @@ export async function POST(request) {
             linkedin_url: null,
             phone: null,
             company: company_name || null,
-            company_domain: company_domain || email.split('@')[1],
+            company_domain: discoveredDomain || email.split('@')[1],
           }));
         }
 
-        // 1d: Find company LinkedIn page
+        // 1d: Find company LinkedIn page + discover website domain
         const linkedinCompanyQuery = `site:linkedin.com/company "${searchTerm}"`;
         const linkedinRes = await fetchWithTimeout('https://google.serper.dev/search', {
           method: 'POST',
@@ -288,6 +303,65 @@ export async function POST(request) {
             companyInfo = { ...(companyInfo || {}), linkedin_url: linkedinUrl, name: company_name };
           }
         }
+
+        // 1e: If no domain yet, search for the company website on Google
+        if (!discoveredDomain && company_name) {
+          try {
+            const siteQuery = `"${company_name}" site officiel`;
+            const siteRes = await fetchWithTimeout('https://google.serper.dev/search', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-API-KEY': serperKey },
+              body: JSON.stringify({ q: siteQuery, num: 5, gl: 'fr' }),
+            });
+            if (siteRes.ok) {
+              const siteData = await siteRes.json();
+              // Find the first non-social, non-directory result
+              const SKIP_DOMAINS = ['linkedin.com', 'facebook.com', 'twitter.com', 'instagram.com', 'youtube.com', 'google.com', 'wikipedia.org', 'pagesjaunes.fr', 'societe.com', 'infogreffe.fr', 'pappers.fr', 'verif.com'];
+              const match = (siteData.organic || []).find(r => {
+                const d = extractDomain(r.link);
+                return d && !SKIP_DOMAINS.some(skip => d === skip || d.endsWith(`.${skip}`));
+              });
+              if (match) {
+                discoveredDomain = extractDomain(match.link);
+                companyInfo = { ...(companyInfo || {}), domain: discoveredDomain, website: match.link, name: company_name };
+              }
+            }
+          } catch {}
+        }
+
+        // 1f: If domain discovered and no contacts yet, search emails with the domain
+        if (discoveredDomain && contacts.length === 0 && foundEmails.length === 0) {
+          try {
+            const domainEmailQuery = `"@${discoveredDomain}" OR "${discoveredDomain}" email`;
+            const domainEmailRes = await fetchWithTimeout('https://google.serper.dev/search', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-API-KEY': serperKey },
+              body: JSON.stringify({ q: domainEmailQuery, num: 10, gl: 'fr' }),
+            });
+            if (domainEmailRes.ok) {
+              const data = await domainEmailRes.json();
+              const allText = (data.organic || []).map(r => `${r.title || ''} ${r.snippet || ''}`).join(' ');
+              const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+              const domainEmails = [...new Set((allText.match(emailRegex) || []).map(e => e.toLowerCase()))]
+                .filter(e => {
+                  const d = e.split('@')[1];
+                  return !PERSONAL_DOMAINS.has(d) && (d === discoveredDomain || d.endsWith(`.${discoveredDomain}`));
+                })
+                .slice(0, 5);
+              if (domainEmails.length > 0) {
+                contacts = domainEmails.map(email => ({
+                  name: null,
+                  email,
+                  title: null,
+                  linkedin_url: null,
+                  phone: null,
+                  company: company_name || null,
+                  company_domain: discoveredDomain,
+                }));
+              }
+            }
+          } catch {}
+        }
       } catch {}
     }
 
@@ -299,8 +373,8 @@ export async function POST(request) {
           reveal_personal_emails: false,
         };
 
-        if (company_domain) {
-          searchBody.q_organization_domains = company_domain;
+        if (discoveredDomain) {
+          searchBody.q_organization_domains = discoveredDomain;
         } else {
           searchBody.q_organization_name = company_name;
         }
@@ -325,6 +399,10 @@ export async function POST(request) {
               employees: org.estimated_num_employees,
               linkedin_url: org.linkedin_url,
             };
+            // Discover domain from Apollo if we didn't have one
+            if (!discoveredDomain && org.primary_domain) {
+              discoveredDomain = org.primary_domain;
+            }
           }
 
           // Score people: prefer those with email, seniority titles, and LinkedIn
@@ -356,26 +434,26 @@ export async function POST(request) {
             linkedin_url: p.linkedin_url || null,
             phone: p.phone_numbers?.[0]?.sanitized_number || null,
             company: p.organization?.name || company_name,
-            company_domain: p.organization?.primary_domain || company_domain,
+            company_domain: p.organization?.primary_domain || discoveredDomain,
           }));
         }
       } catch {}
     }
 
-    // Step 3: If Apollo found org info but no people, try Apollo org enrichment
-    if (!companyInfo && apolloKey && company_domain) {
+    // Step 3: If no org info yet, try Apollo org enrichment with discovered domain
+    if (!companyInfo && apolloKey && discoveredDomain) {
       try {
         const res = await fetchWithTimeout('https://api.apollo.io/v1/organizations/enrich', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-api-key': apolloKey },
-          body: JSON.stringify({ domain: company_domain }),
+          body: JSON.stringify({ domain: discoveredDomain }),
         });
         if (res.ok) {
           const data = await res.json();
           if (data.organization) {
             companyInfo = {
               name: data.organization.name,
-              domain: data.organization.primary_domain || company_domain,
+              domain: data.organization.primary_domain || discoveredDomain,
               industry: data.organization.industry,
               employees: data.organization.estimated_num_employees,
               linkedin_url: data.organization.linkedin_url,
@@ -387,12 +465,12 @@ export async function POST(request) {
       } catch {}
     }
 
-    // Step 4: Fallback — generate generic email patterns + email guesses for domain
-    if (contacts.length === 0 && company_domain) {
+    // Step 4: Fallback — generate generic email patterns for discovered domain
+    if (contacts.length === 0 && discoveredDomain) {
       const genericEmails = [
-        `contact@${company_domain}`,
-        `info@${company_domain}`,
-        `direction@${company_domain}`,
+        `contact@${discoveredDomain}`,
+        `info@${discoveredDomain}`,
+        `direction@${discoveredDomain}`,
       ];
       contacts = genericEmails.map(email => ({
         name: null,
@@ -401,7 +479,7 @@ export async function POST(request) {
         linkedin_url: null,
         phone: null,
         company: companyInfo?.name || company_name || null,
-        company_domain,
+        company_domain: discoveredDomain,
       }));
     }
 
