@@ -44,6 +44,7 @@ const PLAN_FEATURES = {
   enterprise: [
     'Tout dans Pro',
     'Enrichissements illimités',
+    'Vérification emails SMTP (bulk)',
     'Apollo + Enrichly + Anymail inclus',
     'API access',
     'Utilisateurs illimités',
@@ -153,7 +154,7 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 text-center">
+            <div className="p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 text-center">
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-red-400 to-red-600 bg-clip-text text-transparent mb-2">~40%</div>
               <p className="text-sm text-zinc-500">Taux de couverture moyen avec <strong className="text-zinc-400">1 seule source</strong> (Apollo, Hunter, etc.)</p>
             </div>
@@ -161,7 +162,7 @@ export default function LandingPage() {
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-violet-400 to-violet-600 bg-clip-text text-transparent mb-2">~85%</div>
               <p className="text-sm text-zinc-500">Taux de couverture avec le <strong className="text-violet-400">waterfall 7 sources</strong> de Prospectia</p>
             </div>
-            <div className="p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 text-center">
+            <div className="p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 text-center">
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-green-400 to-green-600 bg-clip-text text-transparent mb-2">-80%</div>
               <p className="text-sm text-zinc-500">Coût par lead vs. <strong className="text-zinc-400">abonnements séparés</strong> à chaque outil</p>
             </div>
@@ -227,7 +228,7 @@ export default function LandingPage() {
                 iconBg: 'from-green-500 to-emerald-600',
               },
             ].map((feature) => (
-              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
+              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative">
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.iconBg} flex items-center justify-center mb-4 shadow-lg`}>
@@ -477,7 +478,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Starter */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm">
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-1">{PLANS.free.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Pour tester la plateforme</p>
               <div className="flex items-baseline gap-1 mb-6">
@@ -501,7 +502,7 @@ export default function LandingPage() {
             </div>
 
             {/* Pro — Recommended */}
-            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-surface-card/80 backdrop-blur-sm">
+            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-[#111114]/80 backdrop-blur-sm">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg shadow-violet-500/20 flex items-center gap-1.5">
                 <Crown size={12} />
                 Le plus populaire
@@ -530,7 +531,7 @@ export default function LandingPage() {
             </div>
 
             {/* Enterprise */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-surface-card/80 backdrop-blur-sm">
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
               <h3 className="text-lg font-semibold mb-1">{PLANS.enterprise.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Volume et sur-mesure</p>
               <div className="flex items-baseline gap-1 mb-6">
