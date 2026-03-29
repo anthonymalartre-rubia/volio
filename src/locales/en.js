@@ -595,6 +595,188 @@ const en = {
     searchTab: 'Search',
     unknown: 'Unknown',
   },
+
+  // ─── Landing Page ────────────────────────────────────────────
+  landing: {
+    // Nav
+    nav: {
+      features: 'Features',
+      vsCompetition: 'vs Competition',
+      pricing: 'Pricing',
+      faq: 'FAQ',
+    },
+    // Hero
+    hero: {
+      badge: '5x cheaper than Apollo — 7 sources integrated in 1 click',
+      title: 'Prospect with',
+      subtitle: 'The B2B prospecting aggregator that combines <strong class="text-zinc-200">7 enrichment sources</strong> (Apollo, Serper, Enrichly, Anymail, Findymail) in a single search. AI confidence scoring, 150+ categories, 101 departments.',
+      price: 'Starting at €49/month — where Apollo charges €99 for a single source.',
+      compare: 'Compare with competition',
+      sourcesLabel: 'Integrated sources:',
+    },
+    // Why aggregator
+    why: {
+      label: 'Why an aggregator?',
+      title: 'One tool isn\'t enough. We combine them all.',
+      desc: 'Apollo finds 40% of emails. Hunter finds another 30%. Snov.io completes the rest. Using <strong class="text-zinc-300">a single source, you miss 60% of your leads</strong>. Prospectia queries 7 sources in cascade to maximize your coverage rate.',
+      stat1Label: 'Average coverage rate with <strong class="text-zinc-400">1 single source</strong> (Apollo, Hunter, etc.)',
+      stat2Label: 'Coverage rate with Prospectia\'s <strong class="text-violet-400">7-source waterfall</strong>',
+      stat3Label: 'Cost per lead vs. <strong class="text-zinc-400">separate subscriptions</strong> to each tool',
+    },
+    // Features
+    features: {
+      label: 'Features',
+      title: 'What you get for €49/month',
+      desc: 'Everything Apollo, Hunter, Lusha and Snov.io do — combined in one platform, for a fraction of the price.',
+      waterfall: 'Waterfall 7 sources',
+      waterfallDesc: 'Apollo, Serper, Enrichly, Anymail, Findymail, Scraping, Fallback — queried in cascade. Stops at the first email found. You only pay for what\'s needed.',
+      ai: 'AI & natural language search',
+      aiDesc: 'Describe what you\'re looking for: "Italian restaurants in Lyon". Our AI converts your query into a structured search automatically.',
+      scoring: 'Confidence scoring',
+      scoringDesc: 'Each email receives a reliability score: Verified (exact domain), Apollo (database), Probable (guessed pattern). Know exactly what to trust.',
+      categories: '150+ B2B categories',
+      categoriesDesc: '12 B2B sectors and 3 co-ownership groups. The most complete database for prospecting in France — hospitality, healthcare, construction, auto, tech, legal...',
+      departments: '101 departments covered',
+      departmentsDesc: 'All of France: 96 metropolitan departments + 5 overseas. Selection by region, department, or one click.',
+      exportFeature: 'CSV & Zoho CRM export',
+      exportDesc: 'Export as standard CSV or Zoho CRM format (Last Name, Company, Email, Phone). Ready for your outreach campaign in 1 click.',
+    },
+    // How it works
+    howItWorks: {
+      label: 'How it works',
+      title: '3 steps, hundreds of qualified leads',
+      desc: 'No complex forms. Describe what you\'re looking for or select your criteria. Prospectia does the rest.',
+      step1: 'Search in natural language',
+      step1Desc: 'Type "auto garages in Var" or select departments and categories. The AI understands your intent and launches the Google Places search.',
+      step2: 'Automatic waterfall enrichment',
+      step2Desc: 'Prospectia queries 7 sources in cascade: Scraping, Serper, Apollo, Enrichly, Anymail, Findymail. Stops at the first email found, with a confidence score.',
+      step3: 'Export and prospect',
+      step3Desc: 'Filter by score, department or category. Export as CSV or Zoho CRM format. Your leads are ready for outreach in seconds.',
+    },
+    // Waterfall visual
+    waterfall: {
+      label: 'Cascade enrichment',
+      title: '7 sources. 1 click. The best email with confidence score.',
+      desc: 'With Apollo alone, you pay \u20AC99/month for a single source. With Prospectia, you access <strong class="text-zinc-300">7 sources for \u20AC49/month</strong> — and each email receives a confidence level.',
+      confidence: 'Confidence',
+      stopsFirst: 'Stops at the first email found — you only pay for what\'s needed.',
+      free: 'Free',
+      included: 'Included',
+      pattern: 'Pattern',
+    },
+    // Stats
+    stats: {
+      categories: 'Categories',
+      categoriesSub: 'B2B & Co-ownership',
+      countries: 'Countries',
+      sources: 'Sources',
+      sourcesSub: 'Waterfall enrichment',
+      vs: 'vs €99',
+      vsSub: 'Apollo.io alone',
+    },
+    // Email verification
+    emailVerif: {
+      badge: 'Enterprise',
+      title: 'Verify your emails in bulk before sending',
+      desc: 'Import your email database and instantly verify which ones are valid. No need to send to find out — our SMTP verification detects fake emails <strong class="text-zinc-200">without sending a single message</strong>.',
+      smtp: 'Silent SMTP verification',
+      smtpDesc: 'We verify if the mailbox exists via SMTP protocol, without sending an email. No risk of bounce or blacklisting.',
+      csvImport: 'Bulk CSV import',
+      csvImportDesc: 'Import thousands of emails at once. Results in minutes with status: valid, invalid, catch-all or unknown.',
+      reputation: 'Protect your reputation',
+      reputationDesc: 'A bounce rate >5% can blacklist your domain. Clean your database before each campaign.',
+      mockTitle: 'Email verification',
+      mockImported: '2,847 emails imported',
+      mockCsvDone: 'CSV imported',
+      progress: 'Progress',
+      valid: 'Valid',
+      invalid: 'Invalid',
+      catchAll: 'Catch-all',
+      unknown: 'Unknown',
+      cost: 'Cost: ~€0.0005/email via MillionVerifier',
+      exportValid: 'Export valid ones',
+    },
+    // Competition
+    competition: {
+      label: 'Detailed comparison',
+      title: 'Prospectia vs. the competition',
+      desc: 'Why pay €99/month for Apollo, €49 for Hunter, AND €39 for Snov.io when Prospectia combines everything in one platform?',
+      month: 'month',
+      enrichSources: 'Enrichment sources',
+      confidenceScoring: 'Confidence scoring',
+      aiSearch: 'AI search (natural language)',
+      deptsFR: '101 French departments',
+      b2bCategories: 'B2B categories',
+      googlePlaces: 'Google Places integrated',
+      exportZoho: 'Zoho CRM export',
+      monthlyPrice: 'Monthly price',
+      sevenSources: '7 sources',
+      calcTitle: 'The math is simple',
+      calcDesc: 'Apollo (\u20AC99) + Hunter (\u20AC49) + Snov.io (\u20AC39) = <strong class="text-zinc-200">\u20AC187/month</strong> for 3 separate sources, no deduplication, no scoring.<br />Prospectia Pro = <strong class="text-violet-400">\u20AC49/month</strong> for 7 integrated sources, automatic waterfall, AI confidence scoring, and 150+ categories.<br /><span class="text-green-400 font-semibold">Savings: \u20AC138/month, or \u20AC1,656/year.</span>',
+      savings: 'Savings: \u20AC138/month, or \u20AC1,656/year.',
+    },
+    // Pricing
+    pricing: {
+      label: 'Transparent pricing',
+      title: 'The most competitive on the market',
+      desc: 'No hidden credits. No API markup. 7 sources for the price of one at the competition.',
+      perMonth: '/month',
+      starterDesc: 'To test the platform',
+      startFree: 'Start for free',
+      popular: 'Most popular',
+      proDesc: 'For sales teams',
+      proCheaper: '5x cheaper than Apollo',
+      choosePro: 'Choose Pro',
+      enterpriseDesc: 'Volume and custom',
+      contactTeam: 'Contact the team',
+    },
+    // Plan features
+    planFeatures: {
+      free: [
+        '100 searches/month',
+        '20 enrichments/month',
+        '5 exports/month',
+        '3 folders',
+        'Free email scraping',
+        'Standard CSV export',
+        '101 departments (all of France)',
+      ],
+      pro: [
+        'Unlimited searches',
+        '500 enrichments/month',
+        'Unlimited exports',
+        'Unlimited folders',
+        'Full waterfall (7 sources)',
+        'CSV + Zoho CRM export',
+        'Priority support',
+      ],
+      enterprise: [
+        'Everything in Pro',
+        'Unlimited enrichments',
+        'SMTP email verification (bulk)',
+        'Apollo + Enrichly + Anymail included',
+        'API access',
+        'Unlimited users',
+        'Webhooks & integrations',
+        'SLA & dedicated support',
+      ],
+    },
+    // CTA
+    cta: {
+      title: 'Stop paying for 3 tools. Switch to the aggregator.',
+      desc: '7 sources, AI scoring, 150+ categories, 101 departments.',
+      sub: 'Create your account in 30 seconds — no credit card required.',
+    },
+    // Footer
+    footer: {
+      cgu: 'Terms',
+      privacy: 'Privacy',
+      gdpr: 'GDPR',
+      optOut: 'Opt-out / Deletion',
+    },
+    // Format helpers
+    unlimited: 'Unlimited',
+  },
 };
 
 export default en;
