@@ -7,7 +7,8 @@ import { PLANS } from '@/lib/plans';
 import {
   Shield, Users, Mail, CreditCard, Search, ArrowLeft, Crown, RefreshCw,
   Trash2, KeyRound, Eye, EyeOff, Ban, CheckCircle, AlertTriangle, X,
-  ChevronDown, ChevronUp, Clock, Globe, UserCheck, UserX
+  ChevronDown, ChevronUp, Clock, Globe, UserCheck, UserX,
+  BarChart3, TrendingUp, Activity, DollarSign, Zap, Download, Database
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -23,6 +24,9 @@ export default function AdminPage() {
   const [confirmDialog, setConfirmDialog] = useState(null);
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [dashboardStats, setDashboardStats] = useState(null);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const supabase = getSupabase();
 
   useEffect(() => {
@@ -57,8 +61,22 @@ export default function AdminPage() {
     }
 
     setIsAdmin(true);
-    await loadUsers();
+    await Promise.all([loadUsers(), loadDashboardStats()]);
     setLoading(false);
+  }
+
+  async function loadDashboardStats() {
+    setDashboardLoading(true);
+    try {
+      const res = await fetch('/api/admin/stats');
+      if (res.ok) {
+        const data = await res.json();
+        setDashboardStats(data);
+      }
+    } catch (e) {
+      console.error('Failed to load dashboard stats', e);
+    }
+    setDashboardLoading(false);
   }
 
   async function loadUsers() {
@@ -184,6 +202,22 @@ export default function AdminPage() {
     return formatDate(dateStr);
   }
 
+  function formatLimit(limit) {
+    if (limit === -1) return '\u221E';
+    return limit;
+  }
+
+  function getMonthLabel(monthStr) {
+    const [year, month] = monthStr.split('-');
+    const months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[parseInt(month) - 1]} ${year.slice(2)}`;
+  }
+
+  function navigateToUser(userId) {
+    setActiveTab('users');
+    setExpandedUser(userId);
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#08080c] flex items-center justify-center">
@@ -193,6 +227,26 @@ export default function AdminPage() {
   }
 
   if (!isAdmin) return null;
+
+  // Compute top users from dashboardStats
+  const topUsers = (() => {
+    if (!dashboardStats?.usagePerUser) return [];
+    const usageMap = {};
+    dashboardStats.usagePerUser.forEach(u => {
+      usageMap[u.user_id] = u;
+    });
+    return [...users]
+      .map(u => ({
+        ...u,
+        totalActivity: (usageMap[u.id]?.searches || 0) + (usageMap[u.id]?.enrichments || 0),
+        statsSearches: usageMap[u.id]?.searches || 0,
+        statsEnrichments: usageMap[u.id]?.enrichments || 0,
+        statsExports: usageMap[u.id]?.exports || 0,
+        statsProspects: usageMap[u.id]?.prospects || u.prospectCount || 0,
+      }))
+      .sort((a, b) => b.totalActivity - a.totalActivity)
+      .slice(0, 10);
+  })();
 
   return (
     <div className="min-h-screen bg-[#08080c] text-content-primary">
@@ -278,247 +332,627 @@ export default function AdminPage() {
             <h1 className="text-lg font-semibold">Administration</h1>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400">Admin</span>
           </div>
-          <button onClick={() => { loadUsers(); showToast('Donnees actualisees'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-surface-elevated hover:bg-surface-active transition-colors">
+          <button onClick={() => { loadUsers(); loadDashboardStats(); showToast('Donnees actualisees'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-surface-elevated hover:bg-surface-active transition-colors">
             <RefreshCw className="h-3.5 w-3.5" /> Actualiser
           </button>
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="border-b border-line bg-surface-card">
+        <div className="max-w-7xl mx-auto px-6 flex gap-0">
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'dashboard'
+                ? 'border-violet-500 text-violet-400'
+                : 'border-transparent text-content-tertiary hover:text-content-secondary'
+            }`}
+          >
+            <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Dashboard</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('users')}
+            className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === 'users'
+                ? 'border-violet-500 text-violet-400'
+                : 'border-transparent text-content-tertiary hover:text-content-secondary'
+            }`}
+          >
+            <span className="flex items-center gap-2"><Users className="h-4 w-4" /> Utilisateurs</span>
+          </button>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-content-tertiary">Utilisateurs</span>
-            </div>
-            <div className="text-2xl font-bold">{stats.totalUsers}</div>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Mail className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-content-tertiary">Total prospects</span>
-            </div>
-            <div className="text-2xl font-bold">{stats.totalProspects}</div>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <CreditCard className="h-4 w-4 text-violet-400" />
-              <span className="text-xs text-content-tertiary">Utilisateurs Pro</span>
-            </div>
-            <div className="text-2xl font-bold">{stats.proUsers}</div>
-          </div>
-        </div>
 
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
-          <input
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Rechercher par email, ID ou plan..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-card border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
-          />
-        </div>
-
-        {/* Users list */}
-        <div className="space-y-3">
-          {filteredUsers.map(u => {
-            const plan = PLANS[u.plan] || PLANS.free;
-            const isExpanded = expandedUser === u.id;
-            const isEmailConfirmed = !!u.email_confirmed_at;
-
-            return (
-              <div key={u.id} className="rounded-xl border border-line bg-surface-card overflow-hidden transition-colors hover:border-[#2a2a32]">
-                {/* User row — clickable */}
-                <button
-                  onClick={() => setExpandedUser(isExpanded ? null : u.id)}
-                  className="w-full px-5 py-4 flex items-center gap-4 text-left"
-                >
-                  {/* Avatar */}
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                    u.is_admin ? 'bg-amber-500/20 text-amber-400' : 'bg-violet-500/15 text-violet-400'
-                  }`}>
-                    {(u.email || '?')[0].toUpperCase()}
-                  </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium truncate">{u.email}</span>
-                      {u.is_admin && <Crown className="h-3.5 w-3.5 text-amber-400 shrink-0" />}
-                      {!isEmailConfirmed && (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-400 shrink-0">Non confirme</span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-[11px] text-content-muted font-mono">{u.id.slice(0, 12)}...</span>
-                      <span className="text-[11px] text-content-muted">Inscrit {timeAgo(u.auth_created_at || u.created_at)}</span>
-                    </div>
-                  </div>
-
-                  {/* Plan badge */}
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${
-                    u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
-                    u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
-                    'bg-surface-elevated text-content-tertiary'
-                  }`}>
-                    {plan.name}
-                  </span>
-
-                  {/* Stats */}
-                  <div className="hidden sm:flex items-center gap-4 text-xs text-content-tertiary shrink-0">
-                    <span>{u.prospectCount} leads</span>
-                    <span>{u.usage?.searches || 0} rech.</span>
-                  </div>
-
-                  {/* Expand icon */}
-                  {isExpanded ? <ChevronUp className="h-4 w-4 text-content-muted shrink-0" /> : <ChevronDown className="h-4 w-4 text-content-muted shrink-0" />}
-                </button>
-
-                {/* Expanded details */}
-                {isExpanded && (
-                  <div className="border-t border-line bg-surface-alt">
-                    {/* Details grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email</div>
-                        <div className="text-sm text-content-primary break-all">{u.email}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">User ID</div>
-                        <div className="text-xs font-mono text-content-secondary break-all">{u.id}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Inscription</div>
-                        <div className="text-sm text-content-secondary">{formatDate(u.auth_created_at || u.created_at)}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Derniere connexion</div>
-                        <div className="text-sm text-content-secondary">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email confirme</div>
-                        <div className="flex items-center gap-1.5">
-                          {isEmailConfirmed
-                            ? <><UserCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-sm text-emerald-400">Oui</span></>
-                            : <><UserX className="h-3.5 w-3.5 text-orange-400" /><span className="text-sm text-orange-400">Non</span></>
-                          }
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Provider</div>
-                        <div className="text-sm text-content-secondary capitalize">{u.provider}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Prospects</div>
-                        <div className="text-sm text-content-primary font-medium">{u.prospectCount}</div>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Usage (ce mois)</div>
-                        <div className="text-xs text-content-secondary">
-                          {u.usage?.searches || 0} rech. / {u.usage?.enrichments || 0} enrich. / {u.usage?.exports || 0} exports
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex flex-wrap gap-2 px-5 pb-5">
-                      {/* Plan selector */}
-                      <select
-                        value={u.plan || 'free'}
-                        onChange={e => adminAction('update_plan', u.id, { plan: e.target.value })}
-                        className="px-3 py-2 rounded-lg text-xs bg-surface-base border border-line text-content-primary focus:outline-none focus:border-violet-500 cursor-pointer"
-                      >
-                        <option value="free">Starter</option>
-                        <option value="pro">Pro</option>
-                        <option value="enterprise">Enterprise</option>
-                      </select>
-
-                      {/* Toggle admin */}
-                      <button
-                        onClick={() => adminAction('toggle_admin', u.id)}
-                        disabled={actionLoading === `toggle_admin-${u.id}`}
-                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors ${
-                          u.is_admin
-                            ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
-                            : 'bg-surface-elevated text-content-tertiary hover:text-content-primary hover:bg-surface-active'
-                        }`}
-                      >
-                        <Crown className="h-3.5 w-3.5" />
-                        {u.is_admin ? 'Retirer admin' : 'Promouvoir admin'}
-                      </button>
-
-                      {/* Confirm email */}
-                      {!isEmailConfirmed && (
-                        <button
-                          onClick={() => adminAction('confirm_email', u.id)}
-                          disabled={actionLoading === `confirm_email-${u.id}`}
-                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 transition-colors"
-                        >
-                          <CheckCircle className="h-3.5 w-3.5" />
-                          Confirmer email
-                        </button>
-                      )}
-
-                      {/* Send password reset email */}
-                      <button
-                        onClick={() => setConfirmDialog({
-                          title: 'Reinitialiser le mot de passe',
-                          description: 'Un email de reinitialisation sera envoye a l\'utilisateur.',
-                          email: u.email,
-                          danger: false,
-                          onConfirm: () => adminAction('reset_password', u.id),
-                        })}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
-                      >
-                        <Mail className="h-3.5 w-3.5" />
-                        Envoyer reset email
-                      </button>
-
-                      {/* Set password directly */}
-                      <button
-                        onClick={() => setConfirmDialog({
-                          title: 'Definir un mot de passe',
-                          description: 'Definir manuellement un nouveau mot de passe pour cet utilisateur.',
-                          email: u.email,
-                          showPasswordInput: true,
-                          danger: false,
-                          onConfirm: () => adminAction('set_password', u.id, { password: newPassword }),
-                        })}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
-                      >
-                        <KeyRound className="h-3.5 w-3.5" />
-                        Definir mdp
-                      </button>
-
-                      {/* Delete user */}
-                      <button
-                        onClick={() => setConfirmDialog({
-                          title: 'Supprimer l\'utilisateur',
-                          description: 'Cette action est irreversible. Tous les prospects, donnees d\'usage et le compte seront supprimes.',
-                          email: u.email,
-                          danger: true,
-                          onConfirm: () => adminAction('delete_user', u.id),
-                        })}
-                        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        Supprimer
-                      </button>
-                    </div>
-                  </div>
-                )}
+        {/* ==================== DASHBOARD TAB ==================== */}
+        {activeTab === 'dashboard' && (
+          <>
+            {dashboardLoading && !dashboardStats ? (
+              <div className="flex items-center justify-center py-20">
+                <RefreshCw className="h-6 w-6 text-violet-400 animate-spin" />
               </div>
-            );
-          })}
+            ) : dashboardStats ? (
+              <>
+                {/* Row 1 — KPI Cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                  {/* Total Utilisateurs */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-violet-500/20">
+                        <Users className="h-4 w-4 text-violet-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">Utilisateurs</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.global.totalUsers}</div>
+                    <div className="flex items-center gap-2 mt-1.5 text-[10px] text-content-muted">
+                      <span className="px-1.5 py-0.5 rounded bg-surface-elevated">{dashboardStats.revenue.planCounts.free} free</span>
+                      <span className="px-1.5 py-0.5 rounded bg-violet-500/15 text-violet-400">{dashboardStats.revenue.planCounts.pro} pro</span>
+                      <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400">{dashboardStats.revenue.planCounts.enterprise} ent.</span>
+                    </div>
+                  </div>
 
-          {filteredUsers.length === 0 && (
-            <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
-              Aucun utilisateur trouve
+                  {/* MRR */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-emerald-500/20">
+                        <DollarSign className="h-4 w-4 text-emerald-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">MRR</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.revenue.mrr}<span className="text-sm font-normal text-content-tertiary ml-1">&euro;/mois</span></div>
+                    <div className="text-[10px] text-content-muted mt-1.5">
+                      {dashboardStats.revenue.planCounts.pro} Pro + {dashboardStats.revenue.planCounts.enterprise} Enterprise
+                    </div>
+                  </div>
+
+                  {/* Total Prospects */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-blue-500/20">
+                        <Database className="h-4 w-4 text-blue-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">Total Prospects</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.global.totalProspects.toLocaleString('fr-FR')}</div>
+                    <div className="text-[10px] text-content-muted mt-1.5">
+                      {dashboardStats.global.totalWithEmail > 0
+                        ? `${Math.round((dashboardStats.global.totalWithEmail / dashboardStats.global.totalProspects) * 100)}% avec email`
+                        : '0% avec email'}
+                    </div>
+                  </div>
+
+                  {/* Recherches ce mois */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-orange-500/20">
+                        <Search className="h-4 w-4 text-orange-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">Recherches ce mois</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.global.totalSearches}</div>
+                  </div>
+
+                  {/* Enrichissements ce mois */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-pink-500/20">
+                        <Zap className="h-4 w-4 text-pink-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">Enrichissements</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.global.totalEnrichments}</div>
+                  </div>
+
+                  {/* Exports ce mois */}
+                  <div className="rounded-xl border border-line bg-surface-card p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 rounded-lg bg-cyan-500/20">
+                        <Download className="h-4 w-4 text-cyan-400" />
+                      </div>
+                      <span className="text-xs text-content-tertiary">Exports ce mois</span>
+                    </div>
+                    <div className="text-2xl font-bold">{dashboardStats.global.totalExports}</div>
+                  </div>
+                </div>
+
+                {/* Row 2 — Two side-by-side panels */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* Left: Sources d'enrichissement */}
+                  <div className="rounded-xl border border-line bg-surface-card p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Activity className="h-4 w-4 text-violet-400" />
+                      <h2 className="text-sm font-semibold">Sources d&apos;enrichissement</h2>
+                    </div>
+                    {(() => {
+                      const sources = dashboardStats.enrichmentSources || {};
+                      const entries = Object.entries(sources).sort((a, b) => b[1] - a[1]);
+                      const maxVal = entries.length > 0 ? entries[0][1] : 1;
+                      const colors = {
+                        scrape: 'bg-emerald-500',
+                        apollo: 'bg-violet-500',
+                        serper: 'bg-blue-500',
+                        waterfall: 'bg-amber-500',
+                        guess: 'bg-orange-500',
+                        deep: 'bg-pink-500',
+                        manual: 'bg-cyan-500',
+                        enrichly: 'bg-lime-500',
+                        anymail: 'bg-rose-500',
+                        findymail: 'bg-indigo-500',
+                        unknown: 'bg-gray-500',
+                      };
+                      if (entries.length === 0) {
+                        return <p className="text-xs text-content-muted">Aucune donnee</p>;
+                      }
+                      return (
+                        <div className="space-y-3">
+                          {entries.map(([method, count]) => (
+                            <div key={method}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs text-content-secondary capitalize">{method}</span>
+                                <span className="text-xs font-mono text-content-muted">{count.toLocaleString('fr-FR')}</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all ${colors[method] || 'bg-gray-500'}`}
+                                  style={{ width: `${Math.max((count / maxVal) * 100, 2)}%` }}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Right: Activite recente — last 6 months */}
+                  <div className="rounded-xl border border-line bg-surface-card p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <TrendingUp className="h-4 w-4 text-violet-400" />
+                      <h2 className="text-sm font-semibold">Activite recente (6 mois)</h2>
+                    </div>
+                    {(() => {
+                      const history = dashboardStats.usageHistory || {};
+                      const months = Object.keys(history).sort();
+                      const allSearches = months.map(m => history[m].searches);
+                      const allEnrichments = months.map(m => history[m].enrichments);
+                      const maxVal = Math.max(...allSearches, ...allEnrichments, 1);
+                      return (
+                        <div className="space-y-4">
+                          {/* Legend */}
+                          <div className="flex items-center gap-4 text-[10px] text-content-muted">
+                            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-violet-500 inline-block" /> Recherches</span>
+                            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm bg-pink-500 inline-block" /> Enrichissements</span>
+                          </div>
+                          {months.map(m => (
+                            <div key={m}>
+                              <div className="text-[10px] text-content-muted mb-1.5 font-medium">{getMonthLabel(m)}</div>
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <div className="h-2 flex-1 rounded-full bg-surface-elevated overflow-hidden">
+                                    <div
+                                      className="h-full rounded-full bg-violet-500 transition-all"
+                                      style={{ width: `${Math.max((history[m].searches / maxVal) * 100, 1)}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-[10px] font-mono text-content-muted w-10 text-right">{history[m].searches}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <div className="h-2 flex-1 rounded-full bg-surface-elevated overflow-hidden">
+                                    <div
+                                      className="h-full rounded-full bg-pink-500 transition-all"
+                                      style={{ width: `${Math.max((history[m].enrichments / maxVal) * 100, 1)}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-[10px] font-mono text-content-muted w-10 text-right">{history[m].enrichments}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                </div>
+
+                {/* Row 3 — Top Users table */}
+                <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
+                  <div className="px-5 py-4 border-b border-line flex items-center gap-2">
+                    <Crown className="h-4 w-4 text-amber-400" />
+                    <h2 className="text-sm font-semibold">Top 10 utilisateurs actifs ce mois</h2>
+                  </div>
+                  {topUsers.length === 0 ? (
+                    <div className="p-8 text-center text-xs text-content-muted">Aucune activite ce mois</div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead>
+                          <tr className="border-b border-line bg-surface-base">
+                            <th className="text-left px-4 py-2.5 text-content-muted font-medium">Email</th>
+                            <th className="text-left px-4 py-2.5 text-content-muted font-medium">Plan</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Leads</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Recherches</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Enrichissements</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Exports</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Derniere connexion</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {topUsers.map((u, i) => {
+                            const plan = PLANS[u.plan] || PLANS.free;
+                            return (
+                              <tr
+                                key={u.id}
+                                onClick={() => navigateToUser(u.id)}
+                                className="border-b border-line last:border-0 hover:bg-surface-elevated cursor-pointer transition-colors"
+                              >
+                                <td className="px-4 py-3">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[10px] text-content-muted font-mono w-4">{i + 1}.</span>
+                                    <span className="text-content-primary font-medium truncate max-w-[200px]">{u.email}</span>
+                                    {u.is_admin && <Crown className="h-3 w-3 text-amber-400 shrink-0" />}
+                                  </div>
+                                </td>
+                                <td className="px-4 py-3">
+                                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                    u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
+                                    u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
+                                    'bg-surface-elevated text-content-tertiary'
+                                  }`}>
+                                    {plan.name}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-3 text-right text-content-secondary font-mono">{u.statsProspects}</td>
+                                <td className="px-4 py-3 text-right text-content-secondary font-mono">{u.statsSearches}</td>
+                                <td className="px-4 py-3 text-right text-content-secondary font-mono">{u.statsEnrichments}</td>
+                                <td className="px-4 py-3 text-right text-content-secondary font-mono">{u.statsExports}</td>
+                                <td className="px-4 py-3 text-right text-content-muted">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
+                Impossible de charger les statistiques
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ==================== USERS TAB ==================== */}
+        {activeTab === 'users' && (
+          <>
+            {/* Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="rounded-xl border border-line bg-surface-card p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="h-4 w-4 text-violet-400" />
+                  <span className="text-xs text-content-tertiary">Utilisateurs</span>
+                </div>
+                <div className="text-2xl font-bold">{stats.totalUsers}</div>
+              </div>
+              <div className="rounded-xl border border-line bg-surface-card p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Mail className="h-4 w-4 text-violet-400" />
+                  <span className="text-xs text-content-tertiary">Total prospects</span>
+                </div>
+                <div className="text-2xl font-bold">{stats.totalProspects}</div>
+              </div>
+              <div className="rounded-xl border border-line bg-surface-card p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <CreditCard className="h-4 w-4 text-violet-400" />
+                  <span className="text-xs text-content-tertiary">Utilisateurs Pro</span>
+                </div>
+                <div className="text-2xl font-bold">{stats.proUsers}</div>
+              </div>
             </div>
-          )}
-        </div>
+
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-content-muted" />
+              <input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Rechercher par email, ID ou plan..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-card border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
+              />
+            </div>
+
+            {/* Users list */}
+            <div className="space-y-3">
+              {filteredUsers.map(u => {
+                const plan = PLANS[u.plan] || PLANS.free;
+                const isExpanded = expandedUser === u.id;
+                const isEmailConfirmed = !!u.email_confirmed_at;
+
+                return (
+                  <div key={u.id} className="rounded-xl border border-line bg-surface-card overflow-hidden transition-colors hover:border-[#2a2a32]">
+                    {/* User row — clickable */}
+                    <button
+                      onClick={() => setExpandedUser(isExpanded ? null : u.id)}
+                      className="w-full px-5 py-4 flex items-center gap-4 text-left"
+                    >
+                      {/* Avatar */}
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+                        u.is_admin ? 'bg-amber-500/20 text-amber-400' : 'bg-violet-500/15 text-violet-400'
+                      }`}>
+                        {(u.email || '?')[0].toUpperCase()}
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium truncate">{u.email}</span>
+                          {u.is_admin && <Crown className="h-3.5 w-3.5 text-amber-400 shrink-0" />}
+                          {!isEmailConfirmed && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-400 shrink-0">Non confirme</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-3 mt-0.5">
+                          <span className="text-[11px] text-content-muted font-mono">{u.id.slice(0, 12)}...</span>
+                          <span className="text-[11px] text-content-muted">Inscrit {timeAgo(u.auth_created_at || u.created_at)}</span>
+                        </div>
+                      </div>
+
+                      {/* Plan badge */}
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${
+                        u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
+                        u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
+                        'bg-surface-elevated text-content-tertiary'
+                      }`}>
+                        {plan.name}
+                      </span>
+
+                      {/* Stats */}
+                      <div className="hidden sm:flex items-center gap-4 text-xs text-content-tertiary shrink-0">
+                        <span>{u.prospectCount} leads</span>
+                        <span>{u.usage?.searches || 0} rech.</span>
+                      </div>
+
+                      {/* Expand icon */}
+                      {isExpanded ? <ChevronUp className="h-4 w-4 text-content-muted shrink-0" /> : <ChevronDown className="h-4 w-4 text-content-muted shrink-0" />}
+                    </button>
+
+                    {/* Expanded details */}
+                    {isExpanded && (
+                      <div className="border-t border-line bg-surface-alt">
+                        {/* Details grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5">
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email</div>
+                            <div className="text-sm text-content-primary break-all">{u.email}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">User ID</div>
+                            <div className="text-xs font-mono text-content-secondary break-all">{u.id}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Inscription</div>
+                            <div className="text-sm text-content-secondary">{formatDate(u.auth_created_at || u.created_at)}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Derniere connexion</div>
+                            <div className="text-sm text-content-secondary">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email confirme</div>
+                            <div className="flex items-center gap-1.5">
+                              {isEmailConfirmed
+                                ? <><UserCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-sm text-emerald-400">Oui</span></>
+                                : <><UserX className="h-3.5 w-3.5 text-orange-400" /><span className="text-sm text-orange-400">Non</span></>
+                              }
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Provider</div>
+                            <div className="text-sm text-content-secondary capitalize">{u.provider}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Prospects</div>
+                            <div className="text-sm text-content-primary font-medium">{u.prospectCount}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Usage (ce mois)</div>
+                            <div className="text-xs text-content-secondary">
+                              {u.usage?.searches || 0} rech. / {u.usage?.enrichments || 0} enrich. / {u.usage?.exports || 0} exports
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Usage progress bars */}
+                        <div className="px-5 pb-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          {/* Searches progress */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] text-content-muted">Recherches</span>
+                              <span className="text-[10px] font-mono text-content-muted">
+                                {u.usage?.searches || 0} / {formatLimit(plan.limits.searches_per_month)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all ${
+                                  plan.limits.searches_per_month !== -1 && (u.usage?.searches || 0) >= plan.limits.searches_per_month
+                                    ? 'bg-red-500' : 'bg-violet-500'
+                                }`}
+                                style={{
+                                  width: plan.limits.searches_per_month === -1
+                                    ? '100%'
+                                    : `${Math.min(((u.usage?.searches || 0) / plan.limits.searches_per_month) * 100, 100)}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                          {/* Enrichments progress */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] text-content-muted">Enrichissements</span>
+                              <span className="text-[10px] font-mono text-content-muted">
+                                {u.usage?.enrichments || 0} / {formatLimit(plan.limits.enrichments_per_month)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all ${
+                                  plan.limits.enrichments_per_month !== -1 && (u.usage?.enrichments || 0) >= plan.limits.enrichments_per_month
+                                    ? 'bg-red-500' : 'bg-pink-500'
+                                }`}
+                                style={{
+                                  width: plan.limits.enrichments_per_month === -1
+                                    ? '100%'
+                                    : `${Math.min(((u.usage?.enrichments || 0) / plan.limits.enrichments_per_month) * 100, 100)}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                          {/* Exports progress */}
+                          <div>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] text-content-muted">Exports</span>
+                              <span className="text-[10px] font-mono text-content-muted">
+                                {u.usage?.exports || 0} / {formatLimit(plan.limits.exports_per_month)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-surface-elevated overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all ${
+                                  plan.limits.exports_per_month !== -1 && (u.usage?.exports || 0) >= plan.limits.exports_per_month
+                                    ? 'bg-red-500' : 'bg-cyan-500'
+                                }`}
+                                style={{
+                                  width: plan.limits.exports_per_month === -1
+                                    ? '100%'
+                                    : `${Math.min(((u.usage?.exports || 0) / plan.limits.exports_per_month) * 100, 100)}%`
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Stripe customer ID */}
+                        {u.stripe_customer_id && (
+                          <div className="px-5 pb-3">
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Stripe Customer</div>
+                            <a
+                              href={`https://dashboard.stripe.com/customers/${u.stripe_customer_id}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs font-mono text-violet-400 hover:text-violet-300 transition-colors"
+                              onClick={e => e.stopPropagation()}
+                            >
+                              <CreditCard className="h-3 w-3" />
+                              {u.stripe_customer_id.length > 20
+                                ? `${u.stripe_customer_id.slice(0, 20)}...`
+                                : u.stripe_customer_id}
+                            </a>
+                          </div>
+                        )}
+
+                        {/* Actions */}
+                        <div className="flex flex-wrap gap-2 px-5 pb-5">
+                          {/* Plan selector */}
+                          <select
+                            value={u.plan || 'free'}
+                            onChange={e => adminAction('update_plan', u.id, { plan: e.target.value })}
+                            className="px-3 py-2 rounded-lg text-xs bg-surface-base border border-line text-content-primary focus:outline-none focus:border-violet-500 cursor-pointer"
+                          >
+                            <option value="free">Starter</option>
+                            <option value="pro">Pro</option>
+                            <option value="enterprise">Enterprise</option>
+                          </select>
+
+                          {/* Toggle admin */}
+                          <button
+                            onClick={() => adminAction('toggle_admin', u.id)}
+                            disabled={actionLoading === `toggle_admin-${u.id}`}
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors ${
+                              u.is_admin
+                                ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
+                                : 'bg-surface-elevated text-content-tertiary hover:text-content-primary hover:bg-surface-active'
+                            }`}
+                          >
+                            <Crown className="h-3.5 w-3.5" />
+                            {u.is_admin ? 'Retirer admin' : 'Promouvoir admin'}
+                          </button>
+
+                          {/* Confirm email */}
+                          {!isEmailConfirmed && (
+                            <button
+                              onClick={() => adminAction('confirm_email', u.id)}
+                              disabled={actionLoading === `confirm_email-${u.id}`}
+                              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 transition-colors"
+                            >
+                              <CheckCircle className="h-3.5 w-3.5" />
+                              Confirmer email
+                            </button>
+                          )}
+
+                          {/* Send password reset email */}
+                          <button
+                            onClick={() => setConfirmDialog({
+                              title: 'Reinitialiser le mot de passe',
+                              description: 'Un email de reinitialisation sera envoye a l\'utilisateur.',
+                              email: u.email,
+                              danger: false,
+                              onConfirm: () => adminAction('reset_password', u.id),
+                            })}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
+                          >
+                            <Mail className="h-3.5 w-3.5" />
+                            Envoyer reset email
+                          </button>
+
+                          {/* Set password directly */}
+                          <button
+                            onClick={() => setConfirmDialog({
+                              title: 'Definir un mot de passe',
+                              description: 'Definir manuellement un nouveau mot de passe pour cet utilisateur.',
+                              email: u.email,
+                              showPasswordInput: true,
+                              danger: false,
+                              onConfirm: () => adminAction('set_password', u.id, { password: newPassword }),
+                            })}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
+                          >
+                            <KeyRound className="h-3.5 w-3.5" />
+                            Definir mdp
+                          </button>
+
+                          {/* Delete user */}
+                          <button
+                            onClick={() => setConfirmDialog({
+                              title: 'Supprimer l\'utilisateur',
+                              description: 'Cette action est irreversible. Tous les prospects, donnees d\'usage et le compte seront supprimes.',
+                              email: u.email,
+                              danger: true,
+                              onConfirm: () => adminAction('delete_user', u.id),
+                            })}
+                            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Supprimer
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {filteredUsers.length === 0 && (
+                <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
+                  Aucun utilisateur trouve
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
