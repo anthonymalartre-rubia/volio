@@ -172,7 +172,7 @@ export default function Dashboard() {
         supabase.from('lead_folders').select('*').order('created_at', { ascending: true }),
         supabase.from('lead_tags').select('*').order('name'),
         supabase.from('prospect_tags').select('prospect_id, tag_id'),
-        supabase.from('prospects').select('*').order('created_at', { ascending: false }),
+        supabase.from('prospects').select('*').order('created_at', { ascending: false }).limit(50000),
         supabase.from('search_sessions').select('*').order('created_at', { ascending: false }).limit(20),
       ]);
 
