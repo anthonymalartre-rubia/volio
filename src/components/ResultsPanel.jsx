@@ -470,7 +470,6 @@ export default memo(function ResultsPanel({
   const [copiedEmail, setCopiedEmail] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [tooltipId, setTooltipId] = useState(null);
-  const [showEnrichDropdown, setShowEnrichDropdown] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
@@ -612,12 +611,6 @@ export default memo(function ResultsPanel({
 
   const isEnterprise = userPlan?.id === 'enterprise';
 
-  const ENRICH_METHODS = [
-    { id: null, label: t('results.sources.waterfall'), icon: '🔄', description: t('results.sources.waterfallDesc'), cost: t('results.sources.waterfallNote') },
-    { id: 'scrape', label: t('results.sources.scraping'), icon: '🌐', description: t('results.sources.scrapingDesc'), cost: t('results.sources.scrapingNote') },
-    { id: 'serper', label: t('results.sources.serper'), icon: '🔍', description: t('results.sources.serperDesc'), cost: t('results.sources.serperNote') },
-    { id: 'apollo', label: t('results.sources.apollo'), icon: '🚀', description: t('results.sources.apolloDesc'), cost: t('results.sources.apolloNote') },
-  ];
 
   const folderProspects = useMemo(() => {
     if (activeFolder === 'all') return prospects;
@@ -905,63 +898,25 @@ export default memo(function ResultsPanel({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 p-2 sm:p-3 rounded-2xl border border-line bg-surface-card">
         {/* Enrichment */}
-        {!isEnriching && !isDeepEnriching && !isWaterfallEnriching ? (
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative group/tip">
-              <button
-                onClick={onStartEnrichment}
-                disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
-              >
-                <Zap size={14} />
-                <span className="hidden sm:inline">{t('results.enrichBtn')}</span>
-                <span className="sm:hidden">{t('results.enrichBtn')}</span>
-              </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-52 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
-                <div className="font-semibold text-content-primary mb-1">{t('results.basicScrapingTitle')}</div>
-                {t('results.basicScrapingDesc')}
-                <div className="text-content-faint mt-1">{t('results.basicScrapingNote')}</div>
+        {!isWaterfallEnriching ? (
+          <div className="relative group/tip">
+            <button
+              onClick={() => onStartWaterfallEnrichment()}
+              disabled={prospects.length === 0}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
+            >
+              <Zap size={14} />
+              {t('results.enrichBtn')}
+            </button>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
+              <div className="font-semibold text-violet-400 mb-1">{t('results.cascadeTitle')}</div>
+              <div className="space-y-0.5">
+                <div>1. {t('results.cascadeStep1')}</div>
+                <div>2. {t('results.cascadeStep2')}</div>
+                <div>3. {t('results.cascadeStep3')}</div>
+                <div>4. {t('results.cascadeStep4')}</div>
               </div>
-            </div>
-            <div className="relative group/tip">
-              <button
-                onClick={onStartDeepEnrichment}
-                disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
-              >
-                <Radar size={14} />
-                <span className="hidden sm:inline">{t('results.deepEnrich')}</span>
-                <span className="sm:hidden">Deep</span>
-              </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
-                <div className="font-semibold text-content-primary mb-1">{t('results.deepCrawlTitle')}</div>
-                {t('results.deepCrawlDesc')}
-                <div className="text-content-faint mt-1">{t('results.deepCrawlNote')}</div>
-              </div>
-            </div>
-            <div className="relative group/tip">
-              <button
-                onClick={() => onStartWaterfallEnrichment()}
-                disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 disabled:bg-surface-elevated disabled:from-surface-elevated disabled:to-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed shadow-lg shadow-orange-600/10"
-              >
-                <Crown size={14} />
-                <span className="hidden sm:inline">{t('results.waterfallPro')}</span>
-                <span className="sm:hidden">Waterfall</span>
-              </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-64 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
-                <div className="font-semibold text-orange-400 mb-1">{t('results.cascadeTitle')}</div>
-                <div className="space-y-0.5">
-                  <div>{t('results.cascadeStep1')}</div>
-                  <div>{t('results.cascadeStep2')}</div>
-                  <div>{t('results.cascadeStep3')}</div>
-                  <div>{t('results.cascadeStep4')}</div>
-                  <div>{t('results.cascadeStep5')}</div>
-                  <div>{t('results.cascadeStep6')}</div>
-                  <div>{t('results.cascadeStep7')}</div>
-                </div>
-                <div className="text-content-faint mt-1">{t('results.stopsWhenFound')}</div>
-              </div>
+              <div className="text-content-faint mt-1">{t('results.stopsWhenFound')}</div>
             </div>
           </div>
         ) : (
@@ -976,88 +931,29 @@ export default memo(function ResultsPanel({
             <div className="flex items-center gap-2">
               <div className="w-24 h-1.5 bg-surface-elevated rounded-full overflow-hidden">
                 <div
-                  className={`h-full transition-all duration-300 rounded-full ${isWaterfallEnriching ? 'bg-gradient-to-r from-orange-500 to-amber-500' : 'bg-gradient-to-r from-purple-500 to-indigo-500'}`}
-                  style={{ width: `${
-                    isWaterfallEnriching ? (waterfallProgress?.total > 0 ? (waterfallProgress.current / waterfallProgress.total) * 100 : 0) :
-                    isDeepEnriching ? (deepEnrichProgress?.total > 0 ? (deepEnrichProgress.current / deepEnrichProgress.total) * 100 : 0) :
-                    enrichProgress_pct
-                  }%` }}
+                  className="h-full transition-all duration-300 rounded-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                  style={{ width: `${waterfallProgress?.total > 0 ? (waterfallProgress.current / waterfallProgress.total) * 100 : 0}%` }}
                 />
               </div>
               <span className="text-[10px] font-mono text-content-muted tabular-nums">
-                {isWaterfallEnriching ? `${waterfallProgress?.current || 0}/${waterfallProgress?.total || 0}` :
-                 isDeepEnriching ? `${deepEnrichProgress?.current || 0}/${deepEnrichProgress?.total || 0}` :
-                 `${enrichProgress?.current}/${enrichProgress?.total}`}
+                {`${waterfallProgress?.current || 0}/${waterfallProgress?.total || 0}`}
               </span>
             </div>
-            <span className="text-[10px] truncate max-w-[150px] hidden sm:block" style={{ color: isWaterfallEnriching ? '#f97316' : '#a78bfa' }}>
-              {isWaterfallEnriching ? (waterfallProgress?.currentSite || '') :
-               isDeepEnriching ? (deepEnrichProgress?.currentSite || '') :
-               (enrichProgress?.currentSite || '')}
+            <span className="text-[10px] truncate max-w-[150px] hidden sm:block text-violet-400">
+              {waterfallProgress?.currentSite || ''}
             </span>
           </div>
         )}
 
-        <div className="relative">
-          <div className="flex">
-            <button
-              onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, null)}
-              disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
-              className="flex items-center gap-2 px-3 py-2 rounded-l-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              <Zap className="h-3.5 w-3.5" />
-              {t('results.enrichAll', { count: prospectsWithoutEmail })}
-            </button>
-            <button
-              onClick={() => setShowEnrichDropdown(!showEnrichDropdown)}
-              disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
-              className="flex items-center px-1.5 py-2 rounded-r-lg text-xs font-medium bg-violet-700 text-white hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all border-l border-violet-500/30"
-            >
-              <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-          </div>
-
-          {showEnrichDropdown && (
-            <div className="absolute z-50 top-full mt-1 right-0 w-80 rounded-lg border border-line bg-surface-card shadow-xl py-1">
-              <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-content-muted font-semibold">
-                {t('results.enrichMethod')}
-              </div>
-              {ENRICH_METHODS.map((m) => {
-                const isLocked = m.id !== null && !isEnterprise;
-                return (
-                  <button
-                    key={m.id || 'waterfall'}
-                    onClick={() => {
-                      if (isLocked) return;
-                      setShowEnrichDropdown(false);
-                      onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, m.id);
-                    }}
-                    disabled={isLocked}
-                    className={`w-full text-left px-3 py-2 flex items-center gap-2.5 text-xs transition-colors ${
-                      isLocked
-                        ? 'opacity-40 cursor-not-allowed'
-                        : 'hover:bg-surface-elevated cursor-pointer'
-                    }`}
-                  >
-                    <span className="text-base leading-none">{m.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-content-primary font-medium flex items-center gap-1.5">
-                        {m.label}
-                        {isLocked && <Lock className="h-3 w-3 text-content-muted" />}
-                      </div>
-                      <div className="text-[10px] text-content-tertiary leading-snug">{m.description}</div>
-                      <div className="text-[9px] text-content-faint mt-0.5">{m.cost}</div>
-                    </div>
-                    {isLocked && (
-                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium whitespace-nowrap">
-                        Enterprise
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+        <div>
+          <button
+            onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, null)}
+            disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            <Zap className="h-3.5 w-3.5" />
+            {t('results.enrichAll', { count: prospectsWithoutEmail })}
+          </button>
         </div>
 
         <div className="flex-1" />
