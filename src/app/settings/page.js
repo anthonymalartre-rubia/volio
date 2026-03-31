@@ -313,7 +313,7 @@ export default function SettingsPage() {
 
       {/* Header */}
       <div className="border-b border-line bg-surface-card">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-3">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3">
           <button onClick={() => router.push('/dashboard')} className="p-2 rounded-lg hover:bg-surface-elevated transition-colors">
             <ArrowLeft className="h-4 w-4 text-content-tertiary" />
           </button>
@@ -322,7 +322,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-6 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
         {/* === Profile Section === */}
         <div className="rounded-xl border border-line bg-surface-card p-6">

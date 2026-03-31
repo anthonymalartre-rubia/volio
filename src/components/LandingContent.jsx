@@ -41,7 +41,7 @@ export default function LandingContent() {
     <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden" style={{'--c-bg-base':'9 9 11','--c-bg-card':'17 17 20','--c-bg-elevated':'30 30 36','--c-bg-alt':'13 13 16','--c-border':'30 30 36','--c-border-hover':'39 39 42','--c-text-primary':'250 250 250','--c-text-secondary':'161 161 170','--c-text-tertiary':'113 113 122','--c-text-muted':'82 82 91','--c-text-faint':'63 63 70'}}>
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
               <span className="text-[11px] font-bold text-white">P</span>
@@ -62,7 +62,7 @@ export default function LandingContent() {
       </nav>
 
       {/* Hero */}
-      <section className="relative pt-32 pb-28 px-6 overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-28 px-4 sm:px-6 overflow-hidden">
         {/* Interactive particle background */}
         <MouseParticles />
         {/* Background glow */}
@@ -77,7 +77,7 @@ export default function LandingContent() {
             {t('landing.hero.badge')}
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-8">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6 sm:mb-8">
             <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">{t('landing.hero.title')}</span>
             <br />
             <TypewriterText />
@@ -111,7 +111,7 @@ export default function LandingContent() {
       <InteractiveDemo />
 
       {/* Why an aggregator */}
-      <section className="py-24 px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.why.label')}</p>
@@ -139,7 +139,7 @@ export default function LandingContent() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 px-6 border-t border-white/[0.06]">
+      <section id="features" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.features.label')}</p>
@@ -212,7 +212,7 @@ export default function LandingContent() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-24 px-6 border-t border-white/[0.06]">
+      <section id="how-it-works" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.howItWorks.label')}</p>
@@ -264,7 +264,7 @@ export default function LandingContent() {
       </section>
 
       {/* Waterfall visual */}
-      <section className="py-24 px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.waterfall.label')}</p>
@@ -300,7 +300,7 @@ export default function LandingContent() {
       </section>
 
       {/* Stats */}
-      <section className="py-20 px-6 border-t border-white/[0.06]">
+      <section className="py-20 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
@@ -320,7 +320,7 @@ export default function LandingContent() {
       </section>
 
       {/* Email Verification Feature */}
-      <section className="py-24 px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left -- Text */}
@@ -440,7 +440,7 @@ export default function LandingContent() {
       </section>
 
       {/* Full Competitor Comparison */}
-      <section id="vs-concurrence" className="py-24 px-6 border-t border-white/[0.06]">
+      <section id="vs-concurrence" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.competition.label')}</p>
@@ -538,7 +538,7 @@ export default function LandingContent() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-24 px-6 border-t border-white/[0.06]">
+      <section id="pricing" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.pricing.label')}</p>
@@ -635,7 +635,7 @@ export default function LandingContent() {
       <FAQSection />
 
       {/* Final CTA */}
-      <section className="relative py-28 px-6 border-t border-white/[0.06] overflow-hidden">
+      <section className="relative py-28 px-4 sm:px-6 border-t border-white/[0.06] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto text-center relative">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
