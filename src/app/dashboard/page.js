@@ -744,10 +744,22 @@ export default function Dashboard() {
             )
           );
           if (supabase) {
-            await supabase
+            const { error: saveError } = await supabase
               .from('prospects')
               .update({ email: data.email, email_method: method })
               .eq('id', prospect.id);
+            if (saveError) {
+              console.error('Failed to save email for', prospect.id, saveError);
+              // Retry once after 1s
+              await new Promise(r => setTimeout(r, 1000));
+              const { error: retryError } = await supabase
+                .from('prospects')
+                .update({ email: data.email, email_method: method })
+                .eq('id', prospect.id);
+              if (retryError) {
+                console.error('Retry failed for', prospect.id, retryError);
+              }
+            }
           }
 
           const steps = (data.waterfall || []).map((s) =>
