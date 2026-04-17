@@ -1,17 +1,22 @@
-// src/lib/analytics.js — Single-pass computation (was 12 passes)
+// src/lib/analytics.js — Single-pass computation
 
 export function computeAnalytics(prospects, searchHistory) {
   const now = Date.now();
   const thirtyDaysAgo = now - 30 * 86400000;
   const sevenDaysAgo = now - 7 * 86400000;
 
-  // Week boundaries for trend (precomputed)
+  // Week boundaries for trend (4 weeks, with readable labels)
   const weekBounds = [];
+  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+  const monthNames = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec'];
   for (let i = 3; i >= 0; i--) {
+    const start = new Date(now - (i + 1) * 7 * 86400000);
+    const end = new Date(now - i * 7 * 86400000);
+    const label = i === 0 ? 'Cette semaine' : i === 1 ? 'Sem. derniere' : `${start.getDate()} ${monthNames[start.getMonth()]}`;
     weekBounds.push({
-      label: `S-${i}`,
-      start: now - (i + 1) * 7 * 86400000,
-      end: now - i * 7 * 86400000,
+      label,
+      start: start.getTime(),
+      end: end.getTime(),
       count: 0,
     });
   }
@@ -19,6 +24,8 @@ export function computeAnalytics(prospects, searchHistory) {
   let recent30 = 0;
   let recent7 = 0;
   let withEmail = 0;
+  let withPhone = 0;
+  let withWebsite = 0;
   const byDept = {};
   const byMethod = {};
   const byType = { b2b: 0, copro: 0, custom: 0 };
@@ -36,6 +43,8 @@ export function computeAnalytics(prospects, searchHistory) {
       withEmail++;
       if (p.email_method) byMethod[p.email_method] = (byMethod[p.email_method] || 0) + 1;
     }
+    if (p.telephone) withPhone++;
+    if (p.site_web) withWebsite++;
 
     if (p.departement) byDept[p.departement] = (byDept[p.departement] || 0) + 1;
     if (p.type) byType[p.type] = (byType[p.type] || 0) + 1;
@@ -48,8 +57,8 @@ export function computeAnalytics(prospects, searchHistory) {
       }
     }
 
-    // Score distribution
-    const score = p.lead_score || 0;
+    // Score distribution (based on data completeness)
+    const score = p.lead_score || computeLeadScore(p);
     if (score >= 80) scoreDistribution.excellent++;
     else if (score >= 60) scoreDistribution.bon++;
     else if (score >= 40) scoreDistribution.moyen++;
@@ -61,6 +70,8 @@ export function computeAnalytics(prospects, searchHistory) {
     recent30,
     recent7,
     withEmail,
+    withPhone,
+    withWebsite,
     enrichmentRate: prospects.length > 0 ? Math.round((withEmail / prospects.length) * 100) : 0,
     byDept,
     byMethod,
@@ -69,4 +80,16 @@ export function computeAnalytics(prospects, searchHistory) {
     scoreDistribution,
     searchCount: searchHistory?.length || 0,
   };
+}
+
+// Compute a lead quality score based on data completeness
+function computeLeadScore(p) {
+  let score = 0;
+  if (p.email) score += 35;
+  if (p.telephone) score += 20;
+  if (p.site_web) score += 15;
+  if (p.note && p.note >= 4) score += 15;
+  if (p.nb_avis && p.nb_avis >= 10) score += 10;
+  if (p.adresse) score += 5;
+  return score;
 }

@@ -1,70 +1,149 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Users, Mail, TrendingUp, BarChart3, MapPin, Target } from 'lucide-react';
+import { Users, Mail, Phone, Globe, TrendingUp, BarChart3, MapPin, Target, Zap, CheckCircle } from 'lucide-react';
 import { computeAnalytics } from '@/lib/analytics';
 import { DEPTS } from '@/lib/constants';
+import { useI18n } from '@/lib/i18n';
 
 export default function OverviewPanel({ prospects, searchHistory }) {
+  const { t } = useI18n();
   const analytics = useMemo(
     () => computeAnalytics(prospects || [], searchHistory || []),
     [prospects, searchHistory]
   );
 
+  const hasData = analytics.total > 0;
+
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-content-primary">Vue d'ensemble</h2>
+    <div className="space-y-6">
+      <h2 className="text-lg font-semibold text-content-primary">Vue d&apos;ensemble</h2>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard icon={Users} label="Total leads" value={analytics.total} sub={`+${analytics.recent7} cette semaine`} />
-        <KpiCard icon={Mail} label="Emails trouves" value={analytics.withEmail} sub={`${analytics.enrichmentRate}% enrichis`} />
-        <KpiCard icon={Target} label="Recherches" value={analytics.searchCount} sub="sessions lancees" />
-        <KpiCard icon={TrendingUp} label="7 derniers jours" value={analytics.recent7} sub="nouveaux leads" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <KpiCard
+          icon={Users}
+          label="Total leads"
+          value={analytics.total.toLocaleString('fr-FR')}
+          color="text-violet-400"
+          bgColor="bg-violet-500/10"
+        />
+        <KpiCard
+          icon={Mail}
+          label="Emails"
+          value={analytics.withEmail.toLocaleString('fr-FR')}
+          sub={`${analytics.enrichmentRate}% enrichis`}
+          color="text-green-400"
+          bgColor="bg-green-500/10"
+        />
+        <KpiCard
+          icon={Phone}
+          label="Telephones"
+          value={analytics.withPhone.toLocaleString('fr-FR')}
+          color="text-blue-400"
+          bgColor="bg-blue-500/10"
+        />
+        <KpiCard
+          icon={Globe}
+          label="Sites web"
+          value={analytics.withWebsite.toLocaleString('fr-FR')}
+          color="text-amber-400"
+          bgColor="bg-amber-500/10"
+        />
       </div>
+
+      {/* Enrichment progress — the most important metric */}
+      {hasData && (
+        <div className="rounded-xl border border-line bg-surface-card p-5">
+          <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
+            <Zap className="h-4 w-4 text-violet-400" /> Progression enrichissement
+          </h3>
+          <div className="flex items-center gap-4 mb-3">
+            <div className="flex-1 h-4 bg-surface-elevated rounded-full overflow-hidden flex">
+              {analytics.withEmail > 0 && (
+                <div
+                  className="h-full bg-green-500 transition-all duration-500"
+                  style={{ width: `${(analytics.withEmail / analytics.total) * 100}%` }}
+                  title={`${analytics.withEmail} emails trouves`}
+                />
+              )}
+            </div>
+            <span className="text-sm font-bold text-content-primary tabular-nums">
+              {analytics.enrichmentRate}%
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-4 text-xs text-content-tertiary">
+            <span className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+              {analytics.withEmail.toLocaleString('fr-FR')} avec email
+            </span>
+            <span className="flex items-center gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-surface-elevated" />
+              {(analytics.total - analytics.withEmail).toLocaleString('fr-FR')} sans email
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Weekly trend */}
         <div className="rounded-xl border border-line bg-surface-card p-4">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" /> Tendance hebdomadaire
+            <BarChart3 className="h-4 w-4" /> Tendance (4 semaines)
           </h3>
-          <div className="flex items-end gap-3 h-32">
+          <div className="flex items-end gap-3 h-36">
             {analytics.weeklyTrend.map((w, i) => {
               const maxCount = Math.max(...analytics.weeklyTrend.map(x => x.count), 1);
-              const height = (w.count / maxCount) * 100;
+              const height = maxCount > 0 ? (w.count / maxCount) * 100 : 0;
+              const isCurrentWeek = i === analytics.weeklyTrend.length - 1;
               return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <span className="text-[10px] text-content-tertiary">{w.count}</span>
-                  <div className="w-full rounded-t-md bg-violet-600/80" style={{ height: `${Math.max(4, height)}%` }} />
-                  <span className="text-[10px] text-content-muted">{w.label}</span>
+                <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
+                  <span className="text-[11px] font-mono text-content-tertiary tabular-nums">
+                    {w.count > 0 ? w.count.toLocaleString('fr-FR') : ''}
+                  </span>
+                  <div className="w-full flex items-end" style={{ height: '80px' }}>
+                    <div
+                      className={`w-full rounded-t-lg transition-all duration-500 ${isCurrentWeek ? 'bg-violet-500' : 'bg-violet-500/40'}`}
+                      style={{ height: w.count > 0 ? `${Math.max(8, height)}%` : '4px' }}
+                    />
+                  </div>
+                  <span className={`text-[10px] leading-tight text-center ${isCurrentWeek ? 'text-violet-400 font-medium' : 'text-content-muted'}`}>
+                    {w.label}
+                  </span>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* By department */}
+        {/* By department — top 6 */}
         <div className="rounded-xl border border-line bg-surface-card p-4">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
-            <MapPin className="h-4 w-4" /> Par departement
+            <MapPin className="h-4 w-4" /> Top departements
           </h3>
-          <div className="space-y-3">
-            {Object.entries(analytics.byDept).sort((a, b) => b[1] - a[1]).map(([dept, count]) => {
-              const pct = analytics.total > 0 ? (count / analytics.total) * 100 : 0;
-              return (
-                <div key={dept}>
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-content-secondary">{DEPTS[dept]?.name || dept}</span>
-                    <span className="text-content-tertiary">{count}</span>
+          <div className="space-y-2.5">
+            {Object.entries(analytics.byDept)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 6)
+              .map(([dept, count]) => {
+                const maxDept = Math.max(...Object.values(analytics.byDept));
+                const pct = maxDept > 0 ? (count / maxDept) * 100 : 0;
+                return (
+                  <div key={dept}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-content-secondary">{dept} — {DEPTS[dept]?.name || dept}</span>
+                      <span className="text-content-tertiary font-mono tabular-nums">{count.toLocaleString('fr-FR')}</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                      <div className="h-full rounded-full bg-indigo-500 transition-all duration-500" style={{ width: `${pct}%` }} />
+                    </div>
                   </div>
-                  <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
-                    <div className="h-full rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            {Object.keys(analytics.byDept).length === 0 && (
+              <p className="text-xs text-content-muted">Aucune donnee</p>
+            )}
           </div>
         </div>
       </div>
@@ -72,51 +151,89 @@ export default function OverviewPanel({ prospects, searchHistory }) {
       {/* Score distribution & email methods */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-xl border border-line bg-surface-card p-4">
-          <h3 className="text-sm font-medium text-content-secondary mb-4">Qualite des leads</h3>
-          <div className="space-y-2">
-            {[
-              { key: 'excellent', label: 'Excellent (80+)', color: 'bg-green-500' },
-              { key: 'bon', label: 'Bon (60-79)', color: 'bg-blue-500' },
-              { key: 'moyen', label: 'Moyen (40-59)', color: 'bg-amber-500' },
-              { key: 'faible', label: 'Faible (<40)', color: 'bg-red-500' },
-            ].map(({ key, label, color }) => (
-              <div key={key} className="flex items-center gap-3">
-                <div className={`w-2.5 h-2.5 rounded-full ${color}`} />
-                <span className="text-xs text-content-secondary flex-1">{label}</span>
-                <span className="text-xs font-medium text-content-primary">{analytics.scoreDistribution[key]}</span>
-              </div>
-            ))}
-          </div>
+          <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
+            <Target className="h-4 w-4" /> Qualite des leads
+          </h3>
+          {hasData ? (
+            <div className="space-y-2.5">
+              {[
+                { key: 'excellent', label: 'Excellent (email + tel + site)', color: 'bg-green-500' },
+                { key: 'bon', label: 'Bon (email + tel ou site)', color: 'bg-blue-500' },
+                { key: 'moyen', label: 'Moyen (tel ou site seul)', color: 'bg-amber-500' },
+                { key: 'faible', label: 'Faible (peu de donnees)', color: 'bg-red-500' },
+              ].map(({ key, label, color }) => {
+                const count = analytics.scoreDistribution[key];
+                const pct = analytics.total > 0 ? Math.round((count / analytics.total) * 100) : 0;
+                return (
+                  <div key={key} className="flex items-center gap-3">
+                    <div className={`w-2.5 h-2.5 rounded-full ${color} shrink-0`} />
+                    <span className="text-xs text-content-secondary flex-1">{label}</span>
+                    <span className="text-xs font-mono text-content-tertiary tabular-nums">{pct}%</span>
+                    <span className="text-xs font-medium text-content-primary tabular-nums w-12 text-right">{count.toLocaleString('fr-FR')}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-xs text-content-muted">Lancez une recherche pour voir la qualite</p>
+          )}
         </div>
 
         <div className="rounded-xl border border-line bg-surface-card p-4">
-          <h3 className="text-sm font-medium text-content-secondary mb-4">Sources d'enrichissement</h3>
-          <div className="space-y-2">
-            {Object.entries(analytics.byMethod).sort((a, b) => b[1] - a[1]).map(([method, count]) => (
-              <div key={method} className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-violet-500" />
-                <span className="text-xs text-content-secondary flex-1 capitalize">{method}</span>
-                <span className="text-xs font-medium text-content-primary">{count}</span>
-              </div>
-            ))}
-            {Object.keys(analytics.byMethod).length === 0 && (
-              <div className="text-xs text-content-muted">Aucun enrichissement</div>
-            )}
-          </div>
+          <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
+            <CheckCircle className="h-4 w-4" /> Sources d&apos;enrichissement
+          </h3>
+          {Object.keys(analytics.byMethod).length > 0 ? (
+            <div className="space-y-2.5">
+              {Object.entries(analytics.byMethod).sort((a, b) => b[1] - a[1]).map(([method, count]) => {
+                const colors = {
+                  scrape: 'bg-green-500',
+                  serper: 'bg-yellow-500',
+                  apollo: 'bg-orange-500',
+                  apollo_org: 'bg-orange-400',
+                  guess: 'bg-zinc-500',
+                  'deep-verified': 'bg-emerald-500',
+                  'deep-pattern': 'bg-purple-500',
+                };
+                const labels = {
+                  scrape: 'Scraping site web',
+                  serper: 'Recherche Google',
+                  apollo: 'Apollo (ancien)',
+                  apollo_org: 'Apollo Org (ancien)',
+                  guess: 'Email devine',
+                  'deep-verified': 'Deep - verifie',
+                  'deep-pattern': 'Deep - pattern',
+                };
+                const pct = analytics.withEmail > 0 ? Math.round((count / analytics.withEmail) * 100) : 0;
+                return (
+                  <div key={method} className="flex items-center gap-3">
+                    <div className={`w-2.5 h-2.5 rounded-full ${colors[method] || 'bg-violet-500'} shrink-0`} />
+                    <span className="text-xs text-content-secondary flex-1">{labels[method] || method}</span>
+                    <span className="text-xs font-mono text-content-tertiary tabular-nums">{pct}%</span>
+                    <span className="text-xs font-medium text-content-primary tabular-nums w-12 text-right">{count.toLocaleString('fr-FR')}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-xs text-content-muted">Aucun enrichissement effectue</p>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-function KpiCard({ icon: Icon, label, value, sub }) {
+function KpiCard({ icon: Icon, label, value, sub, color = 'text-violet-400', bgColor = 'bg-violet-500/10' }) {
   return (
     <div className="rounded-xl border border-line bg-surface-card p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="h-4 w-4 text-violet-400" />
-        <span className="text-xs text-content-tertiary">{label}</span>
+        <div className={`p-1.5 rounded-lg ${bgColor}`}>
+          <Icon className={`h-4 w-4 ${color}`} />
+        </div>
+        <span className="text-[11px] text-content-tertiary uppercase tracking-wider">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-content-primary">{value}</div>
+      <div className="text-2xl font-bold text-content-primary tabular-nums">{value}</div>
       {sub && <div className="text-[10px] text-content-muted mt-1">{sub}</div>}
     </div>
   );
