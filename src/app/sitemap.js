@@ -1,6 +1,7 @@
 import { getAllSeoUrls } from '@/lib/slugs';
 import { getAllCompetitors } from '@/lib/competitors';
 import { getAllPosts } from '@/lib/blog';
+import { getAllGlossaryTerms } from '@/lib/glossary';
 
 /**
  * Dynamic sitemap generated at build time + ISR.
@@ -46,5 +47,14 @@ export default async function sitemap() {
     lastModified: new Date(p.publishedAt),
   }));
 
-  return [...staticPages, ...seoUrls, ...vsUrls, ...blogIndex, ...blogPosts];
+  // Glossary
+  const glossaryIndex = [{ url: `${baseUrl}/glossaire`, priority: 0.7, changeFrequency: 'weekly', lastModified: now }];
+  const glossaryTerms = getAllGlossaryTerms().map((t) => ({
+    url: `${baseUrl}/glossaire/${t.slug}`,
+    priority: 0.5,
+    changeFrequency: 'monthly',
+    lastModified: now,
+  }));
+
+  return [...staticPages, ...seoUrls, ...vsUrls, ...blogIndex, ...blogPosts, ...glossaryIndex, ...glossaryTerms];
 }

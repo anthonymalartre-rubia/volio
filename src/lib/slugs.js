@@ -162,5 +162,20 @@ export function getAllSeoUrls(baseUrl = 'https://prospectia.cloud') {
     }
   }
 
+  // Combined category × city pages (top 100 French cities)
+  // Lazy import to avoid circular dependency
+  try {
+    const { CITIES_FR } = require('./cities');
+    for (const cat of cats) {
+      for (const city of CITIES_FR) {
+        urls.push({
+          loc: `${baseUrl}/prospection/${cat.slug}/ville/${city.slug}`,
+          priority: 0.5,
+          changefreq: 'monthly',
+        });
+      }
+    }
+  } catch {}
+
   return urls;
 }
