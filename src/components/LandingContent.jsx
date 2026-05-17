@@ -53,10 +53,11 @@ export default function LandingContent() {
             <span className="text-lg font-bold tracking-tight">Prospectia</span>
             <span className="text-violet-400 text-xs font-semibold">.ai</span>
           </Link>
-          <div className="hidden sm:flex items-center gap-8">
+          <div className="hidden sm:flex items-center gap-6">
             <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.features')}</Link>
-            <Link href="#vs-concurrence" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.vsCompetition')}</Link>
+            <Link href="/prospection" className="text-sm text-zinc-500 hover:text-white transition">Prospection</Link>
             <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.pricing')}</Link>
+            <Link href="/blog" className="text-sm text-zinc-500 hover:text-white transition">Blog</Link>
             <Link href="#faq" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.faq')}</Link>
           </div>
           <div className="flex items-center gap-3">
@@ -656,24 +657,75 @@ export default function LandingContent() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-12 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-              <span className="text-[8px] font-bold text-white">P</span>
+      <footer className="border-t border-white/[0.06] py-12 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* SEO link clusters */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10 pb-10 border-b border-white/[0.06]">
+            {/* Product */}
+            <div>
+              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Produit</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/" className="text-zinc-500 hover:text-violet-400 transition">Accueil</Link></li>
+                <li><Link href="/signup" className="text-zinc-500 hover:text-violet-400 transition">Inscription</Link></li>
+                <li><Link href="/login" className="text-zinc-500 hover:text-violet-400 transition">Connexion</Link></li>
+                <li><Link href="#pricing" className="text-zinc-500 hover:text-violet-400 transition">Tarifs</Link></li>
+              </ul>
             </div>
-            <span className="text-sm font-bold tracking-tight">Prospectia</span>
-            <span className="text-violet-400 text-[10px] font-semibold">.ai</span>
+
+            {/* Comparatifs */}
+            <div>
+              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Comparatifs</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/vs/apollo" className="text-zinc-500 hover:text-violet-400 transition">vs Apollo.io</Link></li>
+                <li><Link href="/vs/hunter" className="text-zinc-500 hover:text-violet-400 transition">vs Hunter.io</Link></li>
+                <li><Link href="/vs/lusha" className="text-zinc-500 hover:text-violet-400 transition">vs Lusha</Link></li>
+                <li><Link href="/vs/snov" className="text-zinc-500 hover:text-violet-400 transition">vs Snov.io</Link></li>
+              </ul>
+            </div>
+
+            {/* Prospection populaires */}
+            <div>
+              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Prospection</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/prospection" className="text-zinc-500 hover:text-violet-400 transition">Tous secteurs</Link></li>
+                <li><Link href="/prospection/restaurant" className="text-zinc-500 hover:text-violet-400 transition">Restaurants</Link></li>
+                <li><Link href="/prospection/hotel" className="text-zinc-500 hover:text-violet-400 transition">Hôtels</Link></li>
+                <li><Link href="/prospection/avocat" className="text-zinc-500 hover:text-violet-400 transition">Avocats</Link></li>
+                <li><Link href="/prospection/dept/75-paris" className="text-zinc-500 hover:text-violet-400 transition">Paris (75)</Link></li>
+              </ul>
+            </div>
+
+            {/* Ressources */}
+            <div>
+              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Ressources</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/blog" className="text-zinc-500 hover:text-violet-400 transition">Blog</Link></li>
+                <li><Link href="/blog/trouver-email-entreprise-france" className="text-zinc-500 hover:text-violet-400 transition">Trouver un email B2B</Link></li>
+                <li><Link href="/blog/rgpd-prospection-b2b" className="text-zinc-500 hover:text-violet-400 transition">Guide RGPD</Link></li>
+                <li><Link href="/blog/cold-emailing-2026" className="text-zinc-500 hover:text-violet-400 transition">Cold emailing 2026</Link></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex items-center gap-6 text-xs text-zinc-600">
-            <Link href="/cgu" className="hover:text-zinc-400 transition">{t('landing.footer.cgu')}</Link>
-            <Link href="/confidentialite" className="hover:text-zinc-400 transition">{t('landing.footer.privacy')}</Link>
-            <Link href="/rgpd" className="hover:text-zinc-400 transition">{t('landing.footer.gdpr')}</Link>
-            <Link href="/opt-out" className="hover:text-zinc-400 transition">{t('landing.footer.optOut')}</Link>
+
+          {/* Bottom legal */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-1.5">
+              <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
+                <span className="text-[8px] font-bold text-white">P</span>
+              </div>
+              <span className="text-sm font-bold tracking-tight">Prospectia</span>
+              <span className="text-violet-400 text-[10px] font-semibold">.cloud</span>
+            </div>
+            <div className="flex items-center gap-6 text-xs text-zinc-600">
+              <Link href="/cgu" className="hover:text-zinc-400 transition">{t('landing.footer.cgu')}</Link>
+              <Link href="/confidentialite" className="hover:text-zinc-400 transition">{t('landing.footer.privacy')}</Link>
+              <Link href="/rgpd" className="hover:text-zinc-400 transition">{t('landing.footer.gdpr')}</Link>
+              <Link href="/opt-out" className="hover:text-zinc-400 transition">{t('landing.footer.optOut')}</Link>
+            </div>
+            <p className="text-[11px] text-zinc-700">
+              &copy; 2026 Prospectia.cloud
+            </p>
           </div>
-          <p className="text-[11px] text-zinc-700">
-            &copy; 2026 Prospectia.ai
-          </p>
         </div>
       </footer>
     </div>
