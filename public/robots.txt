@@ -6,4 +6,4 @@ Disallow: /settings
 Disallow: /admin
 Disallow: /opt-out
 
-Sitemap: https://scraping-dom-ezdrive.vercel.app/sitemap.xml
+Sitemap: https://prospectia.cloud/sitemap.xml

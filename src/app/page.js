@@ -1,6 +1,6 @@
 import LandingContent from '@/components/LandingContent';
 
-const SITE_URL = 'https://scraping-dom-ezdrive.vercel.app';
+const SITE_URL = 'https://prospectia.cloud';
 
 export const metadata = {
   title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',

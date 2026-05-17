@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://scraping-dom-ezdrive.vercel.app'),
+  metadataBase: new URL('https://prospectia.cloud'),
   title: {
     default: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
     template: '%s | Prospectia.ai',
