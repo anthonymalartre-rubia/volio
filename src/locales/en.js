@@ -295,6 +295,7 @@ const en = {
     // Enrichment buttons
     enrichBtn: 'Enrich',
     enrichAll: 'Enrich all ({{count}})',
+    enrichSelection: 'Enrich selection ({{count}})',
     enrichMethod: 'Enrichment method',
     stop: 'Stop',
     confirm: 'Confirm',

@@ -37,6 +37,34 @@ function extractDomain(url) {
   }
 }
 
+// Extract French department code from a postal address.
+// Handles metropolitan (01-95), Corsica (2A/2B from 200xx/202xx), and DOM-TOM (971-976).
+// Returns null if no valid code can be extracted.
+function extractDeptFromAddress(addr) {
+  if (!addr || typeof addr !== 'string') return null;
+  const match = addr.match(/\b(\d{5})\b/);
+  if (!match) return null;
+  const cp = match[1];
+  // DOM-TOM : 971xx-976xx → "971" à "976"
+  if (cp.startsWith('97')) {
+    const deptCode = cp.slice(0, 3);
+    if (['971', '972', '973', '974', '976'].includes(deptCode)) return deptCode;
+    return null;
+  }
+  // Corse : 200xx-201xx → "2A", 202xx-206xx → "2B"
+  if (cp.startsWith('20')) {
+    const n = parseInt(cp, 10);
+    if (n >= 20000 && n <= 20190) return '2A';
+    if (n >= 20200 && n <= 20620) return '2B';
+    return null;
+  }
+  // Metropole : les 2 premiers chiffres du CP = code dept (01 à 95)
+  const dept = cp.slice(0, 2);
+  const n = parseInt(dept, 10);
+  if (n >= 1 && n <= 95) return dept;
+  return null;
+}
+
 // Escape CSV values to prevent injection (quotes, formulas)
 function escapeCSV(value) {
   if (value == null) return '';
@@ -454,7 +482,9 @@ export default function Dashboard() {
               note: place.note || null,
               nb_avis: place.nb_avis || 0,
               type: task.type,
-              departement: task.dept || '75',
+              // Priorité : code postal extrait de l'adresse Google (source de vérité),
+              // sinon le département choisi dans la recherche, sinon null.
+              departement: extractDeptFromAddress(place.adresse) || task.dept || null,
               folder_id: folderId || null,
             });
           }

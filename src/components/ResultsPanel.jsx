@@ -922,28 +922,40 @@ export default memo(function ResultsPanel({
 
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 p-2 sm:p-3 rounded-2xl border border-line bg-surface-card">
-        {/* Enrichment */}
+        {/* Enrichment — bouton selection-aware. Visible uniquement si l'utilisateur
+            a coché des prospects. Le bouton "Enrichir tout (N)" juste à côté
+            couvre le cas "rien de coché". Ça évite l'ambiguïté qui faisait
+            que cliquer "Enrichir" avec 3 cases cochées enrichissait quand
+            même les 75 prospects. */}
         {!isWaterfallEnriching ? (
-          <div className="relative group/tip">
-            <button
-              onClick={() => onStartWaterfallEnrichment()}
-              disabled={prospects.length === 0}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
-            >
-              <Zap size={14} />
-              {t('results.enrichBtn')}
-            </button>
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
-              <div className="font-semibold text-violet-400 mb-1">{t('results.cascadeTitle')}</div>
-              <div className="space-y-0.5">
-                <div>1. {t('results.cascadeStep1')}</div>
-                <div>2. {t('results.cascadeStep2')}</div>
-                <div>3. {t('results.cascadeStep3')}</div>
-                <div>4. {t('results.cascadeStep4')}</div>
+          selectedIds.size > 0 ? (
+            <div className="relative group/tip">
+              <button
+                onClick={() => {
+                  const ids = Array.from(selectedIds);
+                  const hasUnenriched = prospects.some(p => ids.includes(p.id) && !p.email);
+                  if (hasUnenriched) {
+                    onBulkEnrich?.(null, null, ids);
+                  }
+                }}
+                disabled={prospects.length === 0}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
+              >
+                <Zap size={14} />
+                {t('results.enrichSelection', { count: selectedIds.size })}
+              </button>
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
+                <div className="font-semibold text-violet-400 mb-1">{t('results.cascadeTitle')}</div>
+                <div className="space-y-0.5">
+                  <div>1. {t('results.cascadeStep1')}</div>
+                  <div>2. {t('results.cascadeStep2')}</div>
+                  <div>3. {t('results.cascadeStep3')}</div>
+                  <div>4. {t('results.cascadeStep4')}</div>
+                </div>
+                <div className="text-content-faint mt-1">{t('results.stopsWhenFound')}</div>
               </div>
-              <div className="text-content-faint mt-1">{t('results.stopsWhenFound')}</div>
             </div>
-          </div>
+          ) : null
         ) : (
           <div className="flex items-center gap-3">
             <button
