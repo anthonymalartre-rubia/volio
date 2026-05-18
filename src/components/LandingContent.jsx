@@ -1,17 +1,12 @@
 'use client';
 
-import { lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3 } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
-import TypewriterText from '@/components/TypewriterText';
+import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n } from '@/lib/i18n';
-
-// Lazy-load heavy components (canvas + demo)
-const MouseParticles = lazy(() => import('@/components/MouseParticles'));
-const InteractiveDemo = lazy(() => import('@/components/InteractiveDemo'));
 
 function formatPrice(cents) {
   if (cents === 0) return '0';
@@ -68,54 +63,52 @@ export default function LandingContent() {
       </header>
 
       <main>
-      {/* Hero */}
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-28 px-4 sm:px-6 overflow-hidden">
-        {/* Interactive particle background */}
-        <Suspense fallback={null}><MouseParticles /></Suspense>
+      {/* Hero — version simplifiée avec widget interactif */}
+      <section className="relative pt-20 sm:pt-28 pb-16 px-4 sm:px-6 overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-violet-600/15 via-indigo-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-20 right-[10%] w-72 h-72 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-40 left-[5%] w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-gradient-to-b from-violet-600/15 via-indigo-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-40 right-[10%] w-72 h-72 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-60 left-[5%] w-64 h-64 bg-indigo-500/8 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+        <div className="max-w-5xl mx-auto text-center relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs text-zinc-400 mb-8 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs text-zinc-400 mb-6 backdrop-blur-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             {t('landing.hero.badge')}
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-6 sm:mb-8">
-            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">{t('landing.hero.title')}</span>
+          {/* H1 simplifié — direct */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] mb-5">
+            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Trouvez l&apos;email de</span>
             <br />
-            <TypewriterText />
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
+              n&apos;importe quelle entreprise
+            </span>
           </h1>
-          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-6 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.hero.subtitle') }} />
-          <p className="text-sm text-violet-400 font-semibold mb-10">
-            {t('landing.hero.price')}
+
+          {/* Sous-titre court */}
+          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Scraping intelligent + recherche Google. <strong className="text-white">150+ secteurs, 101 départements.</strong> 49€/mois, recherches illimitées.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <HeroCTA />
-            <Link
-              href="#vs-concurrence"
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition flex items-center gap-1"
-            >
-              {t('landing.hero.compare')}
-              <ArrowRight size={14} />
-            </Link>
+
+          {/* Widget de recherche fonctionnel */}
+          <div className="max-w-3xl mx-auto text-left">
+            <HeroSearchWidget />
           </div>
 
-          {/* Source logos ribbon */}
-          <div className="mt-14 flex items-center justify-center gap-6 flex-wrap">
-            <span className="text-[11px] text-zinc-600 uppercase tracking-wider">{t('landing.hero.sourcesLabel')}</span>
-            {['Google Places', 'Scraping web', 'Recherche Google'].map((s) => (
-              <span key={s} className="text-xs text-zinc-500 px-3 py-1 rounded-full border border-white/[0.06] bg-white/[0.02]">{s}</span>
-            ))}
+          {/* Social proof rapide */}
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-zinc-500 flex-wrap">
+            <span className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+              Aucune carte bancaire requise
+            </span>
+            <span>·</span>
+            <span>7 jours d&apos;essai gratuit</span>
+            <span>·</span>
+            <span>Conforme RGPD</span>
           </div>
         </div>
       </section>
-
-      {/* Interactive Demo */}
-      <Suspense fallback={null}><InteractiveDemo /></Suspense>
 
       {/* Why an aggregator */}
       <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
