@@ -3,7 +3,10 @@ import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    maxNetworkRetries: 1,
+    timeout: 15000,
+  });
 }
 
 export async function POST(request) {

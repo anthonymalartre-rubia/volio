@@ -4,7 +4,14 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { PLANS } from '@/lib/plans';
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY);
+  // Config :
+  //  - maxNetworkRetries: 1 → on évite que la fonction tourne 30s+ en cas
+  //    de problème réseau persistant (Vercel a un timeout limité).
+  //  - timeout: 15000 → 15s par requête, suffisant pour Stripe normal.
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    maxNetworkRetries: 1,
+    timeout: 15000,
+  });
 }
 
 export async function POST(request) {
