@@ -4,10 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email';
 import { paymentSuccessEmail, subscriptionCancelledEmail } from '@/lib/emailTemplates';
 import { PLANS } from '@/lib/plans';
+import { cleanEnv } from '@/lib/envClean';
 
 function getStripe() {
-  // .trim() critique : voir /api/stripe/checkout pour le contexte.
-  return new Stripe(process.env.STRIPE_SECRET_KEY?.trim());
+  return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
 }
 
 function getSupabaseAdmin() {
@@ -25,7 +25,7 @@ export async function POST(request) {
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET?.trim());
+    event = stripe.webhooks.constructEvent(body, sig, cleanEnv(process.env.STRIPE_WEBHOOK_SECRET));
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });

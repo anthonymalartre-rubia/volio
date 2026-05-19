@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { cleanEnv } from '@/lib/envClean';
 
 function getStripe() {
-  // .trim() critique cf. /api/stripe/checkout : un \n résiduel dans la clé
-  // collée depuis le dashboard Vercel cause "StripeConnectionError" opaque.
-  return new Stripe(process.env.STRIPE_SECRET_KEY?.trim(), {
+  return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY), {
     maxNetworkRetries: 1,
     timeout: 15000,
   });

@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { PLANS } from '@/lib/plans';
+import { cleanEnv } from '@/lib/envClean';
 
 /**
  * POST /api/stripe/sync-subscription
@@ -22,7 +23,7 @@ import { PLANS } from '@/lib/plans';
  * Réservé aux utilisateurs authentifiés (chacun ne sync que son propre compte).
  */
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY?.trim(), {
+  return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY), {
     maxNetworkRetries: 1,
     timeout: 15000,
   });

@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { PLANS } from '@/lib/plans';
+import { cleanEnv } from '@/lib/envClean';
 
 function getStripe() {
-  // .trim() est CRITIQUE : si l'env var a été collée avec un \n final dans
-  // le dashboard Vercel (très facile à faire), le SDK envoie ce \n dans le
-  // header Authorization → HTTP malformé → "StripeConnectionError" opaque.
-  return new Stripe(process.env.STRIPE_SECRET_KEY?.trim(), {
+  // cleanEnv : strip espaces, \n, et littéraux \n (2 chars) que Vercel UI
+  // peut conserver après un copy-paste imparfait.
+  return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY), {
     maxNetworkRetries: 1,
     timeout: 15000,
   });
@@ -35,9 +35,7 @@ export async function POST(request) {
     if (!plan) {
       return NextResponse.json({ error: `Plan inconnu : ${planId}` }, { status: 400 });
     }
-    // Trim défensif : même fix que pour la clé secrète, le price ID peut
-    // aussi avoir un \n résiduel collé depuis Stripe Dashboard.
-    plan.stripePriceId = plan.stripePriceId?.trim();
+    plan.stripePriceId = cleanEnv(plan.stripePriceId);
     if (!plan.stripePriceId) {
       console.error(`[stripe/checkout] Missing STRIPE_${planId.toUpperCase()}_PRICE_ID env var for plan ${planId}`);
       return NextResponse.json(
