@@ -1,32 +1,41 @@
 // src/lib/email.js
 // Lightweight email utility using Resend REST API (no SDK dependency)
+import { cleanEnv } from './envClean';
 
-const FROM_ADDRESS = 'Prospectia.ai <noreply@prospectia.ai>';
-const FALLBACK_FROM = 'Prospectia.ai <onboarding@resend.dev>';
+// From address par défaut. Configurable via env var pour les déploiements
+// preview / staging qui utilisent un autre sender domain Resend.
+const DEFAULT_FROM = 'Prospectia <hello@prospectia.cloud>';
+const FALLBACK_FROM = 'Prospectia <onboarding@resend.dev>';
 
 /**
  * Send a transactional email via Resend API.
- * @param {{ to: string, subject: string, html: string }} options
+ * @param {{ to: string, subject: string, html: string, replyTo?: string }} options
  * @returns {Promise<{ success: boolean, id?: string, error?: string }>}
  */
-export async function sendEmail({ to, subject, html }) {
-  const apiKey = process.env.RESEND_API_KEY;
+export async function sendEmail({ to, subject, html, replyTo }) {
+  const apiKey = cleanEnv(process.env.RESEND_API_KEY);
   if (!apiKey) {
     console.warn('[email] RESEND_API_KEY not configured — skipping email');
     return { success: false, error: 'RESEND_API_KEY not configured' };
   }
 
-  // Use fallback sender when testing with Resend's test key
-  const from = apiKey.startsWith('re_test_') ? FALLBACK_FROM : FROM_ADDRESS;
+  // Resend impose d'utiliser leur sandbox sender quand on a une clé de test
+  // OU quand le domaine n'a pas encore été vérifié sur Resend.
+  const isTestKey = apiKey.startsWith('re_test_');
+  const customFrom = cleanEnv(process.env.RESEND_FROM_ADDRESS);
+  const from = isTestKey ? FALLBACK_FROM : (customFrom || DEFAULT_FROM);
 
   try {
+    const body = { from, to: [to], subject, html };
+    if (replyTo) body.reply_to = replyTo;
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ from, to: [to], subject, html }),
+      body: JSON.stringify(body),
     });
 
     const data = await res.json();
