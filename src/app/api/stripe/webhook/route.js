@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { sendEmail } from '@/lib/email';
-import { paymentSuccessEmail, subscriptionCancelledEmail } from '@/lib/emailTemplates';
+import {
+  paymentSuccessEmail,
+  subscriptionCancelledEmail,
+  paymentFailedEmail,
+  planChangedEmail,
+} from '@/lib/emailTemplates';
 import { PLANS } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
@@ -9,6 +14,42 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────
+
+/**
+ * Récupère l'email + full_name d'un user.
+ * - email : stocké dans auth.users (PAS dans user_profiles → c'était la cause
+ *   du bug où les emails de confirmation/annulation n'étaient JAMAIS envoyés).
+ * - full_name : stocké dans user_metadata côté auth.users.
+ */
+async function getUserContact(supabaseAdmin, userId) {
+  try {
+    const { data, error } = await supabaseAdmin.auth.admin.getUserById(userId);
+    if (error || !data?.user) return { email: null, fullName: null };
+    return {
+      email: data.user.email || null,
+      fullName: data.user.user_metadata?.full_name || data.user.user_metadata?.name || null,
+    };
+  } catch (err) {
+    console.error('[webhook] getUserContact failed:', err);
+    return { email: null, fullName: null };
+  }
+}
+
+/**
+ * Match un price.id Stripe avec un plan local (free/pro/enterprise).
+ * Renvoie 'free' si aucun match (sécurité : on ne grant pas un plan inconnu).
+ */
+function planIdFromPriceId(priceId) {
+  if (!priceId) return 'free';
+  for (const [id, plan] of Object.entries(PLANS)) {
+    if (plan.stripePriceId && plan.stripePriceId === priceId) return id;
+  }
+  return 'free';
+}
+
+// ─── Handler ──────────────────────────────────────────────────────
 
 export async function POST(request) {
   const stripe = getStripe();
@@ -20,42 +61,42 @@ export async function POST(request) {
   try {
     event = stripe.webhooks.constructEvent(body, sig, cleanEnv(process.env.STRIPE_WEBHOOK_SECRET));
   } catch (err) {
-    console.error('Webhook signature verification failed:', err.message);
+    console.error('[webhook] Signature verification failed:', err.message);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
-  // ─── Idempotence (audit P0 #6) ────────────────────────────────────
-  // Stripe retransmet régulièrement les webhooks (retry sur 4xx/5xx, replays).
-  // Sans cette garde, un checkout.session.completed reçu 2x = 2 emails de
-  // confirmation envoyés au client. Pire, un customer.subscription.deleted
-  // retransmis après un nouvel abonnement = downgrade fantôme.
-  //
-  // On insère event.id dans une table avec PRIMARY KEY ; si l'insert échoue
-  // sur conflit, l'event a déjà été traité → on renvoie 200 sans rien faire
-  // (Stripe arrête de retry).
+  // ─── Idempotence ──────────────────────────────────────────────
+  // Stripe retransmet les webhooks (retry sur 4xx/5xx, replays).
+  // Sans cette garde, double-traitement = double emails / actions répétées.
   const { error: idempotencyError } = await supabaseAdmin
     .from('stripe_webhook_events')
     .insert({ id: event.id, type: event.type });
 
   if (idempotencyError) {
     if (idempotencyError.code === '23505') {
-      // duplicate key — event déjà traité, ack silencieusement
       console.log(`[webhook] Duplicate event ${event.id} (${event.type}), skipping`);
       return NextResponse.json({ received: true, duplicate: true });
     }
-    // Autre erreur DB : on log mais on continue à traiter pour ne pas perdre
-    // l'event. Le pire cas est un double-traitement qu'on cherchait à éviter,
-    // mais ça reste mieux qu'un event perdu.
     console.error('[webhook] Idempotency insert failed (non-blocking):', idempotencyError);
   }
 
-  switch (event.type) {
-    case 'checkout.session.completed': {
-      const session = event.data.object;
-      const userId = session.metadata.supabase_user_id;
-      const planId = session.metadata.plan_id;
-      if (userId && planId) {
-        await supabaseAdmin
+  console.log(`[webhook] Processing ${event.type} (${event.id})`);
+
+  try {
+    switch (event.type) {
+      // ═══════════════════════════════════════════════════════════
+      // checkout.session.completed → premier paiement réussi
+      // ═══════════════════════════════════════════════════════════
+      case 'checkout.session.completed': {
+        const session = event.data.object;
+        const userId = session.metadata?.supabase_user_id;
+        const planId = session.metadata?.plan_id;
+        if (!userId || !planId) {
+          console.warn('[webhook] checkout.session.completed missing metadata', { userId, planId });
+          break;
+        }
+
+        const { error: updateError } = await supabaseAdmin
           .from('user_profiles')
           .update({
             plan: planId,
@@ -65,46 +106,96 @@ export async function POST(request) {
           })
           .eq('id', userId);
 
-        // Send payment success email
-        try {
-          const { data: profile } = await supabaseAdmin
-            .from('user_profiles')
-            .select('email, full_name')
-            .eq('id', userId)
-            .single();
-
-          if (profile?.email) {
-            const plan = PLANS[planId] || { name: planId, price: 0 };
-            const template = paymentSuccessEmail(
-              profile.full_name,
-              plan.name,
-              session.amount_total || plan.price
-            );
-            sendEmail({ to: profile.email, subject: template.subject, html: template.html })
-              .catch((err) => console.error('[webhook] Payment email failed:', err));
-          }
-        } catch (emailErr) {
-          console.error('[webhook] Payment email error:', emailErr);
+        if (updateError) {
+          console.error('[webhook] checkout.session.completed update failed:', updateError);
+          break;
         }
+
+        // Email de confirmation
+        const { email, fullName } = await getUserContact(supabaseAdmin, userId);
+        if (email) {
+          const plan = PLANS[planId] || { name: planId, price: 0 };
+          const tpl = paymentSuccessEmail(fullName, plan.name, session.amount_total || plan.price);
+          sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
+            .catch((err) => console.error('[webhook] Payment email failed:', err));
+        }
+        break;
       }
-      break;
-    }
 
-    case 'customer.subscription.updated': {
-      // Handle subscription updates (e.g. plan changes, cancellation scheduled)
-      // cancel_at_period_end being true means the user will downgrade at period end
-      break;
-    }
+      // ═══════════════════════════════════════════════════════════
+      // customer.subscription.updated → changement plan / annulation programmée
+      // ═══════════════════════════════════════════════════════════
+      case 'customer.subscription.updated': {
+        const subscription = event.data.object;
+        // Trouve l'user par son subscription_id
+        const { data: profile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('id, plan')
+          .eq('stripe_subscription_id', subscription.id)
+          .maybeSingle();
 
-    case 'customer.subscription.deleted': {
-      const subscription = event.data.object;
-      const { data } = await supabaseAdmin
-        .from('user_profiles')
-        .select('id, email, full_name')
-        .eq('stripe_subscription_id', subscription.id)
-        .single();
+        if (!profile) {
+          // Fallback : essaie via metadata supabase_user_id sur la subscription
+          const metaUserId = subscription.metadata?.supabase_user_id;
+          if (!metaUserId) {
+            console.warn('[webhook] subscription.updated : user introuvable', subscription.id);
+            break;
+          }
+          // (la suite utilisera metaUserId, mais on a déjà pas le profil)
+        }
 
-      if (data) {
+        const userId = profile?.id || subscription.metadata?.supabase_user_id;
+        if (!userId) break;
+
+        // Détecte le NOUVEAU plan basé sur le price.id actuel
+        const newPriceId = subscription.items?.data?.[0]?.price?.id;
+        const newPlanId = planIdFromPriceId(newPriceId);
+
+        // Si la subscription est marquée pour cancel à la fin de période,
+        // on garde le plan actuel jusqu'au period_end (le user a payé).
+        // Quand customer.subscription.deleted arrivera, on bascule en free.
+        const isScheduledCancel = subscription.cancel_at_period_end === true;
+
+        // Update seulement si le plan a changé
+        if (profile?.plan && profile.plan !== newPlanId && !isScheduledCancel) {
+          await supabaseAdmin
+            .from('user_profiles')
+            .update({
+              plan: newPlanId,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', userId);
+
+          // Email "votre plan a changé"
+          const { email, fullName } = await getUserContact(supabaseAdmin, userId);
+          if (email) {
+            const oldPlan = PLANS[profile.plan] || { name: profile.plan };
+            const newPlan = PLANS[newPlanId] || { name: newPlanId };
+            const tpl = planChangedEmail(fullName, oldPlan.name, newPlan.name);
+            sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
+              .catch((err) => console.error('[webhook] Plan change email failed:', err));
+          }
+        }
+        break;
+      }
+
+      // ═══════════════════════════════════════════════════════════
+      // customer.subscription.deleted → annulation effective
+      // ═══════════════════════════════════════════════════════════
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object;
+        const { data: profile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('id')
+          .eq('stripe_subscription_id', subscription.id)
+          .maybeSingle();
+
+        const userId = profile?.id || subscription.metadata?.supabase_user_id;
+        if (!userId) {
+          console.warn('[webhook] subscription.deleted : user introuvable', subscription.id);
+          break;
+        }
+
         await supabaseAdmin
           .from('user_profiles')
           .update({
@@ -112,21 +203,53 @@ export async function POST(request) {
             stripe_subscription_id: null,
             updated_at: new Date().toISOString(),
           })
-          .eq('id', data.id);
+          .eq('id', userId);
 
-        // Send subscription cancelled email
-        if (data.email) {
-          try {
-            const template = subscriptionCancelledEmail(data.full_name);
-            sendEmail({ to: data.email, subject: template.subject, html: template.html })
-              .catch((err) => console.error('[webhook] Cancellation email failed:', err));
-          } catch (emailErr) {
-            console.error('[webhook] Cancellation email error:', emailErr);
-          }
+        // Email d'annulation
+        const { email, fullName } = await getUserContact(supabaseAdmin, userId);
+        if (email) {
+          const tpl = subscriptionCancelledEmail(fullName);
+          sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
+            .catch((err) => console.error('[webhook] Cancellation email failed:', err));
         }
+        break;
       }
-      break;
+
+      // ═══════════════════════════════════════════════════════════
+      // invoice.payment_failed → renouvellement échoué
+      // ═══════════════════════════════════════════════════════════
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object;
+        const subscriptionId = invoice.subscription;
+        if (!subscriptionId) break;
+
+        const { data: profile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('id')
+          .eq('stripe_subscription_id', subscriptionId)
+          .maybeSingle();
+        if (!profile) break;
+
+        // On ne change pas le plan tout de suite : Stripe va retry et finir
+        // par envoyer subscription.deleted si tous les retries échouent.
+        // On notifie juste l'user pour qu'il mette à jour son moyen de paiement.
+        const { email, fullName } = await getUserContact(supabaseAdmin, profile.id);
+        if (email) {
+          const tpl = paymentFailedEmail(fullName, invoice.amount_due, invoice.hosted_invoice_url);
+          sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
+            .catch((err) => console.error('[webhook] Payment failed email failed:', err));
+        }
+        break;
+      }
+
+      default:
+        // Event reçu mais non géré : pas grave, on ack quand même.
+        break;
     }
+  } catch (err) {
+    // On log mais on retourne 200 quand même pour ne pas faire retry Stripe
+    // sur des erreurs métier (sinon on peut spammer le user d'emails).
+    console.error(`[webhook] Handler crashed on ${event.type}:`, err);
   }
 
   return NextResponse.json({ received: true });

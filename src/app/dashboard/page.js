@@ -179,6 +179,8 @@ export default function Dashboard() {
   const [userPlan, setUserPlan] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userUsage, setUserUsage] = useState(null);
+  // Toast post-Stripe (retour de checkout) — { type: 'success'|'cancelled', planName? }
+  const [upgradeToast, setUpgradeToast] = useState(null);
   // Modal "limite atteinte" affichée quand une API renvoie 429
   // { type: 'searches'|'enrichments', current, limit, processed?, total? } | null
   const [limitModal, setLimitModal] = useState(null);
@@ -227,6 +229,78 @@ export default function Dashboard() {
   }, [router]);
 
   // Get current user and load data on mount
+  // ─── Retour depuis Stripe Checkout ────────────────────────────────
+  // L'URL contient ?upgrade=success ou ?upgrade=cancelled. Le webhook Stripe
+  // a normalement déjà tourné côté backend (synchrone : Stripe redirect
+  // l'user → on arrive ici → en parallèle le webhook async upgrade le plan
+  // en DB). On affiche un toast + on poll le profil quelques secondes pour
+  // attraper l'upgrade dès qu'il est en base, sans demander à l'user de
+  // refresh la page.
+  useEffect(() => {
+    const upgrade = searchParams.get('upgrade');
+    if (!upgrade) return;
+
+    // Nettoie l'URL pour éviter de re-trigger au prochain mount
+    const currentView = searchParams.get('view');
+    const cleanUrl = currentView ? `/dashboard?view=${currentView}` : '/dashboard';
+    router.replace(cleanUrl, { scroll: false });
+
+    if (upgrade === 'cancelled') {
+      setUpgradeToast({ type: 'cancelled' });
+      return;
+    }
+
+    if (upgrade !== 'success') return;
+
+    // Affiche le toast "Paiement reçu, activation en cours..." immédiatement
+    setUpgradeToast({ type: 'pending' });
+
+    // Polling court (max ~15s) : on requête le plan toutes les 1.5s jusqu'à
+    // ce qu'il ne soit plus 'free'. Si le webhook a tardé, on bascule sur
+    // un "Paiement reçu — actualisation dans quelques instants" + le toast
+    // disparaît tout seul ; le user verra son plan upgradé à la prochaine
+    // navigation/refresh.
+    let attempts = 0;
+    const maxAttempts = 10; // 10 × 1.5s = 15s
+    const sb = getSupabase();
+    if (!sb) return;
+
+    const poll = async () => {
+      attempts++;
+      try {
+        const { data: { user: u } } = await sb.auth.getUser();
+        if (!u) return;
+        const { data: prof } = await sb
+          .from('user_profiles')
+          .select('plan')
+          .eq('id', u.id)
+          .single();
+        if (prof && prof.plan && prof.plan !== 'free') {
+          // Upgrade détecté → met à jour le state local + toast succès
+          setUserPlan(getPlan(prof.plan));
+          setUpgradeToast({ type: 'success', planName: prof.plan });
+          return; // stop polling
+        }
+        if (attempts < maxAttempts) {
+          setTimeout(poll, 1500);
+        } else {
+          // Webhook trop lent : on garde le toast "pending" qui se fade
+          // tout seul après quelques secondes (via le timer ci-dessous).
+        }
+      } catch (err) {
+        console.error('[upgrade] poll error:', err);
+      }
+    };
+    setTimeout(poll, 800); // petit délai initial pour laisser le webhook démarrer
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-dismiss du toast upgrade après 7s
+  useEffect(() => {
+    if (!upgradeToast) return;
+    const t = setTimeout(() => setUpgradeToast(null), 7000);
+    return () => clearTimeout(t);
+  }, [upgradeToast]);
+
   // Beforeunload : si l'utilisateur ferme l'onglet pendant un scraping,
   // on marque la session comme 'stopped' au lieu de la laisser à 'running'
   // à vie (audit P1 bug #9). On utilise navigator.sendBeacon() qui est conçu
@@ -1175,6 +1249,47 @@ export default function Dashboard() {
         searchProgress={searchProgress}
         isSearching={isSearching}
       />
+
+      {/* Toast retour Stripe (success / pending / cancelled) */}
+      {upgradeToast && (
+        <div className="fixed top-4 right-4 z-[110] max-w-sm animate-in fade-in slide-in-from-top-2">
+          {upgradeToast.type === 'success' && (
+            <div className="flex items-start gap-3 p-4 rounded-xl border border-emerald-500/30 bg-surface-card shadow-2xl">
+              <div className="p-1.5 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex-shrink-0">
+                <span className="text-white text-base">✓</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-content-primary">Bienvenue sur le plan {upgradeToast.planName?.toUpperCase() || 'Pro'} !</p>
+                <p className="text-xs text-content-tertiary mt-0.5">Votre abonnement est actif. Un reçu vous a été envoyé par email.</p>
+              </div>
+              <button onClick={() => setUpgradeToast(null)} className="text-content-muted hover:text-content-primary text-lg leading-none">×</button>
+            </div>
+          )}
+          {upgradeToast.type === 'pending' && (
+            <div className="flex items-start gap-3 p-4 rounded-xl border border-violet-500/30 bg-surface-card shadow-2xl">
+              <div className="p-1.5 rounded-lg bg-violet-500/15 flex-shrink-0">
+                <div className="w-4 h-4 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-content-primary">Paiement reçu, activation en cours…</p>
+                <p className="text-xs text-content-tertiary mt-0.5">Votre plan sera activé dans quelques secondes.</p>
+              </div>
+            </div>
+          )}
+          {upgradeToast.type === 'cancelled' && (
+            <div className="flex items-start gap-3 p-4 rounded-xl border border-line bg-surface-card shadow-2xl">
+              <div className="p-1.5 rounded-lg bg-surface-elevated flex-shrink-0">
+                <span className="text-content-tertiary text-base">⊘</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-content-primary">Paiement annulé</p>
+                <p className="text-xs text-content-tertiary mt-0.5">Aucun montant n'a été débité. Vous pouvez réessayer à tout moment.</p>
+              </div>
+              <button onClick={() => setUpgradeToast(null)} className="text-content-muted hover:text-content-primary text-lg leading-none">×</button>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex">
         <div className="flex flex-col">

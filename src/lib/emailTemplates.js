@@ -235,3 +235,61 @@ export function subscriptionCancelledEmail(userName) {
     `),
   };
 }
+
+/**
+ * Plan changed email (upgrade Pro → Enterprise ou downgrade)
+ */
+export function planChangedEmail(userName, oldPlanName, newPlanName) {
+  const name = userName || 'there';
+  return {
+    subject: `Votre abonnement est maintenant ${newPlanName}`,
+    html: layout(`
+      <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#fafafa;">
+        &#x1f504; Changement de plan
+      </h1>
+      <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a1a1aa;">
+        Bonjour ${name}, votre abonnement Prospectia a &eacute;t&eacute; mis &agrave; jour.
+      </p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background-color:#1e1e24;border-radius:8px;padding:16px;margin:0 0 24px;">
+        <tr>
+          <td style="padding:8px 16px;font-size:14px;color:#a1a1aa;">Ancien plan</td>
+          <td style="padding:8px 16px;font-size:14px;color:#fafafa;text-align:right;font-weight:600;">${oldPlanName}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 16px;font-size:14px;color:#a1a1aa;border-top:1px solid #2a2a35;">Nouveau plan</td>
+          <td style="padding:8px 16px;font-size:14px;color:#8b5cf6;text-align:right;font-weight:600;border-top:1px solid #2a2a35;">${newPlanName}</td>
+        </tr>
+      </table>
+      <p style="margin:0 0 20px;font-size:13px;line-height:1.6;color:#71717a;">
+        Les nouvelles limites sont actives imm&eacute;diatement. Vous recevrez une facture au prorata pour la diff&eacute;rence.
+      </p>
+      ${ctaButton('Acc&eacute;der au dashboard', DASHBOARD_URL)}
+    `),
+  };
+}
+
+/**
+ * Payment failed email (renouvellement raté)
+ */
+export function paymentFailedEmail(userName, amountCents, hostedInvoiceUrl) {
+  const name = userName || 'there';
+  const formattedAmount = (amountCents / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+  return {
+    subject: 'Echec du paiement de votre abonnement Prospectia',
+    html: layout(`
+      <h1 style="margin:0 0 16px;font-size:22px;font-weight:700;color:#fafafa;">
+        &#x26a0;&#xfe0f; Paiement &eacute;chou&eacute;
+      </h1>
+      <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a1a1aa;">
+        Bonjour ${name}, le renouvellement de votre abonnement Prospectia (${formattedAmount}) n&apos;a pas pu &ecirc;tre effectu&eacute;.
+      </p>
+      <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a1a1aa;">
+        Causes fr&eacute;quentes : carte expir&eacute;e, plafond atteint, ou banque qui a bloqu&eacute; la transaction.
+      </p>
+      <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#a1a1aa;">
+        <strong style="color:#fafafa;">Que faire :</strong> mettez &agrave; jour votre moyen de paiement depuis votre espace client Stripe. Sans action, votre abonnement sera annul&eacute; sous 7 jours et votre compte repassera en plan gratuit.
+      </p>
+      ${hostedInvoiceUrl ? ctaButton('R&eacute;gler la facture', hostedInvoiceUrl) : ctaButton('Mettre &agrave; jour le paiement', DASHBOARD_URL + '/settings')}
+    `),
+  };
+}

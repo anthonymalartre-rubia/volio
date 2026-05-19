@@ -35,8 +35,9 @@ export async function POST(request) {
     if (!plan) {
       return NextResponse.json({ error: `Plan inconnu : ${planId}` }, { status: 400 });
     }
-    plan.stripePriceId = cleanEnv(plan.stripePriceId);
-    if (!plan.stripePriceId) {
+    // On ne mute pas PLANS (objet partagé). cleanEnv idempotent → variable locale.
+    const stripePriceId = cleanEnv(plan.stripePriceId);
+    if (!stripePriceId) {
       console.error(`[stripe/checkout] Missing STRIPE_${planId.toUpperCase()}_PRICE_ID env var for plan ${planId}`);
       return NextResponse.json(
         { error: `ID de prix Stripe manquant pour le plan ${plan.name}. Variable STRIPE_${planId.toUpperCase()}_PRICE_ID à configurer sur Vercel.` },
@@ -53,10 +54,15 @@ export async function POST(request) {
 
     let customerId = profile?.stripe_customer_id;
     if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: { supabase_user_id: user.id },
-      });
+      // idempotency_key : si le user double-clique ou que le réseau retry,
+      // Stripe ne crée pas 2 customers pour le même user.
+      const customer = await stripe.customers.create(
+        {
+          email: user.email,
+          metadata: { supabase_user_id: user.id },
+        },
+        { idempotencyKey: `customer-create-${user.id}` }
+      );
       customerId = customer.id;
       await supabase
         .from('user_profiles')
@@ -73,11 +79,21 @@ export async function POST(request) {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'subscription',
-      line_items: [{ price: plan.stripePriceId, quantity: 1 }],
-      success_url: `${origin}/dashboard?upgrade=success`,
+      line_items: [{ price: stripePriceId, quantity: 1 }],
+      success_url: `${origin}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/dashboard?upgrade=cancelled`,
+      // metadata sur la session : disponible dans checkout.session.completed
       metadata: { supabase_user_id: user.id, plan_id: planId },
+      // subscription_data.metadata : ATTACHÉ À LA SUBSCRIPTION elle-même
+      // → retrouvable dans tous les futurs events subscription.updated /
+      //   subscription.deleted / invoice.payment_failed sans dépendre de la DB.
+      subscription_data: {
+        metadata: { supabase_user_id: user.id, plan_id: planId },
+      },
       allow_promotion_codes: true,
+      // Email de facturation Stripe directement à l'user
+      customer_update: { address: 'auto', name: 'auto' },
+      billing_address_collection: 'auto',
     });
 
     return NextResponse.json({ url: session.url });
