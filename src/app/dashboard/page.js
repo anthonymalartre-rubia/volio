@@ -264,22 +264,40 @@ export default function Dashboard() {
       const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
       const { getPlan } = await import('@/lib/plans');
 
-      // Supabase caps at 1000 rows per query — paginate to fetch all prospects
+      // Supabase caps at 1000 rows per query — paginate to fetch all prospects.
+      // P2 perf : on récupère d'abord le count exact via head:true, puis on lance
+      // toutes les pages en parallèle via Promise.all. Pour 5000 prospects =
+      // 1 round-trip count + 5 pages en parallèle (~400ms total) au lieu de
+      // 5 round-trips séquentiels (~2s).
+      const COLS = 'id,place_id,nom,adresse,telephone,email,email_method,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at,archived_at';
       async function fetchAllProspects() {
         const PAGE_SIZE = 1000;
-        let allData = [];
-        let from = 0;
-        while (true) {
+        const { count, error: countError } = await supabase
+          .from('prospects')
+          .select('id', { count: 'exact', head: true });
+        if (countError || !count) return { data: [], error: countError };
+        if (count <= PAGE_SIZE) {
           const { data, error } = await supabase
             .from('prospects')
-            .select('id,place_id,nom,adresse,telephone,email,email_method,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at,archived_at')
+            .select(COLS)
             .order('created_at', { ascending: false })
-            .range(from, from + PAGE_SIZE - 1);
-          if (error || !data || data.length === 0) break;
-          allData = allData.concat(data);
-          if (data.length < PAGE_SIZE) break;
-          from += PAGE_SIZE;
+            .range(0, PAGE_SIZE - 1);
+          return { data: data || [], error };
         }
+        const pages = Math.ceil(count / PAGE_SIZE);
+        const promises = [];
+        for (let i = 0; i < pages; i++) {
+          const from = i * PAGE_SIZE;
+          promises.push(
+            supabase
+              .from('prospects')
+              .select(COLS)
+              .order('created_at', { ascending: false })
+              .range(from, from + PAGE_SIZE - 1)
+          );
+        }
+        const results = await Promise.all(promises);
+        const allData = results.flatMap((r) => r.data || []);
         return { data: allData, error: null };
       }
 
@@ -1085,8 +1103,11 @@ export default function Dashboard() {
     }
   }, [supabase]);
 
-  // CSV export with injection protection
-  const downloadCSV = useCallback(async (format, filteredList) => {
+  // CSV export with injection protection.
+  // Signature : (filteredList?). On a retiré le param 'format' qui était
+  // dead code depuis le retrait de l'export Zoho. ExportPanel et ResultsPanel
+  // passent encore un premier arg "standard" qu'on ignore via la signature.
+  const downloadCSV = useCallback(async (_unusedFormat, filteredList) => {
     const list = filteredList || prospects;
     if (list.length === 0) return;
 
@@ -1100,9 +1121,6 @@ export default function Dashboard() {
       }
     }
 
-    // Note : on accepte encore le param `format` pour rétro-compat (anciens
-    // appels qui passent "standard"/"zoho"), mais on génère toujours le CSV
-    // standard maintenant. Le format Zoho a été retiré de l'UI.
     const headers = ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
 
     const rows = list.map((prospect) => {

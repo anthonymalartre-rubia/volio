@@ -59,7 +59,12 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
                   key={item.id}
                   onClick={() => {
                     onViewChange(item.id);
-                    onClose();
+                    // onClose() ne sert qu'en mobile pour refermer le drawer.
+                    // Sur desktop la sidebar est toujours visible : pas la peine
+                    // de muter sidebarOpen=false et de re-render pour rien (P2 audit).
+                    if (window.matchMedia('(max-width: 767px)').matches) {
+                      onClose();
+                    }
                   }}
                   className={`
                     w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200

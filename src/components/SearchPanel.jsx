@@ -3,11 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import { DEPTS, REGIONS, B2B_CATS, COPRO_CATS, B2B_GROUPS, COPRO_GROUPS, COUNTRIES, getRegionsForCountry, getDeptsForCountry } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n";
+import OnboardingHint from "@/components/OnboardingHint";
 import {
   Send, Square, Sparkles, MapPin, Building2, Home, Search, PenLine, Loader2,
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder, Zap,
   UtensilsCrossed, Briefcase, Building, Hotel, HardHat, ShoppingBag, ArrowRight,
-  Lightbulb, Globe, User, Users, ExternalLink, Mail, Phone, Crown, Link2,
+  Globe, User, Users, ExternalLink, Mail, Phone, Crown, Link2,
   CheckCircle2,
 } from "lucide-react";
 
@@ -101,36 +102,7 @@ const FOLDER_COLORS = [
   { value: 'rose', label: 'Rose', class: 'bg-rose-500' },
 ];
 
-function OnboardingHint({ storageKey, children }) {
-  const [dismissed, setDismissed] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return localStorage.getItem(storageKey) === '1' || localStorage.getItem('onboarding_completed') != null;
-  });
-
-  if (dismissed) return null;
-
-  const handleDismiss = () => {
-    setDismissed(true);
-    try { localStorage.setItem(storageKey, '1'); } catch {}
-  };
-
-  return (
-    <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.07] animate-gentle-glow">
-      <div className="p-1.5 rounded-lg bg-indigo-500/15 flex-shrink-0 mt-0.5">
-        <Lightbulb size={14} className="text-indigo-400" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-xs text-indigo-300 leading-relaxed">{children}</p>
-      </div>
-      <button
-        onClick={handleDismiss}
-        className="px-2.5 py-1 rounded-lg text-[10px] font-semibold text-indigo-400 border border-indigo-500/25 hover:bg-indigo-500/15 transition flex-shrink-0"
-      >
-        Compris
-      </button>
-    </div>
-  );
-}
+// OnboardingHint a été déplacé dans src/components/OnboardingHint.jsx (P2 cleanup).
 
 const QUICK_SEARCH_PRESETS = [
   {

@@ -65,10 +65,11 @@ src/
 │   ├── CookieConsent.jsx      # Bandeau cookies
 │   ├── UpgradeBanner.jsx      # CTA upgrade contextuel (80%/100% usage)
 │   ├── AuthCTA.jsx            # Composants CTA auth (NavAuth, HeroCTA, FooterCTA)
-│   ├── TypewriterText.jsx     # Effet typewriter hero landing
-│   ├── MouseParticles.jsx     # Particules interactives canvas
-│   ├── FAQSection.jsx         # FAQ accordion
-│   └── InteractiveDemo.jsx    # Démo interactive landing
+│   ├── LimitReachedModal.jsx  # Modale 429 (limite mensuelle atteinte → upgrade Pro)
+│   ├── HeroSearchWidget.jsx   # Widget recherche interactif hero landing
+│   ├── ReaderHeader.jsx       # Header partagé des pages lecture (blog/guide/glossaire)
+│   ├── ReaderFooter.jsx       # Footer adaptatif des pages lecture
+│   └── FAQSection.jsx         # FAQ accordion
 └── lib/
     ├── constants.js           # DEPTS (101), REGIONS (14), B2B_GROUPS (12), COPRO_GROUPS (3)
     ├── plans.js               # Définition plans (Free, Pro, Enterprise) avec limites

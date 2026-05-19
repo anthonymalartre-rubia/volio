@@ -2,9 +2,21 @@
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import fr from '@/locales/fr';
-import en from '@/locales/en';
 
-const locales = { fr, en };
+// FR est chargé en sync (locale par défaut, majorité des users).
+// EN est lazy-loadé via dynamic import → -30 KB sur le First Load JS pour
+// les utilisateurs francophones qui ne basculent jamais (P2 audit perf).
+const locales = { fr };
+
+async function loadLocale(code) {
+  if (locales[code]) return locales[code];
+  if (code === 'en') {
+    const mod = await import(/* webpackChunkName: "locale-en" */ '@/locales/en');
+    locales.en = mod.default;
+    return locales.en;
+  }
+  return null;
+}
 
 const I18nContext = createContext({ t: (key) => key, locale: 'fr', setLocale: () => {} });
 
@@ -18,29 +30,38 @@ export function I18nProvider({ children }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('prospectia_locale');
-    if (saved && locales[saved]) {
-      setLocaleState(saved);
+    if (saved === 'fr' || saved === 'en') {
+      // Précharger la locale avant de switcher pour éviter un flash de FR.
+      loadLocale(saved).then((loaded) => {
+        if (loaded) setLocaleState(saved);
+      });
     }
   }, []);
 
-  const setLocale = useCallback((newLocale) => {
-    if (locales[newLocale]) {
+  const setLocale = useCallback(async (newLocale) => {
+    const loaded = await loadLocale(newLocale);
+    if (loaded) {
       setLocaleState(newLocale);
-      localStorage.setItem('prospectia_locale', newLocale);
+      try { localStorage.setItem('prospectia_locale', newLocale); } catch {}
     }
   }, []);
 
   const t = useCallback((key, replacements) => {
-    let value = getNestedValue(locales[locale], key);
+    // Si la locale n'est pas (encore) chargée, fallback FR.
+    const activeLocale = locales[locale] || locales.fr;
+    let value = getNestedValue(activeLocale, key);
     if (value === undefined) {
-      // Fallback to French
       value = getNestedValue(locales.fr, key);
     }
     if (value === undefined) return key;
-    // Handle {{variable}} replacements
+    // Handle {{variable}} replacements.
+    // Bug fix P2 : on utilise une fonction de replacement au lieu d'une string
+    // pour éviter que String.prototype.replace n'interprète les `$&`, `$1`,
+    // `$$` etc. présents dans la valeur (ex: nom d'entreprise "Cap & Co $1 Inc.").
     if (replacements && typeof value === 'string') {
       Object.entries(replacements).forEach(([k, v]) => {
-        value = value.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), v);
+        const replacement = String(v ?? '');
+        value = value.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), () => replacement);
       });
     }
     return value;

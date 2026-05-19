@@ -35,7 +35,9 @@ function isPersonalEmail(email) {
 
 // ─── Scraping (free) ────────────────────────────────────
 
-const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+// Look-behind négatif (?<![/\w]) pour éviter de matcher des chaînes comme
+// /news/article@2024-01-01 dans des URLs (faux positifs P2 audit).
+const EMAIL_REGEX = /(?<![/\w])[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
 const BLOCKED_DOMAINS = new Set([
   'example.com', 'sentry.io', 'wixpress.com', 'googleapis.com',
   'schema.org', 'w3.org', 'gravatar.com', 'wordpress.org',

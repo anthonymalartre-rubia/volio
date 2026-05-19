@@ -15,17 +15,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Inbox,
-  Radar,
   Copy,
   Check,
   AlertTriangle,
-  Crown,
   Folder,
   FolderOpen,
   Archive,
   X,
-  ChevronDown,
-  Lock,
   Pencil,
   Save,
   MoreVertical,
@@ -43,14 +39,14 @@ import {
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 import { useI18n } from "@/lib/i18n";
-import { Info, Lightbulb } from "lucide-react";
+import { Info } from "lucide-react";
+import OnboardingHint from "@/components/OnboardingHint";
 
 // Reusable tooltip on hover — rendered via portal into document.body to escape all overflow containers
 function InfoTooltip({ text, wide }) {
   const [show, setShow] = useState(false);
   const [style, setStyle] = useState({});
   const wrapRef = useRef(null);
-  const tipRef = useRef(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
@@ -265,36 +261,7 @@ function EnrichmentProgressBanner({
   );
 }
 
-function OnboardingHint({ storageKey, children, dismissLabel }) {
-  const [dismissed, setDismissed] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return localStorage.getItem(storageKey) === '1' || localStorage.getItem('onboarding_completed') != null;
-  });
-
-  if (dismissed) return null;
-
-  const handleDismiss = () => {
-    setDismissed(true);
-    try { localStorage.setItem(storageKey, '1'); } catch {}
-  };
-
-  return (
-    <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.07] animate-gentle-glow">
-      <div className="p-1.5 rounded-lg bg-indigo-500/15 flex-shrink-0 mt-0.5">
-        <Lightbulb size={14} className="text-indigo-400" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-xs text-indigo-300 leading-relaxed">{children}</p>
-      </div>
-      <button
-        onClick={handleDismiss}
-        className="px-2.5 py-1 rounded-lg text-[10px] font-semibold text-indigo-400 border border-indigo-500/25 hover:bg-indigo-500/15 transition flex-shrink-0"
-      >
-        {dismissLabel || 'Compris'}
-      </button>
-    </div>
-  );
-}
+// OnboardingHint a été déplacé dans src/components/OnboardingHint.jsx (P2 cleanup).
 
 const shortUrl = (url) => {
   if (!url) return "";

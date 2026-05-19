@@ -19,7 +19,8 @@ const CONTACT_PATHS = [
 
 const ALL_PATHS = [...CONTACT_PATHS, ...TEAM_PATHS];
 
-const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+// Look-behind négatif (?<![/\w]) pour éviter les faux positifs dans des URLs (P2 audit).
+const EMAIL_REGEX = /(?<![/\w])[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
 
 const BLOCKED_DOMAINS = new Set([
   'example.com', 'sentry.io', 'wixpress.com', 'googleapis.com',

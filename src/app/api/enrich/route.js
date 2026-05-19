@@ -39,7 +39,8 @@ const BLOCKED_EXTENSIONS = [
   '.docx', '.xlsx', '.zip',
 ];
 
-const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+// Look-behind négatif (?<![/\w]) pour éviter les faux positifs dans des URLs (P2 audit).
+const EMAIL_REGEX = /(?<![/\w])[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
 
 const COMMON_PATHS = [
   '/contact',
