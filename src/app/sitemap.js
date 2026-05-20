@@ -59,7 +59,13 @@ export default async function sitemap({ id }) {
     const vsUrls = getAllCompetitors().flatMap((c) => [
       { url: `${baseUrl}/vs/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/alternative/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/outils/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
     ]);
+
+    // Hub /outils (index des 14 outils)
+    const outilsHub = [
+      { url: `${baseUrl}/outils`, priority: 0.8, changeFrequency: 'weekly', lastModified: now },
+    ];
 
     const blog = [
       { url: `${baseUrl}/blog`, priority: 0.7, changeFrequency: 'weekly', lastModified: now },
@@ -91,7 +97,7 @@ export default async function sitemap({ id }) {
       })),
     ];
 
-    return [...staticPages, ...vsUrls, ...blog, ...glossary, ...guides];
+    return [...staticPages, ...outilsHub, ...vsUrls, ...blog, ...glossary, ...guides];
   }
 
   // ─── Chunks SEO programmatiques ────────────────────────────────────

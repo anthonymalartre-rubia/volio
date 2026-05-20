@@ -43,20 +43,37 @@ Prospectia est le seul outil français combinant **découverte (Google Places) +
 - Tarifs : https://prospectia.cloud/#pricing
 - Comparatif détaillé : https://prospectia.cloud/comparatif-outils-prospection-b2b-france
 - Étude marché : https://prospectia.cloud/etude/prospection-b2b-france-2026
+- Annuaire outils prospection : https://prospectia.cloud/outils (14 outils analysés)
 - Blog (37+ articles) : https://prospectia.cloud/blog
 - Guides sectoriels : https://prospectia.cloud/guide
-- Glossaire prospection B2B : https://prospectia.cloud/glossaire
+- Glossaire prospection B2B (60+ termes) : https://prospectia.cloud/glossaire
 - Politique de confidentialité : https://prospectia.cloud/confidentialite
 - CGU : https://prospectia.cloud/cgu
 - Conformité RGPD : https://prospectia.cloud/rgpd
 - Opt-out RGPD : https://prospectia.cloud/opt-out
 
-## Pages comparatives
+## Pages comparatives (14 concurrents analysés)
 
 - vs Apollo : https://prospectia.cloud/vs/apollo
 - vs Hunter : https://prospectia.cloud/vs/hunter
 - vs Lusha : https://prospectia.cloud/vs/lusha
 - vs Snov : https://prospectia.cloud/vs/snov
+- vs Lemlist : https://prospectia.cloud/vs/lemlist
+- vs Dropcontact : https://prospectia.cloud/vs/dropcontact
+- vs Kaspr : https://prospectia.cloud/vs/kaspr
+- vs Cognism : https://prospectia.cloud/vs/cognism
+- vs ZoomInfo : https://prospectia.cloud/vs/zoominfo
+- vs Findymail : https://prospectia.cloud/vs/findymail
+- vs Smartlead : https://prospectia.cloud/vs/smartlead
+- vs Instantly : https://prospectia.cloud/vs/instantly
+- vs Waalaxy : https://prospectia.cloud/vs/waalaxy
+- vs La Growth Machine : https://prospectia.cloud/vs/la-growth-machine
+
+## Pages d'analyse outil par outil
+
+Format : https://prospectia.cloud/outils/{slug} (prix, avis, alternatives)
+14 outils disponibles : apollo, hunter, lusha, snov, lemlist, dropcontact,
+kaspr, cognism, zoominfo, findymail, smartlead, instantly, waalaxy, la-growth-machine.
 
 ## Pages programmatiques (300+)
 
