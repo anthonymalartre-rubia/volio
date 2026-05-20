@@ -57,14 +57,14 @@ export default function CompetitorVsPage({ competitor }) {
           </h1>
           <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mx-auto mb-8">
             {competitor.description} <strong className="text-white">Prospectia est l&apos;alternative française à {competitor.name}</strong> :
-            prospects illimités, scraping intelligent, prix 50% moins cher, et meilleure couverture des PME françaises.
+            ticket d&apos;entrée à 19 €/mois (le moins cher du marché français), scraping intelligent + Google Places, et meilleure couverture des PME françaises.
           </p>
 
           {/* Quick verdict */}
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
             <TrendingDown size={16} className="text-green-400" />
             <span className="text-zinc-300">
-              <strong className="text-green-400">Économisez jusqu&apos;à {Math.round((competitor.pricing - 49) / competitor.pricing * 100)}%</strong> en passant à Prospectia
+              <strong className="text-green-400">Économisez jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}%</strong> en passant à Prospectia
             </span>
           </div>
         </section>
@@ -162,10 +162,10 @@ export default function CompetitorVsPage({ competitor }) {
                 <TrendingDown size={18} className="text-violet-400" />
               </div>
               <h3 className="text-lg font-semibold mb-2">
-                {Math.round((competitor.pricing - 49) / competitor.pricing * 100)}% moins cher
+                Jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}% moins cher
               </h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                Prospectia coûte 49€/mois pour des prospects illimités. {competitor.name} coûte {competitor.pricing}{competitor.pricingUnit} avec des crédits limités.
+                Prospectia démarre à 19 €/mois (plan Solo, 1 000 prospects + 400 enrichissements). {competitor.name} coûte {competitor.pricing}{competitor.pricingUnit} avec des crédits limités. C&apos;est le ticket d&apos;entrée le moins cher du marché français.
               </p>
             </div>
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">

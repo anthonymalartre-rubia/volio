@@ -43,7 +43,7 @@ export default async function Image({ params }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
             <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ 80% emails trouvés</div>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', fontSize: '14px' }}>💶 49€/mois illimité</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', fontSize: '14px' }}>💶 À partir de 19 €/mois</div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud</div>
         </div>

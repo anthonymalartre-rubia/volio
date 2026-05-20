@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowLeft, ArrowRight, User, Zap } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, ArrowRight, User, Zap, Sparkles } from 'lucide-react';
 import { getPostBySlug, getAllPosts } from '@/lib/blog';
+import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
@@ -186,20 +187,48 @@ export default async function BlogPost({ params }) {
   const allPosts = getAllPosts();
   const otherPosts = allPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
+  // Word count estimation from markdown content (for SEO signal)
+  const wordCount = post.content ? post.content.trim().split(/\s+/).length : 0;
+
+  const breadcrumbs = [
+    { label: 'Accueil', href: '/' },
+    { label: 'Blog', href: '/blog' },
+    { label: post.category || 'Article' },
+  ];
+
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.description,
-    datePublished: post.publishedAt,
-    author: { '@type': 'Person', name: post.author },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Prospectia',
-      url: 'https://prospectia.cloud',
-    },
-    url: `https://prospectia.cloud/blog/${slug}`,
-    mainEntityOfPage: `https://prospectia.cloud/blog/${slug}`,
+    '@graph': [
+      breadcrumbSchema(breadcrumbs),
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        datePublished: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
+        author: {
+          '@type': 'Person',
+          name: post.author,
+          url: 'https://prospectia.cloud',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Prospectia',
+          url: 'https://prospectia.cloud',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://prospectia.cloud/icon.svg',
+          },
+        },
+        image: `https://prospectia.cloud/blog/${slug}/opengraph-image`,
+        url: `https://prospectia.cloud/blog/${slug}`,
+        mainEntityOfPage: `https://prospectia.cloud/blog/${slug}`,
+        wordCount,
+        inLanguage: 'fr-FR',
+        articleSection: post.category,
+        keywords: (post.keywords || []).join(', '),
+      },
+    ],
   };
 
   return (
@@ -239,9 +268,35 @@ export default async function BlogPost({ params }) {
             {post.title}
           </h1>
 
-          <p className="text-lg text-content-secondary leading-relaxed mb-12 pb-8 border-b border-line">
+          <p className="text-lg text-content-secondary leading-relaxed mb-8">
             {post.description}
           </p>
+
+          {/* En résumé / TLDR — affiché en tête, optimisé pour extraction IA + featured snippets Google */}
+          {post.tldr && (
+            <div className="mb-10 rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.05] p-5 sm:p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles size={16} className="text-violet-400" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-violet-300">En résumé</span>
+              </div>
+              {Array.isArray(post.tldr) ? (
+                <ul className="space-y-2">
+                  {post.tldr.map((point, idx) => (
+                    <li key={idx} className="flex gap-2 text-sm sm:text-base text-content-secondary leading-relaxed">
+                      <span className="text-violet-400 flex-shrink-0">→</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm sm:text-base text-content-secondary leading-relaxed">
+                  {post.tldr}
+                </p>
+              )}
+            </div>
+          )}
+
+          <div className="mb-12 pb-8 border-b border-line" />
 
           {/* Article content */}
           <div className="prose prose-invert max-w-none">
@@ -251,9 +306,10 @@ export default async function BlogPost({ params }) {
           {/* CTA after article */}
           <div className="mt-12 rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Trouvez vos prospects en quelques clics</h2>
+            <h2 className="text-2xl font-bold mb-3">Trouvez vos prospects B2B en quelques clics</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les emails B2B que vos concurrents ratent. 49€/mois, prospects illimités.
+              Prospectia trouve les entreprises et leurs emails partout en France.
+              <span className="text-violet-300 font-semibold"> Gratuit pour commencer · à partir de 19 €/mois</span> — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"

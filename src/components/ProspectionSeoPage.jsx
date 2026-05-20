@@ -261,7 +261,7 @@ export default function ProspectionSeoPage({
               Trouvez vos prospects en quelques clics
             </h2>
             <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
-              Prospectia trouve les emails B2B que vos concurrents ratent. 49€/mois, prospects illimités, scoring IA inclus.
+              Prospectia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"

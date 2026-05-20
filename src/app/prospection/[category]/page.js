@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   if (!category) return {};
 
   const title = `Trouver l'email des ${category.labelPlural} en France — Prospectia`;
-  const description = `Email professionnel de tous les ${category.labelPlural} en France. 101 départements couverts, scraping intelligent + recherche Google. À partir de 49€/mois.`;
+  const description = `Email professionnel de tous les ${category.labelPlural} en France. 101 départements couverts, scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,

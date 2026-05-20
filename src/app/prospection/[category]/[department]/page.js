@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
   if (!category || !dept) return {};
 
   const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code}) — Prospectia`;
-  const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés dans le ${dept.name} (${dept.code}). Scraping intelligent + recherche Google. À partir de 49€/mois.`;
+  const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés dans le ${dept.name} (${dept.code}). Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
@@ -116,7 +116,7 @@ export default async function CategoryDepartmentPage({ params }) {
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} dans le ${dept.name} ?`,
-      answer: `49€/mois pour le plan Pro avec prospects illimités dans le ${dept.name} et tous les autres départements. Aucun crédit caché, aucun supplément par catégorie ou département.`,
+      answer: `À partir de 19 €/mois (plan Solo : 1 000 prospects + 400 enrichissements), 49 €/mois (plan Pro : 5 000 + 2 000) ou 99 €/mois (plan Business : 10 000 + 4 000). Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
     },
   ];
 

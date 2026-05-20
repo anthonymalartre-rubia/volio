@@ -2734,6 +2734,12 @@ Avoir un mail-tester score 10/10 ne **garantit pas** d'atteindre l'inbox de votr
     readTime: 10,
     category: 'Comparatif',
     keywords: ['apollo vs hunter', 'meilleur outil prospection b2b', 'alternative apollo'],
+    tldr: [
+      'Apollo.io (99 €/mois) : base mondiale de 275M contacts, idéale si vous prospectez à l\'international mais surdimensionné pour la France.',
+      'Hunter.io (49 €/mois) : email finder pur — il faut déjà avoir la liste d\'entreprises, pas de découverte.',
+      'Prospectia (19 €/mois) : seul outil français combinant découverte (Google Places, 150+ catégories) + enrichissement email, ticket d\'entrée le moins cher du marché.',
+      'Pour une PME/freelance français : Prospectia. Pour du multi-pays : Apollo. Pour enrichir une liste existante : Hunter.',
+    ],
     content: `## Le marché en 2026 : 3 outils, 3 promesses, 3 réalités
 
 Si tu cherches un outil de prospection B2B en 2026, tu vas immanquablement tomber sur **Apollo.io**, **Hunter.io** et **Prospectia**. Tous les trois promettent de trouver les emails de tes prospects. Mais en réalité, leurs cas d'usage sont radicalement différents.
@@ -2835,6 +2841,12 @@ Et tu gagnes la discovery Google Places intégrée que ni Apollo ni Hunter ne pr
     readTime: 7,
     category: 'Légal',
     keywords: ['cnil démarchage email', 'amende cold email b2b', 'rgpd prospection sanctions'],
+    tldr: [
+      'Le cold email B2B en France est légal en 2026 sous régime de l\'intérêt légitime (RGPD art. 6), à condition de cibler une fonction (et pas une personne) et d\'offrir un opt-out clair dans chaque mail.',
+      'Sanctions CNIL : jusqu\'à 4% du CA mondial ou 20 M€, mais en pratique 5 000 € à 250 000 € sur les cas B2B observés.',
+      'À éviter absolument : emails personnels (@gmail, @hotmail), bases achetées sans traçabilité, absence d\'opt-out, ciblage de particuliers.',
+      'Bonnes pratiques : filtrer les emails personnels, lien désinscription dans chaque mail, registre des traitements, conservation < 3 ans après dernier contact.',
+    ],
     content: `## Ce que tu risques vraiment en 2026 (chiffres officiels CNIL)
 
 En 2025, la CNIL a infligé **44 millions d'euros d'amendes** liées à la prospection commerciale par email. La plupart concernent des cas tordus (B2C, données revendues), mais le démarchage B2B agressif n'est plus à l'abri.
@@ -2929,6 +2941,12 @@ Le filtre RGPD est activable/désactivable par utilisateur (avec un gros warning
     readTime: 12,
     category: 'Secteurs',
     keywords: ['prospection btp', 'lead artisans btp', 'cold email btp'],
+    tldr: [
+      'Le BTP français compte 670 000 entreprises (95% < 10 salariés) : un marché énorme mais difficile à atteindre par cold email.',
+      'Le canal qui convertit le mieux : téléphone + SMS (artisans rarement devant un PC), pas l\'email.',
+      'Stratégie gagnante : segmenter par corps de métier + département (Prospectia couvre 101 départements), prioriser ceux ayant un site web (signal de digitalisation).',
+      'Catégories Google Places à viser : plombier, électricien, maçon, peintre, menuisier, couvreur, chauffagiste, paysagiste, terrassement.',
+    ],
     content: `## Pourquoi le BTP est un goldmine sous-exploité en B2B
 
 Le BTP représente **480 000 entreprises en France** (Insee 2024), réparties dans tous les départements, avec une moyenne de 3-5 salariés. C'est un marché ENORME que la plupart des outils US (Apollo, Hunter) ne couvrent pas correctement.
@@ -3060,6 +3078,12 @@ Soit **5-10 nouveaux clients pour 1000 prospects ciblés**. Sur Solo à 19 €/m
     readTime: 9,
     category: 'Outils',
     keywords: ['alternative pipedrive', 'crm pas cher b2b', 'meilleur crm 2026'],
+    tldr: [
+      'Pipedrive (24 €/user/mois) reste l\'équilibre prix/fonctionnalités le plus solide pour une équipe sales 2-20 personnes.',
+      'Alternatives sérieuses 2026 : Folk (CRM moderne 19 €), HubSpot Free (limité mais gratuit), Notion (DIY < 5 deals/mois), Attio (UI moderne 29 €).',
+      'À éviter : Salesforce pour < 50 commerciaux (overkill), Monday CRM (pas un vrai CRM), Excel/Sheets (perte de données et de temps).',
+      'Pour < 3 commerciaux : combine Prospectia (sourcing + enrichissement à 19 €/mois) + Folk ou HubSpot Free → setup complet à 19-50 €/mois.',
+    ],
     content: `## Le piège du "j'ai besoin d'un CRM dès maintenant"
 
 90% des SaaS qui te poussent à prendre un CRM payant à 100€/mois oublient un détail : si tu fais moins de 50 deals par mois, **un Notion + 1 vue Kanban gratuit fait le même job**.
@@ -3166,6 +3190,12 @@ Beaucoup de SaaS te font croire qu'un CRM seul suffit pour faire de la prospecti
     readTime: 10,
     category: 'Comparatif',
     keywords: ['alternative lemlist', 'cadenceur email', 'smartlead vs lemlist'],
+    tldr: [
+      'Lemlist (59 €/mois) reste un excellent cadenceur, mais 5 alternatives plus pertinentes en 2026 selon votre cas d\'usage.',
+      'Pour la délivrabilité maximale (warm-up + IP rotation) : Smartlead (39 €) ou Instantly (37 €).',
+      'Pour la simplicité + intégration LinkedIn : La Growth Machine (90 €) ou Folderly.',
+      'Pour combiner sourcing + outreach à bas coût : Prospectia (19 €/mois sourcing + enrichissement) + Smartlead (39 €) = 58 €/mois pour un stack complet (vs 159 € Lemlist seul).',
+    ],
     content: `## Pourquoi chercher une alternative à Lemlist ?
 
 Lemlist a démocratisé le cold email B2B en France et reste un excellent outil. Mais en 2026, il a quelques limites qui poussent de plus en plus d'utilisateurs à chercher ailleurs :
@@ -3345,6 +3375,12 @@ Si tu envoies < 50 emails/jour, **Gmail + un Google Sheet** + un script make.com
     readTime: 11,
     category: 'Stratégie',
     keywords: ['budget prospection b2b', 'stack outils prospection', 'outils sales prix 2026'],
+    tldr: [
+      'Stack solo (50 €/mois) : Prospectia Solo (19 €) + Smartlead Starter (29 €) + Notion gratuit. Idéal freelance / pré-PMF.',
+      'Stack PME (200 €/mois) : Prospectia Pro (49 €) + Smartlead Pro (94 €) + Folk CRM (39 €). Couvre 2-5 commerciaux confortablement.',
+      'Stack scale-up (500 €/mois) : Prospectia Business (99 €) + Lemlist (159 €) + Pipedrive (5 users × 49 €). Au-delà : passez à HubSpot ou Salesforce.',
+      'Coûts cachés sous-estimés : temps de rédaction (~20% du CTR), enrichissement complémentaire (Findymail / Dropcontact), warmup IP.',
+    ],
     content: `## Le piège du "outils pas chers"
 
 Tu paies 49 €/mois Hunter, 99 € Lemlist, 30 € pour ton CRM, et tu te dis "OK 178 €/mois c'est gérable". Sauf qu'à la fin de l'année, ton coût d'acquisition par client est de **800 €**. Pourquoi ? Parce qu'on oublie 3 coûts cachés.
@@ -3460,6 +3496,12 @@ Sur 1000 prospects/mois, Prospectia économise **64 heures de travail** = **1920
     readTime: 11,
     category: 'Secteurs',
     keywords: ['prospection restaurants', 'lead restaurateur', 'cold email restauration'],
+    tldr: [
+      'La France compte 175 000 restaurants : segment énorme mais saturé d\'outreach (4-8 sollicitations / semaine en moyenne par restaurateur).',
+      'Le créneau qui convertit : mardi-jeudi, 9h-11h ou 15h-17h. Évitez vendredi soir / lundi.',
+      'Personnalisation indispensable : type de cuisine, note Google, ticket moyen, géolocalisation. Un mail générique = poubelle.',
+      'Catégories Google Places fines à viser : restaurant gastronomique, pizzeria, brasserie, sushi, traiteur, food-truck, dark kitchen.',
+    ],
     content: `## 175 000 restaurants en France = un marché énorme mais difficile
 
 Le secteur de la restauration française représente **175 000 établissements** (Insee 2024), tous des PME ou TPE de moins de 20 salariés. C'est l'un des plus gros marchés B2B FR, **mais l'un des plus durs à prospecter** :
@@ -3604,6 +3646,12 @@ Soit **5-10 clients pour 1000 prospects ciblés**. Sur Solo (19 €/mois), tu pa
     readTime: 9,
     category: 'Légal',
     keywords: ['rgpd prospection b2b', 'cold email légal 2026', 'opt-out rgpd'],
+    tldr: [
+      'Le cold email B2B en France est légal en 2026 sous régime de l\'intérêt légitime (RGPD art. 6.1.f), pas sous le consentement.',
+      '4 obligations non-négociables : finalité claire, lien de désinscription en 1 clic, registre des traitements, conservation < 3 ans après dernier contact.',
+      'Ce qui change vs B2C : pas besoin d\'opt-in préalable, mais l\'opt-out doit être immédiat et l\'email pro générique (contact@) doit cibler une fonction (pas une personne).',
+      'Outils qui automatisent la conformité : Prospectia (filtre 28 domaines persos + opt-out public natif), Dropcontact (RGPD-by-design).',
+    ],
     content: `## La règle qui te coûte une amende en 5 minutes
 
 Beaucoup d'entrepreneurs B2B pensent que "RGPD = pas le droit de prospecter par email". **C'est faux**. En B2B, le cold email est légal, à condition de respecter quelques règles précises.
@@ -3710,6 +3758,12 @@ Le RGPD est complexe. Pour les gros volumes (>10k emails/mois) ou les marchés s
     readTime: 12,
     category: 'Tactique',
     keywords: ['template cold email b2b', 'cold email exemple', 'cold mail qui marche'],
+    tldr: [
+      'Un bon cold email B2B en 2026 fait < 100 mots, mentionne UN problème spécifique du destinataire, et propose UNE seule action (réponse, pas un call).',
+      'Les 7 templates qui convertissent : "pain point spécifique", "social proof secteur", "question contre-intuitive", "compliment + offre", "annonce récente", "case study chiffré", "PS killer".',
+      'Taux moyens à viser : open 50%, reply 8-15%, meeting 2-5%. En dessous = problème de ciblage, au-dessus = pousser le volume.',
+      'À bannir absolument : "J\'espère que vous allez bien", pavé de présentation entreprise, demande de meeting dès le premier mail, fichier joint non sollicité.',
+    ],
     content: `## Le cold email B2B en 2026 : ce qui marche, ce qui ne marche plus
 
 En 2022, un template bidon avec "{{first_name}}, j'ai vu que..." obtenait 5-8% de réponse. En 2026, ce même template = direct spam ou ignore.
@@ -3997,6 +4051,12 @@ Tous ces templates ne servent à rien si tes prospects sont mauvais. Prospectia 
     readTime: 11,
     category: 'Sales Ops',
     keywords: ['kpi sales ops', 'dashboard sales b2b', 'metrics sales 2026'],
+    tldr: [
+      'Les 5 KPI Sales Ops vraiment utiles en 2026 : Reply Rate (par séquence), Velocity (jours du premier contact au closed-won), CAC payback, MRR per FTE, Pipeline coverage (3x objectif).',
+      'À ignorer : nombre d\'emails envoyés, "activités" dans le CRM (vanity metrics), open rate (cassé par Apple Mail Privacy).',
+      'Le bon dashboard Sales Ops : 1 vue weekly (3-4 KPI) + 1 vue monthly (cohorts + funnel) + 1 vue quarterly (CAC, LTV, ratio sales/marketing).',
+      'Stack Sales Ops léger 2026 : Prospectia (sourcing) + Smartlead (outreach) + Folk (CRM) + Looker Studio (gratuit pour le reporting) = setup complet < 200 €/mois.',
+    ],
     content: `## Le Sales Ops, le métier qui sépare les bonnes équipes des excellentes
 
 En 2026, une équipe sales sans Sales Ops, c'est comme un avion sans pilote automatique. Tu voles, mais tu cames le carburant.
@@ -4194,6 +4254,12 @@ Implémente ces 10 KPI **dans cet ordre** :
     readTime: 10,
     category: 'Secteurs',
     keywords: ['prospection agences web', 'agence digitale france', 'lead agence marketing'],
+    tldr: [
+      'La France compte ~14 000 agences web / digitales : cible saturée d\'outreach (souvent 10+ sollicitations / semaine par agence).',
+      'Ce qui marche : référencer une RÉALISATION récente de l\'agence (cas client, refonte, prix) avant de pitcher. Personne ne lit "je vous propose un partenariat".',
+      'Critères de tri Prospectia : note Google > 4.5, site < 10 pages (= en croissance, pas usine à gaz), localisation Paris/Lyon/Bordeaux/Marseille (concentration du marché).',
+      'Pitch type qui convertit : freelances/SaaS qui complètent l\'offre agence (pas qui la concurrencent), avec démo en 15 min max.',
+    ],
     content: `## Les agences digitales françaises : 12 000 cibles, 1 milliard de marché
 
 Le marché des agences web/digitales en France représente **12 000 entreprises** (Insee), pour un CA cumulé de ~10 milliards d'euros. C'est un **marché ultra-segmenté** :
@@ -4343,6 +4409,12 @@ Beaucoup d'agences se déclarent "growth", "digital", "marketing" sans vrai segm
     readTime: 12,
     category: 'Tactique',
     keywords: ['multicanal outbound', 'sequence email linkedin', 'cold email linkedin'],
+    tldr: [
+      'Le multicanal email + LinkedIn génère +60% de réponses vs email seul, mais demande 2-3× plus de temps de setup.',
+      'Séquence type qui marche : J1 email pain point → J3 visite LinkedIn + connexion → J5 message LinkedIn court → J8 email relance → J14 voicemail / SMS.',
+      'À éviter : pitch dans la demande de connexion LinkedIn, copier-coller de l\'email en LinkedIn, plus de 5 touches en moins de 3 semaines.',
+      'Outils pour automatiser : La Growth Machine, HeyReach, Lemlist. Combinés à Prospectia pour le sourcing initial (Google Places + LinkedIn URLs).',
+    ],
     content: `## Le monocanal est mort en 2026
 
 En 2018, un cold email seul pouvait obtenir 8% de réponse. En 2026, c'est tombé à 3-5%. Pourquoi ? L'inbox est saturée, les filtres anti-spam sont meilleurs, et les prospects ignorent tout ce qui ressemble à de la prospection générique.
@@ -4546,6 +4618,12 @@ Pour scaler, il faut absolument :
     readTime: 8,
     category: 'Tactique',
     keywords: ['relance commerciale', 'suivi prospect', 'follow up email'],
+    tldr: [
+      '80% des deals B2B closent entre la 5e et la 12e relance, mais 90% des commerciaux abandonnent après la 2e. Faire mieux que ce simple seuil = doubler le pipeline.',
+      'Cadence optimale 2026 : J1 mail initial → J4 relance courte → J9 ajout de valeur (article, case study) → J16 break-up email → J45 mail de "résurrection".',
+      'À éviter : "Je relance car je n\'ai pas eu de réponse" (passif-agressif), forwarder son propre mail, plus de 6 relances.',
+      'Le break-up email convertit 14% en moyenne — toujours l\'envoyer avant d\'abandonner un lead.',
+    ],
     content: `## La règle du "80% des deals nécessitent 5 relances" (et la stat sur laquelle 92% des sales abandonnent)
 
 Marketo a publié une étude qui circule depuis 2018 : **80% des deals B2B se signent entre la 5e et la 12e relance**. Pourtant, **92% des sales abandonnent avant la 5e**.
@@ -4678,6 +4756,12 @@ Tu devrais suivre par semaine :
     readTime: 10,
     category: 'Comparatif',
     keywords: ['hunter vs snov', 'snov vs lusha', 'meilleur email finder'],
+    tldr: [
+      'Hunter.io (49 €/mois) : leader historique, base 200M emails, idéal recherche par domaine — pas de découverte.',
+      'Snov.io (39 €/mois) : moins cher, inclut un cadenceur intégré, mais base plus petite et moins fiable sur la France.',
+      'Lusha (49 €/mois) : focus US, faible couverture France, mais excellent sur les contacts mobiles directs.',
+      'Pour le marché français, aucun des trois ne propose la découverte de prospects : combiner avec un outil de sourcing (Prospectia, Apollo) ou s\'appuyer sur LinkedIn.',
+    ],
     content: `## 3 email finders, 3 promesses, 1 marché français qu'ils ratent
 
 Hunter, Snov.io et Lusha sont les 3 plus gros email finders en 2026, avec respectivement 70k+, 90k+ et 50k+ clients dans le monde. Mais sur le marché français, ils ont tous le même problème : ils sont conçus pour les ETI et grandes entreprises, **pas pour les PME et commerces locaux**.
@@ -4851,6 +4935,12 @@ J'ai pris 100 PME française au hasard (BTP, restos, services, agences) et test�
     readTime: 10,
     category: 'Secteurs',
     keywords: ['prospection avocats', 'lead profession libérale', 'cold email avocat'],
+    tldr: [
+      'La France compte ~70 000 avocats : marché atomisé, très local, où la prospection email fonctionne bien à condition d\'être ultra-spécifique au domaine de droit.',
+      'Catégories Google Places à cibler : cabinet d\'avocats, notaire, expert-comptable, huissier, géomètre-expert.',
+      'Ce qui marche : segmenter par spécialité (droit social, droit des affaires, droit fiscal...) et pitcher un outil/service qui résout une douleur quotidienne (signature électronique, facturation, gestion de dossiers).',
+      'À éviter : pitch générique "j\'aide les avocats à signer plus de clients" → ils en reçoivent 10/jour et ignorent tout ce qui ressemble à du marketing low-cost.',
+    ],
     content: `## 200 000 professionnels libéraux en France : un marché premium et complexe
 
 Le marché des professions libérales en France représente **plus de 200 000 actifs** : avocats (75 000), experts-comptables (22 000), notaires (16 000), médecins libéraux (60 000), architectes (30 000), kinés, ostéopathes, etc.
@@ -5022,6 +5112,12 @@ Sur 500 cabinets libéraux ciblés :
     readTime: 11,
     category: 'Stratégie',
     keywords: ['ideal customer profile', 'icp b2b', 'comment définir son icp'],
+    tldr: [
+      'L\'ICP (Ideal Customer Profile) n\'est pas un buyer persona — c\'est la description précise du type d\'ENTREPRISE qui achète vite, paye bien et reste longtemps.',
+      'Méthode en 3 étapes : (1) lister vos 10 meilleurs clients actuels, (2) trouver ce qu\'ils ont en commun (taille, secteur, géographie, signal d\'achat), (3) ne plus jamais sourcer en dehors.',
+      'Les 5 critères qui comptent en 2026 : secteur d\'activité, taille (CA ou effectif), géographie, maturité digitale, signal d\'achat récent (levée, embauche, lancement produit).',
+      'Outils pour appliquer son ICP : Prospectia (filtres catégorie + département + scoring), Apollo (filtres firmographiques globaux), Captain Data (signaux d\'achat custom).',
+    ],
     content: `## Pourquoi 90% des startups ont un ICP trop large
 
 "On vise les PME en France" — c'est ce que disent 9 startups sur 10 quand on leur demande leur ICP. Sauf qu'avec 4 millions de PME en France, cet ICP ne sert à RIEN : tu ne sauras pas qui prospecter, quel message envoyer, ni où concentrer ton budget.
@@ -5202,6 +5298,12 @@ ANTI-ICP :
     readTime: 10,
     category: 'Tactique',
     keywords: ['personnalisation cold email', 'cold email scale', 'ia personnalisation prospection'],
+    tldr: [
+      'La personnalisation 1-1 est morte en 2026 (trop chère, trop lente). La nouvelle norme : "1-to-segment" avec variables dynamiques + ouverture personnalisée générée par IA.',
+      'Le ratio gagnant : 80% du mail = template par segment, 20% = première ligne personnalisée (un fact spécifique au prospect : sa boîte, son poste, son secteur).',
+      'Outils 2026 : Clay (data + IA hyper-flexible), Smartwriter, Lyne.ai. Mais aussi GPT-4 + custom prompt sur Make/Zapier (5× moins cher).',
+      'Le piège : personnaliser sur des éléments sans valeur perçue ("j\'ai vu que vous êtes basé à Lyon" — tout le monde le sait). Personnaliser sur un SIGNAL (annonce, embauche, levée).',
+    ],
     content: `## Le paradoxe de la prospection 2026
 
 D'un côté : un cold email personnalisé fait **3× plus de réponses** qu'un email générique.
@@ -5402,6 +5504,12 @@ PS : {{ps_specifique_au_prospect}}
     readTime: 10,
     category: 'Comparatif',
     keywords: ['dropcontact vs kaspr', 'outil prospection français', 'alternative apollo france'],
+    tldr: [
+      'Dropcontact (31 €/mois) : enrichissement email RGPD-by-design, intégration Pipedrive / HubSpot, mais pas de découverte. Idéal pour enrichir une liste existante.',
+      'Kaspr (49 €/mois) : extraction de contacts LinkedIn (email + téléphone), efficace pour le sourcing mais limité par les quotas LinkedIn.',
+      'Prospectia (19 €/mois) : combine découverte (Google Places, 150+ catégories, 101 départements) + enrichissement email. Le seul à 19 €/mois.',
+      'Comment choisir : enrichir une liste = Dropcontact, sourcer via LinkedIn = Kaspr, sourcer via Google Places + enrichir = Prospectia. Les 3 sont complémentaires.',
+    ],
     content: `## Pourquoi privilégier les outils français en B2B ?
 
 En 2026, choisir un outil français pour ta prospection a 3 avantages :
@@ -5561,6 +5669,12 @@ Coût combiné : 19 + 24 + 45 = 88 €/mo, vs Apollo seul à 99 $/mo avec moins 
     readTime: 11,
     category: 'Secteurs',
     keywords: ['prospection ecommerce', 'lead ecommerce france', 'cold email ecommerce'],
+    tldr: [
+      'La France compte ~210 000 sites e-commerce actifs (FEVAD 2026), dont 80% font moins de 100 000 € de CA — segment énorme pour SaaS, agences, freelances.',
+      'Critères de qualification clés : technologie utilisée (Shopify, WooCommerce, Prestashop), ancienneté du site, fréquence de mise à jour, trafic estimé (SimilarWeb).',
+      'Catégories Google Places : "magasin de vêtements", "épicerie bio", "magasin de meubles", "boutique de décoration", "concept store" — pour la partie e-commerce locaux.',
+      'Pour le pure-player : préférer des sources comme BuiltWith ou Wappalyzer (technographic), puis Prospectia pour enrichir les emails après identification.',
+    ],
     content: `## 200 000+ e-commerces français : un marché tech mais fragmenté
 
 Le marché du e-commerce en France représente **200 000+ sites marchands actifs** (Fevad 2024), allant du solo founder Shopify à la marque DNVB qui pèse 100M€.
@@ -5742,6 +5856,12 @@ Sur 500 e-commerces qualifiés (avec CA > 100k€/an) :
     readTime: 9,
     category: 'Comparatif',
     keywords: ['phantombuster vs captain data', 'automation prospection', 'scraping linkedin'],
+    tldr: [
+      'PhantomBuster (69 €/mois) : leader historique du scraping LinkedIn/réseaux, 100+ "Phantoms" prêts à l\'emploi, mais courbe d\'apprentissage modérée.',
+      'Captain Data (399 €/mois minimum) : plateforme plus puissante (workflows, intégrations natives), mais positionnée mid-market/entreprise.',
+      'Pour < 10k contacts/mois : PhantomBuster reste imbattable rapport puissance/prix. Au-delà : Captain Data ou solution custom (Make + APIs).',
+      'À combiner avec un outil de découverte/enrichissement : Prospectia (sourcing Google Places + emails à 19 €/mois) complète parfaitement Phantom (sourcing LinkedIn).',
+    ],
     content: `## Pourquoi automatiser sa prospection en 2026 ?
 
 Faire de la prospection à la main, c'est :

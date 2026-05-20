@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   if (!dept) return {};
 
   const title = `Prospection B2B dans le ${dept.name} (${dept.code}) — Prospectia`;
-  const description = `Trouvez les emails B2B de toutes les entreprises du département ${dept.name} (${dept.code}). 150+ secteurs couverts : restaurants, commerces, artisans, services. À partir de 49€/mois.`;
+  const description = `Trouvez les emails B2B de toutes les entreprises du département ${dept.name} (${dept.code}). 150+ secteurs couverts : restaurants, commerces, artisans, services. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
@@ -75,7 +75,7 @@ export default async function DepartmentPage({ params }) {
     },
     {
       question: `Quel est le prix pour prospecter dans le ${dept.name} ?`,
-      answer: `49€/mois pour le plan Pro avec prospects illimités (toutes catégories, tous départements). Aucun crédit caché, aucune limite par département.`,
+      answer: `À partir de 19 €/mois (plan Solo, 1 000 prospects et 400 enrichissements/mois). Le plan Pro à 49 €/mois donne 5 000 prospects + 2 000 enrichissements, et Business à 99 €/mois 10 000 + 4 000. Tous les départements et toutes les catégories sont inclus, sans supplément.`,
     },
   ];
 

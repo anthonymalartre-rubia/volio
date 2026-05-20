@@ -136,7 +136,7 @@ export default async function Image({ params }) {
                 fontSize: '14px',
               }}
             >
-              💶 49€/mois illimité
+              💶 À partir de 19 €/mois
             </div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud</div>

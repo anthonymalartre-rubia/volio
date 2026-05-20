@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
   if (!category || !city) return {};
 
   const title = `Email des ${category.labelPlural} à ${city.name} — Prospectia`;
-  const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} à ${city.name}. Scraping intelligent + recherche Google. À partir de 49€/mois, illimité.`;
+  const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} à ${city.name}. Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,

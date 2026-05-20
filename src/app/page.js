@@ -1,10 +1,11 @@
 import LandingContent from '@/components/LandingContent';
+import { FAQ_ITEMS } from '@/lib/faq-data';
 
 const SITE_URL = 'https://prospectia.cloud';
 
 export const metadata = {
-  title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
-  description: 'Prospectia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. 150+ catégories B2B, 101 départements, scoring de confiance. À partir de 49€/mois.',
+  title: 'Prospectia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
+  description: 'Le ticket d\'entrée le moins cher du marché français. Découverte de prospects via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 19 €/mois.',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -13,17 +14,17 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
-    description: 'Scraping intelligent + recherche Google. 150+ catégories B2B, 101 départements, scoring de confiance. À partir de 49€/mois.',
+    title: 'Prospectia — Prospection B2B France à partir de 19 €/mois',
+    description: 'Le moins cher du marché français. Découverte (Google Places) + enrichissement email automatique. 150+ catégories, 101 départements, scoring de confiance.',
     url: SITE_URL,
-    siteName: 'Prospectia.ai',
+    siteName: 'Prospectia',
     locale: 'fr_FR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prospectia.ai — Prospection B2B automatisée',
-    description: 'Trouvez l\'email de n\'importe quelle entreprise en France. Scraping + Google, scoring IA, 150+ catégories.',
+    title: 'Prospectia — Prospection B2B automatisée',
+    description: 'À partir de 19 €/mois. Trouvez emails & entreprises en France. 150+ catégories, 101 départements.',
   },
   robots: {
     index: true,
@@ -31,27 +32,116 @@ export const metadata = {
   },
 };
 
-// JSON-LD structured data for SaaS product
-const jsonLd = {
+// JSON-LD structured data for SaaS product (SoftwareApplication + offers + ratings)
+const softwareApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Prospectia.ai',
+  name: 'Prospectia',
+  alternateName: ['Prospectia.ai', 'Prospectia.cloud'],
   applicationCategory: 'BusinessApplication',
+  applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'Plateforme de prospection B2B automatisée en France. Scraping intelligent + recherche Google pour trouver les emails professionnels.',
+  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade (scraping intelligent, recherche Google, fallback patterns) avec scoring de confiance. À partir de 19 €/mois.',
   url: SITE_URL,
-  offers: {
-    '@type': 'AggregateOffer',
-    priceCurrency: 'EUR',
-    lowPrice: '0',
-    highPrice: '149',
-    offerCount: '3',
-  },
+  inLanguage: 'fr-FR',
+  countriesSupported: 'FR',
+  featureList: [
+    'Recherche d\'entreprises B2B via Google Places',
+    'Couverture des 101 départements français (métropole + DROM)',
+    '150+ catégories d\'activité',
+    'Enrichissement email en cascade (waterfall)',
+    'Scraping intelligent des sites web',
+    'Scoring de confiance par email',
+    'Export CSV compatible tous CRM',
+    'Recherche en langage naturel (IA Claude)',
+    'Conformité RGPD (filtre emails personnels, opt-out public)',
+    'Pas d\'engagement, annulation à tout moment',
+  ],
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'Starter',
+      description: '100 prospects · 20 enrichissements · 5 exports par mois',
+      price: '0',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/signup`,
+    },
+    {
+      '@type': 'Offer',
+      name: 'Solo',
+      description: '1 000 prospects · 400 enrichissements par mois',
+      price: '19',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/signup`,
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: '19',
+        priceCurrency: 'EUR',
+        unitText: 'MONTH',
+        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
+      },
+    },
+    {
+      '@type': 'Offer',
+      name: 'Pro',
+      description: '5 000 prospects · 2 000 enrichissements par mois',
+      price: '49',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/signup`,
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: '49',
+        priceCurrency: 'EUR',
+        unitText: 'MONTH',
+        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
+      },
+    },
+    {
+      '@type': 'Offer',
+      name: 'Business',
+      description: '10 000 prospects · 4 000 enrichissements par mois',
+      price: '99',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_URL}/signup`,
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: '99',
+        priceCurrency: 'EUR',
+        unitText: 'MONTH',
+        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
+      },
+    },
+  ],
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '4.8',
     ratingCount: '50',
+    bestRating: '5',
+    worstRating: '1',
   },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Prospectia',
+    url: SITE_URL,
+  },
+};
+
+// FAQPage schema — Google renders Q/R rich snippet in SERP
+const faqPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
 };
 
 export default function LandingPage() {
@@ -59,7 +149,11 @@ export default function LandingPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
       />
       <LandingContent />
     </>

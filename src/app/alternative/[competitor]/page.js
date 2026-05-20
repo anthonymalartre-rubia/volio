@@ -11,13 +11,14 @@ export async function generateMetadata({ params }) {
   const c = getCompetitor(slug);
   if (!c) return {};
 
+  const savingsPct = Math.max(0, Math.round((c.pricing - 19) / c.pricing * 100));
   return {
-    title: `Meilleure alternative à ${c.name} en 2026 — Prospectia (49€/mois)`,
-    description: `Cherche une alternative à ${c.name} ? Prospectia est l'alternative française : prospects illimités, scraping intelligent, ${Math.round((c.pricing - 49) / c.pricing * 100)}% moins cher. Conforme RGPD.`,
+    title: `Meilleure alternative à ${c.name} en 2026 — Prospectia (à partir de 19 €/mois)`,
+    description: `Cherche une alternative à ${c.name} ? Prospectia est l'alternative française pour la prospection B2B : à partir de 19 €/mois (${savingsPct}% moins cher), scraping intelligent + Google Places, conforme RGPD.`,
     alternates: { canonical: `https://prospectia.cloud/alternative/${slug}` },
     openGraph: {
       title: `Alternative à ${c.name} en 2026 — Prospectia`,
-      description: `L'alternative française à ${c.name} : prospects illimités, 49€/mois, scraping + Google.`,
+      description: `L'alternative française à ${c.name} : à partir de 19 €/mois, scraping + Google Places, conforme RGPD.`,
       url: `https://prospectia.cloud/alternative/${slug}`,
     },
   };

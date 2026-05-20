@@ -13,7 +13,7 @@ export default async function Image({ params }) {
   const c = getCompetitor(slug);
   if (!c) return new ImageResponse(<div>Not found</div>);
 
-  const savings = Math.round(((c.pricing - 49) / c.pricing) * 100);
+  const savings = Math.max(0, Math.round(((c.pricing - 19) / c.pricing) * 100));
 
   return new ImageResponse(
     (
@@ -41,13 +41,13 @@ export default async function Image({ params }) {
             Prospectia <span style={{ color: '#71717a', margin: '0 16px' }}>vs</span> {c.name}
           </div>
           <div style={{ fontSize: '28px', color: '#a1a1aa', lineHeight: 1.3 }}>
-            Économisez {savings}% en passant à Prospectia. 49€/mois, prospects illimités.
+            Économisez jusqu'à {savings}% en passant à Prospectia. À partir de 19 €/mois — le moins cher du marché français.
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
             <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ {savings}% moins cher</div>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ Recherches illimitées</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ Conforme RGPD</div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud</div>
         </div>

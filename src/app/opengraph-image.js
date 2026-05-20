@@ -153,7 +153,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          A partir de 49€/mois
+          A partir de 19 €/mois — le moins cher du marche francais
         </div>
       </div>
     ),

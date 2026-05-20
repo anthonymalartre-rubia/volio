@@ -178,7 +178,8 @@ export default async function GuidePage({ params }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Mettez ce guide en pratique</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les emails B2B que vos concurrents ratent. 49€/mois, prospects illimités.
+              Prospectia trouve les entreprises de votre secteur et leurs emails partout en France.
+              <span className="text-violet-300 font-semibold"> Gratuit pour commencer · à partir de 19 €/mois.</span>
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
               <Zap size={16} />

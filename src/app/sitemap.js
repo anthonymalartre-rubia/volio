@@ -49,6 +49,7 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/`, priority: 1.0, changeFrequency: 'weekly', lastModified: now },
       { url: `${baseUrl}/signup`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/login`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/comparatif-outils-prospection-b2b-france`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/cgu`, priority: 0.3, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/confidentialite`, priority: 0.3, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/rgpd`, priority: 0.3, changeFrequency: 'yearly', lastModified: now },
