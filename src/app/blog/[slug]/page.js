@@ -5,6 +5,7 @@ import { getPostBySlug, getAllPosts } from '@/lib/blog';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import StudyCallout from '@/components/StudyCallout';
 
 // ISR : on rebuild la page article toutes les 30 min, et on autorise les
 // slugs non pré-rendus (dynamicParams) → un article programmé apparaît
@@ -302,6 +303,9 @@ export default async function BlogPost({ params }) {
           <div className="prose prose-invert max-w-none">
             {renderMarkdown(post.content)}
           </div>
+
+          {/* Étude callout — 1 backlink interne contextuel par article */}
+          <StudyCallout />
 
           {/* CTA after article */}
           <div className="mt-12 rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">

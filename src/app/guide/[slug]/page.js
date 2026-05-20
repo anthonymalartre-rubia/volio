@@ -5,6 +5,7 @@ import { getGuideBySlug, getAllGuides } from '@/lib/guides';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import StudyCallout from '@/components/StudyCallout';
 
 export async function generateStaticParams() {
   return getAllGuides().map((g) => ({ slug: g.slug }));
@@ -173,6 +174,9 @@ export default async function GuidePage({ params }) {
           <div className="prose prose-invert max-w-none">
             {renderMarkdown(guide.content)}
           </div>
+
+          {/* Étude callout — backlink interne contextuel sur chaque guide */}
+          <StudyCallout />
 
           <div className="mt-12 rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />

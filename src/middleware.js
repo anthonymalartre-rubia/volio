@@ -112,6 +112,7 @@ export async function middleware(request) {
     pathname.startsWith('/vs') ||
     pathname.startsWith('/alternative') ||
     pathname.startsWith('/comparatif') ||
+    pathname.startsWith('/etude') ||
     pathname.startsWith('/blog') ||
     pathname.startsWith('/glossaire') ||
     pathname.startsWith('/outils') ||
