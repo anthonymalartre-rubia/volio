@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Download, Mail, CheckCircle, XCircle, AlertCircle,
-  Search, Loader2, ExternalLink, Filter,
+  Search, Loader2, ExternalLink, Filter, ShieldOff, LogIn,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 
@@ -13,16 +13,19 @@ export default function AdminLeadsPage() {
   const router = useRouter();
   const supabase = getSupabase();
   const [loading, setLoading] = useState(true);
-  const [authorized, setAuthorized] = useState(false);
+  // null = checking, 'guest' = pas connecté, 'no-admin' = connecté sans admin, 'ok' = ok
+  const [authState, setAuthState] = useState(null);
+  const [currentEmail, setCurrentEmail] = useState(null);
   const [leads, setLeads] = useState([]);
   const [search, setSearch] = useState('');
   const [resourceFilter, setResourceFilter] = useState('all');
 
   useEffect(() => {
     (async () => {
-      if (!supabase) return;
+      if (!supabase) { setLoading(false); return; }
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push('/login'); return; }
+      if (!user) { setAuthState('guest'); setLoading(false); return; }
+      setCurrentEmail(user.email);
 
       const { data: profile } = await supabase
         .from('user_profiles')
@@ -30,9 +33,13 @@ export default function AdminLeadsPage() {
         .eq('id', user.id)
         .maybeSingle();
 
-      if (!profile?.is_admin) { router.push('/dashboard'); return; }
+      if (!profile?.is_admin) {
+        setAuthState('no-admin');
+        setLoading(false);
+        return;
+      }
 
-      setAuthorized(true);
+      setAuthState('ok');
       const res = await fetch('/api/admin/leads?limit=500');
       if (res.ok) {
         const data = await res.json();
@@ -81,7 +88,64 @@ export default function AdminLeadsPage() {
       </div>
     );
   }
-  if (!authorized) return null;
+
+  // Pas connecté → écran clair avec lien login
+  if (authState === 'guest') {
+    return (
+      <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
+        <div className="max-w-md w-full rounded-2xl border border-line bg-surface-card p-8 text-center">
+          <div className="w-12 h-12 mx-auto rounded-xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center mb-4">
+            <LogIn size={20} className="text-violet-300" />
+          </div>
+          <h1 className="text-xl font-bold mb-2">Connexion requise</h1>
+          <p className="text-sm text-content-secondary mb-6">
+            Cette page est réservée aux administrateurs. Connectez-vous avec un compte admin pour accéder aux leads capturés.
+          </p>
+          <Link href="/login?return=/admin/leads" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
+            <LogIn size={14} />
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Connecté mais sans droits admin → écran explicite
+  if (authState === 'no-admin') {
+    return (
+      <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
+        <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
+          <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4">
+            <ShieldOff size={20} className="text-amber-300" />
+          </div>
+          <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
+          <p className="text-sm text-content-secondary mb-2">
+            Vous êtes connecté en tant que <strong className="text-content-primary">{currentEmail}</strong>,
+            mais ce compte n&apos;a pas les droits administrateur.
+          </p>
+          <p className="text-xs text-content-tertiary mb-6 leading-relaxed">
+            Pour accéder à cette page, reconnectez-vous avec votre compte admin
+            (ex : <code>@suraya.fr</code> ou <code>@gmail.fr</code>).
+          </p>
+          <div className="flex items-center justify-center gap-2">
+            <Link href="/dashboard" className="px-4 py-2 rounded-xl border border-line text-content-secondary hover:text-content-primary hover:bg-surface-elevated text-sm font-medium transition">
+              Retour au dashboard
+            </Link>
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                router.push('/login?return=/admin/leads');
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"
+            >
+              <LogIn size={14} />
+              Changer de compte
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary p-4 sm:p-8">
