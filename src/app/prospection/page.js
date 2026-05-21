@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Search, MapPin, ArrowRight } from 'lucide-react';
-import { getAllCategories, getAllDepartments } from '@/lib/slugs';
+import { Search, MapPin, ArrowRight, Globe, Palmtree } from 'lucide-react';
+import { getAllCategories, getAllDepartments, getAllRegions } from '@/lib/slugs';
 import { B2B_GROUPS } from '@/lib/constants';
 
 export const metadata = {
@@ -17,7 +17,16 @@ export const metadata = {
 export default function ProspectionIndexPage() {
   const categories = getAllCategories();
   const departments = getAllDepartments();
+  const regions = getAllRegions();
   const groupedCategories = B2B_GROUPS;
+
+  // Regroupe les départements par région (métropole + Outre-mer séparés)
+  const metropolitanRegions = regions.filter((r) => r.key !== 'om');
+  const overseasRegion = regions.find((r) => r.key === 'om');
+
+  // Helper : retourne les départements (objets complets) d'une région
+  const deptsInRegion = (region) =>
+    departments.filter((d) => region.depts.includes(d.code));
 
   return (
     <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
@@ -84,20 +93,99 @@ export default function ProspectionIndexPage() {
           </div>
         </section>
 
-        {/* Departments */}
+        {/* Regions hub (raccourci par région — utile pour les recherches type "PACA", "Île-de-France") */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-8">Explorer par département</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-            {departments.map((dept) => (
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8 flex items-center gap-3">
+            <Globe size={24} className="text-violet-400" />
+            Explorer par région
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+            {/* On utilise restaurant comme catégorie par défaut car c'est la plus
+                recherchée — l'utilisateur peut changer ensuite */}
+            {regions.map((r) => (
               <Link
-                key={dept.slug}
-                href={`/prospection/dept/${dept.slug}`}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-zinc-300 hover:text-white transition"
+                key={r.slug}
+                href={`/prospection/restaurant/region/${r.slug}`}
+                className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm transition ${
+                  r.key === 'om'
+                    ? 'border-amber-500/30 bg-amber-500/[0.06] hover:bg-amber-500/15 text-amber-200 hover:text-white'
+                    : 'border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-zinc-300 hover:text-white'
+                }`}
               >
-                <MapPin size={12} className="text-violet-400 flex-shrink-0" />
-                <span className="truncate">{dept.code} · {dept.name}</span>
+                {r.key === 'om' ? (
+                  <Palmtree size={12} className="text-amber-400 flex-shrink-0" />
+                ) : (
+                  <MapPin size={12} className="text-violet-400 flex-shrink-0" />
+                )}
+                <span className="truncate">{r.name}</span>
+                <span className="ml-auto text-xs text-zinc-500 flex-shrink-0">{r.depts.length}</span>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Departments grouped by region — meilleure UX que la liste plate de 101 */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-8">Explorer par département</h2>
+
+          <div className="space-y-8">
+            {/* Métropole : 13 régions */}
+            {metropolitanRegions.map((region) => {
+              const regionDepts = deptsInRegion(region);
+              if (regionDepts.length === 0) return null;
+              return (
+                <div key={region.slug}>
+                  <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <MapPin size={12} />
+                    {region.name}
+                    <span className="text-zinc-500 font-normal normal-case tracking-normal text-xs">
+                      · {regionDepts.length} départements
+                    </span>
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                    {regionDepts.map((dept) => (
+                      <Link
+                        key={dept.slug}
+                        href={`/prospection/dept/${dept.slug}`}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-zinc-300 hover:text-white transition"
+                      >
+                        <span className="text-xs font-mono text-violet-400 flex-shrink-0">{dept.code}</span>
+                        <span className="truncate">{dept.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Outre-mer : section dédiée et visuellement distincte */}
+            {overseasRegion && (
+              <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.03] p-5">
+                <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Palmtree size={14} />
+                  Outre-mer (DROM)
+                  <span className="text-zinc-500 font-normal normal-case tracking-normal text-xs">
+                    · {deptsInRegion(overseasRegion).length} territoires
+                  </span>
+                </h3>
+                <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
+                  Guadeloupe, Martinique, Guyane, La Réunion, Mayotte —
+                  marchés B2B souvent ignorés mais avec une concurrence plus faible.
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                  {deptsInRegion(overseasRegion).map((dept) => (
+                    <Link
+                      key={dept.slug}
+                      href={`/prospection/dept/${dept.slug}`}
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] hover:bg-amber-500/15 hover:border-amber-500/40 text-sm text-amber-200 hover:text-white transition"
+                    >
+                      <span className="text-xs font-mono text-amber-400 flex-shrink-0">{dept.code}</span>
+                      <span className="truncate">{dept.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 

@@ -1,9 +1,88 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Printer, Zap, Download } from 'lucide-react';
+import { ArrowLeft, Printer, Zap, Download, X } from 'lucide-react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+
+/**
+ * Bouton "Télécharger en PDF" qui ouvre la dialog d'impression du navigateur.
+ *
+ * Au premier clic : affiche une petite modale d'instruction (la 1re fois
+ * seulement, mémorisée en localStorage) — beaucoup d'utilisateurs ne savent
+ * pas que "Imprimer → Sauvegarder en PDF" existe.
+ *
+ * Pourquoi pas une route serveur via Puppeteer ?
+ *   → @sparticuz/chromium dépasse les 50 MB du bundle Vercel free tier
+ *     et plante en prod. La solution browser est universelle et gratuite.
+ */
+function PrintToPdfButton() {
+  const [showHint, setShowHint] = useState(false);
+
+  const handleClick = () => {
+    const hintSeen = typeof window !== 'undefined' && localStorage.getItem('print-pdf-hint-seen') === '1';
+    if (!hintSeen) {
+      setShowHint(true);
+    } else {
+      window.print();
+    }
+  };
+
+  const confirmAndPrint = () => {
+    if (typeof window !== 'undefined') localStorage.setItem('print-pdf-hint-seen', '1');
+    setShowHint(false);
+    // Délai court pour laisser la modale se fermer avant la dialog print
+    setTimeout(() => window.print(), 100);
+  };
+
+  return (
+    <>
+      <button
+        onClick={handleClick}
+        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"
+      >
+        <Download size={14} />
+        Télécharger en PDF
+      </button>
+
+      {/* Hint modale (1re fois seulement) */}
+      {showHint && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm no-print" onClick={() => setShowHint(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="max-w-md w-full bg-surface-card border border-line rounded-2xl p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-lg bg-violet-500/15 border border-violet-500/30 flex items-center justify-center">
+                  <Printer size={16} className="text-violet-300" />
+                </div>
+                <h3 className="font-bold text-content-primary">Sauvegarder en PDF</h3>
+              </div>
+              <button onClick={() => setShowHint(false)} className="text-content-tertiary hover:text-content-primary" aria-label="Fermer">
+                <X size={18} />
+              </button>
+            </div>
+            <p className="text-sm text-content-secondary leading-relaxed mb-4">
+              Une dialog d&apos;impression va s&apos;ouvrir. Dans le champ <strong className="text-content-primary">Destination</strong>,
+              choisissez <strong className="text-content-primary">&laquo; Enregistrer au format PDF &raquo;</strong> (Mac &amp; Windows).
+            </p>
+            <div className="rounded-lg bg-surface-elevated p-3 text-xs text-content-tertiary mb-4 font-mono">
+              💡 Raccourci clavier : <kbd className="px-1.5 py-0.5 rounded bg-surface-base">⌘ + P</kbd> (Mac) / <kbd className="px-1.5 py-0.5 rounded bg-surface-base">Ctrl + P</kbd> (Windows)
+            </div>
+            <div className="flex items-center gap-2 justify-end">
+              <button onClick={() => setShowHint(false)} className="px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-content-primary transition">
+                Annuler
+              </button>
+              <button onClick={confirmAndPrint} className="px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition inline-flex items-center gap-2">
+                <Printer size={14} />
+                Ouvrir la dialog
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 
 /**
  * Layout commun pour toutes les pages de contenu des ressources :
@@ -53,26 +132,7 @@ export default function ResourceContentLayout({
             Retour à la description
           </Link>
 
-          {printable && (
-            <div className="flex items-center gap-2">
-              <a
-                href={`/api/ressources/${resource.slug}/pdf`}
-                download
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"
-              >
-                <Download size={14} />
-                Télécharger le PDF
-              </a>
-              <button
-                onClick={() => window.print()}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-line text-content-secondary hover:text-content-primary hover:bg-surface-elevated text-sm font-medium transition"
-                title="Aperçu impression / sauvegarde rapide (Cmd+P)"
-              >
-                <Printer size={14} />
-                Imprimer
-              </button>
-            </div>
-          )}
+          {printable && <PrintToPdfButton />}
         </div>
 
         {/* Contenu */}
