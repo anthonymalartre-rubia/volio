@@ -731,6 +731,225 @@ const CATEGORY_OVERRIDES = {
   'exploitation agricole': {
     pitchHook: 'Bonjour {first_name}, {company} produit du {custom.production}. Vous vendez à la coop ou en circuit court ?',
   },
+
+  // ───── Hôtellerie & Restauration (+5) ─────────────────
+  'brasserie': {
+    marketSize: '42 000 brasseries en France (cafés-brasseries servant des repas légers + bière à pression), modèle particulièrement résilient post-COVID.',
+    pitchHook: 'Bonjour {first_name}, en brasserie le volume midi pèse souvent 60 % du CA. Comment {company} gère le flux pause-déj des bureaux du quartier ?',
+    painPoints: [
+      'Forte concurrence (1 brasserie tous les 200 m en zone urbaine)',
+      'Pression sur la marge bière (Heineken, Kronenbourg)',
+      'Saisonnalité terrasse → -25 % de CA en hiver',
+    ],
+  },
+  'traiteur': {
+    marketSize: '11 000 entreprises de traiteur en France (CHR + événementiel + livraison), CA moyen 480 k€.',
+    pitchHook: 'Bonjour {first_name}, en traiteur événementiel, septembre = pic mariage et CE. Vous démarchez quand pour les entreprises clientes ?',
+    seasonality: {
+      peak: 'mai-septembre (mariages) + novembre-décembre (CE fin d\'année)',
+      low: 'janvier-mars',
+      comment: 'Réservations à 6-9 mois d\'avance : prospectez en janvier-mars pour la saison estivale.',
+    },
+  },
+  'boulangerie pâtisserie': {
+    marketSize: '32 000 boulangeries-pâtisseries artisanales en France (Confédération de la Boulangerie 2024).',
+    pitchHook: 'Bonjour {first_name}, en boulangerie le coût matière (farine, beurre) a explosé. Comment {company} maintient ses marges ?',
+    painPoints: [
+      'Coûts énergie (+40 % depuis 2022) → 8 000 fermetures en 2 ans',
+      'Concurrence des chaînes (Marie Blachère, Paul, Brioche Dorée)',
+      'Difficulté à recruter des boulangers (15 000 postes ouverts)',
+    ],
+    bestApproach: {
+      channel: 'Téléphone ou visite après-midi (14h-16h)',
+      timing: 'Tout au long de l\'année',
+      why: 'Les boulangers sont en production de nuit/matin. L\'après-midi est leur seul créneau de "bureau".',
+    },
+  },
+  'pizzeria': {
+    marketSize: '21 000 pizzerias en France, marché ultra-concurrentiel avec montée du livraison (Uber Eats, Just Eat).',
+    pitchHook: 'Bonjour {first_name}, en pizzeria les commissions Uber/Just Eat pèsent 25-30 %. Comment {company} équilibre sur place vs livraison ?',
+  },
+  'café': {
+    marketSize: '32 000 cafés en France (cafés purs sans restauration), modèle économique tendu — 30 % de fermetures depuis 2010.',
+    pitchHook: 'Bonjour {first_name}, en café indépendant la diversification est clé. {company} a déjà ajouté restauration, événementiel ou speciality coffee ?',
+  },
+
+  // ───── Commerce & Distribution (+6) ───────────────────
+  'opticien': {
+    marketSize: '13 500 magasins d\'optique en France, dont 60 % indépendants. CA moyen 850 k€, marge brute 65-75 %.',
+    pitchHook: 'Bonjour {first_name}, en optique le 100 % santé a changé les marges. Comment {company} compense sur l\'optique premium ?',
+    kpis: [
+      { label: 'CA moyen magasin', value: '850 k€', hint: 'opticien indépendant' },
+      { label: 'Panier moyen', value: '420 €', hint: 'lunettes + verres' },
+      { label: 'Part 100 % santé', value: '45 %', hint: 'des ventes 2024' },
+      { label: 'Marge brute', value: '65-75 %', hint: 'avant charges' },
+    ],
+  },
+  'fleuriste': {
+    marketSize: '14 000 fleuristes indépendants en France, marché de 1,3 Md€ tiré par les événements et l\'abonnement.',
+    pitchHook: 'Bonjour {first_name}, en fleuriste les pics (Saint-Valentin, fête des mères) font 40 % du CA. Comment {company} démarche les CE et entreprises ?',
+  },
+  'bijouterie': {
+    pitchHook: 'Bonjour {first_name}, en bijouterie le marché des fiançailles tient la baraque. Comment {company} attire la cible jeune (alliances, occasions) ?',
+  },
+  'librairie': {
+    marketSize: '3 200 librairies indépendantes en France (Syndicat de la Librairie Française) + 5 000 points de vente livre.',
+    pitchHook: 'Bonjour {first_name}, en librairie indépendante l\'événementiel (signatures, rencontres) fait la différence. Comment vous trouvez les auteurs ?',
+  },
+  'supermarché': {
+    pitchHook: 'Bonjour {first_name}, je vois que {company} est sur le bassin {custom.zone}. Vous bossez avec des producteurs locaux ou tout via la centrale ?',
+  },
+  'jardinerie': {
+    pitchHook: 'Bonjour {first_name}, en jardinerie le pic mars-juin fait 60 % du CA. Comment {company} maintient l\'animation hors saison ?',
+  },
+
+  // ───── Automobile & Transport (+4) ────────────────────
+  'concessionnaire automobile': {
+    marketSize: '4 500 concessions automobiles en France (CNPA 2024), CA moyen 18 M€, en pleine transition vers l\'électrique.',
+    pitchHook: 'Bonjour {first_name}, en concession la VN baisse mais le VO et l\'après-vente compensent. Comment {company} équilibre les 3 piliers ?',
+  },
+  'contrôle technique': {
+    marketSize: '6 800 centres de contrôle technique en France (UTAC OTC), réglementé et stable.',
+    pitchHook: 'Bonjour {first_name}, en CT le marché est saturé. Comment {company} se différencie sur la fidélisation (rappels SMS, etc.) ?',
+  },
+  'auto-école': {
+    marketSize: '11 700 auto-écoles en France, marché en mutation (concurrence en ligne : Ornikar, En Voiture Simone).',
+    pitchHook: 'Bonjour {first_name}, en auto-école la pression Ornikar / En Voiture Simone est réelle. Comment {company} attire les jeunes 18-25 ?',
+  },
+  'carrosserie': {
+    pitchHook: 'Bonjour {first_name}, en carrosserie les contrats assureurs représentent souvent 70 % du CA. Comment {company} négocie les bordereaux ?',
+  },
+
+  // ───── Santé & Bien-être (+4) ─────────────────────────
+  'kinésithérapeute': {
+    marketSize: '93 000 kinésithérapeutes en France, 75 % en libéral (Ordre des MK 2024).',
+    pitchHook: 'Bonjour {first_name}, en kiné libéral les délais RDV explosent. Comment {company} gère la prise de rendez-vous et la diversification (sport, rééducation) ?',
+    persona: {
+      titles: ['Kinésithérapeute libéral', 'Associé cabinet', 'Coordinateur'],
+      decisionMaker: 'le praticien lui-même en libéral',
+      painPoint: 'agenda saturé, difficulté à dégager du temps admin',
+    },
+  },
+  'ostéopathe': {
+    marketSize: '36 000 ostéopathes en France (Registre des Ostéopathes 2024), profession en très forte croissance (+8 % par an).',
+    pitchHook: 'Bonjour {first_name}, en ostéo le marché est saturé en ville. Comment {company} se différencie (sport, pédiatrie, animaux) ?',
+  },
+  'ophtalmologue': {
+    pitchHook: 'Bonjour Docteur {last_name}, les délais RDV ophtalmo sont de 50+ jours en moyenne. Comment {company} gère les flux et la délégation orthoptiste ?',
+  },
+  'maison de retraite': {
+    marketSize: '7 500 EHPAD en France (DREES 2024), secteur en tension avec rapport Castex 2026.',
+    pitchHook: 'Bonjour {first_name}, en EHPAD le taux d\'occupation et le recrutement soignant sont vitaux. Comment {company} se positionne sur ces 2 fronts ?',
+  },
+
+  // ───── BTP & Construction (+6) ────────────────────────
+  'électricien': {
+    marketSize: '78 000 entreprises d\'électricité du bâtiment en France, dont 92 % de TPE (CAPEB).',
+    pitchHook: 'Bonjour {first_name}, avec MaPrimeRénov\' et la transition IRVE (bornes), {company} a des gros chantiers en vue ?',
+    painPoints: [
+      'Pénurie main d\'œuvre qualifiée (35 000 postes ouverts)',
+      'Hausse coûts cuivre et composants',
+      'Concurrence des chaînes (Sogemat, Rexel direct chantier)',
+    ],
+  },
+  'menuisier': {
+    marketSize: '45 000 entreprises de menuiserie en France (charpente + menuiserie intérieure).',
+    pitchHook: 'Bonjour {first_name}, en menuiserie pose vs fabrication, comment {company} équilibre les 2 activités ?',
+  },
+  'peintre en bâtiment': {
+    pitchHook: 'Bonjour {first_name}, en peinture bâtiment le pic est mars-octobre. Comment {company} optimise les chantiers hivernaux (intérieur) ?',
+  },
+  'paysagiste': {
+    pitchHook: 'Bonjour {first_name}, en paysagiste l\'entretien récurrent (B2B copros) est plus rentable que le création (B2C). Comment {company} équilibre ?',
+    seasonality: {
+      peak: 'mars-octobre (création + entretien)',
+      low: 'novembre-février',
+      comment: 'Hiver = chiffrage et signature de contrats annuels copros. Prospectez en décembre.',
+    },
+  },
+  'couvreur': {
+    pitchHook: 'Bonjour {first_name}, en couverture les tempêtes ouvrent un pic immédiat de demandes. Comment {company} prépare ses équipes intervention ?',
+  },
+  'serrurier': {
+    pitchHook: 'Bonjour {first_name}, en serrurerie B2B (copros, syndics) le contrat de maintenance est l\'or. Comment {company} démarche les syndics ?',
+  },
+
+  // ───── Services aux entreprises (+5) ──────────────────
+  'notaire': {
+    marketSize: '17 000 notaires en France répartis dans 6 800 offices (CSN 2024).',
+    pitchHook: 'Bonjour Maître {last_name}, en notariat la digitalisation des actes change le métier. Comment {company} attire les nouveaux clients (jeunes acquéreurs) ?',
+    persona: {
+      titles: ['Notaire associé', 'Notaire individuel', 'Clerc principal'],
+      decisionMaker: 'notaire titulaire ou associé senior',
+      painPoint: 'transmission/installation difficile, digitalisation des actes, baisse volume transactions',
+    },
+  },
+  'cabinet de conseil': {
+    pitchHook: 'Bonjour {first_name}, en conseil le sourcing client = sang du business. Comment {company} équilibre référencements grands comptes et new business ?',
+  },
+  'agence de communication': {
+    pitchHook: 'Bonjour {first_name}, en agence com le cycle commercial est long. Comment {company} génère des leads qualifiés au-delà du bouche-à-oreille ?',
+  },
+  'agence d\'intérim': {
+    pitchHook: 'Bonjour {first_name}, en intérim la concurrence Adecco/Manpower est rude. Comment {company} se différencie sur les profils pénuriques (BTP, industrie) ?',
+  },
+  'formation professionnelle': {
+    pitchHook: 'Bonjour {first_name}, post-réforme CPF 2024 le marché s\'est durci. Comment {company} compense la baisse des inscriptions CPF ?',
+  },
+
+  // ───── Immobilier (+2) ────────────────────────────────
+  'promoteur immobilier': {
+    marketSize: '12 000 promoteurs immobiliers en France (FPI 2024), marché en correction -32 % depuis 2022.',
+    pitchHook: 'Bonjour {first_name}, en promotion la crise 2023-2024 a redistribué les cartes. Comment {company} sécurise son foncier pour 2026-2027 ?',
+  },
+  'constructeur de maisons': {
+    pitchHook: 'Bonjour {first_name}, en CMI le marché est en chute libre (-40 % de mises en chantier 2024). Comment {company} adapte son catalogue ?',
+  },
+
+  // ───── Industrie & Artisanat (+2) ─────────────────────
+  'photographe': {
+    pitchHook: 'Bonjour {first_name}, en photo pro (mariage, corporate, produit), comment {company} équilibre le volume saisonnier et les missions corporate plus rentables ?',
+  },
+  'ébéniste': {
+    pitchHook: 'Bonjour {first_name}, en ébénisterie sur-mesure le bouche-à-oreille fonctionne. Mais pour les architectes d\'intérieur prescripteurs, comment {company} les démarche ?',
+  },
+
+  // ───── Finance & Assurance (+1) ───────────────────────
+  'assurance': {
+    pitchHook: 'Bonjour {first_name}, en assurance B2B les renouvellements pro = moments clés. Comment {company} identifie les entreprises à 6 mois de l\'échéance ?',
+  },
+
+  // ───── Éducation & Culture (+3) ───────────────────────
+  'crèche': {
+    marketSize: '14 000 crèches en France (CAF 2024) — micro-crèches privées en forte croissance (+7 % par an).',
+    pitchHook: 'Bonjour {first_name}, en micro-crèche la course aux familles + au personnel sont les 2 défis. Comment {company} se positionne ?',
+  },
+  'école de musique': {
+    pitchHook: 'Bonjour {first_name}, en école de musique la fidélisation des élèves (cours hebdo) est tout. Comment {company} démarche les écoles publiques pour les interventions ?',
+  },
+  'école de langues': {
+    pitchHook: 'Bonjour {first_name}, en école de langues B2B le marché entreprise vaut 10x le B2C. Comment {company} démarche les DRH des PME ?',
+  },
+
+  // ───── Technologie & Digital (+2) ─────────────────────
+  'agence digitale': {
+    pitchHook: 'Bonjour {first_name}, en agence digital le coût acquisition par référencement payant flambe. Comment {company} génère des leads outbound ?',
+  },
+  'développeur web': {
+    pitchHook: 'Bonjour {first_name}, en freelance dev les missions longues TJM 600+ sont plus rares en 2024. Comment {company} sécurise son carnet ?',
+  },
+
+  // ───── Agriculture & Alimentation (+3) ────────────────
+  'boucherie': {
+    marketSize: '17 000 boucheries artisanales en France, marché en érosion (-2 % par an) face aux GMS.',
+    pitchHook: 'Bonjour {first_name}, en boucherie le circuit court éleveur (Label Rouge, bio) est l\'arme contre les GMS. Comment {company} sourcing ?',
+  },
+  'fromagerie': {
+    pitchHook: 'Bonjour {first_name}, en fromagerie spécialisée AOP / AOC = différenciation reine. Comment {company} démarche les restaurants gastronomiques ?',
+  },
+  'chocolaterie': {
+    pitchHook: 'Bonjour {first_name}, en chocolaterie artisanale Noël + Pâques font 60 % du CA. Comment {company} étoffe les cadeaux corporate hors saison ?',
+  },
 };
 
 /**

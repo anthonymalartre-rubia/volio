@@ -154,13 +154,234 @@ const DEPT_DATA = {
   '976': { population: '300 k', topCities: ['Mamoudzou', 'Koungou', 'Dzaoudzi'], density: 'urbain en croissance', keySectors: ['BTP', 'Pêche', 'Services publics'], economy: { tag: 'Mayotte', comment: 'Plus jeune département français + forte croissance démographique.' }, prospectingTip: 'BTP et services publics. Marché en construction.' },
 };
 
+// Enrichissements complémentaires : entreprises emblématiques + note éco récente.
+// Mergé avec DEPT_DATA via getDeptData(). Format minimaliste, focus top 50 dépts.
+const DEPT_ENRICHMENTS = {
+  // ───── Île-de-France ────────────────
+  '75': {
+    notableCompanies: ['LVMH', 'BNP Paribas', 'Sanofi', 'Total Energies', 'Société Générale'],
+    economicNote: 'Paris concentre 13 sièges du CAC 40 + le plus gros écosystème startup d\'Europe continentale.',
+  },
+  '92': {
+    notableCompanies: ['L\'Oréal', 'Renault', 'Vinci', 'Bouygues', 'Engie'],
+    economicNote: 'La Défense = 3,5 M de m² de bureaux + 500 000 m² de bureaux à Boulogne, Issy et Levallois.',
+  },
+  '78': {
+    notableCompanies: ['Renault Technocentre', 'Bouygues Construction', 'Yvelines Numériques'],
+    economicNote: 'Versailles + Saint-Quentin-en-Yvelines = pôle automobile (Renault, PSA) + tech.',
+  },
+  '93': {
+    notableCompanies: ['SFR (Saint-Denis)', 'Generali', 'Veolia', 'BNP Paribas Securities'],
+    economicNote: 'Saint-Denis Pleyel = nouveau hub tertiaire post-JO 2024, prix immobiliers en hausse.',
+  },
+  '94': {
+    notableCompanies: ['Servier (Suresnes)', 'Auchan Retail', 'Sodexo HQ'],
+    economicNote: 'Rungis MIN brasse 24 Md€/an de produits frais : 200 000 visiteurs par jour.',
+  },
+  '95': {
+    notableCompanies: ['Roissy hub (FedEx, DHL)', 'Air France Cargo'],
+    economicNote: 'Roissy-CDG = 2e aéroport européen, 87 000 emplois directs.',
+  },
+  '77': {
+    notableCompanies: ['Disneyland Paris', 'Pomona', 'Veolia Eau'],
+    economicNote: 'Disneyland = 1er employeur privé d\'Île-de-France hors Paris (17 000 emplois).',
+  },
+  '91': {
+    notableCompanies: ['Sanofi (Massy)', 'CEA', 'École Polytechnique', 'EDF R&D'],
+    economicNote: 'Paris-Saclay = plus grand cluster scientifique européen, 13 % de la R&D française.',
+  },
+
+  // ───── Auvergne-Rhône-Alpes ────────
+  '69': {
+    notableCompanies: ['Sanofi Pasteur', 'Crédit Agricole CIB', 'Renault Trucks', 'BioMérieux', 'OL Groupe'],
+    economicNote: 'Lyon Part-Dieu = 2e quartier d\'affaires français + Vaise (numérique) + Gerland (biotechs).',
+  },
+  '38': {
+    notableCompanies: ['STMicroelectronics', 'Schneider Electric', 'Soitec', 'Atos'],
+    economicNote: 'Grenoble = 1er pôle français nanotech + Schneider Electric HQ.',
+  },
+  '63': {
+    notableCompanies: ['Michelin', 'Limagrain (semences)', 'Volvic'],
+    economicNote: 'Michelin = 12 000 emplois directs + écosystème pneu mondial.',
+  },
+  '74': {
+    notableCompanies: ['Salomon', 'Dynastar', 'Mavic'],
+    economicNote: 'Haute-Savoie = 100 000 frontaliers en Suisse + cluster sport outdoor.',
+  },
+  '73': {
+    notableCompanies: ['Tefal', 'Rossignol', 'Compagnie des Alpes'],
+    economicNote: 'Capitale française du ski (Courchevel, Méribel, Val Thorens).',
+  },
+
+  // ───── PACA ─────────────────────────
+  '13': {
+    notableCompanies: ['CMA CGM (Marseille)', 'Airbus Helicopters', 'Gemalto (Aix)', 'STMicro Rousset'],
+    economicNote: 'Marseille-Provence = 1er port français + Aix = capitale tertiaire régionale.',
+  },
+  '06': {
+    notableCompanies: ['Amadeus', 'IBM (Nice)', 'Schneider Electric (Sophia)', 'Cisco France'],
+    economicNote: 'Sophia Antipolis = plus grande technopole d\'Europe, 36 000 emplois tech.',
+  },
+  '83': {
+    notableCompanies: ['Naval Group (Toulon)', 'CNIM', 'Marine Nationale'],
+    economicNote: 'Toulon = 1er port militaire français, 22 000 marins.',
+  },
+  '84': {
+    notableCompanies: ['Pernod Ricard (Avignon)', 'Coopératives viticoles', 'McCormick France'],
+    economicNote: 'Vaucluse = 5e vignoble français + Festival d\'Avignon (1,5 M de visiteurs).',
+  },
+
+  // ───── Nouvelle-Aquitaine ──────────
+  '33': {
+    notableCompanies: ['CDiscount', 'Bordeaux Métropole Mobilité', 'Dassault Aviation', 'Thales Avionics'],
+    economicNote: 'Bordeaux = 4e métropole pour les sièges sociaux régionaux + cluster aérospatial.',
+  },
+  '64': {
+    notableCompanies: ['TotalEnergies (Pau)', 'Safran Helicopter Engines', 'Air Liquide'],
+    economicNote: 'Pau = capitale énergie française + Bayonne-Anglet-Biarritz = pôle tertiaire basque.',
+  },
+  '17': {
+    notableCompanies: ['Léa Nature', 'Naval Group (Rochefort)', 'Sernam'],
+    economicNote: 'La Rochelle = 1er port français pêche frais + base sous-marine historique.',
+  },
+  '79': {
+    notableCompanies: ['MAIF', 'MAAF', 'MACIF', 'Inter Mutuelles Assistance'],
+    economicNote: 'Niort = capitale française du mutualisme : 15 000 emplois directs.',
+  },
+  '16': {
+    notableCompanies: ['Hennessy (Cognac)', 'Martell', 'Rémy Martin', 'Leroy Somer'],
+    economicNote: 'Cognac = 70 % des exports de spiritueux français (2,9 Md€).',
+  },
+
+  // ───── Occitanie ────────────────────
+  '31': {
+    notableCompanies: ['Airbus', 'CNES', 'Continental Automotive', 'Pierre Fabre'],
+    economicNote: 'Toulouse = capitale européenne aéronautique + Toulouse Space City.',
+  },
+  '34': {
+    notableCompanies: ['Dell Technologies', 'Sanofi Pasteur Mérieux', 'Sopra Steria', 'Murex'],
+    economicNote: 'Montpellier = pôle French Tech + cluster eHealth + 1ère croissance démographique FR.',
+  },
+  '30': {
+    notableCompanies: ['Orano (Marcoule)', 'Royal Canin (Aimargues)', 'Vinci Construction'],
+    economicNote: 'Gard = patrimoine UNESCO (Pont du Gard) + filière nucléaire civile.',
+  },
+
+  // ───── Pays de la Loire ─────────────
+  '44': {
+    notableCompanies: ['Airbus (Saint-Nazaire)', 'Chantiers de l\'Atlantique', 'BNP Paribas Cardif', 'Capgemini'],
+    economicNote: 'Nantes = 6e métropole française + French Tech Atlantique + chantiers navals leader mondial.',
+  },
+  '49': {
+    notableCompanies: ['Bouvet-Ladubay', 'Briochin (Cholet)', 'Eram', 'Cointreau'],
+    economicNote: 'Angers = capitale française horticulture + Cholet = cluster textile-cuir.',
+  },
+  '85': {
+    notableCompanies: ['Puy du Fou', 'Sodebo (Saint-Georges-de-Montaigu)', 'Beneteau'],
+    economicNote: 'Puy du Fou = 2,8 M de visiteurs/an, n°1 français parcs à thème en CA.',
+  },
+
+  // ───── Bretagne ─────────────────────
+  '35': {
+    notableCompanies: ['Crédit Mutuel Arkéa', 'Bridor', 'Yves Rocher', 'CRH (Cybersécurité)'],
+    economicNote: 'Rennes = pôle cybersécurité (Cyber Campus) + IUT Lannion + INRIA.',
+  },
+  '29': {
+    notableCompanies: ['Bigard', 'Doux', 'Naval Group (Brest)', 'Thales'],
+    economicNote: 'Finistère = 1er pôle français pêche/aquaculture + Brest = base navale nucléaire.',
+  },
+  '56': {
+    notableCompanies: ['Cooperl Arc Atlantique', 'Michelin (Vannes)', 'Briochin'],
+    economicNote: 'Lorient = capitale mondiale course au large + Vannes = pôle tertiaire dynamique.',
+  },
+  '22': {
+    notableCompanies: ['Nokia (Lannion)', 'Orange Lannion', 'Synopsys'],
+    economicNote: 'Lannion = berceau historique télécoms français (Centre Lannion Telecom).',
+  },
+
+  // ───── Hauts-de-France ──────────────
+  '59': {
+    notableCompanies: ['Auchan', 'Decathlon', 'Bonduelle', 'Boulanger', 'Kiabi'],
+    economicNote: 'Lille = 4e métropole française + Eurométropole avec Tournai (Belgique) + n°1 distribution.',
+  },
+  '62': {
+    notableCompanies: ['Eurotunnel (Calais)', 'Le Touquet Tourisme', 'Bonduelle (Renescure)'],
+    economicNote: 'Calais = 1er port passagers d\'Europe continentale (10 M de passagers/an).',
+  },
+  '60': {
+    notableCompanies: ['Chanel (Compiègne)', 'L\'Oréal Chevilly', 'Yves Rocher (La Croixière)'],
+    economicNote: 'Oise = cluster cosmétique majeur (Chanel, L\'Oréal) + proximité Paris.',
+  },
+
+  // ───── Grand Est ────────────────────
+  '67': {
+    notableCompanies: ['Parlement Européen', 'Conseil de l\'Europe', 'Lilly France', 'Eurométropole de Strasbourg'],
+    economicNote: 'Strasbourg = 2e siège institutionnel UE après Bruxelles + cluster pharma Stratéus.',
+  },
+  '68': {
+    notableCompanies: ['PSA Mulhouse', 'Liebherr', 'Solvay (Tavaux)', 'Clemessy'],
+    economicNote: 'PSA Mulhouse = 8 000 emplois + frontière trinationale Allemagne-Suisse.',
+  },
+  '51': {
+    notableCompanies: ['Moët & Chandon', 'Veuve Clicquot', 'Mumm', 'Pommery', 'Roederer'],
+    economicNote: 'Champagne AOC = 5,7 Md€ de CA + 30 000 emplois directs dans la filière.',
+  },
+  '57': {
+    notableCompanies: ['Smart (Hambach)', 'PSA Trémery', 'ArcelorMittal'],
+    economicNote: '110 000 frontaliers au Luxembourg = pouvoir d\'achat moyen le plus élevé hors IDF.',
+  },
+
+  // ───── Normandie ────────────────────
+  '76': {
+    notableCompanies: ['TotalEnergies (raffinerie Gonfreville)', 'Sanofi (Le Trait)', 'ExxonMobil'],
+    economicNote: 'Le Havre = 1er port FR conteneurs + 2e pôle pétrochimique français.',
+  },
+  '14': {
+    notableCompanies: ['Renault Truks (Blainville)', 'Bosch', 'NXP Semiconductors'],
+    economicNote: 'Caen = 3e pôle français microélectronique + tourisme mémoriel D-Day (5 M de visiteurs/an).',
+  },
+  '27': {
+    notableCompanies: ['Glaxosmithkline (Évreux)', 'Sanofi', 'Renault Cléon'],
+    economicNote: 'Eure = cluster cosmétique Cosmetic Valley + plus grande usine pharma Sanofi (Le Trait).',
+  },
+
+  // ───── Centre-Val de Loire ──────────
+  '37': {
+    notableCompanies: ['Cosmetic Valley HQ', 'Skis Rossignol', 'Michelin (Joué-lès-Tours)'],
+    economicNote: 'Tours = capitale Loire + cluster pharma-cosmétique avec Pierre Fabre, Sanofi, Ipsen.',
+  },
+  '45': {
+    notableCompanies: ['Hutchinson', 'IBM France (Orléans)', 'Servier (Gidy)'],
+    economicNote: 'Orléans = pôle logistique sud Paris + cluster pharma (Servier, Boehringer).',
+  },
+
+  // ───── Bourgogne-Franche-Comté ──────
+  '21': {
+    notableCompanies: ['Boivin (Dijon)', 'Maille', 'Amora', 'Édulis'],
+    economicNote: 'Dijon = capitale gastronomique (Cité Internationale de la Gastronomie) + Côtes de Beaune.',
+  },
+  '25': {
+    notableCompanies: ['PSA Sochaux', 'Alstom (Belfort)', 'Carrefour Logistique'],
+    economicNote: 'PSA Sochaux = berceau historique Peugeot + cluster microtechnique Besançon.',
+  },
+
+  // ───── DROM ─────────────────────────
+  '974': {
+    notableCompanies: ['Bourbon Tourisme', 'CMA CGM Réunion', 'Cilam (cosmétique)'],
+    economicNote: 'La Réunion = bassin économique DROM le plus dynamique, croissance numérique et touristique forte.',
+  },
+};
+
 /**
  * Récupère les données enrichies pour un dept (code à 2 ou 3 caractères).
- * Renvoie null si pas de data.
+ * Renvoie null si pas de data, sinon merge DEPT_DATA + DEPT_ENRICHMENTS.
  */
 export function getDeptData(deptCode) {
   if (!deptCode) return null;
-  return DEPT_DATA[deptCode] || null;
+  const base = DEPT_DATA[deptCode];
+  if (!base) return null;
+  const enrich = DEPT_ENRICHMENTS[deptCode];
+  return enrich ? { ...base, ...enrich } : base;
 }
 
-export { DEPT_DATA };
+export { DEPT_DATA, DEPT_ENRICHMENTS };
