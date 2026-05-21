@@ -85,12 +85,12 @@ export async function POST(request) {
     }
 
     // Pour les ressources direct (calculateurs en ligne) : pas de capture,
-    // on retourne juste l'URL.
+    // on retourne directement l'URL du calculateur.
     if (resource.deliveryMode === 'direct') {
       return NextResponse.json({
         ok: true,
         message: 'Accès direct',
-        url: `/ressources/${resource.slug}`,
+        url: `/ressources/${resource.slug}/utiliser`,
       });
     }
 

@@ -109,15 +109,18 @@ export default async function sitemap({ id }) {
       })),
     ];
 
-    // Ressources (hub + 8 lead magnets)
+    // Ressources : hub + 8 landing pages + 8 pages de contenu/calculateur
     const ressources = [
       { url: `${baseUrl}/ressources`, priority: 0.9, changeFrequency: 'weekly', lastModified: now },
-      ...getAllResources().map((r) => ({
-        url: `${baseUrl}/ressources/${r.slug}`,
-        priority: 0.8,
-        changeFrequency: 'monthly',
-        lastModified: now,
-      })),
+      ...getAllResources().flatMap((r) => {
+        const detailSuffix = r.deliveryMode === 'direct' ? 'utiliser' : 'telecharger';
+        return [
+          // Landing page commerciale
+          { url: `${baseUrl}/ressources/${r.slug}`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
+          // Page de contenu/calculateur (réelle valeur pour SEO)
+          { url: `${baseUrl}/ressources/${r.slug}/${detailSuffix}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
+        ];
+      }),
     ];
 
     return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...ressources, ...blog, ...glossary, ...guides];
