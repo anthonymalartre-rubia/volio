@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
+import ApiKeysManager from '@/components/ApiKeysManager';
+import { Key } from 'lucide-react';
 
 // ─── Composants UI réutilisables (refonte settings UX) ──────────────────
 function SectionHeader({ icon, title, subtitle }) {
@@ -942,6 +944,21 @@ export default function SettingsPage() {
                     );
                   })}
                 </div>
+              </div>
+            </section>
+
+            {/* ─── API publique ──────────────────────────────── */}
+            <section id="api" className="scroll-mt-20 mb-8">
+              <SectionHeader
+                icon={<Key className="h-5 w-5 text-violet-500" />}
+                title="API & intégrations"
+                subtitle="Clés API pour Zapier, Make et intégrations custom."
+              />
+              <div className="mt-4 rounded-2xl border border-line bg-surface-card p-5">
+                <ApiKeysManager />
+              </div>
+              <div className="mt-3 text-sm text-content-tertiary">
+                <a href="/api" className="text-violet-400 hover:underline">📖 Documentation complète de l&apos;API v1 →</a>
               </div>
             </section>
 
