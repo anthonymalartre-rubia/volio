@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, Menu, Loader2, Sun, Moon, Globe } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
+import NotificationBell from '@/components/NotificationBell';
 
 export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching }) {
   const router = useRouter();
@@ -79,6 +80,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           >
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
+          {user && <NotificationBell />}
           {user && (
             <>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-line">

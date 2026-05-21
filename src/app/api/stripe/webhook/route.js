@@ -10,6 +10,7 @@ import {
 import { PLANS } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { createNotification, NOTIF_TYPES } from '@/lib/notifications';
 
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
@@ -126,6 +127,14 @@ export async function POST(request) {
           sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
             .catch((err) => console.error('[webhook] Payment email failed:', err));
         }
+        // Notification in-app
+        createNotification(userId, {
+          type: NOTIF_TYPES.PAYMENT_SUCCESS,
+          title: `Bienvenue sur le plan ${PLANS[planId]?.name || planId} !`,
+          body: 'Votre paiement a été confirmé. Tous les nouveaux quotas sont actifs immédiatement.',
+          link: '/dashboard',
+          metadata: { plan_id: planId, session_id: session.id },
+        }).catch((err) => console.error('[webhook] Notif success failed:', err));
         break;
       }
 
@@ -182,6 +191,14 @@ export async function POST(request) {
             sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
               .catch((err) => console.error('[webhook] Plan change email failed:', err));
           }
+          // Notification in-app
+          createNotification(userId, {
+            type: NOTIF_TYPES.PLAN_CHANGED,
+            title: `Plan changé : ${PLANS[profile.plan]?.name || profile.plan} → ${PLANS[newPlanId]?.name || newPlanId}`,
+            body: 'Vos quotas ont été mis à jour. Le changement est effectif immédiatement.',
+            link: '/settings#plan',
+            metadata: { old_plan: profile.plan, new_plan: newPlanId },
+          }).catch((err) => console.error('[webhook] Notif plan change failed:', err));
         }
         break;
       }
@@ -219,6 +236,13 @@ export async function POST(request) {
           sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
             .catch((err) => console.error('[webhook] Cancellation email failed:', err));
         }
+        // Notification in-app
+        createNotification(userId, {
+          type: NOTIF_TYPES.SUBSCRIPTION_CANCELLED,
+          title: 'Abonnement annulé',
+          body: 'Vous êtes désormais sur le plan Starter (gratuit). Vos données restent accessibles.',
+          link: '/settings#plan',
+        }).catch((err) => console.error('[webhook] Notif cancelled failed:', err));
         break;
       }
 
@@ -246,6 +270,14 @@ export async function POST(request) {
           sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
             .catch((err) => console.error('[webhook] Payment failed email failed:', err));
         }
+        // Notification in-app (importante : reste visible tant que pas lue)
+        createNotification(profile.id, {
+          type: NOTIF_TYPES.PAYMENT_FAILED,
+          title: 'Paiement échoué',
+          body: 'Le renouvellement de votre abonnement a échoué. Mettez à jour votre moyen de paiement pour éviter une interruption.',
+          link: invoice.hosted_invoice_url || '/settings#plan',
+          metadata: { amount_due: invoice.amount_due, invoice_id: invoice.id },
+        }).catch((err) => console.error('[webhook] Notif payment failed:', err));
         break;
       }
 

@@ -1,6 +1,7 @@
 // src/lib/usage.js
 import { getPlan, isLimitReached } from './plans';
 import { sendEmail } from './email';
+import { createNotification, NOTIF_TYPES } from './notifications';
 import { usageWarningEmail, usageLimitReachedEmail } from './emailTemplates';
 
 function getCurrentMonth() {
@@ -127,6 +128,33 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
         }
         sendEmail({ to: profile.email, subject: template.subject, html: template.html })
           .catch((err) => console.error(`[usage] ${thresholdCrossed}% email failed:`, err));
+      }
+
+      // ─── In-app notification (en plus de l'email) ────────────────────────
+      // L'utilisateur la verra dans le NotificationBell la prochaine fois
+      // qu'il ouvre le dashboard, même s'il n'ouvre pas son mail.
+      const actionLabel = {
+        searches: 'recherches',
+        enrichments: 'enrichissements',
+        exports: 'exports',
+      }[action] || action;
+
+      if (thresholdCrossed === 100) {
+        createNotification(userId, {
+          type: NOTIF_TYPES.QUOTA_REACHED,
+          title: `Quota ${actionLabel} atteint`,
+          body: `Vous avez utilisé 100% de vos ${actionLabel} ce mois sur le plan ${plan.name}. Passez à un plan supérieur pour continuer.`,
+          link: '/settings#plan',
+          metadata: { action, plan: plan.name, threshold: 100 },
+        }).catch((err) => console.error('[usage] notif 100% failed:', err));
+      } else {
+        createNotification(userId, {
+          type: NOTIF_TYPES.QUOTA_WARNING,
+          title: `Quota ${actionLabel} bientôt atteint (80%)`,
+          body: `Plus que 20% disponible ce mois sur le plan ${plan.name}.`,
+          link: '/settings#plan',
+          metadata: { action, plan: plan.name, threshold: 80 },
+        }).catch((err) => console.error('[usage] notif 80% failed:', err));
       }
     }
   } catch (emailErr) {
