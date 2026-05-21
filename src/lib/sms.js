@@ -1,9 +1,18 @@
 // Envoi de SMS via Twilio (REST API directe — pas de SDK pour rester serverless-friendly).
 //
 // Env vars requises :
-//   TWILIO_ACCOUNT_SID         (commence par AC...)
-//   TWILIO_AUTH_TOKEN
-//   TWILIO_FROM_NUMBER         (numéro Twilio acheté, ex +33756123456) ou TWILIO_MESSAGING_SERVICE_SID
+//   TWILIO_ACCOUNT_SID         (toujours requis, commence par AC...)
+//
+//   Puis 2 modes d'authentification (au choix, l'API Key est préférée en prod) :
+//     Mode A — API Key (recommandé) :
+//       TWILIO_API_KEY_SID     (commence par SK...)
+//       TWILIO_API_KEY_SECRET
+//     Mode B — Auth Token (legacy) :
+//       TWILIO_AUTH_TOKEN
+//
+//   Émetteur (au choix) :
+//     TWILIO_FROM_NUMBER         (numéro Twilio acheté, ex +33756123456)
+//     TWILIO_MESSAGING_SERVICE_SID
 //
 // Tarification indicative (mai 2026) :
 //   FR mobile : ~0.07 € / SMS standard (160 chars)
@@ -48,17 +57,27 @@ export function isMobileE164Fr(phone) {
 export async function sendSms({ to, body, from }) {
   const accountSid = cleanEnv(process.env.TWILIO_ACCOUNT_SID);
   const authToken = cleanEnv(process.env.TWILIO_AUTH_TOKEN);
+  const apiKeySid = cleanEnv(process.env.TWILIO_API_KEY_SID);
+  const apiKeySecret = cleanEnv(process.env.TWILIO_API_KEY_SECRET);
   const fromNumber = from || cleanEnv(process.env.TWILIO_FROM_NUMBER);
   const messagingServiceSid = cleanEnv(process.env.TWILIO_MESSAGING_SERVICE_SID);
 
-  if (!accountSid || !authToken) {
-    return { success: false, error: 'Twilio credentials missing (TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN)' };
+  // Auth : préfère API Key (recommandée prod) sinon fallback Auth Token
+  const useApiKey = !!(apiKeySid && apiKeySecret);
+  const authUser = useApiKey ? apiKeySid : accountSid;
+  const authPass = useApiKey ? apiKeySecret : authToken;
+
+  if (!accountSid) {
+    return { success: false, error: 'TWILIO_ACCOUNT_SID manquant' };
+  }
+  if (!authUser || !authPass) {
+    return { success: false, error: 'Twilio credentials manquants (TWILIO_API_KEY_SID + TWILIO_API_KEY_SECRET ou TWILIO_AUTH_TOKEN)' };
   }
   if (!to || !body) {
     return { success: false, error: 'to and body are required' };
   }
   if (!fromNumber && !messagingServiceSid) {
-    return { success: false, error: 'TWILIO_FROM_NUMBER or TWILIO_MESSAGING_SERVICE_SID required' };
+    return { success: false, error: 'TWILIO_FROM_NUMBER ou TWILIO_MESSAGING_SERVICE_SID requis' };
   }
 
   const url = `${TWILIO_API_BASE}/Accounts/${accountSid}/Messages.json`;
@@ -71,7 +90,7 @@ export async function sendSms({ to, body, from }) {
     form.set('From', fromNumber);
   }
 
-  const auth = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
+  const auth = Buffer.from(`${authUser}:${authPass}`).toString('base64');
 
   try {
     const res = await fetch(url, {
