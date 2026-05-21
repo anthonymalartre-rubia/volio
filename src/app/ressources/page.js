@@ -1,16 +1,35 @@
 import Link from 'next/link';
-import {
-  ArrowLeft, ArrowRight, Mail, Phone, Calculator, TrendingUp,
-  ShieldCheck, Flame, BookOpen, Target, Download, Zap,
-} from 'lucide-react';
-import { getAllResources, getResourcesByCategory } from '@/lib/resources';
+import { ArrowLeft, Download, Zap } from 'lucide-react';
+import { getAllResources } from '@/lib/resources';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import ResourcesGrid from '@/components/resources/ResourcesGrid';
 
-const ICON_MAP = {
-  Mail, Phone, Calculator, TrendingUp, ShieldCheck, Flame, BookOpen, Target,
-};
+// Revalide les compteurs toutes les heures (pas besoin d'être temps réel)
+export const revalidate = 3600;
+
+/**
+ * Récupère le nb de downloads par ressource depuis Supabase.
+ * Si échec (Supabase down, etc.), on retourne {} et l'UI affiche pas de compteur.
+ */
+async function getDownloadCounts() {
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from('resource_leads')
+      .select('resource_slug');
+    if (error || !data) return {};
+    const counts = {};
+    for (const row of data) {
+      counts[row.resource_slug] = (counts[row.resource_slug] || 0) + 1;
+    }
+    return counts;
+  } catch {
+    return {};
+  }
+}
 
 export const metadata = {
   title: 'Ressources gratuites prospection B2B 2026 — Templates, calculateurs, checklists',
@@ -36,10 +55,9 @@ const breadcrumbs = [
   { label: 'Ressources' },
 ];
 
-export default function RessourcesIndex() {
+export default async function RessourcesIndex() {
   const resources = getAllResources();
-  const grouped = getResourcesByCategory();
-  const categories = Object.keys(grouped);
+  const downloadCounts = await getDownloadCounts();
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -106,43 +124,8 @@ export default function RessourcesIndex() {
             Téléchargeables gratuitement (le plus souvent en échange de votre email).
           </p>
 
-          {/* Tools grid groupé par catégorie */}
-          {categories.map((cat) => (
-            <section key={cat} className="mb-12">
-              <h2 className="text-xl sm:text-2xl font-bold text-content-primary mb-4">{cat}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {grouped[cat].map((r) => {
-                  const Icon = ICON_MAP[r.icon] || Download;
-                  return (
-                    <Link
-                      key={r.slug}
-                      href={`/ressources/${r.slug}`}
-                      className="group rounded-2xl border border-line bg-surface-card hover:bg-surface-elevated hover:border-violet-500/30 transition p-5 flex flex-col"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center mb-3">
-                        <Icon size={18} className="text-violet-300" />
-                      </div>
-                      <h3 className="text-base font-bold text-content-primary group-hover:text-violet-400 transition mb-2 leading-snug">
-                        {r.title}
-                      </h3>
-                      <p className="text-sm text-content-secondary leading-relaxed mb-4 flex-1">
-                        {r.shortDesc}
-                      </p>
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-content-tertiary">
-                          {r.format}
-                          {r.pages ? ` · ${r.pages} pages` : ''}
-                        </span>
-                        <span className="text-violet-300 font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                          Télécharger <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
+          {/* Grille interactive avec search + filtres + social proof */}
+          <ResourcesGrid resources={resources} downloadCounts={downloadCounts} />
 
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">

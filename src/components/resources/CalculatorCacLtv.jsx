@@ -1,7 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Calculator, Info, ShieldCheck } from 'lucide-react';
+import { Calculator, Info, ShieldCheck, RotateCcw, Share2, Check } from 'lucide-react';
+import { useCalculatorState } from './useCalculatorState';
+import CountUp from './CountUp';
+import { PaybackTimeline } from './Charts';
 
 const fmt = (n) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(n);
 const fmtEur = (n) => `${fmt(n)} €`;
@@ -16,12 +19,27 @@ const fmtPct = (n) => `${(Math.round(n * 10) / 10)}%`;
  * - CAC Payback (mois)
  * - Diagnostic vs benchmark
  */
+const DEFAULTS = { cac: 800, arpu: 99, grossMargin: 80, churnMensuel: 3, expansionMensuelle: 1 };
+
+const PRESETS = {
+  'TPE / Freelance': { cac: 400, arpu: 29, grossMargin: 85, churnMensuel: 5, expansionMensuelle: 0.5 },
+  'PME': { cac: 800, arpu: 99, grossMargin: 80, churnMensuel: 3, expansionMensuelle: 1 },
+  'Mid-market': { cac: 4000, arpu: 500, grossMargin: 78, churnMensuel: 2, expansionMensuelle: 1.5 },
+  'Enterprise': { cac: 25000, arpu: 2500, grossMargin: 75, churnMensuel: 1, expansionMensuelle: 2 },
+};
+
 export default function CalculatorCacLtv() {
-  const [cac, setCac] = useState(800);
-  const [arpu, setArpu] = useState(99);
-  const [grossMargin, setGrossMargin] = useState(80);
-  const [churnMensuel, setChurnMensuel] = useState(3);
-  const [expansionMensuelle, setExpansionMensuelle] = useState(1);
+  const { state, setField, setMany, reset, getShareUrl } = useCalculatorState('cac-ltv', DEFAULTS);
+  const { cac, arpu, grossMargin, churnMensuel, expansionMensuelle } = state;
+  const [shareCopied, setShareCopied] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(getShareUrl());
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    } catch {}
+  };
 
   const results = useMemo(() => {
     // Net churn (churn - expansion)
@@ -80,37 +98,53 @@ export default function CalculatorCacLtv() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <section className="rounded-2xl border border-line bg-surface-card p-5">
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <ShieldCheck size={18} className="text-violet-400" />
-            Vos métriques
-          </h2>
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <ShieldCheck size={18} className="text-violet-400" />
+              Vos métriques
+            </h2>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={handleShare}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-violet-500/10 text-content-secondary hover:text-violet-300 border border-line hover:border-violet-500/30 transition"
+                title="Copier le lien partageable"
+              >
+                {shareCopied ? <Check size={11} className="text-green-400" /> : <Share2 size={11} />}
+                {shareCopied ? 'Copié' : 'Partager'}
+              </button>
+              <button
+                onClick={reset}
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-amber-500/10 text-content-secondary hover:text-amber-400 border border-line hover:border-amber-500/30 transition"
+                title="Réinitialiser"
+              >
+                <RotateCcw size={11} />
+                Reset
+              </button>
+            </div>
+          </div>
+
+          {/* Presets */}
+          <div className="mb-4 -mt-1">
+            <div className="text-xs text-content-tertiary mb-1.5">Charger un benchmark :</div>
+            <div className="flex flex-wrap gap-1.5">
+              {Object.entries(PRESETS).map(([name, preset]) => (
+                <button
+                  key={name}
+                  onClick={() => setMany(preset)}
+                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-violet-500/10 hover:bg-violet-500/20 text-violet-300 border border-violet-500/30 transition"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="space-y-4">
-            <Field
-              label="CAC (Coût d'Acquisition Client) €"
-              hint="Marketing + sales + outils ÷ nouveaux clients. France 2026 : 600-1500 € TPE/PME."
-              value={cac} onChange={setCac} min={50} max={20000} step={50} fmt={fmtEur}
-            />
-            <Field
-              label="ARPU (Revenu mensuel par user) €"
-              hint="Average Revenue Per User. MRR / nb clients actifs."
-              value={arpu} onChange={setArpu} min={5} max={5000} step={5} fmt={fmtEur}
-            />
-            <Field
-              label="Marge brute (%)"
-              hint="Cible SaaS B2B : 75-85% (vs 30-50% e-commerce)."
-              value={grossMargin} onChange={setGrossMargin} min={20} max={95} step={1} fmt={fmtPct}
-            />
-            <Field
-              label="Churn mensuel (%)"
-              hint="% clients perdus / mois. Excellent : < 2%. Critique : > 10%."
-              value={churnMensuel} onChange={setChurnMensuel} min={0.1} max={20} step={0.1} fmt={fmtPct}
-            />
-            <Field
-              label="Expansion MRR mensuelle (%)"
-              hint="Upsell + cross-sell. NRR = 100 + (expansion − churn) × 12."
-              value={expansionMensuelle} onChange={setExpansionMensuelle} min={0} max={10} step={0.1} fmt={fmtPct}
-            />
+            <Field label="CAC (Coût d'Acquisition Client) €" hint="Marketing + sales + outils ÷ nouveaux clients. France 2026 : 600-1500 € TPE/PME." value={cac} onChange={(v) => setField('cac', v)} min={50} max={50000} step={50} fmt={fmtEur} />
+            <Field label="ARPU (Revenu mensuel par user) €" hint="Average Revenue Per User. MRR / nb clients actifs." value={arpu} onChange={(v) => setField('arpu', v)} min={5} max={10000} step={5} fmt={fmtEur} />
+            <Field label="Marge brute (%)" hint="Cible SaaS B2B : 75-85% (vs 30-50% e-commerce)." value={grossMargin} onChange={(v) => setField('grossMargin', v)} min={20} max={95} step={1} fmt={fmtPct} />
+            <Field label="Churn mensuel (%)" hint="% clients perdus / mois. Excellent : < 2%. Critique : > 10%." value={churnMensuel} onChange={(v) => setField('churnMensuel', v)} min={0.1} max={20} step={0.1} fmt={fmtPct} />
+            <Field label="Expansion MRR mensuelle (%)" hint="Upsell + cross-sell. NRR = 100 + (expansion − churn) × 12." value={expansionMensuelle} onChange={(v) => setField('expansionMensuelle', v)} min={0} max={10} step={0.1} fmt={fmtPct} />
           </div>
         </section>
 
@@ -154,12 +188,22 @@ export default function CalculatorCacLtv() {
                 {results.nrrAnnuel >= 100 ? '✓ Croissance organique' : '⚠ Décroissance'}
               </div>
             </div>
-            <div className={`text-3xl font-bold mb-1 ${results.nrrAnnuel >= 100 ? 'text-green-400' : 'text-amber-400'}`}>
-              {results.nrrAnnuel.toFixed(0)}%
+            <div className={`text-3xl font-bold mb-1 tabular-nums ${results.nrrAnnuel >= 100 ? 'text-green-400' : 'text-amber-400'}`}>
+              <CountUp value={results.nrrAnnuel} formatter={(n) => `${Math.round(n)}%`} />
             </div>
             <div className="text-xs text-content-secondary">
               NRR &gt; 100% = votre base existante grandit même sans nouveaux clients (rêve SaaS).
             </div>
+          </div>
+
+          {/* Timeline payback SVG */}
+          <div className="rounded-2xl border border-line bg-surface-card p-5">
+            <div className="text-xs text-content-tertiary uppercase tracking-wider mb-2">Projection LTV cumulée vs CAC (36 mois)</div>
+            <PaybackTimeline
+              cac={cac}
+              monthlyMargin={arpu * (grossMargin / 100)}
+              totalMonths={36}
+            />
           </div>
         </section>
       </div>
@@ -220,21 +264,27 @@ export default function CalculatorCacLtv() {
 function Field({ label, hint, value, onChange, min, max, step, fmt }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-content-primary mb-1">{label}</label>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-2 mb-1.5">
+        <label className="text-sm font-medium text-content-primary">{label}</label>
+        <span className="text-xs font-mono font-semibold text-violet-300 tabular-nums whitespace-nowrap">
+          {fmt ? fmt(value) : value.toLocaleString('fr-FR')}
+        </span>
+      </div>
+      <div className="flex items-center gap-2">
         <input
           type="range"
           min={min} max={max} step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="flex-1 accent-violet-500"
+          className="flex-1 accent-violet-500 min-w-0"
         />
         <input
           type="number"
           min={min} max={max} step={step}
           value={value}
           onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
-          className="w-24 px-2 py-1 rounded bg-surface-base border border-line text-sm font-mono text-right"
+          className="w-20 sm:w-24 px-2 py-1 rounded bg-surface-base border border-line text-sm font-mono text-right tabular-nums focus:outline-none focus:border-violet-500 transition"
+          aria-label={`${label} (saisie numérique)`}
         />
       </div>
       {hint && <div className="text-xs text-content-tertiary mt-1">{hint}</div>}

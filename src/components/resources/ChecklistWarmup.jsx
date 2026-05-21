@@ -1,5 +1,7 @@
 // Checklist warmup de domaine cold email — 28 jours.
 
+import { CoverPage, Toc } from './CoverAndToc';
+
 const DNS_RECORDS = [
   { name: 'SPF', purpose: 'Liste les serveurs autorisés à envoyer en votre nom', example: 'v=spf1 include:_spf.google.com include:sendgrid.net ~all' },
   { name: 'DKIM', purpose: 'Signature cryptographique des emails', example: 'Activée dans Google Workspace ou Microsoft 365 — pas de config manuelle' },
@@ -88,29 +90,31 @@ const METRICS = [
 ];
 
 export default function ChecklistWarmup() {
+  const tocItems = [
+    { id: 'dns', label: 'Configuration DNS (à faire en premier)', meta: '5 records' },
+    ...PHASES.map((p, i) => ({ id: `phase-${i}`, label: p.title })),
+    { id: 'metrics', label: 'Métriques de référence', meta: '5 KPI' },
+    { id: 'maintenance', label: 'Maintenance après warmup' },
+  ];
+
   return (
     <div>
-      <header className="mb-10 keep-together">
-        <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Checklist
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
-          Checklist warmup domaine cold email — 28 jours
-        </h1>
-        <p className="text-content-secondary leading-relaxed mb-6">
-          Protocole complet pour warmer un nouveau domaine d&apos;envoi cold email en 28 jours :
-          configuration DNS, volumes, métriques à surveiller, outils.
-          Sans warmup, votre meilleur cold email finit en spam.
-        </p>
-        <div className="rounded-2xl border border-red-500/30 bg-red-500/[0.04] p-4 text-sm text-content-secondary">
-          ⚠️ <strong className="text-content-primary">Règle absolue :</strong>{' '}
-          créez TOUJOURS un sous-domaine dédié au cold email (ex: <code>hello.votredomaine.com</code>).
-          Si le sous-domaine tombe en spam, votre domaine principal reste intact.
-        </div>
-      </header>
+      <CoverPage
+        title="Checklist warmup domaine cold email"
+        subtitle="Protocole complet en 28 jours pour warmer un nouveau domaine d'envoi : DNS, volumes, métriques, outils."
+        tagline="🔥 28 jours · 4 phases · 0% spam"
+      />
+
+      <div className="mb-8 rounded-2xl border border-red-500/30 bg-red-500/[0.04] p-4 text-sm text-content-secondary keep-together">
+        ⚠️ <strong className="text-content-primary">Règle absolue :</strong>{' '}
+        créez TOUJOURS un sous-domaine dédié au cold email (ex: <code>hello.votredomaine.com</code>).
+        Si le sous-domaine tombe en spam, votre domaine principal reste intact.
+      </div>
+
+      <Toc items={tocItems} />
 
       {/* DNS records */}
-      <section className="mb-10 keep-together">
+      <section id="dns" className="mb-10 keep-together scroll-mt-24">
         <h2 className="text-2xl font-bold mb-4 pb-2 border-b border-line">
           📡 Configuration DNS (à faire en premier)
         </h2>
@@ -133,7 +137,7 @@ export default function ChecklistWarmup() {
 
       {/* Phases */}
       {PHASES.map((phase, i) => (
-        <section key={i} className="mb-10 keep-together">
+        <section key={i} id={`phase-${i}`} className="mb-10 keep-together scroll-mt-24">
           <div className={`border-l-4 border-${phase.color}-500 pl-4 mb-4`}>
             <h2 className="text-2xl font-bold mb-1">{phase.title}</h2>
             <p className="text-sm text-content-secondary italic">{phase.goal}</p>
@@ -155,7 +159,7 @@ export default function ChecklistWarmup() {
       ))}
 
       {/* Métriques de référence */}
-      <section className="mb-10 keep-together">
+      <section id="metrics" className="mb-10 keep-together scroll-mt-24">
         <h2 className="text-2xl font-bold mb-4 pb-2 border-b border-line">
           📊 Métriques de référence (à surveiller en permanence)
         </h2>
@@ -184,7 +188,7 @@ export default function ChecklistWarmup() {
       </section>
 
       {/* Maintenance après warmup */}
-      <section className="mb-10 keep-together">
+      <section id="maintenance" className="mb-10 keep-together scroll-mt-24">
         <h2 className="text-2xl font-bold mb-4 pb-2 border-b border-line">
           🔧 Maintenance après warmup (J+29 et au-delà)
         </h2>

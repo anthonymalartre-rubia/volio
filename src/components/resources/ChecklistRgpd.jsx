@@ -1,5 +1,7 @@
 // Checklist RGPD cold email B2B France 2026 — 47 points.
 
+import { CoverPage, Toc } from './CoverAndToc';
+
 const SECTIONS = [
   {
     title: 'Base légale et finalité (9 points)',
@@ -88,29 +90,31 @@ const SECTIONS = [
 const TOTAL = SECTIONS.reduce((sum, s) => sum + s.items.length, 0);
 
 export default function ChecklistRgpd() {
+  const tocItems = SECTIONS.map((s, i) => ({
+    id: `section-${i}`,
+    label: s.title,
+    meta: `${s.items.length} pts`,
+  }));
+
   return (
     <div>
-      <header className="mb-10 keep-together">
-        <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Checklist
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
-          Checklist RGPD cold email B2B France 2026
-        </h1>
-        <p className="text-content-secondary leading-relaxed mb-6">
-          {TOTAL} points à valider pour faire du cold email B2B en France sans risque CNIL
-          en 2026. Audit complet de votre conformité, organisé en 7 catégories.
-        </p>
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-4 text-sm text-content-secondary">
-          ⚖️ <strong className="text-content-primary">Cadre légal :</strong>{' '}
-          en France, le cold email B2B est légal sous régime de l&apos;intérêt légitime (RGPD art. 6.1.f).
-          La CNIL a sanctionné <strong>87 entreprises en 2024</strong>, dont une douzaine sur des cas B2B.
-          Cette checklist couvre 100% des points contrôlés en cas d&apos;audit.
-        </div>
-      </header>
+      <CoverPage
+        title="Checklist RGPD cold email B2B France"
+        subtitle={`${TOTAL} points à valider pour faire du cold email B2B en France sans risque CNIL en 2026.`}
+        tagline="⚖️ Conformité art. 6.1.f RGPD"
+      />
+
+      <div className="mb-8 rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-4 text-sm text-content-secondary keep-together">
+        ⚖️ <strong className="text-content-primary">Cadre légal :</strong>{' '}
+        en France, le cold email B2B est légal sous régime de l&apos;intérêt légitime (RGPD art. 6.1.f).
+        La CNIL a sanctionné <strong>87 entreprises en 2024</strong>, dont une douzaine sur des cas B2B.
+        Cette checklist couvre 100% des points contrôlés en cas d&apos;audit.
+      </div>
+
+      <Toc items={tocItems} />
 
       {SECTIONS.map((sec, sectionIdx) => (
-        <section key={sectionIdx} className="mb-10 keep-together">
+        <section key={sectionIdx} id={`section-${sectionIdx}`} className="mb-10 keep-together scroll-mt-24">
           <h2 className="text-2xl font-bold mb-4 pb-2 border-b border-line text-content-primary">
             {sec.title}
           </h2>

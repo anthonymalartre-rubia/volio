@@ -1,7 +1,9 @@
-// 20 templates cold email B2B français — page imprimable.
+// 20 templates cold email B2B français — page imprimable + copiable.
 //
 // Structure : 4 templates × 5 catégories (SaaS, e-commerce, HCR, BTP, professions libérales).
 // Pour chaque template : objet, corps, CTA, reply rate observé, persona cible.
+
+import CopyButton from './CopyButton';
 
 const TEMPLATES = [
   // ─── 1. SaaS B2B ──────────────────────────────────────────────
@@ -398,14 +400,23 @@ export default function TemplatesColdEmail() {
                 </div>
 
                 <div className="mb-3">
-                  <div className="text-xs text-content-tertiary uppercase tracking-wider mb-1">Objet</div>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-xs text-content-tertiary uppercase tracking-wider">Objet</div>
+                    <CopyButton text={t.subject} label="Copier l'objet" />
+                  </div>
                   <div className="font-mono text-sm bg-surface-elevated rounded px-3 py-2 text-content-primary">
                     {t.subject}
                   </div>
                 </div>
 
                 <div>
-                  <div className="text-xs text-content-tertiary uppercase tracking-wider mb-1">Corps</div>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-xs text-content-tertiary uppercase tracking-wider">Corps</div>
+                    <div className="flex items-center gap-2">
+                      <CopyButton text={t.body} label="Copier le corps" />
+                      <CopyButton text={`${t.subject}\n\n${t.body}`} label="Copier tout" />
+                    </div>
+                  </div>
                   <pre className="font-mono text-sm bg-surface-elevated rounded px-3 py-3 text-content-primary whitespace-pre-wrap leading-relaxed">
                     {t.body}
                   </pre>

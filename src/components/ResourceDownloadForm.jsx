@@ -24,15 +24,35 @@ export default function ResourceDownloadForm({ resource }) {
 
   const isDirect = resource.deliveryMode === 'direct';
 
+  // 28 domaines emails personnels qu'on refuse (cohérence avec le filtre RGPD
+  // déjà en place dans le scraping/enrichissement Prospectia).
+  const PERSONAL_DOMAINS = new Set([
+    'gmail.com', 'googlemail.com', 'hotmail.com', 'hotmail.fr', 'outlook.com',
+    'outlook.fr', 'live.com', 'live.fr', 'yahoo.com', 'yahoo.fr', 'free.fr',
+    'orange.fr', 'sfr.fr', 'wanadoo.fr', 'laposte.net', 'icloud.com', 'me.com',
+    'mac.com', 'aol.com', 'protonmail.com', 'pm.me', 'gmx.com', 'gmx.fr',
+    'tutanota.com', 'mail.com', 'yandex.com', 'bbox.fr', 'numericable.fr',
+  ]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (state === 'loading') return;
 
-    // Validation simple
+    const trimmed = email.trim().toLowerCase();
+
+    // Validation 1 : format email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
+    if (!emailRegex.test(trimmed)) {
       setState('error');
       setErrorMsg('Email invalide. Vérifiez votre saisie.');
+      return;
+    }
+
+    // Validation 2 : domaine pro uniquement (refuse @gmail, @hotmail, etc.)
+    const domain = trimmed.split('@')[1];
+    if (PERSONAL_DOMAINS.has(domain)) {
+      setState('error');
+      setErrorMsg(`Utilisez votre email professionnel (pas @${domain}). C'est gratuit, juste pour qualifier le téléchargement.`);
       return;
     }
 

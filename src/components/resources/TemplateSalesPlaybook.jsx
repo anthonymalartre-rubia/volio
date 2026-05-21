@@ -1,5 +1,7 @@
 // Template de Sales Playbook pour TPE/PME B2B — page imprimable.
 
+import { CoverPage, Toc } from './CoverAndToc';
+
 const SECTIONS = [
   {
     n: 1,
@@ -215,28 +217,30 @@ const SECTIONS = [
 ];
 
 export default function TemplateSalesPlaybook() {
+  const tocItems = SECTIONS.map((s) => ({
+    id: `section-${s.n}`,
+    label: s.title,
+    meta: `Section ${s.n}/7`,
+  }));
+
   return (
     <div>
-      <header className="mb-10 keep-together">
-        <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Template
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
-          Template Sales Playbook TPE/PME B2B
-        </h1>
-        <p className="text-content-secondary leading-relaxed mb-6">
-          Bible commerciale écrite de votre boîte. 7 sections pré-remplies avec exemples concrets,
-          objections types et grille de scoring BANT. À adapter à votre contexte en 2-3 heures.
-        </p>
-        <div className="rounded-2xl border border-violet-500/30 bg-violet-500/[0.04] p-4 text-sm text-content-secondary">
-          <strong className="text-content-primary">Comment utiliser :</strong>{' '}
-          remplacez les sections entre crochets <code>[...]</code> par les informations spécifiques à votre boîte.
-          Faites une mise à jour trimestrielle pour intégrer les retours sales + les évolutions produit/marché.
-        </div>
-      </header>
+      <CoverPage
+        title="Sales Playbook TPE/PME B2B"
+        subtitle="Bible commerciale écrite de votre boîte. 7 sections pré-remplies avec exemples concrets, objections types et grille de scoring BANT."
+        tagline="📘 Template à adapter en 2-3 heures"
+      />
+
+      <div className="mb-8 rounded-2xl border border-violet-500/30 bg-violet-500/[0.04] p-4 text-sm text-content-secondary keep-together">
+        <strong className="text-content-primary">Comment utiliser :</strong>{' '}
+        remplacez les sections entre crochets <code>[...]</code> par les informations spécifiques à votre boîte.
+        Faites une mise à jour trimestrielle pour intégrer les retours sales + les évolutions produit/marché.
+      </div>
+
+      <Toc items={tocItems} />
 
       {SECTIONS.map((s) => (
-        <section key={s.n} className="mb-10 keep-together">
+        <section key={s.n} id={`section-${s.n}`} className="mb-10 keep-together scroll-mt-24">
           <div className="border-l-4 border-violet-500 pl-4 mb-4">
             <div className="text-xs text-content-tertiary uppercase tracking-wider mb-1">Section {s.n}/7</div>
             <h2 className="text-2xl font-bold text-content-primary">{s.title}</h2>

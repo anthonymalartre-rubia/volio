@@ -1,4 +1,6 @@
-// 5 scripts de cold call B2B français — page imprimable.
+// 5 scripts de cold call B2B français — page imprimable + copiable.
+
+import CopyButton from './CopyButton';
 
 const SCRIPTS = [
   {
@@ -273,9 +275,12 @@ export default function ScriptColdCall() {
             <div className="space-y-4">
               {s.sections.map((sec, i) => (
                 <div key={i} className="rounded-xl border border-line bg-surface-card p-4 keep-together">
-                  <h3 className="font-bold text-content-primary mb-2 text-sm uppercase tracking-wider text-violet-500">
-                    {sec.title}
-                  </h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-bold text-content-primary text-sm uppercase tracking-wider text-violet-500">
+                      {sec.title}
+                    </h3>
+                    <CopyButton text={sec.content} label="Copier" />
+                  </div>
                   <pre className="font-mono text-sm whitespace-pre-wrap leading-relaxed text-content-primary">
                     {sec.content}
                   </pre>

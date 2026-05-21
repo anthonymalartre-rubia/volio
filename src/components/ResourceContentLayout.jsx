@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Printer, Zap } from 'lucide-react';
+import { ArrowLeft, Printer, Zap, Download } from 'lucide-react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
@@ -54,13 +54,24 @@ export default function ResourceContentLayout({
           </Link>
 
           {printable && (
-            <button
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"
-            >
-              <Printer size={14} />
-              Imprimer / Sauvegarder en PDF
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href={`/api/ressources/${resource.slug}/pdf`}
+                download
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"
+              >
+                <Download size={14} />
+                Télécharger le PDF
+              </a>
+              <button
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-line text-content-secondary hover:text-content-primary hover:bg-surface-elevated text-sm font-medium transition"
+                title="Aperçu impression / sauvegarde rapide (Cmd+P)"
+              >
+                <Printer size={14} />
+                Imprimer
+              </button>
+            </div>
           )}
         </div>
 
