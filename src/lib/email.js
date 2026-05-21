@@ -2,9 +2,14 @@
 // Lightweight email utility using Resend REST API (no SDK dependency)
 import { cleanEnv } from './envClean';
 
-// From address par défaut. Configurable via env var pour les déploiements
-// preview / staging qui utilisent un autre sender domain Resend.
-const DEFAULT_FROM = 'Prospectia <hello@prospectia.cloud>';
+// From address par défaut.
+// IMPORTANT : on envoie depuis le sous-domaine `send.prospectia.cloud`
+// (= le sous-domaine vérifié sur Resend via SPF + MX records).
+// Le domaine racine `prospectia.cloud` reste réservé aux mails IONOS
+// (boîtes pro existantes type contact@prospectia.cloud).
+//
+// Surchargeable via RESEND_FROM_ADDRESS pour les déploiements preview/staging.
+const DEFAULT_FROM = 'Prospectia <hello@send.prospectia.cloud>';
 const FALLBACK_FROM = 'Prospectia <onboarding@resend.dev>';
 
 /**
