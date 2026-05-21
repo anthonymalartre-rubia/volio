@@ -3,13 +3,16 @@
 import { cleanEnv } from './envClean';
 
 // From address par défaut.
-// IMPORTANT : on envoie depuis le sous-domaine `send.prospectia.cloud`
-// (= le sous-domaine vérifié sur Resend via SPF + MX records).
-// Le domaine racine `prospectia.cloud` reste réservé aux mails IONOS
-// (boîtes pro existantes type contact@prospectia.cloud).
+// Le domaine `prospectia.cloud` est vérifié sur Resend (DKIM, SPF, MX sur
+// le sous-domaine `send` mais Resend valide bien le domaine racine pour
+// l'envoi). Donc on envoie depuis hello@prospectia.cloud.
+//
+// IMPORTANT : pour une délivrabilité optimale, il faudrait ajouter
+// `include:amazonses.com` au SPF racine du domaine (TXT @). Sans ça,
+// SPF check échoue côté destinataire mais DKIM compense (DMARC alignment).
 //
 // Surchargeable via RESEND_FROM_ADDRESS pour les déploiements preview/staging.
-const DEFAULT_FROM = 'Prospectia <hello@send.prospectia.cloud>';
+const DEFAULT_FROM = 'Prospectia <hello@prospectia.cloud>';
 const FALLBACK_FROM = 'Prospectia <onboarding@resend.dev>';
 
 /**
@@ -62,10 +65,25 @@ export async function sendEmail({ to, subject, html, replyTo }) {
   console.warn(`[email] Primary sender ${primaryFrom} refused (${firstAttempt.error}). Retrying with ${FALLBACK_FROM}...`);
   const fallbackAttempt = await callResend({ apiKey, from: FALLBACK_FROM, to, subject, html, replyTo });
 
+  // Conserve la trace du primary error même si le fallback marche, et
+  // surtout si le fallback échoue (très utile pour le debug).
+  const primaryErrorTrace = `primary[${primaryFrom}]: ${firstAttempt.error}`;
+
   if (fallbackAttempt.success) {
-    return { ...fallbackAttempt, fromUsed: FALLBACK_FROM, fallbackUsed: true };
+    return {
+      ...fallbackAttempt,
+      fromUsed: FALLBACK_FROM,
+      fallbackUsed: true,
+      primaryError: firstAttempt.error,
+    };
   }
-  return { ...fallbackAttempt, fromUsed: FALLBACK_FROM, fallbackUsed: true };
+  return {
+    ...fallbackAttempt,
+    error: `${fallbackAttempt.error} | ${primaryErrorTrace}`,
+    fromUsed: FALLBACK_FROM,
+    fallbackUsed: true,
+    primaryError: firstAttempt.error,
+  };
 }
 
 async function callResend({ apiKey, from, to, subject, html, replyTo }) {
