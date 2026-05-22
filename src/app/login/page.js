@@ -5,8 +5,9 @@ import { getSupabase } from '@/lib/supabase';
 import { useI18n } from '@/lib/i18n';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -48,10 +49,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
-      <ThemeToggle className="absolute top-4 right-4" />
+    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <AuthBackgroundDecor />
+      <ThemeToggle className="absolute top-4 right-4 z-10" />
+      <Link href="/" className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-content-primary transition">
+        <ArrowLeft size={12} />
+        Prospectia
+      </Link>
       <div
-        className={`w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${
+        className={`relative w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}
       >

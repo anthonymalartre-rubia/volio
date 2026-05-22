@@ -1,0 +1,74 @@
+// Shell visuel réutilisable pour les pages auth + RGPD + désabonnement.
+// Apporte un fond cohérent (gradient blobs + grid pattern) + nav + footer.
+// Le contenu central reçoit children, généralement un <div> card-style.
+
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+
+export default function AuthPageShell({
+  children,
+  backHref = '/',
+  backLabel = 'Prospectia',
+  showSignupCta = true,
+  contentWidth = 'max-w-md', // 'max-w-md' | 'max-w-lg' | 'max-w-2xl' | 'max-w-3xl'
+}) {
+  return (
+    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
+      {/* Background blobs animés (cohérent avec /parrainage, /newsletter) */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-violet-600/15 blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[140px]" />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
+
+      {/* Top nav minimaliste */}
+      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href={backHref} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
+            <ArrowLeft size={14} />
+            {backLabel}
+          </Link>
+          <Link href="/" className="flex items-center gap-1">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
+              <span className="text-[11px] font-bold text-white">P</span>
+            </div>
+            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-violet-400 text-xs font-semibold">.cloud</span>
+          </Link>
+          {showSignupCta ? (
+            <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
+              Essayer gratuit
+            </Link>
+          ) : (
+            <div className="w-[100px]" /> /* spacer pour équilibrer la nav */
+          )}
+        </div>
+      </nav>
+
+      <main className={`relative pt-24 pb-16 px-4 sm:px-6 min-h-[calc(100vh-4rem)] flex items-center justify-center`}>
+        <div className={`w-full ${contentWidth}`}>
+          {children}
+        </div>
+      </main>
+
+      <footer className="border-t border-white/[0.06] py-6 bg-[#08080c]/50 backdrop-blur-xl relative">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500">
+          <span>© 2026 Prospectia.cloud — Prospection B2B France · Belgique · Suisse</span>
+          <div className="flex gap-4">
+            <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
+            <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>
+            <Link href="/rgpd" className="hover:text-zinc-300 transition">RGPD</Link>
+            <Link href="/status" className="hover:text-zinc-300 transition">Status</Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

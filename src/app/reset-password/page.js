@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Lock, Eye, EyeOff, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 
 function getPasswordStrength(password) {
   if (!password) return { score: 0, label: '', color: '' };
@@ -83,7 +84,8 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
         <div
           className={`w-full max-w-sm space-y-6 text-center transition-all duration-700 ease-out ${
@@ -116,7 +118,8 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
       <div
         className={`w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${

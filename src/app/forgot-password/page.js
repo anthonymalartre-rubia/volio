@@ -6,6 +6,7 @@ import { useI18n } from '@/lib/i18n';
 import Link from 'next/link';
 import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -44,7 +45,8 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
         <div
           className={`w-full max-w-sm space-y-6 text-center transition-all duration-700 ease-out ${
@@ -79,7 +81,8 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative">
+    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
       <div
         className={`w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${

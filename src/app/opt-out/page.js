@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, Shield, CheckCircle, AlertCircle, Mail } from 'lucide-react';
+import { Shield, CheckCircle2, AlertCircle, Mail, Loader2, Lock, Eye } from 'lucide-react';
+import AuthPageShell from '@/components/AuthPageShell';
 
 function OptOutInner() {
   const searchParams = useSearchParams();
@@ -24,7 +25,6 @@ function OptOutInner() {
     setLoading(true);
     setStatus(null);
     setMessage('');
-
     try {
       const res = await fetch('/api/opt-out', {
         method: 'POST',
@@ -32,13 +32,10 @@ function OptOutInner() {
         body: JSON.stringify({ email, company, reason }),
       });
       const data = await res.json();
-
       if (res.ok && data.success) {
         setStatus('success');
         setMessage(data.message);
-        setEmail('');
-        setCompany('');
-        setReason('');
+        setEmail(''); setCompany(''); setReason('');
       } else {
         setStatus('error');
         setMessage(data.error || 'Une erreur est survenue. Veuillez réessayer.');
@@ -52,204 +49,170 @@ function OptOutInner() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-base text-content-primary">
-      {/* Header */}
-      <div className="border-b border-line px-6 py-4">
-        <div className="max-w-3xl mx-auto">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition"
-          >
-            <ArrowLeft size={16} />
-            Retour à l&apos;accueil
-          </Link>
+    <AuthPageShell contentWidth="max-w-2xl" backLabel="Accueil" showSignupCta={false}>
+      {/* Hero */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 border border-violet-500/30 mb-4">
+          <Shield size={22} className="text-violet-300" />
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Droit d&apos;opposition RGPD</h1>
+        <p className="text-sm text-zinc-400 max-w-xl mx-auto leading-relaxed">
+          Supprimez vos données personnelles de notre base de prospects. Traitement sous 48 h, conforme à l&apos;article 21 du RGPD.
+        </p>
+      </div>
+
+      {/* Bandeau 1-clic confirmation (depuis un lien email de campagne) */}
+      {(oneClickOk || oneClickError) && (
+        <div className={`mb-6 p-5 rounded-2xl border backdrop-blur-xl ${oneClickOk ? 'border-emerald-500/30 bg-emerald-500/[0.06]' : 'border-red-500/30 bg-red-500/[0.06]'}`}>
+          <div className="flex items-start gap-3">
+            {oneClickOk ? (
+              <CheckCircle2 size={20} className="text-emerald-400 mt-0.5 flex-shrink-0" />
+            ) : (
+              <AlertCircle size={20} className="text-red-400 mt-0.5 flex-shrink-0" />
+            )}
+            <div>
+              {oneClickOk && !alreadyOptedOut && (
+                <>
+                  <p className="text-base font-semibold text-emerald-300 mb-1">Désinscription confirmée</p>
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    Vous ne recevrez plus de {oneClickChannel === 'sms' ? 'SMS' : 'mails'} de prospection.
+                    Votre {oneClickChannel === 'sms' ? 'numéro' : 'adresse'} est retirée de toutes nos listes + ajoutée à notre blocklist permanente.
+                  </p>
+                </>
+              )}
+              {oneClickOk && alreadyOptedOut && (
+                <>
+                  <p className="text-base font-semibold text-emerald-300 mb-1">Vous étiez déjà désinscrit</p>
+                  <p className="text-sm text-zinc-300 leading-relaxed">Aucune action supplémentaire nécessaire.</p>
+                </>
+              )}
+              {oneClickError && (
+                <>
+                  <p className="text-base font-semibold text-red-300 mb-1">Erreur lors de la désinscription</p>
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    Code : <code className="text-xs bg-red-500/10 px-1.5 py-0.5 rounded">{oneClickError}</code>. Utilisez le formulaire ci-dessous pour saisir manuellement votre email.
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Card explication */}
+      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl p-6 mb-6">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-violet-500/15 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
+            <Eye size={14} className="text-violet-300" />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold mb-2">Pourquoi cette page ?</h2>
+            <p className="text-sm text-zinc-400 leading-relaxed mb-2">
+              Prospectia collecte des données professionnelles publiques (email pro, nom d&apos;entreprise, téléphone) via Google Places dans le cadre de la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
+            </p>
+            <p className="text-sm text-zinc-400 leading-relaxed">
+              Conformément à l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez à tout moment exercer votre droit d&apos;opposition. Votre demande sera traitée sous <strong className="text-white">48 heures</strong>.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-16">
-        {/* Title */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-            <Shield size={18} className="text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">Droit d&apos;opposition &mdash; RGPD</h1>
-            <p className="text-sm text-content-secondary">Suppression de vos données personnelles</p>
-          </div>
-        </div>
+      {/* Form */}
+      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl p-6 sm:p-7">
+        <h2 className="text-lg font-bold mb-5 flex items-center gap-2">
+          <Lock size={16} className="text-violet-400" />
+          Demande de suppression
+        </h2>
 
-        {/* One-click confirmation banner (depuis un lien dans une campagne) */}
-        {(oneClickOk || oneClickError) && (
-          <div className={`mb-8 p-5 rounded-2xl border ${oneClickOk ? 'border-green-500/30 bg-green-500/[0.06]' : 'border-red-500/30 bg-red-500/[0.06]'}`}>
-            <div className="flex items-start gap-3">
-              {oneClickOk ? (
-                <CheckCircle size={22} className="text-green-400 mt-0.5 flex-shrink-0" />
-              ) : (
-                <AlertCircle size={22} className="text-red-400 mt-0.5 flex-shrink-0" />
-              )}
-              <div>
-                {oneClickOk && !alreadyOptedOut && (
-                  <>
-                    <p className="text-base font-semibold text-green-400 mb-1">
-                      Désinscription confirmée
-                    </p>
-                    <p className="text-sm text-content-secondary leading-relaxed">
-                      Vous ne recevrez plus de {oneClickChannel === 'sms' ? 'SMS' : 'mails'} de prospection de Prospectia.
-                      Votre {oneClickChannel === 'sms' ? 'numéro' : 'adresse'} est retirée de toutes nos listes
-                      et ajoutée à notre blocklist permanente.
-                    </p>
-                  </>
-                )}
-                {oneClickOk && alreadyOptedOut && (
-                  <>
-                    <p className="text-base font-semibold text-green-400 mb-1">
-                      Vous étiez déjà désinscrit
-                    </p>
-                    <p className="text-sm text-content-secondary leading-relaxed">
-                      Aucune action supplémentaire nécessaire. Vous ne recevrez plus de prospection de Prospectia.
-                    </p>
-                  </>
-                )}
-                {oneClickError && (
-                  <>
-                    <p className="text-base font-semibold text-red-400 mb-1">
-                      Erreur lors de la désinscription
-                    </p>
-                    <p className="text-sm text-content-secondary leading-relaxed">
-                      Code : <code>{oneClickError}</code>. Utilisez le formulaire ci-dessous pour saisir manuellement votre email.
-                    </p>
-                  </>
-                )}
-              </div>
+        {status === 'success' && (
+          <div className="mb-5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
+            <CheckCircle2 size={18} className="text-emerald-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-emerald-300">Demande enregistrée</p>
+              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{message}</p>
+            </div>
+          </div>
+        )}
+        {status === 'error' && (
+          <div className="mb-5 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3">
+            <AlertCircle size={18} className="text-red-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-red-300">Erreur</p>
+              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{message}</p>
             </div>
           </div>
         )}
 
-        {/* Explanation */}
-        <div className="p-6 rounded-2xl border border-line bg-surface-card mb-10">
-          <h2 className="font-semibold text-lg mb-3">Pourquoi cette page ?</h2>
-          <div className="space-y-3 text-sm text-content-secondary leading-relaxed">
-            <p>
-              Conformément au <strong className="text-content-primary">Règlement Général sur la Protection des Données (RGPD)</strong>,
-              vous disposez d&apos;un droit d&apos;accès, de rectification, de suppression et d&apos;opposition
-              concernant vos données personnelles.
-            </p>
-            <p>
-              Prospectia.ai collecte des informations professionnelles publiquement disponibles
-              (nom d&apos;entreprise, adresse, téléphone, email professionnel) via Google Places et
-              des sources publiques, dans le cadre de la prospection B2B.
-            </p>
-            <p>
-              Si vous souhaitez que vos données soient supprimées de notre base et ne soient plus
-              collectées à l&apos;avenir, remplissez le formulaire ci-dessous. Votre demande sera
-              traitée sous <strong className="text-content-primary">48 heures</strong>.
-            </p>
-          </div>
-        </div>
-
-        {/* Form */}
-        <div className="p-6 rounded-2xl border border-line bg-surface-card">
-          <h2 className="font-semibold text-lg mb-6">Demande de suppression</h2>
-
-          {status === 'success' && (
-            <div className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/20 flex items-start gap-3">
-              <CheckCircle size={20} className="text-green-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-green-400">Demande enregistrée</p>
-                <p className="text-sm text-green-400/80 mt-1">{message}</p>
-              </div>
-            </div>
-          )}
-
-          {status === 'error' && (
-            <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
-              <AlertCircle size={20} className="text-red-400 mt-0.5 flex-shrink-0" />
-              <div>
-                <p className="text-sm font-semibold text-red-400">Erreur</p>
-                <p className="text-sm text-red-400/80 mt-1">{message}</p>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Adresse email <span className="text-red-400">*</span>
-              </label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
+              Adresse email <span className="text-red-400">*</span>
+            </label>
+            <div className="relative">
+              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="votre@email.com"
-                className="w-full px-4 py-3 rounded-xl bg-surface-base border border-line text-content-primary placeholder:text-content-tertiary text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition"
-              />
-              <p className="text-xs text-content-tertiary mt-1.5">
-                L&apos;email que vous souhaitez supprimer de notre base de données.
-              </p>
-            </div>
-
-            {/* Company */}
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium mb-2">
-                Nom de l&apos;entreprise <span className="text-content-tertiary">(optionnel)</span>
-              </label>
-              <input
-                id="company"
-                type="text"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder="Nom de votre entreprise"
-                className="w-full px-4 py-3 rounded-xl bg-surface-base border border-line text-content-primary placeholder:text-content-tertiary text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition"
+                placeholder="votre@email.pro"
+                className="w-full pl-9 pr-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
               />
             </div>
+            <p className="text-[11px] text-zinc-500 mt-1.5">L&apos;email à supprimer de notre base.</p>
+          </div>
 
-            {/* Reason */}
-            <div>
-              <label htmlFor="reason" className="block text-sm font-medium mb-2">
-                Motif <span className="text-content-tertiary">(optionnel)</span>
-              </label>
-              <textarea
-                id="reason"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                placeholder="Précisez la raison de votre demande si vous le souhaitez..."
-                rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-surface-base border border-line text-content-primary placeholder:text-content-tertiary text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition resize-none"
-              />
-            </div>
+          <div>
+            <label htmlFor="company" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
+              Entreprise <span className="text-zinc-500 normal-case">(optionnel)</span>
+            </label>
+            <input
+              id="company"
+              type="text"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="Nom de votre entreprise"
+              className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
+            />
+          </div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Envoi en cours...' : 'Envoyer ma demande de suppression'}
-            </button>
-          </form>
-        </div>
+          <div>
+            <label htmlFor="reason" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
+              Motif <span className="text-zinc-500 normal-case">(optionnel)</span>
+            </label>
+            <textarea
+              id="reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Précisez la raison de votre demande si vous le souhaitez (aide à améliorer nos pratiques)..."
+              rows={3}
+              className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition resize-none"
+            />
+          </div>
 
-        {/* Legal note */}
-        <p className="text-xs text-content-tertiary mt-8 leading-relaxed text-center">
-          En soumettant ce formulaire, votre email sera supprimé de notre base de prospects
-          et ajouté à notre liste d&apos;exclusion pour empêcher toute collecte future.
-          Pour toute question, contactez-nous à{' '}
-          <a href="mailto:contact@prospectia.ai" className="text-violet-400 hover:underline">
-            contact@prospectia.ai
-          </a>.
+          <button
+            type="submit"
+            disabled={loading || !email}
+            className="w-full py-3 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? <Loader2 size={14} className="animate-spin" /> : <Shield size={14} />}
+            {loading ? 'Envoi en cours...' : 'Envoyer ma demande de suppression'}
+          </button>
+        </form>
+
+        <p className="text-[11px] text-zinc-500 mt-4 leading-relaxed text-center">
+          🔒 Votre email sera supprimé de notre base + ajouté à notre liste d&apos;exclusion permanente.<br />
+          Pour toute question : <a href="mailto:hello@prospectia.cloud" className="text-violet-300 hover:underline">hello@prospectia.cloud</a>
         </p>
-      </main>
-    </div>
+      </div>
+    </AuthPageShell>
   );
 }
 
 export default function OptOutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#08080c]" />}>
       <OptOutInner />
     </Suspense>
   );
