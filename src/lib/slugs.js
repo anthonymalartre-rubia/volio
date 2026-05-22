@@ -192,6 +192,16 @@ export function getAllSeoUrls(baseUrl = 'https://prospectia.cloud') {
     }
   }
 
+  // ─── Pages personas /pour/[persona] ────────────────────────────
+  try {
+    const { getAllPersonas } = require('./personas');
+    for (const p of getAllPersonas()) {
+      urls.push({ loc: `${baseUrl}/pour/${p.slug}`, priority: 0.7, changefreq: 'monthly' });
+    }
+  } catch (e) {
+    // personas optionnel — si non présent, on skip
+  }
+
   // ─── Belgique francophone (Wallonie + Bruxelles, 6 provinces) ───
   // Lazy import pour éviter cycle de dépendance
   try {
