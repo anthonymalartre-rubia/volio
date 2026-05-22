@@ -1,12 +1,16 @@
 import Link from 'next/link';
-import { Check, X, Zap, ArrowRight, TrendingDown, Award, Shield, Globe } from 'lucide-react';
+import { Check, X, Zap, ArrowRight, TrendingDown, Award, Shield, Globe, AlertTriangle, LogOut } from 'lucide-react';
 import { TestimonialsBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 
 /**
- * Reusable component for /vs/[competitor] comparison pages.
- * High-intent SEO pages targeting users comparing tools.
+ * Reusable component for /vs/[competitor] and /alternative/[competitor].
+ * Le prop `intent` adapte le hero et ajoute des sections selon le mot-clé cible :
+ *  - 'vs'          (défaut)  : intent comparaison neutre ("vs", "ou", "lequel choisir")
+ *  - 'alternative' : intent switcher ("alternative à", "remplacer", "équivalent à")
  */
-export default function CompetitorVsPage({ competitor }) {
+export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
+  const isAlternative = intent === 'alternative';
+  const savingsPct = Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100));
   // Comparison criteria — fixed list of features
   const comparison = [
     { feature: 'Prix mensuel', prospectia: '49€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, prospectiaWins: true },
@@ -47,28 +51,75 @@ export default function CompetitorVsPage({ competitor }) {
       </nav>
 
       <main className="pt-24 pb-16">
-        {/* Hero */}
+        {/* Hero — différencié selon intent */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-300 mb-6">
-            <Award size={12} />
-            Comparatif 2026
+            {isAlternative ? <LogOut size={12} /> : <Award size={12} />}
+            {isAlternative ? `Alternative à ${competitor.name}` : 'Comparatif 2026'}
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
-            Prospectia vs {competitor.name} : lequel choisir ?
+            {isAlternative
+              ? `La meilleure alternative à ${competitor.name} en France`
+              : `Prospectia vs ${competitor.name} : lequel choisir ?`}
           </h1>
           <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mx-auto mb-8">
-            {competitor.description} <strong className="text-white">Prospectia est l&apos;alternative française à {competitor.name}</strong> :
-            ticket d&apos;entrée à 19 €/mois (le moins cher du marché français), scraping intelligent + Google Places, et meilleure couverture des PME françaises.
+            {isAlternative ? (
+              <>
+                Vous utilisez {competitor.name} et vous cherchez à <strong className="text-white">payer moins cher tout en trouvant plus d&apos;emails en France</strong> ?
+                Prospectia est l&apos;alternative française à {competitor.name} : ticket d&apos;entrée à 19 €/mois ({savingsPct}% moins cher),
+                cascade waterfall qui trouve 70-85 % des emails français (vs 30-40 % chez {competitor.name}), conforme RGPD natif.
+              </>
+            ) : (
+              <>
+                {competitor.description} <strong className="text-white">Prospectia est l&apos;alternative française à {competitor.name}</strong> :
+                ticket d&apos;entrée à 19 €/mois (le moins cher du marché français), scraping intelligent + Google Places, et meilleure couverture des PME françaises.
+              </>
+            )}
           </p>
 
           {/* Quick verdict */}
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
             <TrendingDown size={16} className="text-green-400" />
             <span className="text-zinc-300">
-              <strong className="text-green-400">Économisez jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}%</strong> en passant à Prospectia
+              <strong className="text-green-400">Économisez jusqu&apos;à {savingsPct}%</strong> en {isAlternative ? `switchant de ${competitor.name} vers` : 'passant à'} Prospectia
             </span>
           </div>
         </section>
+
+        {/* Section "Pourquoi switcher" — uniquement sur intent alternative */}
+        {isAlternative && (
+          <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+              <AlertTriangle size={22} className="text-amber-400" />
+              Pourquoi les utilisateurs quittent {competitor.name} en 2026
+            </h2>
+            <p className="text-sm text-zinc-400 mb-6 max-w-2xl">
+              Les 4 raisons principales que nous entendons en démo lors du switch.
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <SwitchReason
+                num="1"
+                title={`Couverture FR limitée chez ${competitor.name}`}
+                desc={`${competitor.name} est conçu pour le marché US. Sur les TPE/PME françaises, taux de couverture email plafonne à 30-40 %. Prospectia monte à 70-85 % sur le même périmètre.`}
+              />
+              <SwitchReason
+                num="2"
+                title={`Prix ${savingsPct}% moins cher`}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Prospectia démarre à 19 €/mois (Solo), 49 € (Pro), 99 € (Business). Tous les pays inclus dans tous les plans.`}
+              />
+              <SwitchReason
+                num="3"
+                title="RGPD natif vs bricolé"
+                desc={`${competitor.name} a ajouté la conformité RGPD après coup. Prospectia filtre automatiquement les emails personnels, opt-out 1 clic, opt-out webhook STOP intégré.`}
+              />
+              <SwitchReason
+                num="4"
+                title="Pas de crédits cachés"
+                desc={`Sur ${competitor.name}, vous payez par credit consommé (et ils s'épuisent vite). Sur Prospectia : 1 quota mensuel clair, jamais de surcharge surprise.`}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Comparison table */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
@@ -262,6 +313,16 @@ export default function CompetitorVsPage({ competitor }) {
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function SwitchReason({ num, title, desc }) {
+  return (
+    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+      <div className="text-3xl font-bold text-amber-400 mb-2">{num}.</div>
+      <h3 className="text-base font-semibold text-zinc-100 mb-2 leading-tight">{title}</h3>
+      <p className="text-sm text-zinc-400 leading-relaxed">{desc}</p>
     </div>
   );
 }
