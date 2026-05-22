@@ -36,6 +36,12 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
   },
+  // Apple touch icon mention (en plus de src/app/apple-icon.svg auto-géré)
+  appleWebApp: {
+    title: 'Prospectia',
+    statusBarStyle: 'black-translucent',
+    capable: true,
+  },
   robots: {
     index: true,
     follow: true,
@@ -87,6 +93,20 @@ const websiteSchema = {
     target: 'https://prospectia.cloud/prospection?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
+};
+
+// Viewport + theme-color (Next.js 14 metadata convention).
+// Adapté pour mobile + dark mode default.
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#08080c' },
+  ],
+  colorScheme: 'light dark',
 };
 
 export default function RootLayout({ children }) {
