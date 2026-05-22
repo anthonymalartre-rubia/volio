@@ -29,6 +29,7 @@ export async function generateMetadata({ params }) {
       languages: {
         'fr-FR': `https://prospectia.cloud/prospection/${categorySlug}`,
         'fr-BE': `https://prospectia.cloud/prospection-be/${categorySlug}`,
+        'fr-CH': `https://prospectia.cloud/prospection-ch/${categorySlug}`,
         'x-default': `https://prospectia.cloud/prospection/${categorySlug}`,
       },
     },

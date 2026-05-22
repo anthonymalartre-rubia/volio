@@ -202,6 +202,27 @@ export function getAllSeoUrls(baseUrl = 'https://prospectia.cloud') {
     // personas optionnel — si non présent, on skip
   }
 
+  // ─── Suisse romande (6 cantons francophones) ────────────────────
+  try {
+    const { getAllCantonsCH } = require('./slugs-ch');
+    const cantonsCH = getAllCantonsCH();
+
+    urls.push({ loc: `${baseUrl}/prospection-ch`, priority: 0.7, changefreq: 'weekly' });
+    for (const cat of cats) {
+      urls.push({ loc: `${baseUrl}/prospection-ch/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
+    }
+    for (const c of cantonsCH) {
+      urls.push({ loc: `${baseUrl}/prospection-ch/canton/${c.slug}`, priority: 0.55, changefreq: 'monthly' });
+    }
+    for (const cat of cats) {
+      for (const c of cantonsCH) {
+        urls.push({ loc: `${baseUrl}/prospection-ch/${cat.slug}/${c.slug}`, priority: 0.4, changefreq: 'monthly' });
+      }
+    }
+  } catch (e) {
+    // slugs-ch optionnel
+  }
+
   // ─── Belgique francophone (Wallonie + Bruxelles, 6 provinces) ───
   // Lazy import pour éviter cycle de dépendance
   try {

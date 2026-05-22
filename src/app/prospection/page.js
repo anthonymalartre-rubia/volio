@@ -11,6 +11,7 @@ export const metadata = {
     languages: {
       'fr-FR': 'https://prospectia.cloud/prospection',
       'fr-BE': 'https://prospectia.cloud/prospection-be',
+      'fr-CH': 'https://prospectia.cloud/prospection-ch',
       'x-default': 'https://prospectia.cloud/prospection',
     },
   },

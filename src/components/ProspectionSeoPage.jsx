@@ -72,6 +72,11 @@ export default function ProspectionSeoPage({
       areaShort: 'Belgique francophone',
       footerCopy: 'Prospection B2B en Belgique francophone',
     },
+    ch: {
+      heroDefault: 'Prospection B2B Suisse romande',
+      areaShort: 'Suisse romande',
+      footerCopy: 'Prospection B2B en Suisse romande',
+    },
   }[country] || { heroDefault: 'Prospection B2B', areaShort: 'France', footerCopy: 'Prospection B2B' };
 
   const heroBadge = department && category
@@ -471,6 +476,7 @@ export default function ProspectionSeoPage({
                 <li><Link href="/api-docs" className="text-zinc-400 hover:text-violet-300 transition">API publique</Link></li>
                 <li><Link href="/prospection" className="text-zinc-400 hover:text-violet-300 transition">France · tous les secteurs</Link></li>
                 <li><Link href="/prospection-be" className="text-zinc-400 hover:text-violet-300 transition">🇧🇪 Belgique francophone</Link></li>
+                <li><Link href="/prospection-ch" className="text-zinc-400 hover:text-violet-300 transition">🇨🇭 Suisse romande</Link></li>
                 <li><Link href="/pour/sdr" className="text-zinc-400 hover:text-violet-300 transition">Pour SDR</Link></li>
                 <li><Link href="/pour/fondateurs" className="text-zinc-400 hover:text-violet-300 transition">Pour fondateurs</Link></li>
                 <li><Link href="/pour/agences-web" className="text-zinc-400 hover:text-violet-300 transition">Pour agences web</Link></li>

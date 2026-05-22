@@ -26,6 +26,7 @@ export async function generateMetadata({ params }) {
       languages: {
         'fr-FR': `${SITE_URL}/prospection/${catSlug}`,
         'fr-BE': `${SITE_URL}/prospection-be/${catSlug}`,
+        'fr-CH': `${SITE_URL}/prospection-ch/${catSlug}`,
         'x-default': `${SITE_URL}/prospection/${catSlug}`,
       },
     },
