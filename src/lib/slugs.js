@@ -192,6 +192,35 @@ export function getAllSeoUrls(baseUrl = 'https://prospectia.cloud') {
     }
   }
 
+  // ─── Belgique francophone (Wallonie + Bruxelles, 6 provinces) ───
+  // Lazy import pour éviter cycle de dépendance
+  try {
+    const { getAllProvincesBE } = require('./slugs-be');
+    const provincesBE = getAllProvincesBE();
+
+    // Hub /prospection-be
+    urls.push({ loc: `${baseUrl}/prospection-be`, priority: 0.7, changefreq: 'weekly' });
+
+    // Pages catégorie BE (~150)
+    for (const cat of cats) {
+      urls.push({ loc: `${baseUrl}/prospection-be/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
+    }
+
+    // Pages province seules (6)
+    for (const p of provincesBE) {
+      urls.push({ loc: `${baseUrl}/prospection-be/province/${p.slug}`, priority: 0.55, changefreq: 'monthly' });
+    }
+
+    // Pages cat × province (150 × 6 = 900)
+    for (const cat of cats) {
+      for (const p of provincesBE) {
+        urls.push({ loc: `${baseUrl}/prospection-be/${cat.slug}/${p.slug}`, priority: 0.4, changefreq: 'monthly' });
+      }
+    }
+  } catch (e) {
+    // slugs-be optionnel — si non présent, on skip
+  }
+
   // Combined category × city pages (top 100 French cities)
   // Lazy import to avoid circular dependency
   try {

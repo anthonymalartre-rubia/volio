@@ -57,14 +57,30 @@ export default function ProspectionSeoPage({
   currentCitySlug = null,
   // ── DensityChart : { items: [{ label, value }], scopeLabel: "par région" } ──
   densityChart = null,
+  // ── Pays cible (pour adapter copy et CTAs) ──
+  country = 'fr', // 'fr' | 'be'
 }) {
+  // Copy adaptable par pays
+  const countryCopy = {
+    fr: {
+      heroDefault: 'Prospection B2B France',
+      areaShort: 'France',
+      footerCopy: 'Prospection B2B en France',
+    },
+    be: {
+      heroDefault: 'Prospection B2B Belgique francophone',
+      areaShort: 'Belgique francophone',
+      footerCopy: 'Prospection B2B en Belgique francophone',
+    },
+  }[country] || { heroDefault: 'Prospection B2B', areaShort: 'France', footerCopy: 'Prospection B2B' };
+
   const heroBadge = department && category
     ? `${category.labelCapitalized} • ${department.name}`
     : department
     ? `Tous les secteurs • ${department.name}`
     : category
     ? category.labelPlural
-    : 'Prospection B2B France';
+    : countryCopy.heroDefault;
 
   // Sections pour le sommaire ancré (sticky TOC). Filtre celles qui n'apparaîtront pas.
   const tocSections = [
@@ -453,7 +469,8 @@ export default function ProspectionSeoPage({
                 <li><Link href="/dashboard" className="text-zinc-400 hover:text-violet-300 transition">Dashboard</Link></li>
                 <li><Link href="/#pricing" className="text-zinc-400 hover:text-violet-300 transition">Tarifs</Link></li>
                 <li><Link href="/api-docs" className="text-zinc-400 hover:text-violet-300 transition">API publique</Link></li>
-                <li><Link href="/prospection" className="text-zinc-400 hover:text-violet-300 transition">Tous les secteurs</Link></li>
+                <li><Link href="/prospection" className="text-zinc-400 hover:text-violet-300 transition">France · tous les secteurs</Link></li>
+                <li><Link href="/prospection-be" className="text-zinc-400 hover:text-violet-300 transition">🇧🇪 Belgique francophone</Link></li>
               </ul>
             </div>
 
@@ -502,7 +519,7 @@ export default function ProspectionSeoPage({
               </span>
             </div>
             <div className="text-[11px] text-zinc-600">
-              © 2026 Prospectia.cloud — Édité par Suraya, France
+              © 2026 Prospectia.cloud — {countryCopy.footerCopy} · Édité par Suraya, France
             </div>
           </div>
         </div>
