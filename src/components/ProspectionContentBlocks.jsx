@@ -11,7 +11,7 @@
 import Link from 'next/link';
 import {
   Target, BarChart3, Calendar, MapPin, MessageCircle, BookOpen, Lightbulb,
-  Mail, Phone, Linkedin, ArrowRight, AlertTriangle, Quote, Building2,
+  Mail, Phone, ArrowRight, AlertTriangle, Quote, Building2,
   Users, TrendingUp, X, CheckCircle2, Shield, Zap,
 } from 'lucide-react';
 import { toRegionUrlSlug } from '@/lib/region-data';
@@ -546,6 +546,97 @@ export function RegionContextBlock({ regionData, region, category }) {
           <p className="text-sm text-zinc-200 leading-relaxed">{regionData.bestForProspecting}</p>
         </div>
       )}
+    </section>
+  );
+}
+
+// ─── 13. TrustBadgesBlock — trust signals juste sous le hero ──────────
+// Badges visuels : RGPD + Stripe + Made in France + No credit card.
+// Réduit la friction de signup en montrant qu'on coche les cases standard.
+export function TrustBadgesBlock() {
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-10">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
+        <TrustBadge
+          icon={<Shield size={14} className="text-emerald-300" />}
+          label="RGPD compliant"
+          tone="emerald"
+        />
+        <TrustBadge
+          icon={<CheckCircle2 size={14} className="text-blue-300" />}
+          label="Paiement sécurisé Stripe"
+          tone="blue"
+        />
+        <TrustBadge
+          icon={<span className="text-sm leading-none">🇫🇷</span>}
+          label="Hébergé et opéré en France"
+          tone="violet"
+        />
+        <TrustBadge
+          icon={<Zap size={14} className="text-amber-300" />}
+          label="Sans carte bancaire"
+          tone="amber"
+        />
+      </div>
+    </section>
+  );
+}
+
+function TrustBadge({ icon, label, tone = 'violet' }) {
+  const toneMap = {
+    emerald: 'border-emerald-500/20 bg-emerald-500/[0.04] text-emerald-100',
+    blue: 'border-blue-500/20 bg-blue-500/[0.04] text-blue-100',
+    violet: 'border-violet-500/20 bg-violet-500/[0.04] text-violet-100',
+    amber: 'border-amber-500/20 bg-amber-500/[0.04] text-amber-100',
+  };
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${toneMap[tone]}`}>
+      {icon}
+      {label}
+    </span>
+  );
+}
+
+// ─── 14. DemoCtaBlock — alternative au signup direct ──────────────────
+// Pour les prospects qui veulent voir avant d'essayer : démo 8 min de l'outil.
+// Lien vers Cal.com (à configurer) ou page interne /demo.
+export function DemoCtaBlock({ category }) {
+  const what = category ? category.labelPlural : 'votre secteur';
+  return (
+    <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
+      <div className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-zinc-900 to-black p-6 sm:p-8">
+        <div className="grid sm:grid-cols-[1fr_auto] gap-5 items-center">
+          <div>
+            <div className="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-[11px] font-semibold text-blue-300 uppercase tracking-wider mb-2">
+              Démo personnalisée
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2 leading-tight">
+              Voir Prospectia sur {what} en 8 minutes
+            </h3>
+            <p className="text-sm text-zinc-400 leading-relaxed">
+              Démo live (8 min, pas de slides) : on cible votre dept/ville, on extrait 50 prospects qualifiés, on génère un CSV importable dans votre CRM. Réservez le créneau qui vous arrange.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Link
+              href="https://cal.com/anthony-malartre/demo-prospectia"
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-sm font-bold transition shadow-lg"
+            >
+              <Calendar size={14} />
+              Réserver une démo
+            </Link>
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-white/10 hover:bg-white/[0.04] text-xs font-medium text-zinc-300 transition"
+            >
+              ou essayer en autonomie
+              <ArrowRight size={12} />
+            </Link>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -1,11 +1,21 @@
 import Link from 'next/link';
 import { Search, MapPin, Mail, Phone, Globe, CheckCircle2, ArrowRight, Zap, Shield, TrendingUp, Clock } from 'lucide-react';
+
+// SVG LinkedIn inline (pas dispo dans cette version de lucide-react)
+function LinkedinIcon({ size = 12 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z" />
+    </svg>
+  );
+}
 import { getBuildDateFr, getBuildMonthFr } from '@/lib/buildDate';
 import {
   MarketSizeBlock, KpiBlock, PersonaBlock, SeasonalityBlock, BestApproachBlock,
   PitchBlock, ObjectionBlock, GlossaryBlock, PainPointsBlock, TopRegionsBlock,
   DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
   SocialProofBlock, CompetitorInlineBlock, AuthoritiesBlock,
+  TrustBadgesBlock, DemoCtaBlock,
 } from './ProspectionContentBlocks';
 import { LeadMagnetBlock, StickyCtaBar } from './ProspectionClientBlocks';
 
@@ -145,6 +155,9 @@ export default function ProspectionSeoPage({
           </div>
         </section>
 
+        {/* Trust badges juste après les stats — rassure avant le scroll */}
+        <TrustBadgesBlock />
+
         {/* Social proof juste après les stats — moment de confiance */}
         <SocialProofBlock department={department} region={region} category={category} />
 
@@ -231,6 +244,9 @@ export default function ProspectionSeoPage({
 
         {/* Sources & cadre légal (E-E-A-T : liens autoritaires INSEE, CNIL...) */}
         <AuthoritiesBlock category={category} />
+
+        {/* Demo CTA — alternative au signup pour les indécis */}
+        <DemoCtaBlock category={category} />
 
         {/* FAQ */}
         {faq.length > 0 && (
@@ -363,16 +379,86 @@ export default function ProspectionSeoPage({
         </article>
       </main>
 
-      {/* Minimal footer */}
-      <footer className="border-t border-white/[0.06] py-8 mt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-zinc-500">
-            © 2026 Prospectia.cloud — Prospection B2B en France
+      {/* Footer renforcé : 4 colonnes + trust strip + social */}
+      <footer className="border-t border-white/[0.06] mt-16 bg-black/40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+            {/* Brand col */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-1 mb-3">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
+                  <span className="text-[11px] font-bold text-white">P</span>
+                </div>
+                <span className="text-base font-bold">Prospectia</span>
+                <span className="text-violet-400 text-xs font-semibold">.cloud</span>
+              </div>
+              <p className="text-xs text-zinc-500 leading-relaxed mb-4">
+                Agrégateur de prospection B2B. 150 secteurs, 101 départements français, cascade waterfall 70-85 % de couverture email.
+              </p>
+              <a href="https://www.linkedin.com/company/prospectia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-violet-300 transition">
+                <LinkedinIcon size={12} />
+                LinkedIn
+              </a>
+            </div>
+
+            {/* Produit */}
+            <div>
+              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Produit</div>
+              <ul className="space-y-2 text-xs">
+                <li><Link href="/dashboard" className="text-zinc-400 hover:text-violet-300 transition">Dashboard</Link></li>
+                <li><Link href="/#pricing" className="text-zinc-400 hover:text-violet-300 transition">Tarifs</Link></li>
+                <li><Link href="/api-docs" className="text-zinc-400 hover:text-violet-300 transition">API publique</Link></li>
+                <li><Link href="/prospection" className="text-zinc-400 hover:text-violet-300 transition">Tous les secteurs</Link></li>
+              </ul>
+            </div>
+
+            {/* Ressources */}
+            <div>
+              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Ressources</div>
+              <ul className="space-y-2 text-xs">
+                <li><Link href="/blog" className="text-zinc-400 hover:text-violet-300 transition">Blog</Link></li>
+                <li><Link href="/ressources" className="text-zinc-400 hover:text-violet-300 transition">Lead magnets</Link></li>
+                <li><Link href="/glossaire" className="text-zinc-400 hover:text-violet-300 transition">Glossaire</Link></li>
+                <li><Link href="/comparatif-outils-prospection-b2b-france" className="text-zinc-400 hover:text-violet-300 transition">Comparatif outils</Link></li>
+                <li><Link href="/etude/prospection-b2b-france-2026" className="text-zinc-400 hover:text-violet-300 transition">Étude marché 2026</Link></li>
+              </ul>
+            </div>
+
+            {/* Société + Légal */}
+            <div>
+              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Société & légal</div>
+              <ul className="space-y-2 text-xs">
+                <li><Link href="/cgu" className="text-zinc-400 hover:text-violet-300 transition">CGU</Link></li>
+                <li><Link href="/confidentialite" className="text-zinc-400 hover:text-violet-300 transition">Confidentialité</Link></li>
+                <li><Link href="/rgpd" className="text-zinc-400 hover:text-violet-300 transition">Droits RGPD</Link></li>
+                <li><Link href="/opt-out" className="text-zinc-400 hover:text-violet-300 transition">Opt-out / désinscription</Link></li>
+                <li><a href="mailto:hello@prospectia.cloud" className="text-zinc-400 hover:text-violet-300 transition">hello@prospectia.cloud</a></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-4 text-xs text-zinc-500">
-            <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>
-            <Link href="/rgpd" className="hover:text-zinc-300 transition">RGPD</Link>
+
+          {/* Trust strip + copyright */}
+          <div className="border-t border-white/[0.04] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-500">
+              <span className="flex items-center gap-1.5">
+                <Shield size={11} className="text-emerald-400" /> RGPD compliant
+              </span>
+              <span className="text-zinc-700">·</span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 size={11} className="text-blue-400" /> Paiement Stripe
+              </span>
+              <span className="text-zinc-700">·</span>
+              <span className="flex items-center gap-1.5">
+                🇫🇷 Made in France
+              </span>
+              <span className="text-zinc-700">·</span>
+              <span className="flex items-center gap-1.5">
+                <TrendingUp size={11} className="text-violet-400" /> Next.js + Supabase + Vercel
+              </span>
+            </div>
+            <div className="text-[11px] text-zinc-600">
+              © 2026 Prospectia.cloud — Édité par Suraya, France
+            </div>
           </div>
         </div>
       </footer>
