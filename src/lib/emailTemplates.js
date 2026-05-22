@@ -642,3 +642,44 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
     }),
   };
 }
+
+// ───────────────────────────────────────────────────────────────
+// referralRewardEmail — Email transactionnel au parrain dont un filleul
+// vient de devenir client payant. Lui annonce le bonus de 1 mois.
+// ───────────────────────────────────────────────────────────────
+export function referralRewardEmail(userName, totalBonusMonths) {
+  const name = userName || 'là';
+  const m = totalBonusMonths || 1;
+  return {
+    subject: '🎉 1 mois gratuit gagné grâce à votre parrainage',
+    html: layout({
+      preheader: `Total cumulé : ${m} mois bonus. Continuez à inviter pour en gagner plus.`,
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🎉',
+          title: `Vous venez de gagner 1 mois gratuit !`,
+          greeting: `Bonjour ${name}, un de vos filleuls vient de devenir client payant sur Prospectia. Votre bonus est crédité.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
+          <tr>
+            <td style="padding:20px;background-color:${COLORS.brandLight};border-radius:10px;text-align:center;">
+              <p style="margin:0 0 4px;font-size:13px;color:${COLORS.textMuted};text-transform:uppercase;letter-spacing:1px;">Total bonus accumulés</p>
+              <p style="margin:0;font-size:36px;font-weight:700;color:${COLORS.brand};">${m} mois</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};">automatiquement crédités sur votre prochain renouvellement</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Voir mon programme de parrainage', `${APP_URL}/parrainage`)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Aucune limite : pour chaque ami payant, +1 mois. <a href="${APP_URL}/parrainage" style="color:${COLORS.brand};">Partagez votre lien</a>.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}

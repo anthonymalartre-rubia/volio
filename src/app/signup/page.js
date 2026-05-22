@@ -42,7 +42,32 @@ export default function SignupPage() {
 
   useEffect(() => {
     setMounted(true);
+    // Capture ?ref=XXX dans le cookie pour survie au signup (Supabase peut
+    // rediriger via /auth/callback et perdre le query string)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+      if (ref && /^[a-zA-Z0-9]{4,12}$/.test(ref)) {
+        document.cookie = `prospectia_ref=${encodeURIComponent(ref)}; path=/; max-age=2592000; SameSite=Lax`;
+      }
+    } catch {}
   }, []);
+
+  // Helper : track le parrainage après login réussi
+  async function trackReferralIfAny() {
+    try {
+      const m = document.cookie.match(/(?:^|;\s*)prospectia_ref=([^;]+)/);
+      const ref = m ? decodeURIComponent(m[1]) : null;
+      if (!ref) return;
+      await fetch('/api/referrals/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: ref }),
+      });
+      // Nettoie le cookie après usage
+      document.cookie = 'prospectia_ref=; path=/; max-age=0';
+    } catch {}
+  }
 
   const handleResendEmail = async () => {
     setResending(true);
@@ -84,7 +109,8 @@ export default function SignupPage() {
       } else if (data?.user?.identities?.length === 0) {
         setError(t('auth.accountExists'));
       } else if (data?.session) {
-        // Auto-confirmed → redirect to dashboard
+        // Auto-confirmed → track referral puis redirect
+        await trackReferralIfAny();
         router.push('/dashboard');
       } else {
         // Email auto-confirmed by trigger but Supabase didn't return session
@@ -94,6 +120,7 @@ export default function SignupPage() {
           password,
         });
         if (!signInError) {
+          await trackReferralIfAny();
           router.push('/dashboard');
         } else {
           // Fallback: show verification screen

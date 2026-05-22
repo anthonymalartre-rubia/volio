@@ -135,6 +135,30 @@ export async function POST(request) {
           link: '/dashboard',
           metadata: { plan_id: planId, session_id: session.id },
         }).catch((err) => console.error('[webhook] Notif success failed:', err));
+
+        // Programme de parrainage : qualifier la referral + accorder 1 mois bonus au parrain
+        try {
+          const { qualifyReferral } = require('@/lib/referrals');
+          const qualResult = await qualifyReferral(userId);
+          if (qualResult.referrer_id) {
+            // Notif + email pour le parrain
+            createNotification(qualResult.referrer_id, {
+              type: NOTIF_TYPES.PAYMENT_SUCCESS,
+              title: '🎉 Vous avez gagné 1 mois gratuit !',
+              body: `Un de vos filleuls vient de devenir client payant. Total de bonus accumulés : ${qualResult.new_bonus} mois.`,
+              link: '/parrainage',
+              metadata: { referral_id: qualResult.referral_id },
+            }).catch(() => {});
+            const { email: refEmail, fullName: refName } = await getUserContact(supabaseAdmin, qualResult.referrer_id);
+            if (refEmail) {
+              const { referralRewardEmail } = require('@/lib/emailTemplates');
+              const tplRef = referralRewardEmail(refName, qualResult.new_bonus);
+              sendEmail({ to: refEmail, subject: tplRef.subject, html: tplRef.html }).catch(() => {});
+            }
+          }
+        } catch (err) {
+          console.error('[webhook] Referral qualify failed:', err);
+        }
         break;
       }
 
