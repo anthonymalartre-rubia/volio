@@ -22,7 +22,10 @@ const SearchPanel = lazy(() => import('@/components/SearchPanel'));
 const ResultsPanel = lazy(() => import('@/components/ResultsPanel'));
 const ExportPanel = lazy(() => import('@/components/ExportPanel'));
 const EmailVerifier = lazy(() => import('@/components/EmailVerifier'));
-const OnboardingOverlay = lazy(() => import('@/components/OnboardingOverlay'));
+// OnboardingOverlay (5 modals plein écran) supprimé en mai 2026 :
+// pattern intrusif "tour produit" remplacé par l'approche Linear :
+// barre progress discrète en top + hints contextuels inline. Voir
+// OnboardingChecklist.jsx pour l'implémentation refondue.
 
 const MAX_LOGS = 100;
 
@@ -197,7 +200,8 @@ export default function Dashboard() {
   const [tags, setTags] = useState([]);
   const [prospectTagMap, setProspectTagMap] = useState({});
   const [searchHistory, setSearchHistory] = useState([]);
-  const [showOnboarding, setShowOnboarding] = useState(false);
+  // showOnboarding supprimé : OnboardingOverlay (5 modals intrusifs) remplacé
+  // par OnboardingChecklist barre progress + OnboardingHint inline (Linear-style)
 
   // Refs to avoid stale closures in async loops
   const stopSearchRef = useRef(false);
@@ -445,17 +449,15 @@ export default function Dashboard() {
       // Apply search history
       setSearchHistory(sessionsRes.data || []);
 
-      // Show onboarding for new users, or when triggered from settings (?onboarding=1)
-      const loadedProspects = prospectsRes.data || [];
+      // OnboardingOverlay supprimé. Si l'user vient avec ?onboarding=1
+      // (ancien lien depuis settings), on nettoie juste l'URL sans rien
+      // afficher de plus (le nouveau onboarding est tjs visible en barre
+      // top tant que pas complété).
       const forceOnboarding = searchParams.get('onboarding') === '1';
-      if (forceOnboarding || (loadedProspects.length === 0 && !localStorage.getItem('onboarding_completed'))) {
-        setShowOnboarding(true);
-        // Clean up the `onboarding` URL param sans casser le `view` éventuel.
-        if (forceOnboarding) {
-          const currentView = searchParams.get('view');
-          const targetUrl = currentView ? `/dashboard?view=${currentView}` : '/dashboard';
-          router.replace(targetUrl, { scroll: false });
-        }
+      if (forceOnboarding) {
+        const currentView = searchParams.get('view');
+        const targetUrl = currentView ? `/dashboard?view=${currentView}` : '/dashboard';
+        router.replace(targetUrl, { scroll: false });
       }
     };
 
@@ -1280,6 +1282,14 @@ export default function Dashboard() {
         isSearching={isSearching}
       />
 
+      {/* OnboardingChecklist en barre top discrète (Linear-style) — sticky
+          juste sous TopBar. Disparaît auto quand 100% complété. Dismissable
+          définitivement (X). Remplace l'ancien widget bottom-right + les
+          5 modals overlay (UX intrusive). */}
+      <Suspense fallback={null}>
+        <OnboardingChecklist isAdmin={isAdmin} />
+      </Suspense>
+
       {/* Toast retour Stripe (success / pending / cancelled) */}
       {upgradeToast && (
         <div className="fixed top-4 right-4 z-[110] max-w-sm animate-in fade-in slide-in-from-top-2">
@@ -1457,19 +1467,8 @@ export default function Dashboard() {
         </main>
       </div>
 
-      {showOnboarding && (
-        <Suspense fallback={null}>
-          <OnboardingOverlay
-            onClose={() => setShowOnboarding(false)}
-            onStartSearch={() => handleViewChange('search')}
-          />
-        </Suspense>
-      )}
-
-      {/* Checklist persistante (bottom-right, dismissable session) — lazy */}
-      <Suspense fallback={null}>
-        <OnboardingChecklist isAdmin={isAdmin} />
-      </Suspense>
+      {/* OnboardingChecklist déplacé en haut (barre top sticky) plus loin
+          dans le JSX (juste après TopBar). Voir ligne ~1280. */}
 
       {/* Sollicitation avis Trustpilot (bottom-left, dismissable 30j) —
           n'apparaît que si Trustpilot configuré + user a fait au moins
