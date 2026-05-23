@@ -76,9 +76,15 @@ export function LogoIcon({
 // Logo — wordmark complet (symbole + texte "Prospectia")
 // ─────────────────────────────────────────────────────────────────────
 //
-// Le SVG wordmark utilise fill="currentColor" → le logo prend la couleur
-// text du parent (ex: text-content-primary en theme-aware, ou text-white
-// en dark forcé).
+// 2 SVG en swap CSS via la classe .light (qui est ajoutée sur <html>
+// par ThemeProvider en mode light) :
+// - prospectia-wordmark-dark.svg : fill blanc, visible sur fond sombre
+// - prospectia-wordmark-light.svg : fill noir, visible sur fond clair
+//
+// Pourquoi 2 fichiers et pas fill="currentColor" : <Image> de next/image
+// traite le SVG comme un raster et NE propage PAS currentColor. Les
+// alternatives (mask-image, inline SVG) sont plus lourdes à maintenir.
+// 2 fichiers de 7KB chacun reste tout à fait acceptable.
 //
 // Variants :
 // - "wordmark" : SVG complet symbole + texte
@@ -98,16 +104,25 @@ export default function Logo({
   const s = SIZES[size] || SIZES.md;
   const wordmark = (
     <span
-      className={`inline-flex items-center text-content-primary ${className}`}
+      className={`inline-flex items-center ${className}`}
       aria-label="Prospectia"
     >
+      {/* Version dark mode (par défaut, fill blanc) — masquée en .light */}
       <Image
-        src="/logos/prospectia-wordmark.svg"
+        src="/logos/prospectia-wordmark-dark.svg"
         alt=""
         width={367}
         height={100}
-        // height contrôlée par classes Tailwind, width auto
-        className={`w-auto ${s.wordmark}`}
+        className={`w-auto block [.light_&]:hidden ${s.wordmark}`}
+        priority={size === 'lg' || size === 'xl'}
+      />
+      {/* Version light mode (fill noir) — visible uniquement quand .light */}
+      <Image
+        src="/logos/prospectia-wordmark-light.svg"
+        alt=""
+        width={367}
+        height={100}
+        className={`w-auto hidden [.light_&]:block ${s.wordmark}`}
         priority={size === 'lg' || size === 'xl'}
       />
     </span>

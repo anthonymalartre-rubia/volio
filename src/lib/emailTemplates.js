@@ -2,6 +2,8 @@
 // HTML email templates pour Prospectia — design refondu (refresh 2026-05).
 // Optimisé Gmail, Outlook, Apple Mail. Light-mode + dark-mode compatible.
 
+import { isTrustpilotEnabled, TRUSTPILOT_REVIEW_URL } from './trustpilot-data';
+
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://prospectia.cloud';
 const DASHBOARD_URL = `${APP_URL}/dashboard`;
 const SETTINGS_URL = `${APP_URL}/settings`;
@@ -31,10 +33,49 @@ const COLORS = {
 // ─── Helpers ────────────────────────────────────────────────────────
 
 /**
+ * Encart Trustpilot — invitation à laisser un avis, affiché juste
+ * au-dessus du footer dans TOUS les emails transactionnels.
+ *
+ * Affiché UNIQUEMENT si Trustpilot est activé ET qu'on a déjà des avis
+ * (isTrustpilotEnabled() === true). Sinon retourne '' → invisible.
+ *
+ * Stratégie : chaque email transactionnel = un touchpoint de plus pour
+ * solliciter un avis sans être intrusif (placé en footer, discret).
+ * S'active automatiquement le jour où Anthony mettra TRUSTPILOT_RATING
+ * et TRUSTPILOT_REVIEW_COUNT à jour dans lib/trustpilot-data.js.
+ */
+function trustpilotPrompt() {
+  if (!isTrustpilotEnabled()) return '';
+  return `
+          <!-- Trustpilot review solicitation -->
+          <tr>
+            <td style="padding:16px 12px 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;">
+                <tr>
+                  <td style="padding:14px 18px;text-align:center;">
+                    <p style="margin:0 0 6px;font-size:13px;color:#047857;font-weight:600;">
+                      Vous aimez Prospectia&nbsp;?
+                    </p>
+                    <p style="margin:0 0 10px;font-size:12px;color:#065f46;line-height:1.5;">
+                      Votre avis Trustpilot nous aide énormément. 30 secondes, pas plus.
+                    </p>
+                    <a href="${TRUSTPILOT_REVIEW_URL}" style="display:inline-block;padding:8px 18px;background-color:#10b981;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;border-radius:8px;">
+                      ⭐ Laisser un avis sur Trustpilot
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+  `;
+}
+
+/**
  * Layout principal avec :
  * - Preheader (texte aperçu inbox)
  * - Header avec logo
  * - Card centrale (max 560px)
+ * - Trustpilot prompt (conditionnel, juste au-dessus du footer)
  * - Footer minimaliste
  */
 function layout({ preheader = '', content, accent = COLORS.brand }) {
@@ -87,6 +128,8 @@ function layout({ preheader = '', content, accent = COLORS.brand }) {
               ${content}
             </td>
           </tr>
+
+          ${trustpilotPrompt()}
 
           <!-- Footer -->
           <tr>

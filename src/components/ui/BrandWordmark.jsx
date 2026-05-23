@@ -42,15 +42,27 @@ export default function BrandWordmark({
 
   // variant="logo" : symbole P + wordmark côte à côte
   // variant="default" : juste wordmark
+  // Note : 2 SVG en swap CSS via .light pour theme-awareness (voir Logo.jsx)
   const inner = (
-    <span className={`inline-flex items-center ${s.gap} text-content-primary ${className}`}>
+    <span className={`inline-flex items-center ${s.gap} ${className}`}>
       {variant === 'logo' && <LogoIcon size={s.iconSize} />}
+      {/* Dark mode (par défaut, fill blanc) */}
       <Image
-        src="/logos/prospectia-wordmark.svg"
+        src="/logos/prospectia-wordmark-dark.svg"
         alt="Prospectia"
         width={367}
         height={100}
-        className={`w-auto ${s.wordmarkH}`}
+        className={`w-auto block [.light_&]:hidden ${s.wordmarkH}`}
+        priority={size === 'lg' || size === 'xl'}
+      />
+      {/* Light mode (fill noir) */}
+      <Image
+        src="/logos/prospectia-wordmark-light.svg"
+        alt=""
+        aria-hidden="true"
+        width={367}
+        height={100}
+        className={`w-auto hidden [.light_&]:block ${s.wordmarkH}`}
         priority={size === 'lg' || size === 'xl'}
       />
     </span>
