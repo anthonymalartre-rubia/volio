@@ -1,3 +1,10 @@
+// Bundle analyzer activable via : ANALYZE=true npm run build
+// Génère un rapport HTML interactif dans .next/analyze/ pour identifier
+// les chunks lourds et le code inutilisé.
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Compress responses (gzip/brotli)
@@ -72,4 +79,4 @@ const nextConfig = {
   // - www.prospectia.cloud → prospectia.cloud (à configurer)
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
