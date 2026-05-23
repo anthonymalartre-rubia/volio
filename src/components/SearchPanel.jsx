@@ -21,6 +21,10 @@ function LinkedInIcon({ size = 16, className = '' }) {
   );
 }
 
+// Avatar bot — gradient brand unifié (violet/indigo). Avant : indigo→purple
+// (off-palette). Aligne le SearchPanel sur la même identité que la landing.
+const BOT_AVATAR_GRADIENT = 'bg-gradient-to-br from-violet-600 to-indigo-600';
+
 function BotMessage({ children, icon: Icon, delay = 0 }) {
   const [visible, setVisible] = useState(delay === 0);
   useEffect(() => {
@@ -33,7 +37,7 @@ function BotMessage({ children, icon: Icon, delay = 0 }) {
   if (!visible) {
     return (
       <div className="flex items-start gap-3">
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+        <div className={`w-7 h-7 rounded-lg ${BOT_AVATAR_GRADIENT} flex items-center justify-center flex-shrink-0`}>
           <Sparkles size={13} className="text-white" />
         </div>
         <div className="flex gap-1 py-3">
@@ -47,7 +51,7 @@ function BotMessage({ children, icon: Icon, delay = 0 }) {
 
   return (
     <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+      <div className={`w-7 h-7 rounded-lg ${BOT_AVATAR_GRADIENT} flex items-center justify-center flex-shrink-0 mt-0.5`}>
         {Icon ? <Icon size={13} className="text-white" /> : <Sparkles size={13} className="text-white" />}
       </div>
       <div className="flex-1 text-sm text-content-primary leading-relaxed">{children}</div>
@@ -56,22 +60,22 @@ function BotMessage({ children, icon: Icon, delay = 0 }) {
 }
 
 function UserMessage({ children }) {
+  // User bubble : violet pour cohérence avec le brand (avant: indigo).
   return (
     <div className="flex justify-end animate-in fade-in slide-in-from-bottom-2 duration-200">
-      <div className="bg-indigo-600/20 border border-indigo-500/20 rounded-xl px-4 py-2 text-sm text-indigo-300 max-w-[80%]">
+      <div className="bg-violet-600/20 border border-violet-500/20 rounded-xl px-4 py-2 text-sm text-violet-300 max-w-[80%]">
         {children}
       </div>
     </div>
   );
 }
 
-function OptionChips({ options, selected, onToggle, colorClass = "indigo" }) {
-  const colors = {
-    indigo: { active: "bg-indigo-600/20 border-indigo-500/30 text-indigo-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
-    blue: { active: "bg-blue-600/20 border-blue-500/30 text-blue-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
-    purple: { active: "bg-purple-600/20 border-purple-500/30 text-purple-400", inactive: "border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary" },
-  };
-  const c = colors[colorClass] || colors.indigo;
+// OptionChips : un seul accent (violet) au lieu de 3 couleurs distinctes
+// (indigo/blue/purple). Le paramètre colorClass est conservé pour compat
+// API mais ignoré — toute la palette utilise désormais violet.
+function OptionChips({ options, selected, onToggle, colorClass = "violet" }) {
+  const activeClass = 'bg-violet-600/20 border-violet-500/30 text-violet-400';
+  const inactiveClass = 'border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary';
 
   return (
     <div className="flex flex-wrap gap-2 animate-in fade-in duration-300">
@@ -83,7 +87,7 @@ function OptionChips({ options, selected, onToggle, colorClass = "indigo" }) {
           <button
             key={value}
             onClick={() => onToggle(value)}
-            className={`px-3.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-xl text-sm font-medium border transition-all active:scale-[0.97] ${isActive ? c.active : c.inactive}`}
+            className={`px-3.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-xl text-sm font-medium border transition-all active:scale-[0.97] ${isActive ? activeClass : inactiveClass}`}
           >
             {label}
           </button>
