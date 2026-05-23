@@ -39,10 +39,12 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/20">
               <span className="text-xs font-bold text-white">P</span>
             </div>
-            <span className="text-sm font-semibold text-content-primary hidden sm:block tracking-tight">Prospectia<span className="text-rose-400">.ai</span></span>
+            <span className="text-sm font-semibold text-content-primary hidden sm:block tracking-tight">
+              Prospectia<span className="text-violet-400">.cloud</span>
+            </span>
           </div>
         </div>
 
@@ -51,7 +53,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           <div className="hidden sm:flex items-center gap-3 flex-1 max-w-md mx-8 animate-in fade-in">
             <div className="flex-1 h-1.5 bg-surface-elevated rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500 ease-out rounded-full"
+                className="h-full bg-gradient-to-r from-violet-600 to-indigo-600 transition-all duration-500 ease-out rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>

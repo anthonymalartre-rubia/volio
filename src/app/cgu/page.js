@@ -37,7 +37,7 @@ export default function CGUPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">2. Éditeur</h2>
             <p>
               Le Service est édité par Prospectia.ai.<br />
-              Contact : <span className="text-content-primary">contact@prospectia.ai</span>
+              Contact : <span className="text-content-primary">contact@prospectia.cloud</span>
             </p>
           </section>
 
@@ -202,7 +202,7 @@ export default function CGUPage() {
               Toute personne dont les données professionnelles sont traitées via le Service dispose des droits suivants :
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
-              <li><span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : via notre page dédiée <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link> ou par email à contact@prospectia.ai</li>
+              <li><span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : via notre page dédiée <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link> ou par email à contact@prospectia.cloud</li>
               <li><span className="text-content-primary font-medium">Droit d&apos;accès</span> : savoir quelles données sont traitées</li>
               <li><span className="text-content-primary font-medium">Droit de suppression</span> : demander l&apos;effacement de ses données</li>
               <li><span className="text-content-primary font-medium">Droit de rectification</span> : corriger des données inexactes</li>
@@ -360,7 +360,7 @@ export default function CGUPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">17. Contact</h2>
             <p>
               Pour toute question relative aux présentes CGU, vous pouvez nous contacter à l&apos;adresse :
-              <span className="text-content-primary font-medium"> contact@prospectia.ai</span>
+              <span className="text-content-primary font-medium"> contact@prospectia.cloud</span>
             </p>
           </section>
         </div>

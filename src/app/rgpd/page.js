@@ -11,7 +11,7 @@ const USER_RIGHTS = [
     icon: UserCheck,
     title: 'Droit d\'accès',
     description: 'Vous avez le droit d\'obtenir la confirmation que des données vous concernant sont ou ne sont pas traitées. Si elles le sont, vous pouvez obtenir une copie de l\'ensemble de vos données personnelles.',
-    how: 'Envoyez un email à contact@prospectia.ai avec l\'objet « Demande d\'accès aux données ». Nous vous répondrons sous 30 jours.',
+    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'accès aux données ». Nous vous répondrons sous 30 jours.',
   },
   {
     icon: Pencil,
@@ -41,7 +41,7 @@ const USER_RIGHTS = [
     icon: Ban,
     title: 'Droit d\'opposition',
     description: 'Vous pouvez vous opposer à tout moment au traitement de vos données personnelles fondé sur l\'intérêt légitime, y compris le profilage. Vous pouvez également vous opposer au traitement à des fins de prospection commerciale.',
-    how: 'Contactez-nous par email à contact@prospectia.ai. Pour la prospection commerciale, cliquez sur le lien de désinscription dans nos emails.',
+    how: 'Contactez-nous par email à contact@prospectia.cloud. Pour la prospection commerciale, cliquez sur le lien de désinscription dans nos emails.',
   },
 ];
 
@@ -50,31 +50,31 @@ const PROSPECT_RIGHTS = [
     icon: Ban,
     title: 'Droit d\'opposition (opt-out)',
     description: 'En tant que professionnel, vous pouvez demander à ne plus apparaître dans les résultats de recherche de Prospectia.ai. Votre demande sera appliquée pour l\'ensemble des utilisateurs du Service, de manière définitive.',
-    how: 'Rendez-vous sur notre page /opt-out ou envoyez un email à contact@prospectia.ai avec l\'objet « Opt-out ». Traitement sous 72 heures.',
+    how: 'Rendez-vous sur notre page /opt-out ou envoyez un email à contact@prospectia.cloud avec l\'objet « Opt-out ». Traitement sous 72 heures.',
   },
   {
     icon: Eye,
     title: 'Droit de savoir qui a vos données',
     description: 'Vous avez le droit de savoir quels utilisateurs de Prospectia.ai ont accédé à vos données professionnelles et dans quel cadre. Nous maintenons des journaux d\'accès permettant de répondre à cette demande.',
-    how: 'Envoyez un email à contact@prospectia.ai avec l\'objet « Demande d\'information sur l\'accès à mes données ». Nous vous répondrons sous 30 jours.',
+    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'information sur l\'accès à mes données ». Nous vous répondrons sous 30 jours.',
   },
   {
     icon: Trash2,
     title: 'Droit de suppression',
     description: 'Vous pouvez demander la suppression complète de vos données professionnelles de notre système. Cette suppression sera effective dans toutes les bases de données de Prospectia.ai et vous serez ajouté à notre liste d\'opt-out pour empêcher toute collecte future.',
-    how: 'Via la page /opt-out ou par email à contact@prospectia.ai. Suppression effective sous 72 heures.',
+    how: 'Via la page /opt-out ou par email à contact@prospectia.cloud. Suppression effective sous 72 heures.',
   },
   {
     icon: Pencil,
     title: 'Droit de rectification',
     description: 'Si les données professionnelles vous concernant sont inexactes (mauvais email, mauvais téléphone, mauvaise adresse), vous pouvez demander leur correction.',
-    how: 'Envoyez un email à contact@prospectia.ai en précisant les données à corriger.',
+    how: 'Envoyez un email à contact@prospectia.cloud en précisant les données à corriger.',
   },
   {
     icon: UserCheck,
     title: 'Droit d\'accès',
     description: 'Vous pouvez demander une copie de toutes les données professionnelles vous concernant traitées par Prospectia.ai, ainsi que les informations relatives aux traitements effectués (finalité, base légale, destinataires, durée de conservation).',
-    how: 'Envoyez un email à contact@prospectia.ai avec l\'objet « Demande d\'accès — personne prospectée ». Réponse sous 30 jours.',
+    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'accès — personne prospectée ». Réponse sous 30 jours.',
   },
 ];
 
@@ -359,7 +359,7 @@ export default function RGPDPage() {
             </p>
             <div className="mt-4 p-4 rounded-xl border border-line bg-surface-card">
               <p className="text-content-primary font-medium">Contact DPO</p>
-              <p className="text-sm mt-1">Email : <span className="text-content-primary">contact@prospectia.ai</span></p>
+              <p className="text-sm mt-1">Email : <span className="text-content-primary">contact@prospectia.cloud</span></p>
               <p className="text-sm mt-1">Délai de réponse : 30 jours maximum (72 heures pour les demandes d&apos;opt-out)</p>
             </div>
           </section>

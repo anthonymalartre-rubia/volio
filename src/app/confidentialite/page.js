@@ -23,7 +23,7 @@ export default function ConfidentialitePage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">1. Responsable du traitement</h2>
             <p>
               Le responsable du traitement des données personnelles est Prospectia.ai.<br />
-              Contact DPO : <span className="text-content-primary font-medium">contact@prospectia.ai</span>
+              Contact DPO : <span className="text-content-primary font-medium">contact@prospectia.cloud</span>
             </p>
             <p className="mt-3">
               Prospectia.ai agit en qualité d&apos;<span className="text-content-primary font-medium">agrégateur technique</span> de
@@ -206,7 +206,7 @@ export default function ConfidentialitePage() {
                 <span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : vous pouvez
                 demander à ne plus apparaître dans les résultats de Prospectia.ai via notre
                 <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition ml-1">page d&apos;opt-out</Link> ou
-                par email à <span className="text-content-primary">contact@prospectia.ai</span>. Votre demande sera traitée sous
+                par email à <span className="text-content-primary">contact@prospectia.cloud</span>. Votre demande sera traitée sous
                 72 heures et sera effective pour tous les utilisateurs du Service.
               </li>
               <li>
@@ -227,7 +227,7 @@ export default function ConfidentialitePage() {
               </li>
             </ul>
             <p className="mt-4">
-              Pour exercer ces droits : <span className="text-content-primary font-medium">contact@prospectia.ai</span> ou
+              Pour exercer ces droits : <span className="text-content-primary font-medium">contact@prospectia.cloud</span> ou
               via la page <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link>.
               Délai de réponse : 30 jours maximum (72 heures pour les demandes d&apos;opt-out).
             </p>
@@ -455,7 +455,7 @@ export default function ConfidentialitePage() {
 
             <p className="mt-4">
               Pour exercer ces droits, contactez notre DPO :
-              <span className="text-content-primary font-medium"> contact@prospectia.ai</span>
+              <span className="text-content-primary font-medium"> contact@prospectia.cloud</span>
             </p>
             <p className="mt-3">
               Pour plus de détails sur l&apos;exercice de vos droits, consultez notre
