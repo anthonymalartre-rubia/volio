@@ -79,24 +79,16 @@ export default async function OutilPage({ params }) {
           priceCurrency: c.pricingUnit.includes('€') ? 'EUR' : 'USD',
         },
       },
-      {
-        '@type': 'Review',
-        itemReviewed: {
-          '@type': 'SoftwareApplication',
-          name: c.name,
-          applicationCategory: 'BusinessApplication',
-        },
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: '4.0',
-          bestRating: '5',
-          worstRating: '1',
-        },
-        author: { '@type': 'Person', name: 'Anthony Malartre' },
-        publisher: { '@type': 'Organization', name: 'Prospectia', url: 'https://prospectia.cloud' },
-        datePublished: '2026-05-20',
-        reviewBody: c.description,
-      },
+      // Bloc Review retiré (2026-05-23) :
+      // - Déclenchait l'alerte Google Search Console "Type d'objet non
+      //   valide pour <parent_node>" (Review standalone dans @graph au
+      //   lieu d'être nested dans l'item parent).
+      // - Avis biaisé : Anthony Malartre comme author qui review ses
+      //   propres concurrents = avis trompeur (DGCCRF art L.121-2) +
+      //   pénalisation Google "Manipulative review snippets".
+      // - Note 4.0 inventée jamais réellement donnée.
+      // À réactiver uniquement si on collecte de vraies reviews tiers
+      // (Trustpilot, G2, Capterra) avec un schéma nested correct.
       {
         '@type': 'FAQPage',
         mainEntity: [
