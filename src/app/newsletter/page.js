@@ -36,7 +36,7 @@ export default function NewsletterPage() {
             <Mail size={12} />
             Newsletter mensuelle Volia
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-4 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
             La prospection B2B France en 5 minutes/mois
           </h1>
           <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto">

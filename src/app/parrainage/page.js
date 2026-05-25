@@ -339,7 +339,7 @@ function GuestScreen() {
             <Gift size={12} />
             Programme de parrainage Volia
           </div>
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-6 bg-gradient-to-b from-white via-violet-100 to-violet-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-6 bg-gradient-to-b from-violet-700 via-violet-600 to-indigo-700 bg-clip-text text-transparent">
             Invitez vos amis,<br />gagnez des <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text">mois gratuits</span>
           </h1>
           <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">

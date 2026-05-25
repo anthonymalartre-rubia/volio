@@ -13,7 +13,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-16">
       <div className="text-center mb-10">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
           {title}
         </h2>
         <p className="text-sm text-content-secondary max-w-2xl mx-auto">{subtitle}</p>
@@ -117,7 +117,7 @@ export function BuiltForProfilesBlock({
         <p className="text-xs font-semibold text-violet-400 uppercase tracking-wider mb-3">
           Conçu sur-mesure
         </p>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
           {title}
         </h2>
         <p className="text-sm text-content-secondary max-w-2xl mx-auto leading-relaxed">

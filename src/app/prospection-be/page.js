@@ -88,7 +88,7 @@ export default function ProspectionBeHub() {
               <MapPin size={12} />
               🇧🇪 Belgique francophone · Wallonie & Bruxelles
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
               Trouvez les emails B2B des entreprises belges francophones
             </h1>
             <p className="text-lg text-content-secondary leading-relaxed max-w-3xl mb-6">

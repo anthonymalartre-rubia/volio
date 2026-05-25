@@ -37,7 +37,7 @@ export default function TrustpilotReviewsBlock({
         <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-3">
           Avis Trustpilot
         </p>
-        <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
           {title}
         </h2>
         <p className="text-sm text-content-secondary max-w-2xl mx-auto leading-relaxed mb-5">

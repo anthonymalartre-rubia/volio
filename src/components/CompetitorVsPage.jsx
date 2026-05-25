@@ -56,7 +56,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             {isAlternative ? <LogOut size={12} /> : <Award size={12} />}
             {isAlternative ? `Alternative à ${competitor.name}` : 'Comparatif 2026'}
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
             {isAlternative
               ? `La meilleure alternative à ${competitor.name} en France`
               : `Volia vs ${competitor.name} : lequel choisir ?`}

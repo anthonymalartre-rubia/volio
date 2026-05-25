@@ -159,7 +159,7 @@ export default function LandingContent() {
 
           {/* H1 simplifié — direct */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] mb-5">
-            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Trouvez l&apos;email de</span>
+            <span className="bg-gradient-to-b from-zinc-900 via-zinc-700 to-zinc-500 bg-clip-text text-transparent">Trouvez l&apos;email de</span>
             <br />
             <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
               n&apos;importe quelle entreprise
@@ -409,7 +409,7 @@ export default function LandingContent() {
               { value: '49\u20AC', label: t('landing.stats.vs'), sub: t('landing.stats.vsSub') },
             ].map((stat) => (
               <div key={stat.label}>
-                <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">{stat.value}</div>
+                <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">{stat.value}</div>
                 <div className="text-sm text-content-secondary mt-2">{stat.label}</div>
                 <div className="text-[10px] text-content-tertiary mt-0.5">{stat.sub}</div>
               </div>
