@@ -687,6 +687,112 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
 }
 
 // ───────────────────────────────────────────────────────────────
+// authSignupConfirm — Email de confirmation d'inscription envoyé
+// via Resend (remplace l'email plain text de Supabase Auth).
+// Supabase admin.generateLink() fournit l'URL, on l'embed dans notre
+// design Volia (header + footer + CTA gradient).
+// ───────────────────────────────────────────────────────────────
+export function authSignupConfirm({ confirmUrl, email }) {
+  return {
+    subject: 'Bienvenue sur Volia — confirmez votre adresse email',
+    html: layout({
+      preheader: 'Confirmez votre email pour activer votre compte Volia (lien valide 24h).',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '👋',
+          title: 'Bienvenue sur Volia',
+          greeting: `Pour activer votre compte <strong style="color:${COLORS.text};">${email}</strong>, cliquez sur le bouton ci-dessous.`,
+        })}
+
+        <div align="center">${ctaPrimary('Confirmer mon email', confirmUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
+          Ce lien expire dans <strong style="color:${COLORS.text};">24 heures</strong>.<br/>
+          Si vous n'êtes pas à l'origine de cette inscription, ignorez simplement cet email — aucun compte ne sera activé.
+        </p>
+
+        <p style="margin:24px 0 0;font-size:12px;color:${COLORS.textFaint};text-align:center;line-height:1.5;word-break:break-all;">
+          Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur&nbsp;:<br/>
+          <a href="${confirmUrl}" style="color:${COLORS.brand};text-decoration:none;">${confirmUrl}</a>
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
+// authPasswordReset — Email de réinitialisation de mot de passe
+// envoyé via Resend. Lien généré par admin.generateLink(type='recovery').
+// ───────────────────────────────────────────────────────────────
+export function authPasswordReset({ resetUrl, email }) {
+  return {
+    subject: 'Réinitialisez votre mot de passe Volia',
+    html: layout({
+      preheader: 'Cliquez pour définir un nouveau mot de passe (lien valide 1h).',
+      accent: COLORS.warning,
+      content: `
+        ${hero({
+          emoji: '🔐',
+          title: 'Réinitialisation de mot de passe',
+          greeting: `Quelqu'un (vous, on espère) a demandé à réinitialiser le mot de passe du compte <strong style="color:${COLORS.text};">${email}</strong>.`,
+        })}
+
+        <div align="center">${ctaPrimary('Définir un nouveau mot de passe', resetUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
+          Ce lien expire dans <strong style="color:${COLORS.text};">1 heure</strong>.<br/>
+          Si vous n'avez rien demandé, ignorez cet email — votre mot de passe ne sera pas changé.
+        </p>
+
+        <p style="margin:24px 0 0;font-size:12px;color:${COLORS.textFaint};text-align:center;line-height:1.5;word-break:break-all;">
+          Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur&nbsp;:<br/>
+          <a href="${resetUrl}" style="color:${COLORS.brand};text-decoration:none;">${resetUrl}</a>
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
+// authResendConfirmation — Renvoi du lien de confirmation (cas
+// où l'utilisateur n'a pas reçu / a supprimé le 1er email).
+// ───────────────────────────────────────────────────────────────
+export function authResendConfirmation({ confirmUrl, email }) {
+  return {
+    subject: 'Volia — nouveau lien de confirmation',
+    html: layout({
+      preheader: 'Voici votre nouveau lien pour activer votre compte Volia (valide 24h).',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '✉️',
+          title: 'Voici votre nouveau lien',
+          greeting: `Vous avez demandé un nouveau lien de confirmation pour <strong style="color:${COLORS.text};">${email}</strong>.`,
+        })}
+
+        <div align="center">${ctaPrimary('Confirmer mon email', confirmUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
+          Ce lien expire dans <strong style="color:${COLORS.text};">24 heures</strong>.
+        </p>
+
+        <p style="margin:24px 0 0;font-size:12px;color:${COLORS.textFaint};text-align:center;line-height:1.5;word-break:break-all;">
+          Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur&nbsp;:<br/>
+          <a href="${confirmUrl}" style="color:${COLORS.brand};text-decoration:none;">${confirmUrl}</a>
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
 // referralRewardEmail — Email transactionnel au parrain dont un filleul
 // vient de devenir client payant. Lui annonce le bonus de 1 mois.
 // ───────────────────────────────────────────────────────────────

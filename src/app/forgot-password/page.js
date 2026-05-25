@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getSupabase } from '@/lib/supabase';
 import { useI18n } from '@/lib/i18n';
 import Link from 'next/link';
 import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
@@ -15,26 +14,36 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const supabase = getSupabase();
   const { t } = useI18n();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Demande de reset via notre endpoint /api/auth/forgot-password (qui
+  // envoie l'email brandé Volia via Resend, et non plus l'email plain text
+  // de Supabase). L'endpoint retourne TOUJOURS success pour ne pas leaker
+  // l'existence d'un compte → on affiche un message neutre côté UI.
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password',
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
+      const data = await res.json().catch(() => ({}));
 
-      if (error) {
-        setError(error.message);
+      if (res.status === 429) {
+        setError(data?.error || t('auth.genericError'));
+      } else if (!res.ok) {
+        setError(data?.error || t('auth.genericError'));
       } else {
+        // Toujours success pour ne pas leaker — l'utilisateur voit le même
+        // message qu'un email existe ou non.
         setSuccess(true);
       }
     } catch (err) {

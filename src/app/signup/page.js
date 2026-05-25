@@ -123,15 +123,20 @@ export default function SignupPage() {
     } catch {}
   }
 
+  // Renvoi du lien de confirmation via notre endpoint /api/auth/resend-confirmation
+  // (qui envoie l'email brandé Volia via Resend, et non plus l'email plain
+  // text de Supabase).
   const handleResendEmail = async () => {
     setResending(true);
     setResendSuccess(false);
     try {
-      const { error } = await supabase.auth.resend({
-        type: 'signup',
-        email,
+      const res = await fetch('/api/auth/resend-confirmation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
-      if (!error) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data?.success) {
         setResendSuccess(true);
       }
     } catch (err) {
@@ -141,40 +146,36 @@ export default function SignupPage() {
     }
   };
 
+  // Signup via notre endpoint /api/auth/signup, qui :
+  //   1. Crée l'utilisateur Supabase (admin API)
+  //   2. Génère le lien de confirmation
+  //   3. Envoie l'email brandé Volia via Resend
+  //
+  // Suppression de l'auto-login post-signup : on attend que l'utilisateur
+  // confirme son email d'abord (consistent avec le nouveau flow où Supabase
+  // n'envoie plus rien et où le compte démarre en email_confirm:false).
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+      const data = await res.json().catch(() => ({}));
 
-      if (error) {
-        setError(error.message);
-      } else if (data?.user?.identities?.length === 0) {
+      if (res.status === 409) {
         setError(t('auth.accountExists'));
-      } else if (data?.session) {
-        // Auto-confirmed → track referral puis redirect (avec ?upgrade=plan
-        // si l'user a cliqué depuis pricing)
-        await trackReferralIfAny();
-        router.push(postSignupRedirect);
+      } else if (!res.ok || !data?.success) {
+        setError(data?.error || t('auth.genericError'));
       } else {
-        // Email auto-confirmed by trigger but Supabase didn't return session
-        // Sign in immediately since the trigger confirmed the email
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        if (!signInError) {
-          await trackReferralIfAny();
-          router.push(postSignupRedirect);
-        } else {
-          // Fallback: show verification screen
-          setSuccess(true);
-        }
+        // Le cookie volia_ref (parrainage) sera consommé après la 1ère
+        // connexion réussie (cf. trackReferralIfAny appelé depuis le
+        // dashboard ou le login post-confirm). On laisse le cookie en place.
+        setSuccess(true);
       }
     } catch (err) {
       setError(t('auth.genericError'));
