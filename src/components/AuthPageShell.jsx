@@ -39,7 +39,7 @@ export default function AuthPageShell({
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
             <span className="text-lg font-bold tracking-tight">Volia</span>
-            <span className="text-violet-400 text-xs font-semibold">.cloud</span>
+            <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           {showSignupCta ? (
             <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">

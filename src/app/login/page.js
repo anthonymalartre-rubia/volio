@@ -101,7 +101,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center">
           <LogoIcon size="lg" className="mx-auto" />
-          <h1 className="mt-4 text-2xl font-bold text-content-primary">Volia<span className="text-violet-400">.cloud</span></h1>
+          <h1 className="mt-4 text-2xl font-bold text-content-primary">Volia<span className="text-violet-400">.fr</span></h1>
           <p className="mt-2 text-sm text-content-tertiary">
             {t('auth.loginTitle')}
           </p>

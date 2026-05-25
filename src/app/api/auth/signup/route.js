@@ -46,32 +46,18 @@ export async function POST(request) {
     const normalizedEmail = email.toLowerCase().trim();
     const admin = getSupabaseAdmin();
 
-    // 1. Créer l'utilisateur (non confirmé)
-    const { data: created, error: createError } = await admin.auth.admin.createUser({
-      email: normalizedEmail,
-      password,
-      email_confirm: false,
-    });
-
-    if (createError) {
-      const msg = (createError.message || '').toLowerCase();
-      // Compte déjà existant → 409
-      if (msg.includes('already') || msg.includes('exists') || msg.includes('registered') || msg.includes('duplicate')) {
-        return NextResponse.json(
-          { error: 'Un compte existe déjà avec cet email.' },
-          { status: 409 }
-        );
-      }
-      console.error('[auth/signup] createUser error:', createError);
-      return NextResponse.json(
-        { error: 'Impossible de créer le compte. Réessayez ou contactez le support.' },
-        { status: 500 }
-      );
-    }
-
-    // 2. Générer le lien de confirmation (sans envoyer d'email Supabase)
-    // Note : admin.generateLink({ type: 'signup' }) re-définit le password
-    // donc on lui passe le même password pour rester cohérent.
+    // generateLink({ type: 'signup', email, password }) fait DEUX choses en
+    // un seul call atomique côté Supabase :
+    //   1. Crée l'utilisateur (email_confirmed_at = null, donc non confirmé)
+    //   2. Génère le lien de confirmation (token magique, valable 24h)
+    //
+    // Erreur précédente : on appelait admin.createUser() PUIS generateLink()
+    // → la 2e échouait avec "user already registered" car la 1ère venait de
+    // créer l'utilisateur. La doc Supabase dit clairement que generateLink
+    // type:signup gère la création — pas besoin de createUser séparé.
+    //
+    // Bénéfice secondaire : atomique. Si generateLink échoue (rate limit,
+    // network, etc.), aucun user fantôme orphelin n'est créé en DB.
     const origin = request.headers.get('origin') || `https://${request.headers.get('host')}` || 'https://volia.fr';
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
       type: 'signup',
@@ -82,15 +68,32 @@ export async function POST(request) {
       },
     });
 
-    if (linkError || !linkData?.properties?.action_link) {
+    if (linkError) {
+      const msg = (linkError.message || '').toLowerCase();
+      // Compte déjà existant → 409
+      if (msg.includes('already') || msg.includes('exists') || msg.includes('registered') || msg.includes('duplicate')) {
+        return NextResponse.json(
+          { error: 'Un compte existe déjà avec cet email.' },
+          { status: 409 }
+        );
+      }
       console.error('[auth/signup] generateLink error:', linkError);
       return NextResponse.json(
-        { error: 'Compte créé mais lien de confirmation non disponible. Contactez le support.' },
+        { error: 'Impossible de créer le compte. Réessayez ou contactez le support.' },
+        { status: 500 }
+      );
+    }
+
+    if (!linkData?.properties?.action_link) {
+      console.error('[auth/signup] generateLink returned no action_link:', linkData);
+      return NextResponse.json(
+        { error: 'Lien de confirmation non disponible. Contactez le support.' },
         { status: 500 }
       );
     }
 
     const confirmUrl = linkData.properties.action_link;
+    const created = linkData.user; // {id, email, ...} si présent dans la réponse
 
     // 3. Envoyer l'email brandé via Resend
     const { subject, html } = authSignupConfirm({ confirmUrl, email: normalizedEmail });
@@ -112,7 +115,7 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: 'Email de confirmation envoyé.',
-      userId: created?.user?.id || null,
+      userId: created?.id || null,
     });
   } catch (err) {
     console.error('[auth/signup] Unexpected error:', err);

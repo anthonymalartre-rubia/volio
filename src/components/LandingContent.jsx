@@ -124,7 +124,7 @@ export default function LandingContent() {
           <Link href="/" className="flex items-center gap-1.5">
             <LogoIcon size="sm" />
             <span className="text-lg font-bold tracking-tight ml-1">Volia</span>
-            <span className="text-violet-400 text-xs font-semibold">.cloud</span>
+            <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.features')}</Link>
@@ -854,7 +854,7 @@ export default function LandingContent() {
             <div className="flex items-center gap-1.5">
               <LogoIcon size="xs" />
               <span className="text-sm font-bold tracking-tight ml-1">Volia</span>
-              <span className="text-violet-400 text-[10px] font-semibold">.cloud</span>
+              <span className="text-violet-400 text-[10px] font-semibold">.fr</span>
             </div>
             <div className="flex items-center gap-6 text-xs text-zinc-600">
               <Link href="/cgu" className="hover:text-zinc-400 transition">{t('landing.footer.cgu')}</Link>
