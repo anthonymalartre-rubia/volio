@@ -35,7 +35,7 @@ export default function TemplateIcp() {
     <div>
       <header className="mb-10 keep-together">
         <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Template
+          Ressource Volia · Template
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
           Template ICP B2B : définissez votre client idéal en 30 minutes
@@ -169,7 +169,7 @@ export default function TemplateIcp() {
         </div>
         <ol className="list-decimal list-inside space-y-3 text-sm">
           <li className="leading-relaxed"><strong className="text-content-primary">Quantité :</strong> existe-t-il au moins 500 entreprises dans le monde qui matchent cet ICP ? (Si non = trop niche)</li>
-          <li className="leading-relaxed"><strong className="text-content-primary">Identifiabilité :</strong> peut-on identifier ces entreprises avec Prospectia / Apollo / LinkedIn Sales Navigator ? (Si non = inadressable)</li>
+          <li className="leading-relaxed"><strong className="text-content-primary">Identifiabilité :</strong> peut-on identifier ces entreprises avec Volia / Apollo / LinkedIn Sales Navigator ? (Si non = inadressable)</li>
           <li className="leading-relaxed"><strong className="text-content-primary">Budget :</strong> ont-ils un budget allouable de minimum 3× votre prix mensuel ? (Si non = problème de fit)</li>
           <li className="leading-relaxed"><strong className="text-content-primary">Douleur :</strong> ressentent-ils une douleur urgente (pas juste &quot;nice to have&quot;) ? (Si non = sales cycle infini)</li>
           <li className="leading-relaxed"><strong className="text-content-primary">Décideur :</strong> peut-on contacter directement le décideur ? (Si non = passer par un canal différent)</li>
@@ -259,8 +259,8 @@ Mon produit : [décris en 2 phrases ton produit + sa proposition de valeur]
           vos meilleurs clients changent, votre produit s&apos;améliore.
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/template-icp-b2b" className="text-violet-500 hover:underline">prospectia.cloud/ressources/template-icp-b2b</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/template-icp-b2b" className="text-violet-500 hover:underline">volia.fr/ressources/template-icp-b2b</a>
         </p>
       </footer>
     </div>

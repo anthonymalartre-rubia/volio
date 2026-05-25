@@ -108,7 +108,7 @@ function OptOutInner() {
           <div>
             <h2 className="text-base font-semibold mb-2">Pourquoi cette page ?</h2>
             <p className="text-sm text-zinc-400 leading-relaxed mb-2">
-              Prospectia collecte des données professionnelles publiques (email pro, nom d&apos;entreprise, téléphone) via Google Places dans le cadre de la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
+              Volia collecte des données professionnelles publiques (email pro, nom d&apos;entreprise, téléphone) via Google Places dans le cadre de la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
             </p>
             <p className="text-sm text-zinc-400 leading-relaxed">
               Conformément à l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez à tout moment exercer votre droit d&apos;opposition. Votre demande sera traitée sous <strong className="text-white">48 heures</strong>.
@@ -203,7 +203,7 @@ function OptOutInner() {
 
         <p className="text-[11px] text-zinc-500 mt-4 leading-relaxed text-center">
           🔒 Votre email sera supprimé de notre base + ajouté à notre liste d&apos;exclusion permanente.<br />
-          Pour toute question : <a href="mailto:hello@prospectia.cloud" className="text-violet-300 hover:underline">hello@prospectia.cloud</a>
+          Pour toute question : <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a>
         </p>
       </div>
     </AuthPageShell>

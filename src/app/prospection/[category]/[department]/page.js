@@ -47,17 +47,17 @@ export async function generateMetadata({ params }) {
   const dept = getDepartmentBySlug(deptSlug);
   if (!category || !dept) return {};
 
-  const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code}) — Prospectia`;
+  const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code}) — Volia`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés dans le ${dept.name} (${dept.code}). Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
     description,
-    alternates: { canonical: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}` },
+    alternates: { canonical: `https://volia.fr/prospection/${catSlug}/${deptSlug}` },
     openGraph: {
       title,
       description,
-      url: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}`,
+      url: `https://volia.fr/prospection/${catSlug}/${deptSlug}`,
     },
   };
 }
@@ -105,16 +105,16 @@ export default async function CategoryDepartmentPage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code})`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés dans le département ${dept.name} (${dept.code}) ? Prospectia identifie automatiquement tous les ${category.labelPlural} géolocalisés dans le ${dept.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez la liste complète en CSV en moins de 5 minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés dans le département ${dept.name} (${dept.code}) ? Volia identifie automatiquement tous les ${category.labelPlural} géolocalisés dans le ${dept.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez la liste complète en CSV en moins de 5 minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} y a-t-il dans le ${dept.name} ?`,
-      answer: `Le département ${dept.name} (${dept.code}) regroupe plusieurs centaines à plusieurs milliers de ${category.labelPlural} selon sa taille. Prospectia couvre toutes les entreprises géolocalisées par Google Places.`,
+      answer: `Le département ${dept.name} (${dept.code}) regroupe plusieurs centaines à plusieurs milliers de ${category.labelPlural} selon sa taille. Volia couvre toutes les entreprises géolocalisées par Google Places.`,
     },
     {
       question: `Comment trouver l'email d'un ${category.label} dans le ${dept.name} ?`,
-      answer: `Sur Prospectia, sélectionnez la catégorie "${category.label}" et le département ${dept.code} (${dept.name}). Notre IA scrape ensuite le site web de chaque entreprise et complète avec une recherche Google ciblée. Vous récupérez en quelques secondes tous les emails professionnels disponibles.`,
+      answer: `Sur Volia, sélectionnez la catégorie "${category.label}" et le département ${dept.code} (${dept.name}). Notre IA scrape ensuite le site web de chaque entreprise et complète avec une recherche Google ciblée. Vous récupérez en quelques secondes tous les emails professionnels disponibles.`,
     },
     {
       question: `Les emails des ${category.labelPlural} du ${dept.name} sont-ils vérifiés ?`,
@@ -122,11 +122,11 @@ export default async function CategoryDepartmentPage({ params }) {
     },
     {
       question: `Puis-je exporter les ${category.labelPlural} du ${dept.name} en CSV ?`,
-      answer: `Oui, exports illimités en CSV standard (Last Name, Company, Email, Phone). Inclus dans tous les plans Prospectia.`,
+      answer: `Oui, exports illimités en CSV standard (Last Name, Company, Email, Phone). Inclus dans tous les plans Volia.`,
     },
     {
       question: `Le démarchage des ${category.labelPlural} du ${dept.name} est-il légal ?`,
-      answer: `Oui, dans le cadre du RGPD (article 6 - intérêt légitime). Prospectia filtre automatiquement les emails personnels, respecte les opt-out, et ne collecte que des données professionnelles publiques. Vous restez responsable de l'usage des données collectées.`,
+      answer: `Oui, dans le cadre du RGPD (article 6 - intérêt légitime). Volia filtre automatiquement les emails personnels, respecte les opt-out, et ne collecte que des données professionnelles publiques. Vous restez responsable de l'usage des données collectées.`,
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} dans le ${dept.name} ?`,
@@ -152,14 +152,14 @@ export default async function CategoryDepartmentPage({ params }) {
         '@type': 'WebPage',
         name: title,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}`,
+        url: `https://volia.fr/prospection/${catSlug}/${deptSlug}`,
         inLanguage: 'fr-FR',
-        isPartOf: { '@id': 'https://prospectia.cloud/#website' },
+        isPartOf: { '@id': 'https://volia.fr/#website' },
       },
       serviceSchema({
         name: `Recherche email ${category.labelPlural} ${dept.name}`,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}`,
+        url: `https://volia.fr/prospection/${catSlug}/${deptSlug}`,
         areaName: dept.name,
       }),
       {

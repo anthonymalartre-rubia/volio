@@ -6,7 +6,7 @@ import { breadcrumbSchema, productSchema } from '@/lib/seo-helpers';
 import { getCategoryData } from '@/lib/category-data';
 import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export async function generateStaticParams() {
   return getAllCategories().map((cat) => ({ category: cat.slug }));
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   const { category: catSlug } = await params;
   const category = getCategoryBySlug(catSlug);
   if (!category) return {};
-  const title = `Trouver l'email des ${category.labelPlural} en Belgique francophone — Prospectia`;
+  const title = `Trouver l'email des ${category.labelPlural} en Belgique francophone — Volia`;
   const description = `Email professionnel des ${category.labelPlural} en Wallonie et Bruxelles (6 provinces). Scraping intelligent + recherche Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,
@@ -61,20 +61,20 @@ export default async function CategoryBePage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Trouver l'email des ${category.labelPlural} en Belgique francophone`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} en Belgique ? Prospectia agrège les ${category.labelPlural} de Wallonie et de Bruxelles-Capitale et trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez les contacts en CSV en quelques clics, conforme RGPD européen.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} en Belgique ? Volia agrège les ${category.labelPlural} de Wallonie et de Bruxelles-Capitale et trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez les contacts en CSV en quelques clics, conforme RGPD européen.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} sont référencés en Belgique francophone ?`,
-      answer: `Prospectia couvre tous les ${category.labelPlural} géolocalisés par Google Places dans les 6 provinces francophones (Wallonie + Bruxelles).`,
+      answer: `Volia couvre tous les ${category.labelPlural} géolocalisés par Google Places dans les 6 provinces francophones (Wallonie + Bruxelles).`,
     },
     {
-      question: `Comment Prospectia trouve-t-il les emails en Belgique ?`,
+      question: `Comment Volia trouve-t-il les emails en Belgique ?`,
       answer: `Le moteur scrape le site web de chaque entreprise belge, puis effectue une recherche Google ciblée. Taux de couverture moyen : 70-85 %.`,
     },
     {
       question: `La prospection B2B en Belgique est-elle conforme au RGPD ?`,
-      answer: `Oui. La Belgique est soumise au même RGPD européen que la France. Prospectia filtre automatiquement les emails personnels et respecte les opt-out.`,
+      answer: `Oui. La Belgique est soumise au même RGPD européen que la France. Volia filtre automatiquement les emails personnels et respecte les opt-out.`,
     },
     {
       question: `Puis-je exporter les contacts en CSV ?`,

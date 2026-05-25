@@ -80,7 +80,7 @@ const SECTIONS = [
 
         <h4 className="font-semibold mt-3 mb-2">Stack outils</h4>
         <ul className="list-disc list-inside space-y-1 text-sm">
-          <li><strong>Sourcing :</strong> Prospectia (19 €/mois)</li>
+          <li><strong>Sourcing :</strong> Volia (19 €/mois)</li>
           <li><strong>Cadenceur :</strong> Smartlead (29 $) ou Lemlist (59 €)</li>
           <li><strong>CRM :</strong> Pipedrive (29 €/user) ou HubSpot Free</li>
           <li><strong>Dialer :</strong> Aircall (30 €/user) ou Ringover</li>
@@ -257,8 +257,8 @@ export default function TemplateSalesPlaybook() {
           Format Notion ou Google Doc partagé recommandé (jamais PDF figé).
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/template-sales-playbook-tpe-pme" className="text-violet-500 hover:underline">prospectia.cloud/ressources/template-sales-playbook-tpe-pme</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/template-sales-playbook-tpe-pme" className="text-violet-500 hover:underline">volia.fr/ressources/template-sales-playbook-tpe-pme</a>
         </p>
       </footer>
     </div>

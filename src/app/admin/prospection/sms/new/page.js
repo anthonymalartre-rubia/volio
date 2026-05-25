@@ -95,7 +95,7 @@ function NewSmsContent() {
   }
 
   function loadTemplate() {
-    setBody('Bonjour {{first_name}}, ici Anthony de Prospectia. On vient de sortir un outil qui aide {{company}} à trouver 3x plus de prospects B2B en 5 min. Démo 10 min ? Répondez OUI.');
+    setBody('Bonjour {{first_name}}, ici Anthony de Volia. On vient de sortir un outil qui aide {{company}} à trouver 3x plus de prospects B2B en 5 min. Démo 10 min ? Répondez OUI.');
   }
 
   if (loading) return <CenteredSpinner />;
@@ -174,7 +174,7 @@ function NewSmsContent() {
                     <input
                       type="text" maxLength={11}
                       value={senderName} onChange={(e) => setSenderName(e.target.value)}
-                      placeholder="Ex : Prospectia"
+                      placeholder="Ex : Volia"
                       className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm focus:outline-none focus:border-emerald-500"
                     />
                     <p className="text-[10px] text-content-tertiary mt-1">

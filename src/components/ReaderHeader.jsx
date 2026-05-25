@@ -17,7 +17,7 @@ export default function ReaderHeader() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-1">
           <LogoIcon size="sm" className="mr-1.5" />
-          <span className="text-lg font-bold tracking-tight text-content-primary">Prospectia</span>
+          <span className="text-lg font-bold tracking-tight text-content-primary">Volia</span>
           <span className="text-violet-500 dark:text-violet-400 text-xs font-semibold">.cloud</span>
         </Link>
         <div className="flex items-center gap-3">

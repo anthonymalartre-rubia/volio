@@ -139,7 +139,7 @@ export default function ProspectionHubPage() {
               <input
                 type="text"
                 maxLength={200}
-                placeholder="Source (ex: Export Prospectia, LinkedIn Sales Nav…) — utile pour le registre RGPD"
+                placeholder="Source (ex: Export Volia, LinkedIn Sales Nav…) — utile pour le registre RGPD"
                 value={newSource}
                 onChange={(e) => setNewSource(e.target.value)}
                 className="px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 transition"

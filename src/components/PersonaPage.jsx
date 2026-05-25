@@ -13,7 +13,7 @@ export default function PersonaPage({ persona }) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ export default function PersonaPage({ persona }) {
           <section id="use-cases" className="max-w-5xl mx-auto px-4 sm:px-6 mb-16 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
               <Target size={22} className="text-violet-400" />
-              Comment Prospectia vous aide concrètement
+              Comment Volia vous aide concrètement
             </h2>
             <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
               4 cas d&apos;usage spécifiques à votre profil — pas du blabla marketing.
@@ -145,7 +145,7 @@ export default function PersonaPage({ persona }) {
         <TestimonialsBlock
           sector={persona.testimonialSector}
           limit={3}
-          title="Ils vous ressemblent et utilisent Prospectia"
+          title="Ils vous ressemblent et utilisent Volia"
           subtitle="Profils basés sur des feedbacks réels du NPS interne."
         />
 
@@ -158,7 +158,7 @@ export default function PersonaPage({ persona }) {
         {/* Autres personas — maillage interne */}
         {otherPersonas.length > 0 && (
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6">Prospectia, c&apos;est aussi pour…</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-6">Volia, c&apos;est aussi pour…</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {otherPersonas.map((p) => (
                 <Link
@@ -196,7 +196,7 @@ export default function PersonaPage({ persona }) {
 
       <footer className="border-t border-white/[0.06] py-8 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <div>© 2026 Prospectia.cloud</div>
+          <div>© 2026 Volia.fr</div>
           <div className="flex gap-4">
             <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
             <Link href="/confidentialite" className="hover:text-zinc-300">Confidentialité</Link>

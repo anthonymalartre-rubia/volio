@@ -8,14 +8,14 @@ import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import EtudeCopyCitation from '@/components/EtudeCopyCitation';
 
-const BASE_URL = 'https://prospectia.cloud';
+const BASE_URL = 'https://volia.fr';
 const STUDY_URL = `${BASE_URL}/etude/prospection-b2b-france-2026`;
 const PUBLISHED_AT = '2026-05-20';
 
 export const metadata = {
-  title: "L'État de la Prospection B2B en France 2026 — Étude Prospectia",
+  title: "L'État de la Prospection B2B en France 2026 — Étude Volia",
   description:
-    "Benchmark exclusif du marché français de la prospection B2B en 2026 : 38 chiffres clés, performance cold email, conformité RGPD, couverture par secteur et par région. Données publiques + analyse Prospectia.",
+    "Benchmark exclusif du marché français de la prospection B2B en 2026 : 38 chiffres clés, performance cold email, conformité RGPD, couverture par secteur et par région. Données publiques + analyse Volia.",
   alternates: { canonical: STUDY_URL },
   keywords: [
     'étude prospection b2b france 2026',
@@ -40,7 +40,7 @@ export const metadata = {
 
 const HERO_STATS = [
   { value: '4,8 M', label: "d'entreprises actives en France", source: 'INSEE 2026' },
-  { value: '101', label: 'départements couverts par Prospectia', source: 'Prospectia 2026' },
+  { value: '101', label: 'départements couverts par Volia', source: 'Volia 2026' },
   { value: '19 €', label: "ticket d'entrée mensuel le moins cher du marché", source: 'Benchmark concurrents 2026' },
   { value: '8-15 %', label: 'taux de réponse moyen cold email B2B FR', source: 'Smartlead + Belkins 2026' },
   { value: '450 €', label: "coût moyen d'un lead B2B qualifié en France", source: "Forrester + analyse marché 2025" },
@@ -88,7 +88,7 @@ const MARKET_SECTIONS = [
     category: 'Commerces de proximité',
     count: '~ 1,2 M',
     sources: 'CCI France 2025',
-    note: 'Boulangeries, coiffeurs, salons, garages : 150+ sous-catégories Prospectia',
+    note: 'Boulangeries, coiffeurs, salons, garages : 150+ sous-catégories Volia',
   },
   {
     category: 'Hôtellerie',
@@ -101,7 +101,7 @@ const MARKET_SECTIONS = [
 const COST_STATS = [
   { metric: 'Salaire moyen SDR Junior en France', value: '32-38 k€/an brut', source: 'Glassdoor + JDN 2026' },
   { metric: 'Salaire moyen Account Executive', value: '55-80 k€/an + variable', source: 'JDN 2026' },
-  { metric: 'Coût stack outils typique pour une PME', value: '150-250 €/mois', source: 'Analyse Prospectia 2026' },
+  { metric: 'Coût stack outils typique pour une PME', value: '150-250 €/mois', source: 'Analyse Volia 2026' },
   { metric: 'Coût d\'acquisition client (CAC) B2B SaaS', value: '600-1 500 €', source: 'OpenView SaaS Benchmarks 2025' },
   { metric: 'Coût par lead qualifié (MQL)', value: '80-450 €', source: 'Forrester 2025' },
   { metric: 'Coût moyen d\'un meeting commercial qualifié (SQL)', value: '200-800 €', source: 'Pavilion Benchmark 2025' },
@@ -156,7 +156,7 @@ const PREDICTIONS = [
   {
     icon: TrendingUp,
     title: 'Le ticket d\'entrée s\'effondre pour démocratiser l\'accès',
-    body: "Le marché français a longtemps été cher (49-99 €/mois minimum). En 2026, des acteurs comme Prospectia cassent ce plancher à 19 €/mois pour 1 000 prospects. Les freelances et TPE qui s'auto-excluaient de l'outbound vont massivement s'y mettre — création estimée de 30-50 k nouveaux \"prospecteurs\" en France d'ici fin 2027.",
+    body: "Le marché français a longtemps été cher (49-99 €/mois minimum). En 2026, des acteurs comme Volia cassent ce plancher à 19 €/mois pour 1 000 prospects. Les freelances et TPE qui s'auto-excluaient de l'outbound vont massivement s'y mettre — création estimée de 30-50 k nouveaux \"prospecteurs\" en France d'ici fin 2027.",
   },
 ];
 
@@ -164,7 +164,7 @@ const FAQ = [
   {
     question: "Quelle est la méthodologie de cette étude ?",
     answer:
-      "L'étude consolide 3 sources : (1) Données publiques officielles (INSEE, CNIL, FEVAD, Conseil National des Barreaux, Ordre des Experts-Comptables), (2) Benchmarks publics du marché outbound (Smartlead, Belkins, Lemlist, Forrester, Pavilion), (3) Données opérationnelles Prospectia (couverture Google Places, taux de réussite du waterfall d'enrichissement). Chaque chiffre est sourcé individuellement dans le texte.",
+      "L'étude consolide 3 sources : (1) Données publiques officielles (INSEE, CNIL, FEVAD, Conseil National des Barreaux, Ordre des Experts-Comptables), (2) Benchmarks publics du marché outbound (Smartlead, Belkins, Lemlist, Forrester, Pavilion), (3) Données opérationnelles Volia (couverture Google Places, taux de réussite du waterfall d'enrichissement). Chaque chiffre est sourcé individuellement dans le texte.",
   },
   {
     question: "Combien d'entreprises B2B y a-t-il en France en 2026 ?",
@@ -189,7 +189,7 @@ const FAQ = [
   {
     question: "Comment citer cette étude ?",
     answer:
-      "Format APA : Malartre, A. (2026). L'État de la Prospection B2B en France 2026. Prospectia. https://prospectia.cloud/etude/prospection-b2b-france-2026. Tout le contenu est libre de reproduction avec mention de la source. Pour toute demande presse : contact@prospectia.cloud.",
+      "Format APA : Malartre, A. (2026). L'État de la Prospection B2B en France 2026. Volia. https://volia.fr/etude/prospection-b2b-france-2026. Tout le contenu est libre de reproduction avec mention de la source. Pour toute demande presse : contact@volia.fr.",
   },
 ];
 
@@ -229,7 +229,7 @@ const jsonLd = {
       author: { '@type': 'Person', name: 'Anthony Malartre', url: BASE_URL },
       publisher: {
         '@type': 'Organization',
-        name: 'Prospectia',
+        name: 'Volia',
         url: BASE_URL,
         logo: { '@type': 'ImageObject', url: `${BASE_URL}/icon.svg` },
       },
@@ -238,7 +238,7 @@ const jsonLd = {
       inLanguage: 'fr-FR',
       articleSection: 'Étude',
       keywords: metadata.keywords.join(', '),
-      isPartOf: { '@type': 'Series', name: 'Études Prospectia' },
+      isPartOf: { '@type': 'Series', name: 'Études Volia' },
     },
     {
       '@type': 'Dataset',
@@ -250,11 +250,11 @@ const jsonLd = {
       keywords: ['prospection B2B', 'cold email', 'RGPD', 'France', 'CAC', 'SDR'],
       creator: {
         '@type': 'Organization',
-        name: 'Prospectia',
+        name: 'Volia',
         url: BASE_URL,
         contactPoint: {
           '@type': 'ContactPoint',
-          email: 'contact@prospectia.cloud',
+          email: 'contact@volia.fr',
           contactType: 'press inquiries',
         },
       },
@@ -305,7 +305,7 @@ export default function EtudePage() {
             </span>
             <span className="inline-flex items-center gap-1"><Calendar size={11} />Publié le 20 mai 2026</span>
             <span>·</span>
-            <span>Anthony Malartre · Prospectia</span>
+            <span>Anthony Malartre · Volia</span>
             <span>·</span>
             <span>15 min de lecture</span>
           </div>
@@ -359,7 +359,7 @@ export default function EtudePage() {
               <ol className="list-decimal list-inside space-y-2 text-sm sm:text-base text-content-secondary">
                 <li><strong className="text-content-primary">Données publiques officielles</strong> : INSEE, CNIL, FEVAD, Conseil National des Barreaux, Ordre des Experts-Comptables, Capeb, UMIH, CCI France.</li>
                 <li><strong className="text-content-primary">Benchmarks marché publics</strong> : Smartlead, Belkins, Lemlist, Forrester, Pavilion, OpenView SaaS Benchmarks, GetResponse, Yesware, Glassdoor, JDN.</li>
-                <li><strong className="text-content-primary">Données opérationnelles Prospectia</strong> : couverture Google Places agrégée (150+ catégories, 101 départements), taux de réussite du waterfall d&apos;enrichissement email.</li>
+                <li><strong className="text-content-primary">Données opérationnelles Volia</strong> : couverture Google Places agrégée (150+ catégories, 101 départements), taux de réussite du waterfall d&apos;enrichissement email.</li>
               </ol>
             </div>
             <p className="text-content-secondary leading-relaxed">
@@ -499,10 +499,10 @@ export default function EtudePage() {
           <section id="secteurs" className="mb-14 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 flex items-center gap-2">
               <BarChart3 size={24} className="text-violet-400" />
-              6. Couverture par secteur (data Prospectia)
+              6. Couverture par secteur (data Volia)
             </h2>
             <p className="text-content-secondary leading-relaxed mb-6">
-              Prospectia identifie automatiquement les entreprises de <strong className="text-content-primary">150+ catégories</strong>
+              Volia identifie automatiquement les entreprises de <strong className="text-content-primary">150+ catégories</strong>
               via Google Places, réparties en 12 grands secteurs B2B + 3 groupes copropriété. Le taux d&apos;email trouvé varie
               selon la maturité digitale du secteur :
             </p>
@@ -536,7 +536,7 @@ export default function EtudePage() {
               ))}
             </div>
             <p className="text-xs text-content-tertiary mt-3 italic">
-              Source : Données agrégées Prospectia (waterfall scraping + Serper + patterns) sur 100 000+ enrichissements en 2025-2026.
+              Source : Données agrégées Volia (waterfall scraping + Serper + patterns) sur 100 000+ enrichissements en 2025-2026.
             </p>
           </section>
 
@@ -639,12 +639,12 @@ export default function EtudePage() {
               </div>
               <p className="text-sm text-content-secondary leading-relaxed">
                 Pour interviews, citations approfondies, accès aux données brutes ou demandes média :
-                <a href="mailto:contact@prospectia.cloud?subject=Demande presse — Étude Prospection B2B France 2026" className="text-violet-400 hover:underline ml-1">
-                  contact@prospectia.cloud
+                <a href="mailto:contact@volia.fr?subject=Demande presse — Étude Prospection B2B France 2026" className="text-violet-400 hover:underline ml-1">
+                  contact@volia.fr
                 </a>
               </p>
               <p className="text-xs text-content-tertiary mt-2">
-                Réponse sous 24h ouvrées. Anthony Malartre, créateur de Prospectia, disponible pour interviews
+                Réponse sous 24h ouvrées. Anthony Malartre, créateur de Volia, disponible pour interviews
                 (français/anglais).
               </p>
             </div>
@@ -653,7 +653,7 @@ export default function EtudePage() {
           {/* CTA final */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Sparkles size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               100 prospects offerts pour découvrir la plateforme française derrière cette étude.
               À partir de 19 €/mois pour passer à 1 000 prospects — le ticket d&apos;entrée le moins cher du marché français.

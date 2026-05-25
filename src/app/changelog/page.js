@@ -3,14 +3,14 @@ import { ArrowLeft, Sparkles, CheckCircle2, Wrench, Shield, Calendar } from 'luc
 import { getAllChangelogEntries } from '@/lib/changelog';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export const metadata = {
-  title: 'Changelog Prospectia — Toutes les nouveautés du produit',
-  description: 'L\'historique complet des évolutions de Prospectia : nouvelles fonctionnalités, améliorations, correctifs, mises à jour SEO. Transparence totale sur le développement.',
+  title: 'Changelog Volia — Toutes les nouveautés du produit',
+  description: 'L\'historique complet des évolutions de Volia : nouvelles fonctionnalités, améliorations, correctifs, mises à jour SEO. Transparence totale sur le développement.',
   alternates: { canonical: `${SITE_URL}/changelog` },
   openGraph: {
-    title: 'Changelog Prospectia',
+    title: 'Changelog Volia',
     description: 'Toutes les nouveautés du produit, mises à jour transparentes.',
     url: `${SITE_URL}/changelog`,
   },
@@ -34,8 +34,8 @@ export default function ChangelogPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Changelog Prospectia',
-    description: 'Historique des évolutions du produit Prospectia',
+    name: 'Changelog Volia',
+    description: 'Historique des évolutions du produit Volia',
     url: `${SITE_URL}/changelog`,
   };
 
@@ -47,7 +47,7 @@ export default function ChangelogPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
               <ArrowLeft size={14} />
-              Prospectia
+              Volia
             </Link>
             <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
               Essayer gratuitement
@@ -65,7 +65,7 @@ export default function ChangelogPage() {
               Tout ce qu&apos;on a livré récemment
             </h1>
             <p className="text-base text-zinc-400 leading-relaxed max-w-2xl">
-              Prospectia est en développement continu. Ici la liste exhaustive des releases — features, améliorations et corrections. Transparence totale.
+              Volia est en développement continu. Ici la liste exhaustive des releases — features, améliorations et corrections. Transparence totale.
             </p>
           </section>
 
@@ -123,7 +123,7 @@ export default function ChangelogPage() {
             <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
               <h2 className="text-2xl font-bold mb-3">Une feature à suggérer ?</h2>
               <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
-                On lit chaque demande. Écrivez-nous à <a href="mailto:hello@prospectia.cloud" className="text-violet-300 hover:underline">hello@prospectia.cloud</a> ou rejoignez la newsletter pour suivre les prochaines releases.
+                On lit chaque demande. Écrivez-nous à <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a> ou rejoignez la newsletter pour suivre les prochaines releases.
               </p>
               <Link href="/newsletter" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
                 <Sparkles size={16} />
@@ -135,7 +135,7 @@ export default function ChangelogPage() {
 
         <footer className="border-t border-white/[0.06] py-8 mt-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
-            <span>© 2026 Prospectia.cloud</span>
+            <span>© 2026 Volia.fr</span>
             <div className="flex gap-4">
               <Link href="/status" className="hover:text-zinc-300">Status</Link>
               <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>

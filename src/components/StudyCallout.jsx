@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { BarChart3, ArrowRight } from 'lucide-react';
 
 /**
- * Encart compact qui pousse l'étude exclusive Prospectia depuis tous les
+ * Encart compact qui pousse l'étude exclusive Volia depuis tous les
  * articles blog + guides. Génère ~50 backlinks internes contextuels.
  */
 export default function StudyCallout() {
@@ -14,14 +14,14 @@ export default function StudyCallout() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-[10px] font-semibold text-violet-300 uppercase tracking-wider mb-1.5">
-            Étude exclusive Prospectia
+            Étude exclusive Volia
           </div>
           <h3 className="text-base sm:text-lg font-bold text-content-primary mb-2">
             L&apos;État de la Prospection B2B en France 2026
           </h3>
           <p className="text-sm text-content-secondary leading-relaxed mb-3">
             38 chiffres clés sur le marché français : coûts réels, performance cold email,
-            conformité RGPD, couverture par secteur et par région. Données publiques + analyse Prospectia.
+            conformité RGPD, couverture par secteur et par région. Données publiques + analyse Volia.
           </p>
           <Link
             href="/etude/prospection-b2b-france-2026"

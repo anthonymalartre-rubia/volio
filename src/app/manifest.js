@@ -3,8 +3,8 @@
 
 export default function manifest() {
   return {
-    name: 'Prospectia — Prospection B2B France',
-    short_name: 'Prospectia',
+    name: 'Volia — Prospection B2B France',
+    short_name: 'Volia',
     description: 'Trouvez les emails B2B de toutes les entreprises françaises. 150+ catégories, 101 départements, à partir de 19 €/mois.',
     start_url: '/',
     display: 'standalone',

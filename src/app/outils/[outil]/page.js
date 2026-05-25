@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   if (!c) return {};
 
   return {
-    title: `${c.name} en 2026 : prix, avis, alternatives — Prospectia`,
+    title: `${c.name} en 2026 : prix, avis, alternatives — Volia`,
     description: `${c.name} : ${c.tagline}. Prix ${c.pricing} ${c.pricingUnit}. Avantages, limites, alternatives françaises et verdict pour la prospection B2B en 2026.`,
     keywords: [
       `${c.name.toLowerCase()}`,
@@ -30,11 +30,11 @@ export async function generateMetadata({ params }) {
       `${c.name.toLowerCase()} alternative`,
       `${c.name.toLowerCase()} france`,
     ],
-    alternates: { canonical: `https://prospectia.cloud/outils/${slug}` },
+    alternates: { canonical: `https://volia.fr/outils/${slug}` },
     openGraph: {
       title: `${c.name} : prix, avis, alternatives (2026)`,
       description: `${c.tagline}. Prix ${c.pricing} ${c.pricingUnit}. Analyse complète et alternatives.`,
-      url: `https://prospectia.cloud/outils/${slug}`,
+      url: `https://volia.fr/outils/${slug}`,
       type: 'article',
     },
   };
@@ -101,7 +101,7 @@ export default async function OutilPage({ params }) {
           {
             '@type': 'Question',
             name: `Quelle est la meilleure alternative française à ${c.name} ?`,
-            acceptedAnswer: { '@type': 'Answer', text: `Prospectia est l'alternative française à ${c.name} : 19 €/mois (${savingsPct}% moins cher), combine découverte (Google Places) + enrichissement email, conforme RGPD natif.` },
+            acceptedAnswer: { '@type': 'Answer', text: `Volia est l'alternative française à ${c.name} : 19 €/mois (${savingsPct}% moins cher), combine découverte (Google Places) + enrichissement email, conforme RGPD natif.` },
           },
           {
             '@type': 'Question',
@@ -182,7 +182,7 @@ export default async function OutilPage({ params }) {
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principal atout</strong> : {c.strengths[0]}</span></li>
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principale limite</strong> : {c.weaknesses[0]}</span></li>
               {savingsPct > 0 && (
-                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Prospectia à 19 €/mois ({savingsPct}% moins cher)</span></li>
+                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Volia à 19 €/mois ({savingsPct}% moins cher)</span></li>
               )}
             </ul>
           </div>
@@ -246,7 +246,7 @@ export default async function OutilPage({ params }) {
             {savingsPct > 0 && (
               <div className="rounded-2xl border border-green-500/30 bg-green-500/[0.06] p-5">
                 <p className="text-sm sm:text-base text-content-secondary leading-relaxed">
-                  💡 <strong className="text-content-primary">Bon à savoir</strong> : à titre de comparaison, Prospectia (alternative française avec découverte Google Places + enrichissement email)
+                  💡 <strong className="text-content-primary">Bon à savoir</strong> : à titre de comparaison, Volia (alternative française avec découverte Google Places + enrichissement email)
                   démarre à <strong>19 €/mois</strong>, soit <strong className="text-green-400">{savingsPct}% moins cher</strong> que {c.name},
                   tout en couvrant les 101 départements français et 150+ catégories d&apos;activité.
                 </p>
@@ -273,26 +273,26 @@ export default async function OutilPage({ params }) {
               Alternatives à {c.name}
             </h2>
 
-            {/* Prospectia featured */}
+            {/* Volia featured */}
             <div className="rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.04] p-5 mb-4">
               <div className="flex items-start gap-4">
                 <LogoIcon size="md" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                    <h3 className="text-lg font-bold text-content-primary">Prospectia</h3>
+                    <h3 className="text-lg font-bold text-content-primary">Volia</h3>
                     <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">🇫🇷 Alternative française recommandée</span>
                   </div>
                   <p className="text-sm text-content-secondary leading-relaxed mb-2">
-                    À partir de <strong className="text-content-primary">19 €/mois</strong>, Prospectia combine découverte d&apos;entreprises (Google Places, 150+ catégories, 101 départements)
+                    À partir de <strong className="text-content-primary">19 €/mois</strong>, Volia combine découverte d&apos;entreprises (Google Places, 150+ catégories, 101 départements)
                     + enrichissement email automatique. RGPD-by-design. {savingsPct > 0 ? `${savingsPct}% moins cher que ${c.name}.` : ''}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/vs/${c.slug.includes('-') ? c.slug.split('-')[0] : c.slug}`} className="text-xs font-medium text-violet-300 hover:text-violet-200">
-                      Voir le comparatif Prospectia vs {c.name} →
+                      Voir le comparatif Volia vs {c.name} →
                     </Link>
                     <span className="text-content-tertiary text-xs">·</span>
                     <Link href="/signup" className="text-xs font-medium text-violet-300 hover:text-violet-200">
-                      Essayer Prospectia gratuitement →
+                      Essayer Volia gratuitement →
                     </Link>
                   </div>
                 </div>
@@ -329,7 +329,7 @@ export default async function OutilPage({ params }) {
               {c.name} vs… <span className="text-base font-normal text-content-tertiary">{pairsForThis.length} comparatifs</span>
             </h2>
             <p className="text-content-secondary leading-relaxed mb-4">
-              Comparaison côte-à-côte avec chacun des autres outils analysés sur Prospectia :
+              Comparaison côte-à-côte avec chacun des autres outils analysés sur Volia :
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {pairsForThis.map((p) => {
@@ -353,7 +353,7 @@ export default async function OutilPage({ params }) {
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               100 prospects offerts pour découvrir l&apos;alternative française à {c.name}.
               À partir de 19 €/mois pour passer à 1 000 prospects + 400 enrichissements — le ticket d&apos;entrée le moins cher du marché français.

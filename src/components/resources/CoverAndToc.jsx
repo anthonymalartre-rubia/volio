@@ -8,7 +8,7 @@ export function CoverPage({ title, subtitle, edition = '2026', author = 'Anthony
     <div className="mb-12 keep-together print:min-h-[90vh] print:flex print:flex-col print:justify-between print:break-after-page">
       <div>
         <div className="text-xs uppercase tracking-[0.2em] text-violet-500 font-semibold mb-6">
-          Ressource Prospectia · Édition {edition}
+          Ressource Volia · Édition {edition}
         </div>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-6 text-content-primary print-text-black">
           {title}
@@ -33,7 +33,7 @@ export function CoverPage({ title, subtitle, edition = '2026', author = 'Anthony
             <span>Édition {edition}</span>
           </div>
           <div className="text-xs">
-            © Prospectia · Licence Creative Commons BY 4.0
+            © Volia · Licence Creative Commons BY 4.0
           </div>
         </div>
       </div>

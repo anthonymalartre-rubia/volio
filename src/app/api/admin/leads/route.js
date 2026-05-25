@@ -79,7 +79,7 @@ export async function GET(request) {
       lines.push(headers.map((h) => escape(row[h])).join(','));
     }
     const csv = lines.join('\n');
-    const filename = `prospectia-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    const filename = `volia-leads-${new Date().toISOString().slice(0, 10)}.csv`;
     return new NextResponse(csv, {
       status: 200,
       headers: {

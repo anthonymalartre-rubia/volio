@@ -91,7 +91,7 @@ export default function LoginPage() {
       <ThemeToggle className="absolute top-4 right-4 z-10" />
       <Link href="/" className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-content-primary transition">
         <ArrowLeft size={12} />
-        Prospectia
+        Volia
       </Link>
       <div
         className={`relative w-full max-w-sm space-y-8 transition-all duration-700 ease-out ${
@@ -101,7 +101,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="text-center">
           <LogoIcon size="lg" className="mx-auto" />
-          <h1 className="mt-4 text-2xl font-bold text-content-primary">Prospectia<span className="text-violet-400">.cloud</span></h1>
+          <h1 className="mt-4 text-2xl font-bold text-content-primary">Volia<span className="text-violet-400">.cloud</span></h1>
           <p className="mt-2 text-sm text-content-tertiary">
             {t('auth.loginTitle')}
           </p>

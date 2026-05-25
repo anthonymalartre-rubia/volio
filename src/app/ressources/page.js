@@ -35,7 +35,7 @@ export const metadata = {
   title: 'Ressources gratuites prospection B2B 2026 — Templates, calculateurs, checklists',
   description:
     'Templates de cold email, scripts cold call, calculateurs CAC/LTV, checklists RGPD, playbooks sales : ressources gratuites pour booster votre prospection B2B en 2026.',
-  alternates: { canonical: 'https://prospectia.cloud/ressources' },
+  alternates: { canonical: 'https://volia.fr/ressources' },
   keywords: [
     'templates cold email gratuit',
     'calculateur cac ltv saas',
@@ -46,7 +46,7 @@ export const metadata = {
   openGraph: {
     title: 'Ressources gratuites prospection B2B 2026',
     description: 'Templates, calculateurs, checklists et playbooks gratuits pour les équipes sales B2B françaises.',
-    url: 'https://prospectia.cloud/ressources',
+    url: 'https://volia.fr/ressources',
   },
 };
 
@@ -67,7 +67,7 @@ export default async function RessourcesIndex() {
         '@type': 'CollectionPage',
         name: 'Ressources gratuites prospection B2B 2026',
         description: metadata.description,
-        url: 'https://prospectia.cloud/ressources',
+        url: 'https://volia.fr/ressources',
         inLanguage: 'fr-FR',
       },
       {
@@ -81,7 +81,7 @@ export default async function RessourcesIndex() {
             '@type': 'CreativeWork',
             name: r.title,
             description: r.shortDesc,
-            url: `https://prospectia.cloud/ressources/${r.slug}`,
+            url: `https://volia.fr/ressources/${r.slug}`,
             keywords: r.keywords.join(', '),
             isAccessibleForFree: true,
           },
@@ -130,9 +130,9 @@ export default async function RessourcesIndex() {
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Au-delà des ressources statiques, Prospectia trouve les entreprises et leurs emails partout en France.
+              Au-delà des ressources statiques, Volia trouve les entreprises et leurs emails partout en France.
               Gratuit pour commencer · à partir de 19 €/mois.
             </p>
             <Link

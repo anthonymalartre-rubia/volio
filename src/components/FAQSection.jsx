@@ -20,7 +20,7 @@ export default function FAQSection() {
             Questions frequentes
           </h2>
           <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-            Tout ce que vous devez savoir sur Prospectia.ai
+            Tout ce que vous devez savoir sur Volia.fr
           </p>
         </div>
 

@@ -46,7 +46,7 @@ export default function ParrainagePage() {
     })();
   }, [supabase]);
 
-  const shareUrl = stats?.code ? `https://prospectia.cloud/signup?ref=${stats.code}` : '';
+  const shareUrl = stats?.code ? `https://volia.fr/signup?ref=${stats.code}` : '';
 
   async function handleCopy() {
     try {
@@ -57,7 +57,7 @@ export default function ParrainagePage() {
   }
 
   const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
-  const emailShareUrl = `mailto:?subject=${encodeURIComponent('Tu vas adorer Prospectia')}&body=${encodeURIComponent(`J'utilise Prospectia pour ma prospection B2B en France et Belgique. À partir de 19 €/mois, super outil. Avec mon lien tu peux tester gratuitement : ${shareUrl}`)}`;
+  const emailShareUrl = `mailto:?subject=${encodeURIComponent('Tu vas adorer Volia')}&body=${encodeURIComponent(`J'utilise Volia pour ma prospection B2B en France et Belgique. À partir de 19 €/mois, super outil. Avec mon lien tu peux tester gratuitement : ${shareUrl}`)}`;
 
   if (loading) return <Loading />;
   if (!authed) return <GuestScreen />;
@@ -72,7 +72,7 @@ export default function ParrainagePage() {
           </Link>
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
           </Link>
         </div>
       </nav>
@@ -85,7 +85,7 @@ export default function ParrainagePage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">Invitez vos amis, gagnez des mois gratuits</h1>
           <p className="text-base text-zinc-400 leading-relaxed">
-            Pour chaque ami qui devient client payant grâce à votre lien, vous gagnez <strong className="text-emerald-300">1 mois gratuit</strong> sur votre abonnement Prospectia. Pas de limite : 5 amis = 5 mois offerts.
+            Pour chaque ami qui devient client payant grâce à votre lien, vous gagnez <strong className="text-emerald-300">1 mois gratuit</strong> sur votre abonnement Volia. Pas de limite : 5 amis = 5 mois offerts.
           </p>
         </section>
 
@@ -132,7 +132,7 @@ export default function ParrainagePage() {
               </a>
               {typeof navigator !== 'undefined' && navigator.share && (
                 <button
-                  onClick={() => navigator.share({ title: 'Prospectia', url: shareUrl })}
+                  onClick={() => navigator.share({ title: 'Volia', url: shareUrl })}
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-white/[0.04] text-sm transition"
                 >
                   <Share2 size={14} className="text-zinc-400" />
@@ -322,7 +322,7 @@ function GuestScreen() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -337,7 +337,7 @@ function GuestScreen() {
         <section className="max-w-3xl mx-auto px-4 sm:px-6 text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/15 to-violet-500/15 border border-pink-500/30 text-xs text-pink-300 mb-6 animate-pulse">
             <Gift size={12} />
-            Programme de parrainage Prospectia
+            Programme de parrainage Volia
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-6 bg-gradient-to-b from-white via-violet-100 to-violet-400 bg-clip-text text-transparent">
             Invitez vos amis,<br />gagnez des <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text">mois gratuits</span>
@@ -399,7 +399,7 @@ function GuestScreen() {
             <GuestStep
               num={1}
               title="Récupérez votre lien"
-              desc="Connectez-vous, copiez le lien personnalisé prospectia.cloud/signup?ref=VOTRE_CODE."
+              desc="Connectez-vous, copiez le lien personnalisé volia.fr/signup?ref=VOTRE_CODE."
               icon={<Copy size={16} />}
               gradient="from-violet-500/15 to-indigo-500/15"
               border="border-violet-500/30"
@@ -430,7 +430,7 @@ function GuestScreen() {
               <div>
                 <h2 className="text-2xl font-bold mb-3">Pourquoi c&apos;est rentable</h2>
                 <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-                  Prospectia coûte 19 à 99 €/mois. <strong className="text-white">Chaque ami payant = 19 à 99 € économisés</strong> sur votre prochain renouvellement.
+                  Volia coûte 19 à 99 €/mois. <strong className="text-white">Chaque ami payant = 19 à 99 € économisés</strong> sur votre prochain renouvellement.
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2 text-zinc-300"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Aucune limite de filleuls</li>
@@ -473,7 +473,7 @@ function GuestScreen() {
 
       <footer className="border-t border-white/[0.06] py-8 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
-          <span>© 2026 Prospectia.cloud</span>
+          <span>© 2026 Volia.fr</span>
           <div className="flex gap-4">
             <Link href="/changelog" className="hover:text-zinc-300">Changelog</Link>
             <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>

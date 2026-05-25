@@ -74,9 +74,10 @@ const nextConfig = {
   },
 
   // Redirections gérées nativement dans Vercel :
-  // - getprospectia.com → prospectia.cloud (configuré côté Vercel)
-  // - scraping-dom-ezdrive.vercel.app → prospectia.cloud (à configurer)
-  // - www.prospectia.cloud → prospectia.cloud (à configurer)
+  // - prospectia.cloud → volia.fr (Phase E — redirect 301 permanent post-rebrand mai 2026)
+  // - getprospectia.com → volia.fr (legacy, à configurer côté Vercel)
+  // - scraping-dom-ezdrive.vercel.app → volia.fr (à configurer)
+  // - www.volia.fr → volia.fr (canonical apex, à configurer)
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

@@ -18,25 +18,25 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(categorySlug);
   if (!category) return {};
 
-  const title = `Trouver l'email des ${category.labelPlural} en France — Prospectia`;
+  const title = `Trouver l'email des ${category.labelPlural} en France — Volia`;
   const description = `Email professionnel de tous les ${category.labelPlural} en France. 101 départements couverts, scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `https://prospectia.cloud/prospection/${categorySlug}`,
+      canonical: `https://volia.fr/prospection/${categorySlug}`,
       languages: {
-        'fr-FR': `https://prospectia.cloud/prospection/${categorySlug}`,
-        'fr-BE': `https://prospectia.cloud/prospection-be/${categorySlug}`,
-        'fr-CH': `https://prospectia.cloud/prospection-ch/${categorySlug}`,
-        'x-default': `https://prospectia.cloud/prospection/${categorySlug}`,
+        'fr-FR': `https://volia.fr/prospection/${categorySlug}`,
+        'fr-BE': `https://volia.fr/prospection-be/${categorySlug}`,
+        'fr-CH': `https://volia.fr/prospection-ch/${categorySlug}`,
+        'x-default': `https://volia.fr/prospection/${categorySlug}`,
       },
     },
     openGraph: {
       title,
       description,
-      url: `https://prospectia.cloud/prospection/${categorySlug}`,
+      url: `https://volia.fr/prospection/${categorySlug}`,
     },
   };
 }
@@ -93,15 +93,15 @@ export default async function CategoryPage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Trouver l'email de tous les ${category.labelPlural} en France`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} en France ? Prospectia agrège les ${category.labelPlural} de tous les départements français et trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Plus besoin d'aller chercher manuellement sur Pages Jaunes, LinkedIn ou société.com — exportez les contacts en CSV en quelques clics.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} en France ? Volia agrège les ${category.labelPlural} de tous les départements français et trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Plus besoin d'aller chercher manuellement sur Pages Jaunes, LinkedIn ou société.com — exportez les contacts en CSV en quelques clics.`;
 
   const faq = [
     {
-      question: `Combien de ${category.labelPlural} sont référencés sur Prospectia ?`,
+      question: `Combien de ${category.labelPlural} sont référencés sur Volia ?`,
       answer: `Notre base contient plusieurs milliers de ${category.labelPlural} répartis sur les 101 départements français. Le nombre exact dépend de votre zone géographique de recherche.`,
     },
     {
-      question: `Comment Prospectia trouve-t-il l'email d'un ${category.label} ?`,
+      question: `Comment Volia trouve-t-il l'email d'un ${category.label} ?`,
       answer: `Notre moteur scrape automatiquement le site web de chaque ${category.label}, puis effectue une recherche Google ciblée si l'email n'est pas trouvé. Pour les entreprises sans site web, nous découvrons leur domaine via Google avant d'extraire l'email.`,
     },
     {
@@ -114,7 +114,7 @@ export default async function CategoryPage({ params }) {
     },
     {
       question: `La prospection des ${category.labelPlural} est-elle conforme au RGPD ?`,
-      answer: `Oui. Prospectia filtre automatiquement les emails personnels (Gmail, Hotmail, etc.), respecte les demandes d'opt-out, et ne collecte que des données professionnelles publiques. Conforme à l'article 6 du RGPD (intérêt légitime).`,
+      answer: `Oui. Volia filtre automatiquement les emails personnels (Gmail, Hotmail, etc.), respecte les demandes d'opt-out, et ne collecte que des données professionnelles publiques. Conforme à l'article 6 du RGPD (intérêt légitime).`,
     },
   ];
 
@@ -133,13 +133,13 @@ export default async function CategoryPage({ params }) {
         '@type': 'WebPage',
         name: title,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${categorySlug}`,
+        url: `https://volia.fr/prospection/${categorySlug}`,
         inLanguage: 'fr-FR',
       },
       productSchema({
         name: `Recherche email ${category.labelPlural} en France`,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${categorySlug}`,
+        url: `https://volia.fr/prospection/${categorySlug}`,
       }),
       {
         '@type': 'FAQPage',

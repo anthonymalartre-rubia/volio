@@ -28,7 +28,7 @@ export async function POST(request) {
   const domain = email.split('@')[1];
   if (PERSONAL_DOMAINS.has(domain)) {
     return NextResponse.json(
-      { error: 'Pour les newsletters B2B Prospectia, merci d\'utiliser votre email professionnel.' },
+      { error: 'Pour les newsletters B2B Volia, merci d\'utiliser votre email professionnel.' },
       { status: 400 }
     );
   }

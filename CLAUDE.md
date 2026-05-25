@@ -1,6 +1,10 @@
-# Prospectia.ai — Agrégateur de prospection B2B en France
+# Volia — Suite SaaS de growth B2B (anciennement Prospectia)
 
-Plateforme SaaS de prospection B2B automatisée couvrant la France entière (101 départements). Combine recherche Google Places + cascade waterfall multi-sources (scraping intelligent du site web → recherche Google via Serper → fallback patterns) avec scoring de confiance.
+Volia (domaine `volia.fr`) est une suite SaaS française organisée en 3 modules style HubSpot :
+
+- **Volia Prospection** : génération de leads B2B France (101 départements) via Google Places + cascade waterfall multi-sources (scraping intelligent du site web → recherche Google via Serper → fallback patterns) avec scoring de confiance.
+- **Volia Campagnes** : envoi de séquences email/SMS automatisées sur les prospects qualifiés.
+- **Volia CRM** : (à venir) pipeline et suivi commercial natif Volia.
 
 Tarification : Starter gratuit (100 prospects) · Solo 19€/mois (1k) · Pro 49€/mois (5k) · Business 99€/mois (10k) — facturation mensuelle ou annuelle (-2 mois).
 

@@ -40,7 +40,7 @@ export default function TrustpilotBadge({
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex items-center ${s.gap} text-content-tertiary hover:text-content-primary transition group ${className}`}
-      aria-label={`Avis Prospectia sur Trustpilot : ${data.rating}/5 sur ${data.reviewCount} avis`}
+      aria-label={`Avis Volia sur Trustpilot : ${data.rating}/5 sur ${data.reviewCount} avis`}
     >
       {/* Étoiles */}
       <span className="flex items-center gap-0.5">

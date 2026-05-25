@@ -7,7 +7,7 @@ import { getCategoryData } from '@/lib/category-data';
 import { getCantonData } from '@/lib/dept-data-ch';
 import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(catSlug);
   const canton = getCantonBySlugCH(cantonSlug);
   if (!category || !canton) return {};
-  const title = `Email des ${category.labelPlural} dans le canton ${canton.name} (Suisse) — Prospectia`;
+  const title = `Email des ${category.labelPlural} dans le canton ${canton.name} (Suisse) — Volia`;
   const description = `Trouvez l'email professionnel des ${category.labelPlural} du canton ${canton.name}. Scraping intelligent + Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,
@@ -72,7 +72,7 @@ export default async function CategoryCantonChPage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Email des ${category.labelPlural} dans le canton ${canton.name}`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés dans le canton ${canton.name} (Suisse romande) ? Prospectia identifie automatiquement tous les ${category.labelPlural} via Google Places, puis trouve leur email professionnel. Marché premium B2B avec un fort pouvoir d'achat.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés dans le canton ${canton.name} (Suisse romande) ? Volia identifie automatiquement tous les ${category.labelPlural} via Google Places, puis trouve leur email professionnel. Marché premium B2B avec un fort pouvoir d'achat.`;
 
   const faq = [
     {
@@ -81,11 +81,11 @@ export default async function CategoryCantonChPage({ params }) {
     },
     {
       question: `Comment trouver l'email d'un ${category.label} en ${canton.name} ?`,
-      answer: `Sélectionnez "${category.label}" et le canton "${canton.name}" sur Prospectia. Notre IA scrape les sites et complète avec Google.`,
+      answer: `Sélectionnez "${category.label}" et le canton "${canton.name}" sur Volia. Notre IA scrape les sites et complète avec Google.`,
     },
     {
       question: `La prospection en Suisse romande est-elle conforme à la nLPD ?`,
-      answer: `Oui. La nouvelle Loi sur la Protection des Données (nLPD) suisse est alignée avec le RGPD européen. Prospectia respecte les deux cadres.`,
+      answer: `Oui. La nouvelle Loi sur la Protection des Données (nLPD) suisse est alignée avec le RGPD européen. Volia respecte les deux cadres.`,
     },
     {
       question: `Combien coûte la prospection en ${canton.name} ?`,

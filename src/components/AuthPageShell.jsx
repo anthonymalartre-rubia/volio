@@ -9,7 +9,7 @@ import { LogoIcon } from '@/components/ui';
 export default function AuthPageShell({
   children,
   backHref = '/',
-  backLabel = 'Prospectia',
+  backLabel = 'Volia',
   showSignupCta = true,
   contentWidth = 'max-w-md', // 'max-w-md' | 'max-w-lg' | 'max-w-2xl' | 'max-w-3xl'
 }) {
@@ -38,7 +38,7 @@ export default function AuthPageShell({
           </Link>
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           {showSignupCta ? (
@@ -59,7 +59,7 @@ export default function AuthPageShell({
 
       <footer className="border-t border-white/[0.06] py-6 bg-[#08080c]/50 backdrop-blur-xl relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500">
-          <span>© 2026 Prospectia.cloud — Prospection B2B France · Belgique · Suisse</span>
+          <span>© 2026 Volia.fr — Prospection B2B France · Belgique · Suisse</span>
           <div className="flex gap-4">
             <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
             <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>

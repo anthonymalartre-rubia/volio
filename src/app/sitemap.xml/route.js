@@ -11,7 +11,7 @@
 
 import { getAllSeoUrls } from '@/lib/slugs';
 
-const BASE = 'https://prospectia.cloud';
+const BASE = 'https://volia.fr';
 const CHUNK_SIZE = 5000;
 
 // 1 régénération / jour suffit (les chunks bougent peu)

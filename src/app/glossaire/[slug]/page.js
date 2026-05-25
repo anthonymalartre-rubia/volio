@@ -16,13 +16,13 @@ export async function generateMetadata({ params }) {
   if (!term) return {};
 
   return {
-    title: `${term.term} : définition complète — Glossaire Prospectia`,
+    title: `${term.term} : définition complète — Glossaire Volia`,
     description: term.shortDef,
-    alternates: { canonical: `https://prospectia.cloud/glossaire/${slug}` },
+    alternates: { canonical: `https://volia.fr/glossaire/${slug}` },
     openGraph: {
       title: `${term.term} : définition`,
       description: term.shortDef,
-      url: `https://prospectia.cloud/glossaire/${slug}`,
+      url: `https://volia.fr/glossaire/${slug}`,
     },
   };
 }
@@ -126,9 +126,9 @@ export default async function GlossaryTermPage({ params }) {
         inDefinedTermSet: {
           '@type': 'DefinedTermSet',
           name: 'Glossaire Prospection B2B',
-          url: 'https://prospectia.cloud/glossaire',
+          url: 'https://volia.fr/glossaire',
         },
-        url: `https://prospectia.cloud/glossaire/${slug}`,
+        url: `https://volia.fr/glossaire/${slug}`,
       },
     ],
   };
@@ -167,7 +167,7 @@ export default async function GlossaryTermPage({ params }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Mettez ce concept en pratique</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois.
+              Volia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois.
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
               <Zap size={16} />

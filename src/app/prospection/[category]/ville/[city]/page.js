@@ -36,17 +36,17 @@ export async function generateMetadata({ params }) {
   const city = getCityBySlug(citySlug);
   if (!category || !city) return {};
 
-  const title = `Email des ${category.labelPlural} à ${city.name} — Prospectia`;
+  const title = `Email des ${category.labelPlural} à ${city.name} — Volia`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} à ${city.name}. Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
     description,
-    alternates: { canonical: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}` },
+    alternates: { canonical: `https://volia.fr/prospection/${catSlug}/ville/${citySlug}` },
     openGraph: {
       title,
       description,
-      url: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}`,
+      url: `https://volia.fr/prospection/${catSlug}/ville/${citySlug}`,
     },
   };
 }
@@ -84,16 +84,16 @@ export default async function CategoryCityPage({ params }) {
     }));
 
   const title = `Trouver l'email des ${category.labelPlural} à ${city.name}`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} à ${city.name} (${city.dept}, ${deptInfo.name}) ? Prospectia identifie automatiquement tous les ${category.labelPlural} géolocalisés à ${city.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Avec ${city.pop > 100000 ? `plus de ${Math.round(city.pop / 1000)} 000 habitants` : `${Math.round(city.pop / 1000)} 000 habitants`}, ${city.name} concentre des centaines voire des milliers de ${category.labelPlural}. Exportez la liste complète en CSV en quelques minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} à ${city.name} (${city.dept}, ${deptInfo.name}) ? Volia identifie automatiquement tous les ${category.labelPlural} géolocalisés à ${city.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Avec ${city.pop > 100000 ? `plus de ${Math.round(city.pop / 1000)} 000 habitants` : `${Math.round(city.pop / 1000)} 000 habitants`}, ${city.name} concentre des centaines voire des milliers de ${category.labelPlural}. Exportez la liste complète en CSV en quelques minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} y a-t-il à ${city.name} ?`,
-      answer: `${city.name} compte environ ${city.pop > 200000 ? 'plusieurs centaines' : 'plusieurs dizaines'} de ${category.labelPlural} référencés sur Google Places. Prospectia accède à tous les ${category.labelPlural} géolocalisés dans un rayon autour de ${city.name}.`,
+      answer: `${city.name} compte environ ${city.pop > 200000 ? 'plusieurs centaines' : 'plusieurs dizaines'} de ${category.labelPlural} référencés sur Google Places. Volia accède à tous les ${category.labelPlural} géolocalisés dans un rayon autour de ${city.name}.`,
     },
     {
       question: `Comment trouver l'email d'un ${category.label} à ${city.name} ?`,
-      answer: `Sur Prospectia, vous filtrez par catégorie "${category.label}" et zone "${city.name}". Notre moteur scrape ensuite chaque site web et complète avec une recherche Google. En 5 minutes, vous récupérez tous les emails disponibles.`,
+      answer: `Sur Volia, vous filtrez par catégorie "${category.label}" et zone "${city.name}". Notre moteur scrape ensuite chaque site web et complète avec une recherche Google. En 5 minutes, vous récupérez tous les emails disponibles.`,
     },
     {
       question: `Les emails des ${category.labelPlural} de ${city.name} sont-ils à jour ?`,
@@ -105,7 +105,7 @@ export default async function CategoryCityPage({ params }) {
     },
     {
       question: `Le démarchage des ${category.labelPlural} à ${city.name} est-il légal ?`,
-      answer: `Oui, en B2B et dans le cadre du RGPD (intérêt légitime). Tous les emails collectés sont professionnels et publics. Prospectia respecte automatiquement les opt-out.`,
+      answer: `Oui, en B2B et dans le cadre du RGPD (intérêt légitime). Tous les emails collectés sont professionnels et publics. Volia respecte automatiquement les opt-out.`,
     },
   ];
 
@@ -124,13 +124,13 @@ export default async function CategoryCityPage({ params }) {
         '@type': 'WebPage',
         name: title,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}`,
+        url: `https://volia.fr/prospection/${catSlug}/ville/${citySlug}`,
         inLanguage: 'fr-FR',
       },
       serviceSchema({
         name: `Recherche email ${category.labelPlural} ${city.name}`,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}`,
+        url: `https://volia.fr/prospection/${catSlug}/ville/${citySlug}`,
         areaName: city.name,
       }),
       {

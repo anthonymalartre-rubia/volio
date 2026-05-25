@@ -244,7 +244,7 @@ export default function ScriptColdCall() {
     <div>
       <header className="mb-10 keep-together">
         <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Scripts
+          Ressource Volia · Scripts
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
           5 scripts cold call B2B qui prennent des RDV
@@ -299,8 +299,8 @@ export default function ScriptColdCall() {
           n&apos;automatisez jamais (les robocalls sont interdits par la CNIL).
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/script-cold-call-b2b-fr" className="text-violet-500 hover:underline">prospectia.cloud/ressources/script-cold-call-b2b-fr</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/script-cold-call-b2b-fr" className="text-violet-500 hover:underline">volia.fr/ressources/script-cold-call-b2b-fr</a>
         </p>
       </footer>
     </div>

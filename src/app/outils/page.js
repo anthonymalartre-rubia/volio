@@ -7,10 +7,10 @@ import ReaderFooter from '@/components/ReaderFooter';
 import { TestimonialsBlock, ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
 
 export const metadata = {
-  title: 'Tous les outils de prospection B2B en 2026 — Prospectia',
+  title: 'Tous les outils de prospection B2B en 2026 — Volia',
   description:
     'Annuaire complet des 14 outils de prospection B2B en 2026 : prix, avis, alternatives. Apollo, Hunter, Lusha, Snov, Lemlist, Dropcontact, Kaspr, Cognism, ZoomInfo, Findymail, Smartlead, Instantly, Waalaxy, La Growth Machine.',
-  alternates: { canonical: 'https://prospectia.cloud/outils' },
+  alternates: { canonical: 'https://volia.fr/outils' },
   keywords: [
     'outils prospection b2b',
     'comparatif outils sales 2026',
@@ -20,7 +20,7 @@ export const metadata = {
   openGraph: {
     title: 'Tous les outils de prospection B2B en 2026',
     description: 'Annuaire complet : prix, avis, alternatives des 14 outils sales les plus populaires.',
-    url: 'https://prospectia.cloud/outils',
+    url: 'https://volia.fr/outils',
   },
 };
 
@@ -40,7 +40,7 @@ export default function OutilsIndex() {
         '@type': 'CollectionPage',
         name: 'Tous les outils de prospection B2B en 2026',
         description: metadata.description,
-        url: 'https://prospectia.cloud/outils',
+        url: 'https://volia.fr/outils',
         inLanguage: 'fr-FR',
       },
       {
@@ -52,7 +52,7 @@ export default function OutilsIndex() {
           item: {
             '@type': 'SoftwareApplication',
             name: c.name,
-            url: `https://prospectia.cloud/outils/${c.slug}`,
+            url: `https://volia.fr/outils/${c.slug}`,
             applicationCategory: 'BusinessApplication',
             offers: {
               '@type': 'Offer',
@@ -166,21 +166,21 @@ export default function OutilsIndex() {
           {/* Témoignages */}
           <TestimonialsBlock
             limit={3}
-            title="Pourquoi ils ont choisi Prospectia"
+            title="Pourquoi ils ont choisi Volia"
             subtitle="Vu de l'intérieur — feedbacks de commerciaux et fondateurs B2B."
           />
 
           {/* Lead magnet */}
           <ResourceTeaserBlock
             title="Hésitez entre 3 outils ? Démarrez par ce PDF gratuit"
-            subtitle="20 templates cold email + checklist warmup domaine. Utile que vous choisissiez Prospectia, Apollo, Hunter ou un autre."
+            subtitle="20 templates cold email + checklist warmup domaine. Utile que vous choisissiez Volia, Apollo, Hunter ou un autre."
             cta="Récupérer le PDF gratuit"
           />
 
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               L&apos;alternative française la moins chère du marché : 19 €/mois, découverte + enrichissement,
               101 départements, 150+ catégories, RGPD natif.

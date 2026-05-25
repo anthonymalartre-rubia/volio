@@ -19,26 +19,26 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://prospectia.cloud'),
+  metadataBase: new URL('https://volia.fr'),
   title: {
-    default: 'Prospectia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
-    template: '%s | Prospectia',
+    default: 'Volia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
+    template: '%s | Volia',
   },
   description: 'Le ticket d\'entrée le moins cher du marché français. Découverte d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 19 €/mois.',
   keywords: ['prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
-  authors: [{ name: 'Prospectia' }],
-  creator: 'Prospectia',
+  authors: [{ name: 'Volia' }],
+  creator: 'Volia',
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    siteName: 'Prospectia',
+    siteName: 'Volia',
   },
   twitter: {
     card: 'summary_large_image',
   },
   // Apple touch icon mention (en plus de src/app/apple-icon.svg auto-géré)
   appleWebApp: {
-    title: 'Prospectia',
+    title: 'Volia',
     statusBarStyle: 'black-translucent',
     capable: true,
   },
@@ -52,10 +52,10 @@ export const metadata = {
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Prospectia',
-  alternateName: ['Prospectia.ai', 'Prospectia.cloud'],
-  url: 'https://prospectia.cloud',
-  logo: 'https://prospectia.cloud/icon.svg',
+  name: 'Volia',
+  alternateName: ['Volia.fr', 'Volia.fr'],
+  url: 'https://volia.fr',
+  logo: 'https://volia.fr/icon.svg',
   description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Le ticket d\'entrée le moins cher du marché français à 19 €/mois.',
   sameAs: [],
   founder: {
@@ -74,7 +74,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: 'contact@prospectia.cloud',
+    email: 'contact@volia.fr',
     availableLanguage: ['French', 'English'],
   },
   address: {
@@ -86,11 +86,11 @@ const organizationSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Prospectia',
-  url: 'https://prospectia.cloud',
+  name: 'Volia',
+  url: 'https://volia.fr',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://prospectia.cloud/prospection?q={search_term_string}',
+    target: 'https://volia.fr/prospection?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 };

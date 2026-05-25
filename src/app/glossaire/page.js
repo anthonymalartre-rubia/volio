@@ -8,11 +8,11 @@ import ReaderFooter from '@/components/ReaderFooter';
 export const metadata = {
   title: 'Glossaire prospection B2B — Termes, concepts, définitions',
   description: 'Dictionnaire des termes de la prospection B2B en 2026 : cold emailing, ICP, BANT, RGPD, deliverability, CRM. Définitions claires et exemples.',
-  alternates: { canonical: 'https://prospectia.cloud/glossaire' },
+  alternates: { canonical: 'https://volia.fr/glossaire' },
   openGraph: {
     title: 'Glossaire prospection B2B',
     description: 'Tous les termes de la prospection B2B expliqués simplement.',
-    url: 'https://prospectia.cloud/glossaire',
+    url: 'https://volia.fr/glossaire',
   },
 };
 

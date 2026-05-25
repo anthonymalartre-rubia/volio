@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Politique de Confidentialité — Prospectia.ai',
-  description: 'Politique de confidentialité et protection des données personnelles de Prospectia.ai.',
+  title: 'Politique de Confidentialité — Volia.fr',
+  description: 'Politique de confidentialité et protection des données personnelles de Volia.fr.',
 };
 
 export default function ConfidentialitePage() {
@@ -22,11 +22,11 @@ export default function ConfidentialitePage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">1. Responsable du traitement</h2>
             <p>
-              Le responsable du traitement des données personnelles est Prospectia.ai.<br />
-              Contact DPO : <span className="text-content-primary font-medium">contact@prospectia.cloud</span>
+              Le responsable du traitement des données personnelles est Volia.fr.<br />
+              Contact DPO : <span className="text-content-primary font-medium">contact@volia.fr</span>
             </p>
             <p className="mt-3">
-              Prospectia.ai agit en qualité d&apos;<span className="text-content-primary font-medium">agrégateur technique</span> de
+              Volia.fr agit en qualité d&apos;<span className="text-content-primary font-medium">agrégateur technique</span> de
               données professionnelles B2B. Cette politique distingue deux catégories de données :
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
@@ -90,7 +90,7 @@ export default function ConfidentialitePage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">4. Données des prospects traitées</h2>
             <p>
-              Dans le cadre de son activité d&apos;agrégation, Prospectia.ai traite les données professionnelles suivantes
+              Dans le cadre de son activité d&apos;agrégation, Volia.fr traite les données professionnelles suivantes
               concernant les entreprises et professionnels référencés :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
@@ -104,7 +104,7 @@ export default function ConfidentialitePage() {
               <li>Département et localisation géographique</li>
             </ul>
             <p className="mt-4">
-              <span className="text-content-primary font-medium">Prospectia.ai ne traite aucune donnée sensible</span> au sens
+              <span className="text-content-primary font-medium">Volia.fr ne traite aucune donnée sensible</span> au sens
               de l&apos;article 9 du RGPD (origine ethnique, opinions politiques, convictions religieuses, données de santé, etc.).
             </p>
           </section>
@@ -170,7 +170,7 @@ export default function ConfidentialitePage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">6. Minimisation des données</h2>
             <p>
-              Conformément au principe de minimisation (article 5.1.c du RGPD), Prospectia.ai met en place les
+              Conformément au principe de minimisation (article 5.1.c du RGPD), Volia.fr met en place les
               mesures suivantes :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
@@ -198,15 +198,15 @@ export default function ConfidentialitePage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">7. Droits des personnes prospectées</h2>
             <p>
-              Si vous êtes un professionnel dont les données sont traitées par Prospectia.ai dans le cadre de
+              Si vous êtes un professionnel dont les données sont traitées par Volia.fr dans le cadre de
               l&apos;enrichissement B2B, vous disposez des droits suivants :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>
                 <span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : vous pouvez
-                demander à ne plus apparaître dans les résultats de Prospectia.ai via notre
+                demander à ne plus apparaître dans les résultats de Volia.fr via notre
                 <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition ml-1">page d&apos;opt-out</Link> ou
-                par email à <span className="text-content-primary">contact@prospectia.cloud</span>. Votre demande sera traitée sous
+                par email à <span className="text-content-primary">contact@volia.fr</span>. Votre demande sera traitée sous
                 72 heures et sera effective pour tous les utilisateurs du Service.
               </li>
               <li>
@@ -227,7 +227,7 @@ export default function ConfidentialitePage() {
               </li>
             </ul>
             <p className="mt-4">
-              Pour exercer ces droits : <span className="text-content-primary font-medium">contact@prospectia.cloud</span> ou
+              Pour exercer ces droits : <span className="text-content-primary font-medium">contact@volia.fr</span> ou
               via la page <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link>.
               Délai de réponse : 30 jours maximum (72 heures pour les demandes d&apos;opt-out).
             </p>
@@ -455,7 +455,7 @@ export default function ConfidentialitePage() {
 
             <p className="mt-4">
               Pour exercer ces droits, contactez notre DPO :
-              <span className="text-content-primary font-medium"> contact@prospectia.cloud</span>
+              <span className="text-content-primary font-medium"> contact@volia.fr</span>
             </p>
             <p className="mt-3">
               Pour plus de détails sur l&apos;exercice de vos droits, consultez notre
@@ -510,7 +510,7 @@ export default function ConfidentialitePage() {
             <Link href="/cgu" className="hover:text-content-primary transition">CGU</Link>
             <Link href="/rgpd" className="hover:text-content-primary transition">RGPD</Link>
           </div>
-          <p className="text-content-tertiary text-xs">&copy; 2026 Prospectia.ai</p>
+          <p className="text-content-tertiary text-xs">&copy; 2026 Volia.fr</p>
         </div>
       </div>
     </div>

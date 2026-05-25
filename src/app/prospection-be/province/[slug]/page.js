@@ -5,7 +5,7 @@ import { getAllProvincesBE, getProvinceBySlugBE } from '@/lib/slugs-be';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import { getProvinceData } from '@/lib/dept-data-be';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export async function generateStaticParams() {
   return getAllProvincesBE().map((p) => ({ slug: p.slug }));
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const province = getProvinceBySlugBE(slug);
   if (!province) return {};
-  const title = `Prospection B2B en ${province.name} (Belgique) — Prospectia`;
+  const title = `Prospection B2B en ${province.name} (Belgique) — Volia`;
   const description = `Trouvez les emails B2B des entreprises de la province ${province.name} (Belgique francophone). 150 secteurs couverts. À partir de 19 €/mois.`;
   return {
     title,
@@ -45,12 +45,12 @@ export default async function ProvinceBePage({ params }) {
     }));
 
   const title = `Prospection B2B en ${province.name}`;
-  const intro = `La province ${province.name} (Belgique francophone) regroupe des milliers d'entreprises B2B : restaurants, commerces, artisans du BTP, professions libérales, services aux entreprises. Prospectia vous permet de trouver leur email professionnel en quelques secondes grâce à notre moteur de scraping et recherche Google, puis d'exporter en CSV.`;
+  const intro = `La province ${province.name} (Belgique francophone) regroupe des milliers d'entreprises B2B : restaurants, commerces, artisans du BTP, professions libérales, services aux entreprises. Volia vous permet de trouver leur email professionnel en quelques secondes grâce à notre moteur de scraping et recherche Google, puis d'exporter en CSV.`;
 
   const faq = [
     {
       question: `Combien d'entreprises en ${province.name} ?`,
-      answer: `Prospectia couvre toutes les entreprises géolocalisées par Google Places dans la province ${province.name}.`,
+      answer: `Volia couvre toutes les entreprises géolocalisées par Google Places dans la province ${province.name}.`,
     },
     {
       question: `Quels secteurs sont disponibles ?`,

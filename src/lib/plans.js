@@ -1,6 +1,6 @@
 import { cleanEnv } from './envClean';
 
-// ─── Plans Prospectia ─────────────────────────────────────────────
+// ─── Plans Volia ─────────────────────────────────────────────
 // Tarification orientée "le moins cher du marché par tier".
 // Solo = ticket d'entrée payant à 19€ (vs Snov.io Starter 39€, Hunter 49€).
 // Yearly = -2 mois offerts (paiement annuel).

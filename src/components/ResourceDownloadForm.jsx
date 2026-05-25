@@ -25,7 +25,7 @@ export default function ResourceDownloadForm({ resource }) {
   const isDirect = resource.deliveryMode === 'direct';
 
   // 28 domaines emails personnels qu'on refuse (cohérence avec le filtre RGPD
-  // déjà en place dans le scraping/enrichissement Prospectia).
+  // déjà en place dans le scraping/enrichissement Volia).
   const PERSONAL_DOMAINS = new Set([
     'gmail.com', 'googlemail.com', 'hotmail.com', 'hotmail.fr', 'outlook.com',
     'outlook.fr', 'live.com', 'live.fr', 'yahoo.com', 'yahoo.fr', 'free.fr',

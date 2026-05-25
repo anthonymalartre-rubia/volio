@@ -4,7 +4,7 @@ export const runtime = 'edge';
 export const revalidate = 86400;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = "Étude exclusive : L'État de la Prospection B2B en France 2026 — Prospectia";
+export const alt = "Étude exclusive : L'État de la Prospection B2B en France 2026 — Volia";
 
 export default async function Image() {
   return new ImageResponse(
@@ -31,7 +31,7 @@ export default async function Image() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 700, color: 'white' }}>P</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px' }}>
-              <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Prospectia</span>
+              <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Volia</span>
               <span style={{ fontSize: '20px', fontWeight: 600, color: '#a78bfa' }}>.cloud</span>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default async function Image() {
               <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>départements</div>
             </div>
           </div>
-          <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud/etude</div>
+          <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr/etude</div>
         </div>
       </div>
     ),

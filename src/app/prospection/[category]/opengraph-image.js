@@ -47,7 +47,7 @@ export default async function Image({ params }) {
             }}
           >P</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Prospectia</span>
+            <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Volia</span>
             <span style={{ fontSize: '20px', fontWeight: 600, color: '#a78bfa' }}>.cloud</span>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default async function Image({ params }) {
               💶 À partir de 19 €/mois
             </div>
           </div>
-          <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud</div>
+          <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr</div>
         </div>
       </div>
     ),

@@ -186,7 +186,7 @@ export default function AdminLeadsPage() {
               <AlertCircle size={16} className="text-red-400 flex-shrink-0 mt-0.5" />
               <div>
                 <strong className="text-red-300">{stats.failed} email{stats.failed > 1 ? 's' : ''} en échec.</strong>{' '}
-                Cause la plus probable : domaine <code className="text-xs px-1 rounded bg-surface-elevated">prospectia.cloud</code> non vérifié sur Resend.
+                Cause la plus probable : domaine <code className="text-xs px-1 rounded bg-surface-elevated">volia.fr</code> non vérifié sur Resend.
                 Voir colonne &quot;Erreur&quot; pour le détail.
                 <br/>
                 <a

@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
     {
       error: 'Génération PDF serveur indisponible',
       message: 'Utilisez le bouton "Télécharger en PDF" sur la page — il déclenche la dialog d\'impression du navigateur (option "Enregistrer au format PDF").',
-      fallback_url: `https://prospectia.cloud/ressources/${slug}/telecharger`,
+      fallback_url: `https://volia.fr/ressources/${slug}/telecharger`,
     },
     { status: 410 /* Gone */ }
   );

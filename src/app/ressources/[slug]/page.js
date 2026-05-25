@@ -17,14 +17,14 @@ export async function generateMetadata({ params }) {
   if (!r) return {};
 
   return {
-    title: `${r.title} — Ressource gratuite Prospectia`,
+    title: `${r.title} — Ressource gratuite Volia`,
     description: r.shortDesc,
     keywords: r.keywords,
-    alternates: { canonical: `https://prospectia.cloud/ressources/${slug}` },
+    alternates: { canonical: `https://volia.fr/ressources/${slug}` },
     openGraph: {
       title: r.title,
       description: r.shortDesc,
-      url: `https://prospectia.cloud/ressources/${slug}`,
+      url: `https://volia.fr/ressources/${slug}`,
       type: 'article',
     },
   };
@@ -97,15 +97,15 @@ export default async function RessourcePage({ params }) {
         name: r.title,
         headline: r.title,
         description: r.shortDesc,
-        url: `https://prospectia.cloud/ressources/${r.slug}`,
+        url: `https://volia.fr/ressources/${r.slug}`,
         keywords: r.keywords.join(', '),
         inLanguage: 'fr-FR',
         isAccessibleForFree: true,
         license: 'https://creativecommons.org/licenses/by/4.0/',
         creator: {
           '@type': 'Organization',
-          name: 'Prospectia',
-          url: 'https://prospectia.cloud',
+          name: 'Volia',
+          url: 'https://volia.fr',
         },
         encodingFormat: r.format,
         ...(r.pages && { numberOfPages: r.pages }),
@@ -198,12 +198,12 @@ export default async function RessourcePage({ params }) {
             </div>
           </section>
 
-          {/* CTA Prospectia */}
+          {/* CTA Volia */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Sparkles size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Au-delà de cette ressource</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les entreprises et leurs emails partout en France.
+              Volia trouve les entreprises et leurs emails partout en France.
               Gratuit pour commencer · à partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link

@@ -7,7 +7,7 @@ import { getCategoryData } from '@/lib/category-data';
 import { getProvinceData } from '@/lib/dept-data-be';
 import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 // ISR : on prébuild les combos populaires, le reste à la demande.
 export const dynamicParams = true;
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(catSlug);
   const province = getProvinceBySlugBE(provSlug);
   if (!category || !province) return {};
-  const title = `Email des ${category.labelPlural} en ${province.name} (Belgique) — Prospectia`;
+  const title = `Email des ${category.labelPlural} en ${province.name} (Belgique) — Volia`;
   const description = `Trouvez l'email professionnel des ${category.labelPlural} de la province ${province.name}. Scraping intelligent + recherche Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,
@@ -74,20 +74,20 @@ export default async function CategoryProvinceBePage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Email des ${category.labelPlural} en ${province.name}`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés en province de ${province.name} (Belgique francophone) ? Prospectia identifie automatiquement tous les ${category.labelPlural} géolocalisés via Google Places, puis trouve leur email professionnel. Exportez en CSV en quelques minutes, conforme RGPD européen.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés en province de ${province.name} (Belgique francophone) ? Volia identifie automatiquement tous les ${category.labelPlural} géolocalisés via Google Places, puis trouve leur email professionnel. Exportez en CSV en quelques minutes, conforme RGPD européen.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} en ${province.name} ?`,
-      answer: `La province ${province.name} regroupe plusieurs centaines à plusieurs milliers de ${category.labelPlural}. Prospectia couvre toutes les entreprises géolocalisées par Google Places.`,
+      answer: `La province ${province.name} regroupe plusieurs centaines à plusieurs milliers de ${category.labelPlural}. Volia couvre toutes les entreprises géolocalisées par Google Places.`,
     },
     {
       question: `Comment trouver l'email d'un ${category.label} en ${province.name} ?`,
-      answer: `Sélectionnez "${category.label}" et la province "${province.name}" sur Prospectia. Notre IA scrape les sites web et complète avec Google. Taux : 70-85 %.`,
+      answer: `Sélectionnez "${category.label}" et la province "${province.name}" sur Volia. Notre IA scrape les sites web et complète avec Google. Taux : 70-85 %.`,
     },
     {
       question: `La prospection en Belgique est-elle conforme au RGPD ?`,
-      answer: `Oui, la Belgique applique le RGPD européen. Prospectia filtre les emails personnels et respecte les demandes d'opt-out.`,
+      answer: `Oui, la Belgique applique le RGPD européen. Volia filtre les emails personnels et respecte les demandes d'opt-out.`,
     },
     {
       question: `Combien coûte la prospection en ${province.name} ?`,

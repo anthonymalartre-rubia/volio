@@ -8,18 +8,18 @@ export const metadata = {
   title: 'Prospection B2B France — 150 secteurs × 101 départements',
   description: 'Trouvez les emails B2B de toutes les entreprises françaises par secteur d\'activité et département. Restaurants, hôtels, avocats, garages, commerces — 15 000+ pages de prospection disponibles.',
   alternates: {
-    canonical: 'https://prospectia.cloud/prospection',
+    canonical: 'https://volia.fr/prospection',
     languages: {
-      'fr-FR': 'https://prospectia.cloud/prospection',
-      'fr-BE': 'https://prospectia.cloud/prospection-be',
-      'fr-CH': 'https://prospectia.cloud/prospection-ch',
-      'x-default': 'https://prospectia.cloud/prospection',
+      'fr-FR': 'https://volia.fr/prospection',
+      'fr-BE': 'https://volia.fr/prospection-be',
+      'fr-CH': 'https://volia.fr/prospection-ch',
+      'x-default': 'https://volia.fr/prospection',
     },
   },
   openGraph: {
     title: 'Prospection B2B France — Toutes catégories et départements',
     description: 'Trouvez les emails B2B de n\'importe quelle entreprise française. 150 secteurs × 101 départements.',
-    url: 'https://prospectia.cloud/prospection',
+    url: 'https://volia.fr/prospection',
   },
 };
 
@@ -43,7 +43,7 @@ export default function ProspectionIndexPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -66,7 +66,7 @@ export default function ProspectionIndexPage() {
             Trouvez les emails B2B de toutes les entreprises françaises
           </h1>
           <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl">
-            Prospectia couvre <strong className="text-white">150 secteurs d&apos;activité</strong> dans les <strong className="text-white">101 départements français</strong>. Explorez par catégorie ou par département pour trouver les emails professionnels de vos prospects.
+            Volia couvre <strong className="text-white">150 secteurs d&apos;activité</strong> dans les <strong className="text-white">101 départements français</strong>. Explorez par catégorie ou par département pour trouver les emails professionnels de vos prospects.
           </p>
         </section>
 
@@ -213,7 +213,7 @@ export default function ProspectionIndexPage() {
 
       <footer className="border-t border-white/[0.06] py-8 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-zinc-500">© 2026 Prospectia.cloud</div>
+          <div className="text-xs text-zinc-500">© 2026 Volia.fr</div>
           <div className="flex gap-4 text-xs text-zinc-500">
             <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
             <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>

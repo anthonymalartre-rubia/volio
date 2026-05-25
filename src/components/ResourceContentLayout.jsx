@@ -146,7 +146,7 @@ export default function ResourceContentLayout({
             <Zap size={28} className="text-violet-400 mx-auto mb-3" />
             <h2 className="text-xl sm:text-2xl font-bold mb-2">Au-delà de cette ressource</h2>
             <p className="text-content-secondary mb-5 max-w-xl mx-auto text-sm">
-              Prospectia trouve les entreprises et leurs emails partout en France.
+              Volia trouve les entreprises et leurs emails partout en France.
               Gratuit pour commencer · à partir de 19 €/mois.
             </p>
             <Link

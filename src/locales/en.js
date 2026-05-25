@@ -398,7 +398,7 @@ const en = {
 
   // ─── Onboarding ────────────────────────────────────────────
   onboarding: {
-    welcome: 'Welcome to Prospectia!',
+    welcome: 'Welcome to Volia!',
     welcomeDesc: 'Generate qualified B2B leads across France in just a few clicks.',
     step1Title: 'Choose your departments and categories',
     step1Desc: 'Launch an automatic search via Google Places to find prospects.',
@@ -504,13 +504,13 @@ const en = {
     gdprWarningTitle: 'GDPR Warning',
     gdprWarningP1: 'By disabling this filter, you will receive personal emails (e.g. @gmail.com, @hotmail.com) in your enrichment results. These addresses are personal data under the GDPR.',
     gdprWarningP2: "Legal obligations: You do not have the right to contact these individuals without first obtaining their explicit consent (opt-in). Sending unsolicited commercial emails to personal addresses is a violation of the GDPR (Art. 6) and the ePrivacy Directive, punishable by fines of up to 20 million euros or 4% of annual turnover.",
-    gdprWarningP3: 'Liability: By disabling this filter, you become solely responsible for the GDPR compliance of your prospecting campaigns. Prospectia.ai cannot be held responsible for the use you make of this personal data.',
+    gdprWarningP3: 'Liability: By disabling this filter, you become solely responsible for the GDPR compliance of your prospecting campaigns. Volia.fr cannot be held responsible for the use you make of this personal data.',
     gdprAcceptConditions: 'You accept these conditions by disabling the filter',
     // Onboarding guide
     gettingStarted: 'Getting started guide',
     gettingStartedDesc: 'Revisit the onboarding tutorial',
     interactiveTutorial: 'Interactive tutorial',
-    interactiveTutorialDesc: 'Rediscover Prospectia.ai features step by step.',
+    interactiveTutorialDesc: 'Rediscover Volia.fr features step by step.',
     reviewGuide: 'Review the guide',
     // Password section
     changePasswordDesc: 'Update your login password',
@@ -642,7 +642,7 @@ const en = {
     hero: {
       badge: 'Cheapest on the French market - Solo at EUR 19/month - unlimited prospects',
       title: 'Prospect with',
-      subtitle: 'Prospectia scrapes websites and searches Google to find the professional email of every business. <strong class="text-zinc-200">150+ categories, 101 departments</strong>, confidence scoring.',
+      subtitle: 'Volia scrapes websites and searches Google to find the professional email of every business. <strong class="text-zinc-200">150+ categories, 101 departments</strong>, confidence scoring.',
       price: 'Starting at EUR 19/month - cheapest in France. Cancel anytime.',
       compare: 'Compare with competition',
       sourcesLabel: 'Integrated sources:',
@@ -651,7 +651,7 @@ const en = {
     why: {
       label: 'Why an aggregator?',
       title: 'Smart scraping + Google search',
-      desc: 'Scraping alone is not enough — many sites don\'t display their email. Prospectia combines <strong class="text-zinc-300">website scraping</strong> with <strong class="text-zinc-300">Google search</strong> to maximize coverage. No website? We discover it automatically.',
+      desc: 'Scraping alone is not enough — many sites don\'t display their email. Volia combines <strong class="text-zinc-300">website scraping</strong> with <strong class="text-zinc-300">Google search</strong> to maximize coverage. No website? We discover it automatically.',
       stat1Label: 'Coverage rate with <strong class="text-zinc-400">scraping only</strong>',
       stat2Label: 'Coverage rate with <strong class="text-violet-400">scraping + Google</strong>',
       stat3Label: 'Cost per lead vs. <strong class="text-zinc-400">separate subscriptions</strong> to each tool',
@@ -678,11 +678,11 @@ const en = {
     howItWorks: {
       label: 'How it works',
       title: '3 steps, hundreds of qualified leads',
-      desc: 'No complex forms. Describe what you\'re looking for or select your criteria. Prospectia does the rest.',
+      desc: 'No complex forms. Describe what you\'re looking for or select your criteria. Volia does the rest.',
       step1: 'Search in natural language',
       step1Desc: 'Type "auto garages in Var" or select departments and categories. The AI understands your intent and launches the Google Places search.',
       step2: 'Automatic waterfall enrichment',
-      step2Desc: 'Prospectia scrapes the website and searches Google to find the email. Stops at the first email found, with a confidence score.',
+      step2Desc: 'Volia scrapes the website and searches Google to find the email. Stops at the first email found, with a confidence score.',
       step3: 'Export and prospect',
       step3Desc: 'Filter by score, department or category. Export as CSV format. Your leads are ready for outreach in seconds.',
     },
@@ -690,7 +690,7 @@ const en = {
     waterfall: {
       label: 'Cascade enrichment',
       title: 'Scraping + Google. The best email with confidence score.',
-      desc: 'Prospectia automatically scrapes every company\'s website, then searches Google if no email is found. <strong class="text-zinc-300">No website? We discover it via Google.</strong>',
+      desc: 'Volia automatically scrapes every company\'s website, then searches Google if no email is found. <strong class="text-zinc-300">No website? We discover it via Google.</strong>',
       confidence: 'Confidence',
       stopsFirst: 'Stops at the first email found — you only pay for what\'s needed.',
       free: 'Free',
@@ -733,7 +733,7 @@ const en = {
     competition: {
       label: 'Pricing comparison',
       title: 'Cheapest on the market, proven by the numbers',
-      desc: 'Prospectia <strong class="text-emerald-400">starts at EUR 19/month</strong> \u2014 the cheapest entry ticket on the French market. Our Pro plan at EUR 49/month is <strong class="text-emerald-400">2x cheaper than Apollo</strong> with built-in Google Places discovery.',
+      desc: 'Volia <strong class="text-emerald-400">starts at EUR 19/month</strong> \u2014 the cheapest entry ticket on the French market. Our Pro plan at EUR 49/month is <strong class="text-emerald-400">2x cheaper than Apollo</strong> with built-in Google Places discovery.',
       month: 'month',
       enrichSources: 'Enrichment sources',
       confidenceScoring: 'Confidence scoring',
@@ -744,7 +744,7 @@ const en = {
       monthlyPrice: 'Monthly price',
       sevenSources: 'Multi-source',
       calcTitle: 'The math is simple',
-      calcDesc: 'Apollo costs EUR 99/month, Hunter EUR 49, Snov.io EUR 39 \u2014 and you must already have a prospect list. Prospectia Solo at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment in one tool. Pro at <strong class="text-violet-400">EUR 49/month</strong> = 5x cheaper than Apollo Basic equivalent.<br /><span class="text-emerald-400 font-semibold">No hidden credits, cancel anytime.</span>',
+      calcDesc: 'Apollo costs EUR 99/month, Hunter EUR 49, Snov.io EUR 39 \u2014 and you must already have a prospect list. Volia Solo at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment in one tool. Pro at <strong class="text-violet-400">EUR 49/month</strong> = 5x cheaper than Apollo Basic equivalent.<br /><span class="text-emerald-400 font-semibold">No hidden credits, cancel anytime.</span>',
       savings: 'Save up to EUR 80/month (EUR 960/year) vs Apollo.',
     },
     // Pricing

@@ -6,10 +6,10 @@ import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
 export const metadata = {
-  title: 'Tous les comparatifs 1-vs-1 d\'outils de prospection B2B 2026 — Prospectia',
+  title: 'Tous les comparatifs 1-vs-1 d\'outils de prospection B2B 2026 — Volia',
   description:
     "91 comparatifs côte-à-côte entre les 14 outils de prospection B2B les plus populaires en 2026 : Apollo vs Hunter, Lemlist vs Smartlead, Dropcontact vs Kaspr, et plus.",
-  alternates: { canonical: 'https://prospectia.cloud/outils/comparatif' },
+  alternates: { canonical: 'https://volia.fr/outils/comparatif' },
   keywords: [
     'comparatif outils prospection b2b',
     'comparatif sales tools 2026',
@@ -20,7 +20,7 @@ export const metadata = {
   openGraph: {
     title: '91 comparatifs 1-vs-1 d\'outils de prospection B2B (2026)',
     description: 'Tous les face-à-face entre les 14 outils les plus utilisés : prix, fonctionnalités, RGPD, verdict.',
-    url: 'https://prospectia.cloud/outils/comparatif',
+    url: 'https://volia.fr/outils/comparatif',
   },
 };
 
@@ -48,7 +48,7 @@ export default function ComparatifsIndex() {
         '@type': 'CollectionPage',
         name: 'Tous les comparatifs 1-vs-1 d\'outils de prospection B2B',
         description: metadata.description,
-        url: 'https://prospectia.cloud/outils/comparatif',
+        url: 'https://volia.fr/outils/comparatif',
         inLanguage: 'fr-FR',
       },
       {
@@ -58,7 +58,7 @@ export default function ComparatifsIndex() {
         itemListElement: pairs.slice(0, 20).map((p, idx) => ({
           '@type': 'ListItem',
           position: idx + 1,
-          url: `https://prospectia.cloud/outils/comparatif/${p.slug}`,
+          url: `https://volia.fr/outils/comparatif/${p.slug}`,
           name: `${p.a.name} vs ${p.b.name}`,
         })),
       },
@@ -132,7 +132,7 @@ export default function ComparatifsIndex() {
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               L&apos;alternative française la moins chère du marché : 19 €/mois, découverte + enrichissement, 101 départements, 150+ catégories.
             </p>

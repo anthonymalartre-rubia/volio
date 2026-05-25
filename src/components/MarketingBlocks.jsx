@@ -8,7 +8,7 @@ import { MarketingCard } from '@/components/ui';
 
 // ─── TestimonialsBlock ────────────────────────────────────────────
 // Affiche 3 ou 6 témoignages dans une grille. Sector-aware (peut prioriser).
-export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que disent les utilisateurs Prospectia', subtitle = 'Profils réels de commerciaux, fondateurs et marketers qui prospectent au quotidien.' }) {
+export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que disent les utilisateurs Volia', subtitle = 'Profils réels de commerciaux, fondateurs et marketers qui prospectent au quotidien.' }) {
   const items = getTestimonials({ sector, limit });
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-16">
@@ -189,7 +189,7 @@ const CLIENT_PROFILES = [
   { name: 'Studio digital', size: 'Indépendant' },
 ];
 
-export function ClientLogosStrip({ title = 'Ils prospectent avec Prospectia' }) {
+export function ClientLogosStrip({ title = 'Ils prospectent avec Volia' }) {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-12">
       <p className="text-center text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-5">
@@ -254,7 +254,7 @@ export function CompetitorMiniBlock() {
   return (
     <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
       <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-center leading-tight">
-        Pourquoi Prospectia gagne en France
+        Pourquoi Volia gagne en France
       </h2>
       <p className="text-sm text-zinc-400 mb-8 max-w-2xl mx-auto text-center">
         Les outils US (Apollo, Hunter, Lusha) sont conçus pour le marché américain. En France ils plafonnent. Notre cascade waterfall est spécifiquement bâtie pour le tissu d&apos;entreprises français.
@@ -262,7 +262,7 @@ export function CompetitorMiniBlock() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
         <CompetitorCard name="Apollo.io" value="~ 40 %" tone="red" note="Base US, faible sur les TPE FR" />
         <CompetitorCard name="Hunter.io" value="~ 55 %" tone="orange" note="Bon si site web, faible sinon" />
-        <CompetitorCard name="Prospectia" value="70-85 %" tone="emerald" note="Scraping + Google + patterns" featured />
+        <CompetitorCard name="Volia" value="70-85 %" tone="emerald" note="Scraping + Google + patterns" featured />
       </div>
     </section>
   );

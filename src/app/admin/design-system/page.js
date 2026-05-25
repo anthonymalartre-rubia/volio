@@ -1,7 +1,7 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// Admin · Design System Prospectia
+// Admin · Design System Volia
 // ─────────────────────────────────────────────────────────────────────
 //
 // Page de référence interne du design system. Documente :
@@ -85,7 +85,7 @@ export default function DesignSystemPage() {
       <PatternsSection />
       <GuidelinesSection />
       <footer className="border-t border-line py-8 text-center text-xs text-content-muted">
-        Design System Prospectia · v1 · Page admin interne
+        Design System Volia · v1 · Page admin interne
       </footer>
     </div>
   );
@@ -109,7 +109,7 @@ function StickyHeader() {
             <ArrowLeft size={14} />
           </Link>
           <h1 className="text-sm sm:text-base font-semibold truncate text-content-primary">
-            Design System Prospectia
+            Design System Volia
           </h1>
         </div>
         <nav className="hidden md:flex items-center gap-1">
@@ -323,7 +323,7 @@ function TokensSection({ copyToClipboard, copiedKey }) {
             <div>
               <div className="text-xs text-content-muted mb-1">Sans (Inter)</div>
               <div className="text-2xl text-content-primary" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Prospectia. Le moins cher.
+                Volia. Le moins cher.
               </div>
             </div>
             <div>

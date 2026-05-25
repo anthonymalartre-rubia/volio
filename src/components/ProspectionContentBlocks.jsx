@@ -54,7 +54,7 @@ export function SocialProofBlock({ department, region, category }) {
             <strong className="text-2xl sm:text-3xl font-bold text-white tabular-nums">{count}</strong>
             <span className="text-zinc-300"> commerciaux et fondateurs ciblent les </span>
             <strong className="text-white">{what}</strong>
-            <span className="text-zinc-300"> {where} via Prospectia ce mois-ci.</span>
+            <span className="text-zinc-300"> {where} via Volia ce mois-ci.</span>
           </div>
           <div className="text-[11px] text-zinc-500 mt-1 flex items-center gap-1.5">
             <TrendingUp size={11} className="text-emerald-400" />
@@ -67,17 +67,17 @@ export function SocialProofBlock({ department, region, category }) {
 }
 
 // ─── Comparatif inline vs concurrent (différenciation FR) ─────────────
-// Encart visuel "Apollo : 40 % / Prospectia : 70-85 % en France".
+// Encart visuel "Apollo : 40 % / Volia : 70-85 % en France".
 // Différenciation N°1 du produit, visible sur chaque page.
 export function CompetitorInlineBlock({ category }) {
   const what = category ? category.labelPlural : 'entreprises françaises';
   return (
     <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
       <h2 className="text-2xl sm:text-3xl font-bold mb-3">
-        Pourquoi Prospectia trouve plus d&apos;emails que les outils US ?
+        Pourquoi Volia trouve plus d&apos;emails que les outils US ?
       </h2>
       <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
-        Apollo, Hunter et Lusha sont conçus pour le marché américain. En France, ils plafonnent. Prospectia est <strong className="text-white">spécifiquement bâti pour le marché français</strong>.
+        Apollo, Hunter et Lusha sont conçus pour le marché américain. En France, ils plafonnent. Volia est <strong className="text-white">spécifiquement bâti pour le marché français</strong>.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
@@ -95,7 +95,7 @@ export function CompetitorInlineBlock({ category }) {
           </div>
         </div>
         <div className="rounded-xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] p-5 relative">
-          <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-violet-500 text-[10px] font-bold text-white uppercase tracking-wider">Prospectia</div>
+          <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-violet-500 text-[10px] font-bold text-white uppercase tracking-wider">Volia</div>
           <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2">Notre cascade waterfall</div>
           <div className="text-3xl font-bold text-emerald-300 tabular-nums mb-1">70-85 %</div>
           <div className="text-xs text-zinc-300 leading-relaxed">
@@ -323,7 +323,7 @@ export function PitchBlock({ data, category }) {
           « {previewed} »
         </blockquote>
         <p className="text-xs text-zinc-500 mt-3">
-          Personnalisez avec les variables <code className="text-violet-300">{`{first_name}`}</code>, <code className="text-violet-300">{`{company}`}</code> et <code className="text-violet-300">{`{custom.X}`}</code> dans Prospectia.
+          Personnalisez avec les variables <code className="text-violet-300">{`{first_name}`}</code>, <code className="text-violet-300">{`{company}`}</code> et <code className="text-violet-300">{`{custom.X}`}</code> dans Volia.
         </p>
       </div>
     </section>
@@ -835,7 +835,7 @@ export function DemoCtaBlock({ category }) {
               Démo personnalisée
             </div>
             <h3 className="text-xl sm:text-2xl font-bold mb-2 leading-tight">
-              Voir Prospectia sur {what} en 8 minutes
+              Voir Volia sur {what} en 8 minutes
             </h3>
             <p className="text-sm text-zinc-400 leading-relaxed">
               Démo live (8 min, pas de slides) : on cible votre dept/ville, on extrait 50 prospects qualifiés, on génère un CSV importable dans votre CRM. Réservez le créneau qui vous arrange.
@@ -843,7 +843,7 @@ export function DemoCtaBlock({ category }) {
           </div>
           <div className="flex flex-col gap-2">
             <Link
-              href="https://cal.com/anthony-malartre/demo-prospectia"
+              href="https://cal.com/anthony-malartre/demo-volia"
               target="_blank"
               rel="noopener"
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-sm font-bold transition shadow-lg"

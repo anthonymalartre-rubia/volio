@@ -110,7 +110,7 @@ export default function ProspectionSeoPage({
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -203,10 +203,10 @@ export default function ProspectionSeoPage({
           {category && <SamplePreviewBlock category={category} department={department} stats={stats} />}
         </div>
 
-        {/* Why Prospectia (3 features) */}
+        {/* Why Volia (3 features) */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8">
-            Pourquoi utiliser Prospectia ?
+            Pourquoi utiliser Volia ?
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <FeatureCard
@@ -406,11 +406,11 @@ export default function ProspectionSeoPage({
                 </Link>
                 <Link href="/vs/apollo" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
-                  Prospectia vs Apollo.io
+                  Volia vs Apollo.io
                 </Link>
                 <Link href="/vs/hunter" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
-                  Prospectia vs Hunter.io
+                  Volia vs Hunter.io
                 </Link>
                 <Link href="/prospection" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
@@ -429,7 +429,7 @@ export default function ProspectionSeoPage({
               Trouvez vos prospects en quelques clics
             </h2>
             <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
-              Prospectia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
+              Volia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"
@@ -452,13 +452,13 @@ export default function ProspectionSeoPage({
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-1 mb-3">
                 <LogoIcon size="sm" className="mr-1.5" />
-                <span className="text-base font-bold">Prospectia</span>
+                <span className="text-base font-bold">Volia</span>
                 <span className="text-violet-400 text-xs font-semibold">.cloud</span>
               </div>
               <p className="text-xs text-zinc-500 leading-relaxed mb-4">
                 Agrégateur de prospection B2B. 150 secteurs, 101 départements français, cascade waterfall 70-85 % de couverture email.
               </p>
-              <a href="https://www.linkedin.com/company/prospectia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-violet-300 transition">
+              <a href="https://www.linkedin.com/company/volia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-violet-300 transition">
                 <LinkedinIcon size={12} />
                 LinkedIn
               </a>
@@ -504,7 +504,7 @@ export default function ProspectionSeoPage({
                 <li><Link href="/confidentialite" className="text-zinc-400 hover:text-violet-300 transition">Confidentialité</Link></li>
                 <li><Link href="/rgpd" className="text-zinc-400 hover:text-violet-300 transition">Droits RGPD</Link></li>
                 <li><Link href="/opt-out" className="text-zinc-400 hover:text-violet-300 transition">Opt-out / désinscription</Link></li>
-                <li><a href="mailto:hello@prospectia.cloud" className="text-zinc-400 hover:text-violet-300 transition">hello@prospectia.cloud</a></li>
+                <li><a href="mailto:hello@volia.fr" className="text-zinc-400 hover:text-violet-300 transition">hello@volia.fr</a></li>
               </ul>
             </div>
           </div>
@@ -529,7 +529,7 @@ export default function ProspectionSeoPage({
               </span>
             </div>
             <div className="text-[11px] text-zinc-600">
-              © 2026 Prospectia.cloud — {countryCopy.footerCopy} · Édité par Suraya, France
+              © 2026 Volia.fr — {countryCopy.footerCopy} · Édité par Suraya, France
             </div>
           </div>
         </div>

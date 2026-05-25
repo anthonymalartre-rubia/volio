@@ -41,7 +41,7 @@ export async function GET() {
       headers: { Authorization: `Bearer ${cleanEnv(process.env.RESEND_API_KEY) || 'invalid'}` },
     }),
     // Vercel (notre propre /api)
-    probe('Vercel (App)', 'https://prospectia.cloud/api/places', { method: 'GET' }),
+    probe('Vercel (App)', 'https://volia.fr/api/places', { method: 'GET' }),
   ]);
 
   const hasDown = results.some((r) => r.status === 'down');

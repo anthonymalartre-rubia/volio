@@ -20,7 +20,7 @@ Quelques chiffres pour planter le décor : la France compte **plus de 175 000 re
 
 Pourquoi ? Parce que la restauration a la réputation d'être un secteur difficile : marges faibles, dirigeants débordés, hyperconcentration géographique des décisionnaires, méfiance vis-à-vis des "vendeurs", saisonnalité brutale. Ce guide va vous expliquer comment, en 2026, prospecter efficacement les restaurants en France — et surtout en faire un canal d'acquisition rentable, pas une perte de temps.
 
-Au programme : décryptage du marché, segmentation fine, buyer personas, méthode opérationnelle (créneaux d'appel, jours à éviter, scripts), trois templates de cold emails testés, panorama des outils utiles dont [Prospectia](/) et les erreurs classiques qui plombent vos taux de conversion.
+Au programme : décryptage du marché, segmentation fine, buyer personas, méthode opérationnelle (créneaux d'appel, jours à éviter, scripts), trois templates de cold emails testés, panorama des outils utiles dont [Volia](/) et les erreurs classiques qui plombent vos taux de conversion.
 
 > "On a mis 8 mois à comprendre que prospecter un chef à 11h15 le mardi avait 4 fois plus de chances d'aboutir qu'à 15h30 le jeudi. C'est ce genre de détail qui change tout en restauration." — Directeur commercial, éditeur SaaS de caisse enregistreuse, 12 commerciaux
 
@@ -43,7 +43,7 @@ Quelques données clés à connaître :
 | Taux de défaillance annuel | 6,8 % |
 | Durée moyenne de vie | 4,2 ans |
 
-Ce dernier chiffre est crucial : un restaurant sur sept ferme chaque année. Cela signifie qu'une base de données figée se périme très vite et que **la fraîcheur de la donnée** est un enjeu commercial majeur. C'est exactement pour ça qu'un agrégateur en temps réel comme [Prospectia](/) qui interroge Google Places à la volée bat n'importe quelle base statique.
+Ce dernier chiffre est crucial : un restaurant sur sept ferme chaque année. Cela signifie qu'une base de données figée se périme très vite et que **la fraîcheur de la donnée** est un enjeu commercial majeur. C'est exactement pour ça qu'un agrégateur en temps réel comme [Volia](/) qui interroge Google Places à la volée bat n'importe quelle base statique.
 
 ### Une saisonnalité qui structure tout
 
@@ -124,7 +124,7 @@ La bonne approche est la suivante :
 3. **Enrichir en temps réel** chaque fiche avec un site web, un téléphone et idéalement un email professionnel
 4. **Filtrer les emails personnels** (RGPD) — un dirigeant qui utilise @gmail à titre pro peut être contacté, mais le risque juridique est plus élevé
 
-C'est exactement ce que fait [Prospectia](/) avec son [waterfall 7 sources](/blog/cold-emailing-2026) (scraping, Serper, Apollo, Enrichly, Anymail, Findymail, fallback). Vous tapez "restaurants Marseille 7e arrondissement, 50+ avis" et vous récupérez 200 prospects qualifiés enrichis en 90 secondes. Voir aussi le hub dédié [/prospection/restaurant](/prospection/restaurant) qui pré-cadre les recherches typiques.
+C'est exactement ce que fait [Volia](/) avec son [waterfall 7 sources](/blog/cold-emailing-2026) (scraping, Serper, Apollo, Enrichly, Anymail, Findymail, fallback). Vous tapez "restaurants Marseille 7e arrondissement, 50+ avis" et vous récupérez 200 prospects qualifiés enrichis en 90 secondes. Voir aussi le hub dédié [/prospection/restaurant](/prospection/restaurant) qui pré-cadre les recherches typiques.
 
 ### Étape 2 : choisir le bon créneau et le bon canal
 
@@ -224,13 +224,13 @@ Citer ces réseaux dans vos mails ou avoir un partenariat (intervention en webin
 
 | Outil | Usage | Tarif indicatif |
 |---|---|---|
-| [Prospectia](/) | Sourcing géolocalisé France entière, enrichissement waterfall 7 sources | 49 €/mois Pro |
+| [Volia](/) | Sourcing géolocalisé France entière, enrichissement waterfall 7 sources | 49 €/mois Pro |
 | TheFork Manager | Comprendre la concurrence et les pratiques de réservation | Gratuit (visite) |
 | Google Maps / Business | Audit fiche, photos, avis, posts | Gratuit |
 | LinkedIn Sales Navigator | Recherche dirigeants par taille / segment | 99 €/mois |
 | Instantly / Lemlist | Cadencement et A/B test cold email | 47-99 €/mois |
 
-Pour les SDR débutants sur le secteur, je conseille de coupler [Prospectia](/signup) (sourcing + enrichissement temps réel France entière) avec Lemlist (cadencement) et un CRM simple type Pipedrive ou HubSpot Starter. Budget total : 200 € par mois pour outiller un commercial qui fait 80 prospects qualifiés par jour.
+Pour les SDR débutants sur le secteur, je conseille de coupler [Volia](/signup) (sourcing + enrichissement temps réel France entière) avec Lemlist (cadencement) et un CRM simple type Pipedrive ou HubSpot Starter. Budget total : 200 € par mois pour outiller un commercial qui fait 80 prospects qualifiés par jour.
 
 ## Les 7 erreurs qui plombent vos taux de conversion
 
@@ -240,28 +240,28 @@ Pour les SDR débutants sur le secteur, je conseille de coupler [Prospectia](/si
 4. **Oublier le terrain.** Le bouche-à-oreille entre restaurateurs est puissant. Une bonne référence locale ouvre plus de portes qu'un Google Ads.
 5. **Ignorer la saisonnalité.** Voir le tableau plus haut. Caler sa séquence sur le mauvais trimestre, c'est cramer ses leads.
 6. **Parler "produit" et pas "résultat".** Un restaurateur n'achète pas un SaaS, il achète "moins de no-show" ou "2 heures de paperasse en moins par semaine".
-7. **Demander trop d'engagement d'un coup.** "Un rendez-vous de 60 minutes" est un non. "12 minutes en visio mardi 10h" est un oui. Voir aussi notre [guide cold emailing 2026](/blog/cold-emailing-2026) et la [comparaison Prospectia vs Apollo](/vs/apollo).
+7. **Demander trop d'engagement d'un coup.** "Un rendez-vous de 60 minutes" est un non. "12 minutes en visio mardi 10h" est un oui. Voir aussi notre [guide cold emailing 2026](/blog/cold-emailing-2026) et la [comparaison Volia vs Apollo](/vs/apollo).
 
 ## Exemples chiffrés de campagnes réelles
 
 **Cas 1 — éditeur SaaS de réservation**
 
 - Cible : 12 000 restaurants indépendants en métropole, segment bistronomie
-- Méthode : sourcing Prospectia, cadencement Lemlist 5 emails sur 14 jours
+- Méthode : sourcing Volia, cadencement Lemlist 5 emails sur 14 jours
 - Résultats à 90 jours : 8,4 % taux de réponse, 3,1 % meetings bookés, 0,9 % closés en abonnement annuel à 990 € HT
 - ROI : 270 % la première année
 
 **Cas 2 — fournisseur emballages éco-responsables**
 
 - Cible : 3 800 fast-food et bistrots zone Île-de-France
-- Méthode : sourcing Prospectia, appel direct (créneau 15h-17h)
+- Méthode : sourcing Volia, appel direct (créneau 15h-17h)
 - Résultats à 60 jours : 22 % décrochage, 6,8 % visite atelier programmée, 2,1 % devis signés
 - ROI : panier moyen 4 200 € de commande initiale
 
 **Cas 3 — cabinet d'expertise comptable**
 
 - Cible : 1 500 restaurants Paris + petite couronne, segment gastro + bistronomie
-- Méthode : sourcing Prospectia + LinkedIn, emails ultra personnalisés
+- Méthode : sourcing Volia + LinkedIn, emails ultra personnalisés
 - Résultats à 6 mois : 12 nouveaux dossiers, ticket moyen 4 800 €/an
 - ROI : largement positif dès le premier nouveau client
 
@@ -274,7 +274,7 @@ Si vous testez : Lyon, Nantes ou Bordeaux. Marché dense, dirigeants accessibles
 Pour les indépendants : téléphone gagne (taux de décrochage 25-35 %). Pour les franchises et restauration collective : email structuré + LinkedIn.
 
 **Comment trouver le bon email d'un dirigeant ?**
-Le plus efficace en 2026 : un outil comme [Prospectia](/) qui fait du waterfall 7 sources. Voir aussi notre [glossaire de l'ICP](/glossaire/icp) pour bien définir votre cible avant.
+Le plus efficace en 2026 : un outil comme [Volia](/) qui fait du waterfall 7 sources. Voir aussi notre [glossaire de l'ICP](/glossaire/icp) pour bien définir votre cible avant.
 
 **Quels jours absolument éviter ?**
 Lundi (jour de fermeture fréquent), dimanche soir, jours fériés évidemment, et les jours de match de Coupe du Monde / Euro pour la restauration sportive.
@@ -286,9 +286,9 @@ Pour générer plus de 50 RDV / mois oui — c'est un secteur où la connaissanc
 
 La restauration française est un marché B2B colossal, mal couvert, et qui récompense les commerciaux qui se donnent la peine de comprendre ses spécificités. Saisonnalité, créneaux, segments, langage : maîtrisez ces quatre dimensions et vous prendrez une longueur d'avance considérable sur les concurrents qui appliquent un cadencement générique.
 
-L'outil compte aussi. Avec [Prospectia](/signup), vous adressez les 175 000 restaurants français en quelques clics, avec une donnée fraîche en temps réel et un enrichissement email waterfall. Couplé à un cadencement intelligent et aux templates de ce guide, vous avez tout pour transformer la restauration en votre meilleur canal d'acquisition 2026.
+L'outil compte aussi. Avec [Volia](/signup), vous adressez les 175 000 restaurants français en quelques clics, avec une donnée fraîche en temps réel et un enrichissement email waterfall. Couplé à un cadencement intelligent et aux templates de ce guide, vous avez tout pour transformer la restauration en votre meilleur canal d'acquisition 2026.
 
-Pour aller plus loin : [/prospection/restaurant](/prospection/restaurant), [comparaison Prospectia vs Lusha](/vs/lusha), [glossaire ICP](/glossaire/icp).
+Pour aller plus loin : [/prospection/restaurant](/prospection/restaurant), [comparaison Volia vs Lusha](/vs/lusha), [glossaire ICP](/glossaire/icp).
 
 ## Annexe 1 : les 12 catégories Google de la restauration
 
@@ -309,7 +309,7 @@ Google Places permet de cibler très finement la restauration via une douzaine d
 | japanese_restaurant | ~4 100 | Restaurants japonais |
 | asian_restaurant | ~6 500 | Cuisine asiatique générique |
 
-[Prospectia](/) permet de croiser ces catégories avec un département et un nombre minimum d'avis pour ne récupérer que les restaurants actifs et notables. Exemple de requête puissante : "restaurants italiens à Lyon, 100+ avis, note > 4,2" = vous obtenez 80 prospects ultra qualifiés en 30 secondes.
+[Volia](/) permet de croiser ces catégories avec un département et un nombre minimum d'avis pour ne récupérer que les restaurants actifs et notables. Exemple de requête puissante : "restaurants italiens à Lyon, 100+ avis, note > 4,2" = vous obtenez 80 prospects ultra qualifiés en 30 secondes.
 
 ## Annexe 2 : la métrique "fraîcheur de la donnée"
 
@@ -323,7 +323,7 @@ Le secteur de la restauration ferme à un taux de 6,8 % par an, ce qui veut dire
 | 13-24 mois | 84 % | 51 % | 38 % |
 | 25+ mois | 72 % | 32 % | 21 % |
 
-C'est pour cette raison que [Prospectia](/signup) interroge Google Places en temps réel à chaque recherche : la donnée est par construction fraîche du jour, et le taux de mail valide post-waterfall dépasse 80 % sur la restauration. Voir [comparaison vs Apollo](/vs/apollo) (qui s'appuie sur une base statique souvent vieille de 12-18 mois).
+C'est pour cette raison que [Volia](/signup) interroge Google Places en temps réel à chaque recherche : la donnée est par construction fraîche du jour, et le taux de mail valide post-waterfall dépasse 80 % sur la restauration. Voir [comparaison vs Apollo](/vs/apollo) (qui s'appuie sur une base statique souvent vieille de 12-18 mois).
 
 ## Annexe 3 : 5 idées de produits qui cartonnent en restauration en 2026
 
@@ -416,7 +416,7 @@ Conditions de réussite :
 - Pitch de 15 secondes maxi avant la question
 - Voix posée, vocabulaire concret, pas de tutoiement
 
-Pour récupérer ces numéros de mobile, oubliez les bases statiques. Utilisez [Prospectia](/) qui fait du sourcing en temps réel sur Google Places, croise avec les sources d'enrichissement et vous donne directement les téléphones professionnels (souvent mobiles dans le BTP) avec une couverture France entière.
+Pour récupérer ces numéros de mobile, oubliez les bases statiques. Utilisez [Volia](/) qui fait du sourcing en temps réel sur Google Places, croise avec les sources d'enrichissement et vous donne directement les téléphones professionnels (souvent mobiles dans le BTP) avec une couverture France entière.
 
 ### L'email : court, brutal, calé sur le bon créneau
 
@@ -537,14 +537,14 @@ Voir notre [glossaire ICP](/glossaire/icp) pour bien cadrer la cible avant de la
 5. **Demander une démo de 60 minutes.** Personne dans le BTP n'a 60 minutes à donner à un inconnu. Vendez d'abord un appel de 10 minutes.
 6. **Ne pas avoir de référence locale.** "On bosse avec 5 entreprises à Lyon" est plus puissant que "On bosse avec 500 entreprises en France".
 7. **Sous-estimer la concurrence des télévendeurs CEE.** Les dirigeants sont saturés d'appels frauduleux. Démarquez-vous immédiatement en 5 secondes ou vous êtes confondu.
-8. **Oublier les DOM-TOM.** Le BTP en Guadeloupe, Martinique, Réunion et Mayotte est très dynamique et beaucoup moins concurrentiel commercialement. [Prospectia](/) couvre les 5 départements d'outre-mer.
+8. **Oublier les DOM-TOM.** Le BTP en Guadeloupe, Martinique, Réunion et Mayotte est très dynamique et beaucoup moins concurrentiel commercialement. [Volia](/) couvre les 5 départements d'outre-mer.
 
 ## Cas client : éditeur SaaS gestion de chantier
 
 Un éditeur que j'ai accompagné en 2025-2026 :
 
 - **Cible** : PME BTP second œuvre, 5-25 salariés, France métropole
-- **Volume sourcé via Prospectia** : 32 000 entreprises qualifiées
+- **Volume sourcé via Volia** : 32 000 entreprises qualifiées
 - **Cadencement** : appel direct mobile (3 tentatives) + 2 emails courts
 - **Équipe** : 4 SDR
 - **Résultats à 12 mois** :
@@ -555,11 +555,11 @@ Un éditeur que j'ai accompagné en 2025-2026 :
   - **MRR généré** : 89 000 € additionnels en année 1
 - **CAC** : 740 € — payback 5,3 mois
 
-Le secret n'était pas magique : sourcing en temps réel via [Prospectia](/signup), discipline absolue sur les créneaux d'appel (7h-8h30, 12h-13h, 17h-19h), templates ultra concrets, et focus exclusif sur les départements 31, 33, 35, 44, 59, 67, 69, 75-95 — pas de saupoudrage France entière au début.
+Le secret n'était pas magique : sourcing en temps réel via [Volia](/signup), discipline absolue sur les créneaux d'appel (7h-8h30, 12h-13h, 17h-19h), templates ultra concrets, et focus exclusif sur les départements 31, 33, 35, 44, 59, 67, 69, 75-95 — pas de saupoudrage France entière au début.
 
-## Comment Prospectia accélère la prospection BTP
+## Comment Volia accélère la prospection BTP
 
-Quelques arguments concrets sur l'apport d'un outil comme [Prospectia](/) sur ce secteur :
+Quelques arguments concrets sur l'apport d'un outil comme [Volia](/) sur ce secteur :
 
 - **Couverture France entière** y compris les 101 départements (97x DOM inclus) où la concurrence commerciale est faible
 - **Sourcing par catégorie Google précise** : électricien, plombier, maçon, peintre, plaquiste, couvreur, menuisier, carreleur, etc.
@@ -567,7 +567,7 @@ Quelques arguments concrets sur l'apport d'un outil comme [Prospectia](/) sur ce
 - **Recherche en langage naturel** ("artisans BTP rénovation énergétique RGE en Auvergne-Rhône-Alpes")
 - **Export CSV** direct pour alimenter votre cadenceur
 
-Comparé à un Apollo ou un Lusha qui couvrent mal les TPE françaises, [Prospectia](/vs/apollo) est nettement plus pertinent sur ce segment. Voir aussi [Prospectia vs Lusha](/vs/lusha).
+Comparé à un Apollo ou un Lusha qui couvrent mal les TPE françaises, [Volia](/vs/apollo) est nettement plus pertinent sur ce segment. Voir aussi [Volia vs Lusha](/vs/lusha).
 
 ## FAQ BTP
 
@@ -587,7 +587,7 @@ Pas obligatoirement, mais c'est un plus énorme. À défaut, formez-le 2 semaine
 Oui, mais à des conditions strictes : courts, calés sur les bons créneaux, sans jargon. Comptez 2-4 % de taux de réponse sur un fichier qualifié — vs 8-10 % par téléphone.
 
 **Comment trouver les numéros de mobile direct ?**
-Soit via un outil comme [Prospectia](/signup) qui les agrège, soit via prospection terrain (visite chantier, foires pro). Les standards d'entreprise sont à éviter.
+Soit via un outil comme [Volia](/signup) qui les agrège, soit via prospection terrain (visite chantier, foires pro). Les standards d'entreprise sont à éviter.
 
 ## Conclusion : un marché qui récompense la discipline
 
@@ -595,9 +595,9 @@ Le BTP n'est pas un marché difficile. Il est juste **différent**. Le commercia
 
 600 000 entreprises, 1,3 million de salariés, croissance soutenue par la rénovation énergétique et les grands chantiers d'infrastructures : c'est probablement le segment B2B avec le meilleur ratio opportunité / saturation commerciale en France en 2026.
 
-Avec [Prospectia](/signup) pour sourcer, les templates de ce guide pour cadencer, et une discipline d'horaires impeccable, vous pouvez bâtir un canal d'acquisition BTP très rentable. Bonne chasse.
+Avec [Volia](/signup) pour sourcer, les templates de ce guide pour cadencer, et une discipline d'horaires impeccable, vous pouvez bâtir un canal d'acquisition BTP très rentable. Bonne chasse.
 
-Pour aller plus loin : [/prospection/electricien](/prospection/electricien), [/prospection/plombier](/prospection/plombier), [comparaison Prospectia vs Apollo](/vs/apollo), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
+Pour aller plus loin : [/prospection/electricien](/prospection/electricien), [/prospection/plombier](/prospection/plombier), [comparaison Volia vs Apollo](/vs/apollo), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
 
 ## Annexe 1 : le vocabulaire BTP à maîtriser
 
@@ -857,12 +857,12 @@ Pourquoi ça marche : actualité réglementaire précise (à vérifier), positio
 
 | Outil | Usage | Tarif |
 |---|---|---|
-| [Prospectia](/) | Sourcing géolocalisé cabinets, enrichissement waterfall | 49 €/mois Pro |
+| [Volia](/) | Sourcing géolocalisé cabinets, enrichissement waterfall | 49 €/mois Pro |
 | LinkedIn Sales Navigator | Recherche d'associés par cabinet et spécialité | 99 €/mois |
 | Doctrine.fr | Veille jurisprudentielle (pour parler le langage des avocats) | Variable |
 | Legal500 / Décideurs | Identifier les cabinets reconnus par spécialité | Gratuit (annuaire) |
 
-Pour le sourcing à grande échelle, [Prospectia](/signup) est particulièrement performant sur les cabinets : recherche par catégorie Google "avocat" + filtre département + enrichissement email automatique. Voir [/prospection/avocat](/prospection/avocat) pour un accès direct au hub dédié. Notre [comparaison vs Apollo](/vs/apollo) montre l'écart sur les TPE/PME françaises.
+Pour le sourcing à grande échelle, [Volia](/signup) est particulièrement performant sur les cabinets : recherche par catégorie Google "avocat" + filtre département + enrichissement email automatique. Voir [/prospection/avocat](/prospection/avocat) pour un accès direct au hub dédié. Notre [comparaison vs Apollo](/vs/apollo) montre l'écart sur les TPE/PME françaises.
 
 ## Les 7 erreurs qui ruinent vos campagnes
 
@@ -877,7 +877,7 @@ Pour le sourcing à grande échelle, [Prospectia](/signup) est particulièrement
 ## Cas client : SaaS legaltech de gestion de cabinet
 
 - **Cible** : cabinets d'avocats 2-15 collaborateurs France entière
-- **Volume sourcé via Prospectia** : 11 800 cabinets qualifiés
+- **Volume sourcé via Volia** : 11 800 cabinets qualifiés
 - **Cadencement** : email "courrier" (3 envois sur 21 jours) + connexion LinkedIn
 - **Résultats à 9 mois** :
   - Taux d'ouverture : 41 %
@@ -912,9 +912,9 @@ Vendre aux avocats français n'est pas plus difficile que vendre à d'autres seg
 
 35 000 cabinets, 12 milliards d'euros de chiffre d'affaires, transition générationnelle en cours : les opportunités sont là, à condition d'y aller avec la bonne posture.
 
-Avec [Prospectia](/signup) pour sourcer France entière, les templates de ce guide pour la posture et un cadencement maîtrisé, vous pouvez transformer ce marché en canal d'acquisition régulier et rentable.
+Avec [Volia](/signup) pour sourcer France entière, les templates de ce guide pour la posture et un cadencement maîtrisé, vous pouvez transformer ce marché en canal d'acquisition régulier et rentable.
 
-Pour aller plus loin : [/prospection/avocat](/prospection/avocat), [comparaison Prospectia vs Lusha](/vs/lusha), [glossaire ICP](/glossaire/icp), [guide cold emailing 2026](/blog/cold-emailing-2026).
+Pour aller plus loin : [/prospection/avocat](/prospection/avocat), [comparaison Volia vs Lusha](/vs/lusha), [glossaire ICP](/glossaire/icp), [guide cold emailing 2026](/blog/cold-emailing-2026).
 
 ## Annexe 1 : la cartographie des 10 plus gros barreaux
 
@@ -994,7 +994,7 @@ Taux mesurés sur 11 800 contacts :
 - Démos qualifiées : 187
 - Conversion : 38 abonnements (panier 4 680 €/an)
 
-Tout cela a été automatisé via [Prospectia](/signup) pour le sourcing et un cadenceur classique pour l'envoi. Le secret n'était pas dans l'outil mais dans la qualité du ciblage et la rigueur du ton.
+Tout cela a été automatisé via [Volia](/signup) pour le sourcing et un cadenceur classique pour l'envoi. Le secret n'était pas dans l'outil mais dans la qualité du ciblage et la rigueur du ton.
 `,
   },
 
@@ -1131,12 +1131,12 @@ Pourquoi ça marche : audit concret avant pitch, statistique générationnelle v
 
 | Outil | Usage | Tarif indicatif |
 |---|---|---|
-| [Prospectia](/) | Sourcing France entière agences + mandataires | 49 €/mois Pro |
+| [Volia](/) | Sourcing France entière agences + mandataires | 49 €/mois Pro |
 | LinkedIn Sales Navigator | Recherche dirigeants + directeurs réseaux | 99 €/mois |
 | SeLoger Pro / MeilleursAgents Pro | Comprendre le marché local et le mandat type | Variable |
 | Lemlist / Instantly | Cadencement multi-touch | 47-99 €/mois |
 
-[Prospectia](/signup) est particulièrement utile sur ce segment pour deux raisons : il couvre **toutes les agences physiques de France** (catégorie "real_estate_agency" sur Google Places, qui matche très précisément) et il enrichit avec des emails pros directement utilisables. Voir [/prospection/agence-immobiliere](/prospection/agence-immobiliere) pour cibler directement.
+[Volia](/signup) est particulièrement utile sur ce segment pour deux raisons : il couvre **toutes les agences physiques de France** (catégorie "real_estate_agency" sur Google Places, qui matche très précisément) et il enrichit avec des emails pros directement utilisables. Voir [/prospection/agence-immobiliere](/prospection/agence-immobiliere) pour cibler directement.
 
 ## Les 7 erreurs qui plombent vos campagnes immobilières
 
@@ -1146,12 +1146,12 @@ Pourquoi ça marche : audit concret avant pitch, statistique générationnelle v
 4. **Ne pas connaître le réseau du prospect.** Vendre la même chose à un Century 21 et à une indépendante est une erreur — les contraintes contractuelles diffèrent.
 5. **Ignorer la conformité Loi Hoguet.** Tout ce qui touche aux mandats et à la commercialisation est encadré. Mentionner explicitement votre conformité rassure.
 6. **Faire des démos de 60 minutes.** Aucun patron d'agence ne vous accordera 60 minutes. Vendez d'abord 12 minutes.
-7. **Sous-estimer les DOM-TOM et les villes moyennes.** Marchés moins concurrentiels, dirigeants plus accessibles. [Prospectia](/) couvre les 5 DOM.
+7. **Sous-estimer les DOM-TOM et les villes moyennes.** Marchés moins concurrentiels, dirigeants plus accessibles. [Volia](/) couvre les 5 DOM.
 
 ## Cas client : éditeur de CRM immobilier
 
 - **Cible** : 9 800 agences indépendantes France métropole, 3 à 12 collaborateurs
-- **Sourcing** : Prospectia, recherche "agence immobilière" département par département
+- **Sourcing** : Volia, recherche "agence immobilière" département par département
 - **Cadencement** : 4 emails sur 18 jours + 1 appel téléphonique
 - **Résultats à 6 mois** :
   - Taux d'ouverture : 36 %
@@ -1166,7 +1166,7 @@ Lancement de la campagne calé sur le **15 janvier**, pic de booking le 6 févri
 ## FAQ Agences immobilières
 
 **Faut-il prospecter le siège des grands réseaux ou les franchisés ?**
-Les deux, mais via des canaux différents : siège pour les contrats centralisés (RH, achats, marketing groupe), franchisés pour les outils optionnels et les services individuels. Notre [comparaison Prospectia vs Apollo](/vs/apollo) montre l'intérêt d'un sourcing par catégorie Google pour les franchisés.
+Les deux, mais via des canaux différents : siège pour les contrats centralisés (RH, achats, marketing groupe), franchisés pour les outils optionnels et les services individuels. Notre [comparaison Volia vs Apollo](/vs/apollo) montre l'intérêt d'un sourcing par catégorie Google pour les franchisés.
 
 **Les mandataires (Iad, Safti, Capifrance) sont-ils un bon marché ?**
 Oui mais c'est un marché à part : 80 000 conseillers indépendants, mais l'achat se fait au siège. Travaillez avec les responsables réseau de chaque enseigne.
@@ -1187,9 +1187,9 @@ Un minimum oui : maîtriser le vocabulaire (mandat exclusif/simple, compromis, a
 
 L'immobilier français est un marché B2B accessible, fragmenté, dynamique et bien moins saturé commercialement qu'on le pense. La clé du succès : maîtriser la **saisonnalité** (janvier-mars et novembre-décembre), parler le **vocabulaire** du métier, proposer de **petits engagements** (12 minutes, pas 60), et fournir des **preuves locales** plutôt que des arguments génériques.
 
-Avec [Prospectia](/signup) pour sourcer 35 000 agences en quelques clics, les templates de ce guide pour la posture, et un cadencement calé sur le bon trimestre, vous pouvez bâtir un canal d'acquisition immobilier régulier et rentable.
+Avec [Volia](/signup) pour sourcer 35 000 agences en quelques clics, les templates de ce guide pour la posture, et un cadencement calé sur le bon trimestre, vous pouvez bâtir un canal d'acquisition immobilier régulier et rentable.
 
-Pour aller plus loin : [/prospection/agence-immobiliere](/prospection/agence-immobiliere), [comparaison Prospectia vs Lusha](/vs/lusha), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
+Pour aller plus loin : [/prospection/agence-immobiliere](/prospection/agence-immobiliere), [comparaison Volia vs Lusha](/vs/lusha), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
 
 ## Annexe 1 : la cartographie des réseaux franchisés français
 
@@ -1214,7 +1214,7 @@ Stratégie : pour un éditeur SaaS qui veut adresser un réseau franchisé, l'ap
 1. **Décrocher le siège** comme partenaire référencé (cycle de vente 6 à 12 mois, mais énorme effet de levier).
 2. **Activer le réseau** ensuite via les directions régionales et les commerciaux dédiés (formation, démos sur place, présence en convention).
 
-Pour les indépendantes, c'est du un-à-un classique avec un sourcing en temps réel via [Prospectia](/signup) puis cadencement multi-touch.
+Pour les indépendantes, c'est du un-à-un classique avec un sourcing en temps réel via [Volia](/signup) puis cadencement multi-touch.
 
 ## Annexe 2 : le vocabulaire à maîtriser
 
@@ -1346,7 +1346,7 @@ C'est probablement le persona B2B le plus particulier de France. Quelques caract
 Si vous deviez n'avoir qu'un seul canal de prospection commerces locaux, ce serait la **visite physique**. Un commercial terrain qui fait 25 à 35 visites par jour en centre-ville, avec un pitch de 60 secondes et une démo tablette, peut générer **3 à 5 RDV qualifiés par jour**. Aucun canal digital ne fait mieux sur cette cible.
 
 Conditions de réussite :
-- Cartographier les rues commerçantes par densité (Google Maps + [Prospectia](/) pour identifier les commerces qualifiés)
+- Cartographier les rues commerçantes par densité (Google Maps + [Volia](/) pour identifier les commerces qualifiés)
 - Passer hors heures de rush (10h-11h, 14h-15h, 17h-18h)
 - Apporter une vraie raison (audit fiche Google, démo flash, offre limitée locale)
 - Suivre par SMS dans les 24h
@@ -1380,7 +1380,7 @@ Les chambres de commerce et les fédérations métier (CGAD, Confédération Fra
 
 La meilleure stratégie 2026 pour le commerce local est **hybride**. Voici le workflow type qui fonctionne :
 
-1. **Sourcing** : identifier les commerces cibles par catégorie + zone géographique via [Prospectia](/signup) (Google Places + enrichissement automatique).
+1. **Sourcing** : identifier les commerces cibles par catégorie + zone géographique via [Volia](/signup) (Google Places + enrichissement automatique).
 2. **Email J+0** : envoi d'un mail court personnalisé (mention de la boutique, audit éclair Google).
 3. **Visite physique J+3 à J+7** : passage en boutique avec mention "Je vous ai envoyé un mail mardi". Démo tablette en 10 minutes.
 4. **SMS de relance J+10** si pas de réponse.
@@ -1445,12 +1445,12 @@ Pourquoi ça marche : question simple qui force la prise de conscience, manque �
 
 | Outil | Usage | Tarif |
 |---|---|---|
-| [Prospectia](/) | Sourcing commerces par catégorie Google, France entière + DOM | 49 €/mois Pro |
+| [Volia](/) | Sourcing commerces par catégorie Google, France entière + DOM | 49 €/mois Pro |
 | Google Maps Pro | Cartographie rues commerçantes | Gratuit |
 | Lemlist / Instantly | Cadencement cold email | 47-99 €/mois |
 | Brevo / Sendinblue | SMS B2B en volume | À l'envoi |
 
-[Prospectia](/signup) est particulièrement performant sur ce segment grâce à ses **150+ catégories Google Places** (boulangerie, pâtisserie, primeur, salon de coiffure, fleuriste, opticien, etc.) qui correspondent exactement aux libellés sous lesquels les commerces sont enregistrés. Couplé à la recherche par département, vous obtenez en quelques minutes la base complète des commerces qualifiés d'un quartier ou d'une ville. Voir [/prospection/boulangerie-patisserie](/prospection/boulangerie-patisserie) et [/prospection/salon-de-coiffure](/prospection/salon-de-coiffure) pour des entrées directes. Notre [comparaison vs Apollo](/vs/apollo) montre pourquoi Apollo n'est pas du tout adapté à cette cible TPE française.
+[Volia](/signup) est particulièrement performant sur ce segment grâce à ses **150+ catégories Google Places** (boulangerie, pâtisserie, primeur, salon de coiffure, fleuriste, opticien, etc.) qui correspondent exactement aux libellés sous lesquels les commerces sont enregistrés. Couplé à la recherche par département, vous obtenez en quelques minutes la base complète des commerces qualifiés d'un quartier ou d'une ville. Voir [/prospection/boulangerie-patisserie](/prospection/boulangerie-patisserie) et [/prospection/salon-de-coiffure](/prospection/salon-de-coiffure) pour des entrées directes. Notre [comparaison vs Apollo](/vs/apollo) montre pourquoi Apollo n'est pas du tout adapté à cette cible TPE française.
 
 ## Les 8 erreurs qui ruinent vos campagnes commerces
 
@@ -1461,12 +1461,12 @@ Pourquoi ça marche : question simple qui force la prise de conscience, manque �
 5. **Ne pas avoir de référence locale.** "On bosse avec 5 boutiques rue de la République" est plus puissant que "300 commerçants en France".
 6. **Ignorer la saisonnalité métier.** Une boulangerie en décembre, un magasin de jouets en novembre, un fleuriste en mai : ce n'est pas le moment de leur prendre 1h de leur temps.
 7. **Mépriser le terrain.** Si votre business model est viable sans visites physiques, tant mieux. Sinon, recrutez des commerciaux terrain — c'est imbattable.
-8. **Oublier les DOM-TOM.** Les commerces en Guadeloupe, Martinique, Réunion, Mayotte sont moins couverts commercialement. [Prospectia](/) inclut les 5 DOM.
+8. **Oublier les DOM-TOM.** Les commerces en Guadeloupe, Martinique, Réunion, Mayotte sont moins couverts commercialement. [Volia](/) inclut les 5 DOM.
 
 ## Cas client : éditeur SaaS de programme de fidélité
 
 - **Cible** : 24 000 commerces de proximité segments alimentaire + beauté + mode, France entière
-- **Sourcing** : Prospectia, 150 catégories Google
+- **Sourcing** : Volia, 150 catégories Google
 - **Cadencement** : email + visite physique (4 SDR terrain) + SMS de relance
 - **Résultats à 9 mois** :
   - Taux de visite acceptée : 31 %
@@ -1506,9 +1506,9 @@ Le commerce de proximité français est un marché B2B colossal, redécouvert de
 
 350 000 commerces, 240 milliards d'euros de chiffre d'affaires, segmentation fine par métier, ancrage local fort : les opportunités sont là, à condition d'aborder la cible avec respect, simplicité et discipline opérationnelle.
 
-Avec [Prospectia](/signup) pour sourcer 350 000 commerces par catégorie et par département (DOM-TOM inclus), les templates de ce guide pour la posture, et une organisation hybride terrain + digital, vous pouvez bâtir un canal d'acquisition commerce local prédictible et rentable.
+Avec [Volia](/signup) pour sourcer 350 000 commerces par catégorie et par département (DOM-TOM inclus), les templates de ce guide pour la posture, et une organisation hybride terrain + digital, vous pouvez bâtir un canal d'acquisition commerce local prédictible et rentable.
 
-Pour aller plus loin : [/prospection/boulangerie-patisserie](/prospection/boulangerie-patisserie), [/prospection/salon-de-coiffure](/prospection/salon-de-coiffure), [comparaison Prospectia vs Apollo](/vs/apollo), [comparaison Prospectia vs Lusha](/vs/lusha), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
+Pour aller plus loin : [/prospection/boulangerie-patisserie](/prospection/boulangerie-patisserie), [/prospection/salon-de-coiffure](/prospection/salon-de-coiffure), [comparaison Volia vs Apollo](/vs/apollo), [comparaison Volia vs Lusha](/vs/lusha), [guide cold emailing 2026](/blog/cold-emailing-2026), [glossaire ICP](/glossaire/icp).
 
 ## Annexe 1 : la cartographie fine des sous-segments
 
@@ -1592,7 +1592,7 @@ Les commerces des 5 départements d'outre-mer (Guadeloupe, Martinique, Guyane, L
 - **Cycle d'investissement saisonnier** : haute saison touristique = novembre-mars aux Antilles, juillet-août à la Réunion
 - **Couverture concurrentielle quasi nulle** des éditeurs SaaS — opportunité rare
 
-[Prospectia](/) couvre les 5 DOM avec la même qualité de sourcing que la métropole. Pour beaucoup d'éditeurs, c'est un canal d'acquisition différenciant et très rentable.
+[Volia](/) couvre les 5 DOM avec la même qualité de sourcing que la métropole. Pour beaucoup d'éditeurs, c'est un canal d'acquisition différenciant et très rentable.
 
 ## Annexe 6 : le storytelling qui marche pour ce marché
 

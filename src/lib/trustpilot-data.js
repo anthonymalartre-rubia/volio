@@ -6,7 +6,7 @@
 //
 // 1) Créer un compte Trustpilot Business (gratuit) sur :
 //    https://business.trustpilot.com/signup
-//    → Domaine : prospectia.cloud
+//    → Domaine : volia.fr
 //    → Récupérer le "Business Unit ID" (ex: 6500abc1234defghi5678901)
 //
 // 2) Ajouter sur Vercel (Settings > Environment Variables) :
@@ -42,7 +42,7 @@ export const TRUSTPILOT_BUSINESS_UNIT_ID =
 // Token public du Review Collector (widget officiel Trustpilot qui permet
 // aux users de laisser un avis depuis notre dashboard). Public, à garder
 // hardcoded — il authentifie ce widget spécifique pour le profil
-// prospectia.cloud.
+// volia.fr.
 export const TRUSTPILOT_REVIEW_COLLECTOR_TOKEN = '35703c39-4ee9-4524-a257-954a1c329973';
 
 // Note moyenne et nombre d'avis actuels — à updater MANUELLEMENT.
@@ -54,7 +54,7 @@ export const TRUSTPILOT_REVIEW_COUNT = 0; // Ex: 23
 
 // Slug Trustpilot public — utilisé pour les liens "Voir les avis" et
 // le lien Trustpilot dans le JSON-LD `sameAs`.
-export const TRUSTPILOT_PROFILE_SLUG = 'prospectia.cloud';
+export const TRUSTPILOT_PROFILE_SLUG = 'volia.fr';
 
 // URL publique du profil Trustpilot
 export const TRUSTPILOT_PROFILE_URL = `https://fr.trustpilot.com/review/${TRUSTPILOT_PROFILE_SLUG}`;

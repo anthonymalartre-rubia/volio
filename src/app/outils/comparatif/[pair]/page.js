@@ -28,11 +28,11 @@ export async function generateMetadata({ params }) {
       `comparatif ${a.name.toLowerCase()} ${b.name.toLowerCase()}`,
       'comparatif outils prospection',
     ],
-    alternates: { canonical: `https://prospectia.cloud/outils/comparatif/${pair}` },
+    alternates: { canonical: `https://volia.fr/outils/comparatif/${pair}` },
     openGraph: {
       title: `${a.name} vs ${b.name} en 2026 — Comparatif`,
       description: `Prix, fonctionnalités, couverture France, RGPD. ${cheaper.name} est le moins cher (${cheaper.pricing} ${cheaper.pricingUnit}).`,
-      url: `https://prospectia.cloud/outils/comparatif/${pair}`,
+      url: `https://volia.fr/outils/comparatif/${pair}`,
       type: 'article',
     },
   };
@@ -75,12 +75,12 @@ export default async function ComparatifPairPage({ params }) {
         author: { '@type': 'Person', name: 'Anthony Malartre' },
         publisher: {
           '@type': 'Organization',
-          name: 'Prospectia',
-          url: 'https://prospectia.cloud',
-          logo: { '@type': 'ImageObject', url: 'https://prospectia.cloud/icon.svg' },
+          name: 'Volia',
+          url: 'https://volia.fr',
+          logo: { '@type': 'ImageObject', url: 'https://volia.fr/icon.svg' },
         },
-        url: `https://prospectia.cloud/outils/comparatif/${pair}`,
-        mainEntityOfPage: `https://prospectia.cloud/outils/comparatif/${pair}`,
+        url: `https://volia.fr/outils/comparatif/${pair}`,
+        mainEntityOfPage: `https://volia.fr/outils/comparatif/${pair}`,
         inLanguage: 'fr-FR',
       },
       // Les 2 outils comparés, chacun avec leur offer
@@ -116,7 +116,7 @@ export default async function ComparatifPairPage({ params }) {
             name: `Quelle alternative française à ${a.name} et ${b.name} ?`,
             acceptedAnswer: {
               '@type': 'Answer',
-              text: `Prospectia est l'alternative française aux deux : 19 €/mois, combine découverte d'entreprises (Google Places, 150+ catégories, 101 départements) + enrichissement email + conformité RGPD-by-design.`,
+              text: `Volia est l'alternative française aux deux : 19 €/mois, combine découverte d'entreprises (Google Places, 150+ catégories, 101 départements) + enrichissement email + conformité RGPD-by-design.`,
             },
           },
           {

@@ -78,10 +78,10 @@ export async function POST(request) {
     }
 
     // URL de retour : on privilégie l'origin de la requête (suit le domaine
-    // réel : prospectia.cloud, www., preview…) plutôt qu'une env var.
+    // réel : volia.fr, www., preview…) plutôt qu'une env var.
     const origin = request.headers.get('origin')
       || process.env.NEXT_PUBLIC_APP_URL
-      || 'https://prospectia.cloud';
+      || 'https://volia.fr';
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,

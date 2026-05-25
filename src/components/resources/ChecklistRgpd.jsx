@@ -69,7 +69,7 @@ const SECTIONS = [
     items: [
       'Signer un DPA avec chaque sous-traitant (cadenceur, CRM, enrichissement, hébergement)',
       'Vérifier que les sous-traitants hors UE respectent les clauses contractuelles types',
-      'Privilégier les sous-traitants UE pour les données sensibles (Dropcontact, Prospectia, etc.)',
+      'Privilégier les sous-traitants UE pour les données sensibles (Dropcontact, Volia, etc.)',
       'Documenter chaque transfert hors UE dans le registre',
       'Vérifier annuellement la conformité de chaque sous-traitant (mises à jour des CGV)',
     ],
@@ -146,7 +146,7 @@ export default function ChecklistRgpd() {
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Finalité</td><td className="p-2">Identifier et contacter des prospects B2B pour vendre [produit X]</td></tr>
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Base légale</td><td className="p-2">Intérêt légitime (art. 6.1.f RGPD)</td></tr>
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Catégories de données</td><td className="p-2">Nom, prénom, email professionnel, téléphone, poste, société</td></tr>
-            <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Destinataires</td><td className="p-2">Équipe sales interne, sous-traitants (Prospectia, Lemlist, HubSpot)</td></tr>
+            <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Destinataires</td><td className="p-2">Équipe sales interne, sous-traitants (Volia, Lemlist, HubSpot)</td></tr>
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Transferts hors UE</td><td className="p-2">Oui (Lemlist : USA) — clauses contractuelles types signées</td></tr>
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Durée de conservation</td><td className="p-2">3 ans après dernier contact</td></tr>
             <tr className="border-t border-line"><td className="p-2 font-mono text-xs">Mesures de sécurité</td><td className="p-2">Accès restreint, MFA, hébergement EU (Supabase, Vercel)</td></tr>
@@ -161,8 +161,8 @@ export default function ChecklistRgpd() {
           <a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" className="text-violet-500 hover:underline ml-1">CNIL — Prospection par email</a>
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/checklist-rgpd-cold-email" className="text-violet-500 hover:underline">prospectia.cloud/ressources/checklist-rgpd-cold-email</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/checklist-rgpd-cold-email" className="text-violet-500 hover:underline">volia.fr/ressources/checklist-rgpd-cold-email</a>
         </p>
         <p className="mt-2 italic">
           Cette checklist ne constitue pas un conseil juridique. Pour les cas complexes,

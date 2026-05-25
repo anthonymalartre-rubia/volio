@@ -265,7 +265,7 @@ export default function Dashboard() {
     // re-cliquer un bouton — il a déjà fait le choix sur la landing).
     if (['solo', 'pro', 'business'].includes(upgrade)) {
       // Nettoie le cookie qui a survécu au signup
-      document.cookie = 'prospectia_signup_plan=; path=/; max-age=0';
+      document.cookie = 'volia_signup_plan=; path=/; max-age=0';
       // Déclenche le checkout avec un petit délai pour laisser le
       // composant se monter et l'auth se stabiliser.
       setTimeout(() => handleUpgrade(upgrade), 600);

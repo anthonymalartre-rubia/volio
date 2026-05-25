@@ -30,11 +30,11 @@ export async function generateMetadata({ params }) {
     title: post.title,
     description: post.description,
     keywords: post.keywords,
-    alternates: { canonical: `https://prospectia.cloud/blog/${slug}` },
+    alternates: { canonical: `https://volia.fr/blog/${slug}` },
     openGraph: {
       title: post.title,
       description: post.description,
-      url: `https://prospectia.cloud/blog/${slug}`,
+      url: `https://volia.fr/blog/${slug}`,
       type: 'article',
       publishedTime: post.publishedAt,
       authors: [post.author],
@@ -211,20 +211,20 @@ export default async function BlogPost({ params }) {
         author: {
           '@type': 'Person',
           name: post.author,
-          url: 'https://prospectia.cloud',
+          url: 'https://volia.fr',
         },
         publisher: {
           '@type': 'Organization',
-          name: 'Prospectia',
-          url: 'https://prospectia.cloud',
+          name: 'Volia',
+          url: 'https://volia.fr',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://prospectia.cloud/icon.svg',
+            url: 'https://volia.fr/icon.svg',
           },
         },
-        image: `https://prospectia.cloud/blog/${slug}/opengraph-image`,
-        url: `https://prospectia.cloud/blog/${slug}`,
-        mainEntityOfPage: `https://prospectia.cloud/blog/${slug}`,
+        image: `https://volia.fr/blog/${slug}/opengraph-image`,
+        url: `https://volia.fr/blog/${slug}`,
+        mainEntityOfPage: `https://volia.fr/blog/${slug}`,
         wordCount,
         inLanguage: 'fr-FR',
         articleSection: post.category,
@@ -323,7 +323,7 @@ export default async function BlogPost({ params }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Trouvez vos prospects B2B en quelques clics</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les entreprises et leurs emails partout en France.
+              Volia trouve les entreprises et leurs emails partout en France.
               <span className="text-violet-300 font-semibold"> Gratuit pour commencer · à partir de 19 €/mois</span> — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
@@ -338,7 +338,7 @@ export default async function BlogPost({ params }) {
 
         {/* Mini-testimonials avant articles connexes */}
         <div className="max-w-3xl mx-auto mt-16">
-          <TestimonialsBlock limit={3} title="Ils ont déjà adopté Prospectia" subtitle="Profils représentatifs basés sur le NPS interne." />
+          <TestimonialsBlock limit={3} title="Ils ont déjà adopté Volia" subtitle="Profils représentatifs basés sur le NPS interne." />
         </div>
 
         {/* Related posts */}

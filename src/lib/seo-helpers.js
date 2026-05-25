@@ -2,7 +2,7 @@
 
 import { getTrustpilotData } from './trustpilot-data';
 
-const BASE_URL = 'https://prospectia.cloud';
+const BASE_URL = 'https://volia.fr';
 
 /**
  * Generate BreadcrumbList schema for a sequence of breadcrumbs.
@@ -72,7 +72,7 @@ export function serviceSchema({ name, description, url, areaName = 'France', pri
     url,
     provider: {
       '@type': 'Organization',
-      name: 'Prospectia',
+      name: 'Volia',
       url: BASE_URL,
     },
     areaServed: areaName === 'France'
@@ -111,7 +111,7 @@ export function productSchema({ name, description, url, priceFrom = 19, currency
     name,
     description,
     url,
-    brand: { '@type': 'Brand', name: 'Prospectia' },
+    brand: { '@type': 'Brand', name: 'Volia' },
     offers: {
       '@type': 'Offer',
       price: String(priceFrom),
@@ -149,7 +149,7 @@ function trustpilotAggregateRatingSchema() {
     bestRating: '5',
     worstRating: '1',
     // Trustpilot référencé comme source des avis (best practice Google)
-    itemReviewed: { '@type': 'Thing', name: 'Prospectia' },
+    itemReviewed: { '@type': 'Thing', name: 'Volia' },
   };
 }
 

@@ -1,17 +1,17 @@
-// Wordmark unifié Prospectia.
+// Wordmark unifié Volia.
 //
-// Avant : 2 brand marks coexistaient — "Prospectia.ai" en rose (login,
-// signup, TopBar) vs "Prospectia.cloud" en violet (footer, marketing,
+// Avant : 2 brand marks coexistaient — "Volia.fr" en rose (login,
+// signup, TopBar) vs "Volia.fr" en violet (footer, marketing,
 // auth shell). Schizophrénie complète alors que le domaine officiel
-// est prospectia.cloud (cf CLAUDE.md).
+// est volia.fr (cf CLAUDE.md).
 //
-// Maintenant : utilise le composant <Logo /> (vrai logo Prospectia avec
+// Maintenant : utilise le composant <Logo /> (vrai logo Volia avec
 // symbole P + viseur, intégré en mai 2026). Le placeholder "P" carré
 // dans un gradient a été remplacé partout.
 //
 // Variants conservés pour rétro-compat avec l'ancienne API :
-// - default : juste le wordmark "Prospectia" (image SVG)
-// - logo : symbole P + texte "Prospectia"
+// - default : juste le wordmark "Volia" (image SVG)
+// - logo : symbole P + texte "Volia"
 // - compact : juste le symbole P (rare)
 
 import Link from 'next/link';
@@ -49,7 +49,7 @@ export default function BrandWordmark({
       {/* Dark mode (par défaut, fill blanc) */}
       <Image
         src="/logos/prospectia-wordmark-dark.svg"
-        alt="Prospectia"
+        alt="Volia"
         width={367}
         height={100}
         className={`w-auto block [.light_&]:hidden ${s.wordmarkH}`}

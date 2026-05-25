@@ -62,7 +62,7 @@ export function extractVariables(template) {
 export function appendOptOutFooter(html, optOutUrl, campaignName) {
   const footer = `
 <div style="margin-top:32px;padding-top:16px;border-top:1px solid #e5e5ea;color:#86868b;font-size:11px;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,sans-serif;text-align:center;">
-  <p style="margin:0 0 4px;">Vous recevez ce mail dans le cadre de la campagne « ${escapeHtml(campaignName || '')} » de Prospectia (intérêt légitime — RGPD art. 6.1.f).</p>
+  <p style="margin:0 0 4px;">Vous recevez ce mail dans le cadre de la campagne « ${escapeHtml(campaignName || '')} » de Volia (intérêt légitime — RGPD art. 6.1.f).</p>
   <p style="margin:0;">
     Vous ne souhaitez plus recevoir nos messages ?
     <a href="${optOutUrl}" style="color:#7c3aed;text-decoration:underline;">Se désinscrire en un clic</a>

@@ -18,7 +18,7 @@ J'ai vu sur G2 que {{société}} utilise encore {{outil_legacy}} pour {{usecase}
 
 Question rapide : combien d'heures par mois ça vous coûte de jongler entre {{outil_legacy}} et le reste de votre stack ?
 
-J'aide des boîtes comme {{ref_client_similaire}} à diviser ce temps par 3 grâce à [Prospectia / votre outil] sans changer leur infra existante.
+J'aide des boîtes comme {{ref_client_similaire}} à diviser ce temps par 3 grâce à [Volia / votre outil] sans changer leur infra existante.
 
 15 min mardi 10h pour vous montrer comment ?
 
@@ -67,7 +67,7 @@ Si vous reconnaissez ce pattern, j'ai 1-2 conseils à partager. 15 min jeudi 11h
     subject: 'Comme {{ref_client_concurrent}}, pour {{société}} ?',
     body: `{{prenom}},
 
-J'aide {{nb}} SaaS B2B français dans votre secteur ({{ref1}}, {{ref2}}, {{ref3}}) à générer +30% de pipeline outbound avec un setup léger : Prospectia + Smartlead.
+J'aide {{nb}} SaaS B2B français dans votre secteur ({{ref1}}, {{ref2}}, {{ref3}}) à générer +30% de pipeline outbound avec un setup léger : Volia + Smartlead.
 
 Curieux de savoir comment {{société}} attaque la prospection sortante aujourd'hui. 15 min mardi pour échanger ?
 
@@ -360,7 +360,7 @@ export default function TemplatesColdEmail() {
     <div>
       <header className="mb-10 keep-together">
         <div className="text-xs uppercase tracking-wider text-violet-500 font-semibold mb-2">
-          Ressource Prospectia · Templates
+          Ressource Volia · Templates
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">
           20 templates de cold email B2B français qui convertissent
@@ -434,8 +434,8 @@ export default function TemplatesColdEmail() {
           Voir notre <a href="/blog/ab-testing-cold-email-2026" className="text-violet-500 hover:underline">guide A/B testing complet</a>.
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/templates-cold-email-b2b-fr" className="text-violet-500 hover:underline">prospectia.cloud/ressources/templates-cold-email-b2b-fr</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/templates-cold-email-b2b-fr" className="text-violet-500 hover:underline">volia.fr/ressources/templates-cold-email-b2b-fr</a>
         </p>
       </footer>
     </div>

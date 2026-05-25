@@ -5,7 +5,7 @@ import { getAllCantonsCH, getCantonBySlugCH } from '@/lib/slugs-ch';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import { getCantonData } from '@/lib/dept-data-ch';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export async function generateStaticParams() {
   return getAllCantonsCH().map((c) => ({ slug: c.slug }));
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const canton = getCantonBySlugCH(slug);
   if (!canton) return {};
-  const title = `Prospection B2B dans le canton ${canton.name} (Suisse) — Prospectia`;
+  const title = `Prospection B2B dans le canton ${canton.name} (Suisse) — Volia`;
   const description = `Trouvez les emails B2B des entreprises du canton ${canton.name} (Suisse romande). 150 secteurs couverts. À partir de 19 €/mois.`;
   return {
     title,
@@ -44,10 +44,10 @@ export default async function CantonChPage({ params }) {
     }));
 
   const title = `Prospection B2B dans le canton ${canton.name}`;
-  const intro = `Le canton ${canton.name} (Suisse romande) regroupe des milliers d'entreprises B2B premium : restaurants, commerces, artisans, professions libérales, services aux entreprises. Prospectia vous permet de trouver leur email professionnel en quelques secondes via Google Places + scraping intelligent.`;
+  const intro = `Le canton ${canton.name} (Suisse romande) regroupe des milliers d'entreprises B2B premium : restaurants, commerces, artisans, professions libérales, services aux entreprises. Volia vous permet de trouver leur email professionnel en quelques secondes via Google Places + scraping intelligent.`;
 
   const faq = [
-    { question: `Combien d'entreprises dans le canton ${canton.name} ?`, answer: `Prospectia couvre toutes les entreprises géolocalisées par Google Places dans le canton ${canton.name}.` },
+    { question: `Combien d'entreprises dans le canton ${canton.name} ?`, answer: `Volia couvre toutes les entreprises géolocalisées par Google Places dans le canton ${canton.name}.` },
     { question: `Quels secteurs disponibles ?`, answer: `Les 150 catégories B2B : hôtellerie, restauration, commerce, automobile, santé, BTP, services aux entreprises, immobilier, industrie, finance, éducation, technologie, agriculture.` },
     { question: `Prix pour prospecter dans ${canton.name} ?`, answer: `À partir de 19 €/mois (1 000 prospects). Tous les pays inclus dans tous les plans.` },
   ];

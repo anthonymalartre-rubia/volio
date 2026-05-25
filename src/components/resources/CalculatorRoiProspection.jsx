@@ -295,7 +295,7 @@ export default function CalculatorRoiProspection() {
         <p className="text-xs text-content-tertiary mt-3">
           Benchmarks France 2026 :
           CAC SaaS B2B 600-1500 €, payback 12-18 mois, ratio CAC/LTV cible 1/3 ou meilleur.
-          Source : <a href="/etude/prospection-b2b-france-2026" className="text-violet-400 hover:underline">étude Prospectia 2026</a>.
+          Source : <a href="/etude/prospection-b2b-france-2026" className="text-violet-400 hover:underline">étude Volia 2026</a>.
         </p>
       </section>
     </div>

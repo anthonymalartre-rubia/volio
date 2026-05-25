@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata = {
-  title: 'Conditions Générales d\'Utilisation — Prospectia.ai',
-  description: 'Conditions Générales d\'Utilisation de la plateforme Prospectia.ai, service de prospection B2B automatisée en France.',
+  title: 'Conditions Générales d\'Utilisation — Volia.fr',
+  description: 'Conditions Générales d\'Utilisation de la plateforme Volia.fr, service de prospection B2B automatisée en France.',
 };
 
 export default function CGUPage() {
@@ -22,8 +22,8 @@ export default function CGUPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">1. Présentation du service</h2>
             <p>
-              Prospectia.ai (ci-après « le Service ») est une plateforme d&apos;agrégation de données B2B
-              éditée et exploitée par Prospectia.ai. Le Service est accessible à l&apos;adresse
+              Volia.fr (ci-après « le Service ») est une plateforme d&apos;agrégation de données B2B
+              éditée et exploitée par Volia.fr. Le Service est accessible à l&apos;adresse
               <span className="text-content-primary font-medium"> scraping-dom-ezdrive.vercel.app</span>.
             </p>
             <p className="mt-3">
@@ -36,8 +36,8 @@ export default function CGUPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">2. Éditeur</h2>
             <p>
-              Le Service est édité par Prospectia.ai.<br />
-              Contact : <span className="text-content-primary">contact@prospectia.cloud</span>
+              Le Service est édité par Volia.fr.<br />
+              Contact : <span className="text-content-primary">contact@volia.fr</span>
             </p>
           </section>
 
@@ -51,9 +51,9 @@ export default function CGUPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-content-primary mb-3">4. Nature d&apos;agrégateur — Rôle de Prospectia.ai</h2>
+            <h2 className="text-xl font-semibold text-content-primary mb-3">4. Nature d&apos;agrégateur — Rôle de Volia.fr</h2>
             <p>
-              Prospectia.ai agit en qualité d&apos;<span className="text-content-primary font-medium">agrégateur technique</span> de
+              Volia.fr agit en qualité d&apos;<span className="text-content-primary font-medium">agrégateur technique</span> de
               données professionnelles publiquement accessibles. Le Service interroge et consolide des informations
               provenant de sources tierces via leurs APIs respectives :
             </p>
@@ -67,9 +67,9 @@ export default function CGUPage() {
               <li><span className="text-content-primary font-medium">Scraping de sites web</span> — Extraction d&apos;emails depuis les pages publiques des entreprises (page d&apos;accueil, contact, mentions légales)</li>
             </ul>
             <p className="mt-4">
-              <span className="text-content-primary font-medium">Prospectia.ai ne constitue pas et ne maintient pas de base de données
+              <span className="text-content-primary font-medium">Volia.fr ne constitue pas et ne maintient pas de base de données
               de données personnelles.</span> Le Service agit comme un intermédiaire technique qui agrège, en temps réel ou quasi-réel,
-              des données déjà publiquement accessibles via les sources ci-dessus. Prospectia.ai n&apos;est pas
+              des données déjà publiquement accessibles via les sources ci-dessus. Volia.fr n&apos;est pas
               le collecteur primaire des données ; les données sont collectées et mises à disposition par les fournisseurs
               tiers mentionnés, chacun opérant selon ses propres conditions d&apos;utilisation et politiques de confidentialité.
             </p>
@@ -119,7 +119,7 @@ export default function CGUPage() {
             </ul>
             <p className="mt-4">
               Tout manquement à ces obligations pourra entraîner la suspension ou la résiliation immédiate du compte,
-              sans préavis ni remboursement, et sans préjudice des dommages et intérêts que Prospectia.ai pourrait réclamer.
+              sans préavis ni remboursement, et sans préjudice des dommages et intérêts que Volia.fr pourrait réclamer.
             </p>
           </section>
 
@@ -163,8 +163,8 @@ export default function CGUPage() {
               </li>
             </ul>
             <p className="mt-4">
-              Prospectia.ai décline toute responsabilité quant à l&apos;utilisation que l&apos;utilisateur fait des données
-              obtenues via le Service. L&apos;utilisateur s&apos;engage à indemniser et garantir Prospectia.ai contre
+              Volia.fr décline toute responsabilité quant à l&apos;utilisation que l&apos;utilisateur fait des données
+              obtenues via le Service. L&apos;utilisateur s&apos;engage à indemniser et garantir Volia.fr contre
               toute réclamation, plainte (y compris auprès de la CNIL) ou action résultant de son utilisation non conforme
               des données.
             </p>
@@ -191,7 +191,7 @@ export default function CGUPage() {
 
             <h3 className="text-lg font-medium text-content-primary mt-5 mb-2">8.2 Base légale</h3>
             <p>
-              Le traitement des données de prospects B2B par Prospectia.ai repose sur l&apos;<span className="text-content-primary font-medium">intérêt
+              Le traitement des données de prospects B2B par Volia.fr repose sur l&apos;<span className="text-content-primary font-medium">intérêt
               légitime</span> (article 6.1.f du RGPD), conformément aux lignes directrices de la CNIL concernant
               la prospection commerciale B2B. Les professionnels qui publient leurs coordonnées à des fins
               commerciales peuvent raisonnablement s&apos;attendre à être contactés dans le cadre de leur activité.
@@ -202,7 +202,7 @@ export default function CGUPage() {
               Toute personne dont les données professionnelles sont traitées via le Service dispose des droits suivants :
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-2">
-              <li><span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : via notre page dédiée <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link> ou par email à contact@prospectia.cloud</li>
+              <li><span className="text-content-primary font-medium">Droit d&apos;opposition (opt-out)</span> : via notre page dédiée <Link href="/opt-out" className="text-violet-400 hover:text-violet-300 transition">/opt-out</Link> ou par email à contact@volia.fr</li>
               <li><span className="text-content-primary font-medium">Droit d&apos;accès</span> : savoir quelles données sont traitées</li>
               <li><span className="text-content-primary font-medium">Droit de suppression</span> : demander l&apos;effacement de ses données</li>
               <li><span className="text-content-primary font-medium">Droit de rectification</span> : corriger des données inexactes</li>
@@ -216,7 +216,7 @@ export default function CGUPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">9. Filtrage et mesures de conformité</h2>
             <p>
-              Prospectia.ai met en place des mesures techniques proactives pour garantir la conformité des données traitées :
+              Volia.fr met en place des mesures techniques proactives pour garantir la conformité des données traitées :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>
@@ -231,7 +231,7 @@ export default function CGUPage() {
                 permettant à l&apos;utilisateur de prioriser les données les plus fiables
               </li>
               <li>
-                <span className="text-content-primary font-medium">Liste d&apos;opt-out centralisée</span> : Prospectia.ai maintient
+                <span className="text-content-primary font-medium">Liste d&apos;opt-out centralisée</span> : Volia.fr maintient
                 une liste de personnes et d&apos;entreprises ayant exercé leur droit d&apos;opposition. Ces entrées sont
                 automatiquement exclues des résultats de recherche pour tous les utilisateurs
               </li>
@@ -278,7 +278,7 @@ export default function CGUPage() {
               </table>
             </div>
             <p className="mt-4">
-              Les prix sont indiqués en euros, hors taxes. Prospectia.ai se réserve le droit de modifier
+              Les prix sont indiqués en euros, hors taxes. Volia.fr se réserve le droit de modifier
               ses tarifs à tout moment. Les utilisateurs seront informés de toute modification tarifaire
               au moins 30 jours avant son entrée en vigueur.
             </p>
@@ -289,7 +289,7 @@ export default function CGUPage() {
             <p>
               Les paiements sont traités de manière sécurisée par <span className="text-content-primary font-medium">Stripe</span>.
               Les abonnements sont facturés mensuellement. Le paiement est dû au début de chaque période
-              de facturation. Prospectia.ai ne stocke aucune information bancaire ; celles-ci sont
+              de facturation. Volia.fr ne stocke aucune information bancaire ; celles-ci sont
               gérées exclusivement par Stripe.
             </p>
           </section>
@@ -297,25 +297,25 @@ export default function CGUPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">12. Limitation de responsabilité</h2>
             <p>
-              Prospectia.ai fournit le Service « en l&apos;état » et ne garantit pas l&apos;exactitude,
+              Volia.fr fournit le Service « en l&apos;état » et ne garantit pas l&apos;exactitude,
               l&apos;exhaustivité ou l&apos;actualité des données collectées. En particulier :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>Les résultats de recherche dépendent de la disponibilité et de la qualité des données fournies par les sources tierces (Google Places, Apollo.io, Serper, Enrichly, Anymail Finder, Findymail)</li>
               <li>Les emails trouvés par enrichissement ne sont pas garantis comme valides ou à jour</li>
               <li>Le scoring des emails est indicatif et ne constitue pas une garantie de délivrabilité</li>
-              <li>Prospectia.ai ne saurait être tenu responsable des dommages directs ou indirects résultant de l&apos;utilisation du Service</li>
-              <li>Prospectia.ai ne saurait être tenu responsable de l&apos;utilisation non conforme des données par l&apos;utilisateur, notamment en cas de non-respect du RGPD, de la loi Informatique et Libertés ou du CPCE</li>
-              <li>En tant qu&apos;agrégateur, Prospectia.ai ne saurait être tenu responsable des données fournies par les services tiers qu&apos;il interroge</li>
+              <li>Volia.fr ne saurait être tenu responsable des dommages directs ou indirects résultant de l&apos;utilisation du Service</li>
+              <li>Volia.fr ne saurait être tenu responsable de l&apos;utilisation non conforme des données par l&apos;utilisateur, notamment en cas de non-respect du RGPD, de la loi Informatique et Libertés ou du CPCE</li>
+              <li>En tant qu&apos;agrégateur, Volia.fr ne saurait être tenu responsable des données fournies par les services tiers qu&apos;il interroge</li>
             </ul>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">13. Disponibilité du service</h2>
             <p>
-              Prospectia.ai s&apos;efforce d&apos;assurer la disponibilité du Service 24h/24, 7j/7.
+              Volia.fr s&apos;efforce d&apos;assurer la disponibilité du Service 24h/24, 7j/7.
               Toutefois, le Service peut être temporairement interrompu pour des raisons de maintenance,
-              de mise à jour ou en cas de force majeure. Prospectia.ai ne saurait être tenu responsable
+              de mise à jour ou en cas de force majeure. Volia.fr ne saurait être tenu responsable
               des interruptions du Service.
             </p>
           </section>
@@ -328,7 +328,7 @@ export default function CGUPage() {
               Aucun remboursement au prorata ne sera effectué pour la période restante.
             </p>
             <p className="mt-3">
-              Prospectia.ai se réserve le droit de suspendre ou de résilier un compte en cas de
+              Volia.fr se réserve le droit de suspendre ou de résilier un compte en cas de
               violation des présentes CGU, notamment en cas d&apos;utilisation non conforme (spamming, usage B2C,
               revente de données), sans préavis ni indemnité.
             </p>
@@ -338,7 +338,7 @@ export default function CGUPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">15. Propriété intellectuelle</h2>
             <p>
               L&apos;ensemble des éléments du Service (interface, design, code, marque, logo) sont la
-              propriété exclusive de Prospectia.ai et sont protégés par le droit de la propriété
+              propriété exclusive de Volia.fr et sont protégés par le droit de la propriété
               intellectuelle. Toute reproduction, représentation ou exploitation non autorisée est interdite.
             </p>
             <p className="mt-3">
@@ -360,7 +360,7 @@ export default function CGUPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">17. Contact</h2>
             <p>
               Pour toute question relative aux présentes CGU, vous pouvez nous contacter à l&apos;adresse :
-              <span className="text-content-primary font-medium"> contact@prospectia.cloud</span>
+              <span className="text-content-primary font-medium"> contact@volia.fr</span>
             </p>
           </section>
         </div>
@@ -370,7 +370,7 @@ export default function CGUPage() {
             <Link href="/confidentialite" className="hover:text-content-primary transition">Politique de confidentialité</Link>
             <Link href="/rgpd" className="hover:text-content-primary transition">RGPD</Link>
           </div>
-          <p className="text-content-tertiary text-xs">&copy; 2026 Prospectia.ai</p>
+          <p className="text-content-tertiary text-xs">&copy; 2026 Volia.fr</p>
         </div>
       </div>
     </div>

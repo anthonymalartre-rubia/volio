@@ -66,7 +66,7 @@ export default function SignupPage() {
       // ?ref=XXX → parrainage
       const ref = params.get('ref');
       if (ref && /^[a-zA-Z0-9]{4,12}$/.test(ref)) {
-        document.cookie = `prospectia_ref=${encodeURIComponent(ref)}; path=/; max-age=2592000; SameSite=Lax`;
+        document.cookie = `volia_ref=${encodeURIComponent(ref)}; path=/; max-age=2592000; SameSite=Lax`;
       }
 
       // ?plan=solo|pro|business → user vient d'une card pricing.
@@ -74,7 +74,7 @@ export default function SignupPage() {
       const plan = params.get('plan');
       if (plan && ['solo', 'pro', 'business'].includes(plan)) {
         setSelectedPlan(plan);
-        document.cookie = `prospectia_signup_plan=${plan}; path=/; max-age=3600; SameSite=Lax`;
+        document.cookie = `volia_signup_plan=${plan}; path=/; max-age=3600; SameSite=Lax`;
       }
     } catch {}
   }, []);
@@ -110,7 +110,7 @@ export default function SignupPage() {
   // Helper : track le parrainage après login réussi
   async function trackReferralIfAny() {
     try {
-      const m = document.cookie.match(/(?:^|;\s*)prospectia_ref=([^;]+)/);
+      const m = document.cookie.match(/(?:^|;\s*)volia_ref=([^;]+)/);
       const ref = m ? decodeURIComponent(m[1]) : null;
       if (!ref) return;
       await fetch('/api/referrals/track', {
@@ -119,7 +119,7 @@ export default function SignupPage() {
         body: JSON.stringify({ code: ref }),
       });
       // Nettoie le cookie après usage
-      document.cookie = 'prospectia_ref=; path=/; max-age=0';
+      document.cookie = 'volia_ref=; path=/; max-age=0';
     } catch {}
   }
 
@@ -247,7 +247,7 @@ export default function SignupPage() {
       <ThemeToggle className="absolute top-4 right-4 z-10" />
       <Link href="/" className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-content-primary transition">
         <ArrowLeft size={12} />
-        Prospectia
+        Volia
       </Link>
       <div
         className={`relative w-full max-w-sm space-y-7 transition-all duration-700 ease-out ${
@@ -257,7 +257,7 @@ export default function SignupPage() {
         {/* Logo */}
         <div className="text-center">
           <LogoIcon size="lg" className="mx-auto" />
-          <h1 className="mt-4 text-2xl font-bold text-content-primary">Prospectia<span className="text-violet-400">.cloud</span></h1>
+          <h1 className="mt-4 text-2xl font-bold text-content-primary">Volia<span className="text-violet-400">.cloud</span></h1>
           <p className="mt-2 text-sm text-content-tertiary">
             {t('auth.signupTitle')}
           </p>

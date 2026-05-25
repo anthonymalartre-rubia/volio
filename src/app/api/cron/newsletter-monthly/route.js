@@ -1,4 +1,4 @@
-// Cron mensuel d'envoi de la newsletter Prospectia.
+// Cron mensuel d'envoi de la newsletter Volia.
 //
 // Stratégie :
 //   - Schedule : 1er du mois à 9h (cf. vercel.json "0 9 1 * *")
@@ -85,7 +85,7 @@ export async function GET(request) {
         const tpl = newsletterMonthlyEmail({
           unsubscribeToken: sub.unsubscribe_token,
           featuredArticleTitle: featured?.title || '',
-          featuredArticleUrl: featured ? `https://prospectia.cloud/blog/${featured.slug}` : '',
+          featuredArticleUrl: featured ? `https://volia.fr/blog/${featured.slug}` : '',
           featuredArticleTeaser: featured?.description || '',
           resourceTitle: '20 templates cold email B2B (PDF gratuit)',
           monthLabel,

@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { ArrowLeft, Mail, CheckCircle2, Calendar, TrendingUp, Zap } from 'lucide-react';
 import NewsletterCapture from '@/components/NewsletterCapture';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export const metadata = {
-  title: 'Newsletter Prospectia — 1 email/mois sur la prospection B2B France',
+  title: 'Newsletter Volia — 1 email/mois sur la prospection B2B France',
   description: 'Stats sectorielles, templates cold email qui convertissent, retours d\'expérience. Désinscription 1 clic. RGPD compliant.',
   alternates: { canonical: `${SITE_URL}/newsletter` },
   openGraph: {
-    title: 'Newsletter Prospectia — La prospection B2B France en 5 minutes/mois',
+    title: 'Newsletter Volia — La prospection B2B France en 5 minutes/mois',
     description: 'Stats sectorielles + templates + retours d\'expérience. 1 email/mois max, désabo 1 clic.',
     url: `${SITE_URL}/newsletter`,
   },
@@ -22,7 +22,7 @@ export default function NewsletterPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
             <ArrowLeft size={14} />
-            Prospectia
+            Volia
           </Link>
           <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
             Essayer gratuitement
@@ -34,7 +34,7 @@ export default function NewsletterPage() {
         <section className="max-w-3xl mx-auto px-4 sm:px-6 text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-300 mb-6">
             <Mail size={12} />
-            Newsletter mensuelle Prospectia
+            Newsletter mensuelle Volia
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-4 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
             La prospection B2B France en 5 minutes/mois
@@ -77,7 +77,7 @@ export default function NewsletterPage() {
 
       <footer className="border-t border-white/[0.06] py-8 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
-          <span>© 2026 Prospectia.cloud</span>
+          <span>© 2026 Volia.fr</span>
           <div className="flex gap-4">
             <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
             <Link href="/confidentialite" className="hover:text-zinc-300">Confidentialité</Link>

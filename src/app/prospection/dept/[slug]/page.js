@@ -13,17 +13,17 @@ export async function generateMetadata({ params }) {
   const dept = getDepartmentBySlug(slug);
   if (!dept) return {};
 
-  const title = `Prospection B2B dans le ${dept.name} (${dept.code}) — Prospectia`;
+  const title = `Prospection B2B dans le ${dept.name} (${dept.code}) — Volia`;
   const description = `Trouvez les emails B2B de toutes les entreprises du département ${dept.name} (${dept.code}). 150+ secteurs couverts : restaurants, commerces, artisans, services. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
     description,
-    alternates: { canonical: `https://prospectia.cloud/prospection/dept/${slug}` },
+    alternates: { canonical: `https://volia.fr/prospection/dept/${slug}` },
     openGraph: {
       title,
       description,
-      url: `https://prospectia.cloud/prospection/dept/${slug}`,
+      url: `https://volia.fr/prospection/dept/${slug}`,
     },
   };
 }
@@ -69,12 +69,12 @@ export default async function DepartmentPage({ params }) {
 
   const title = `Prospection B2B dans le ${dept.name} (${dept.code})`;
   const regionName = dept.region?.name || 'France';
-  const intro = `Le département ${dept.name} (${dept.code}) en région ${regionName} regroupe des milliers d'entreprises B2B : restaurants, commerces, artisans du BTP, professions libérales, services aux entreprises. Prospectia vous permet de trouver leur email professionnel en quelques secondes grâce à notre moteur de scraping et recherche Google. Exportez ensuite vos prospects en CSV.`;
+  const intro = `Le département ${dept.name} (${dept.code}) en région ${regionName} regroupe des milliers d'entreprises B2B : restaurants, commerces, artisans du BTP, professions libérales, services aux entreprises. Volia vous permet de trouver leur email professionnel en quelques secondes grâce à notre moteur de scraping et recherche Google. Exportez ensuite vos prospects en CSV.`;
 
   const faq = [
     {
       question: `Combien d'entreprises sont référencées dans le ${dept.name} ?`,
-      answer: `Prospectia couvre toutes les entreprises géolocalisées par Google Places dans le département ${dept.name} (${dept.code}). En moyenne, nous référençons plusieurs dizaines de milliers d'entreprises par département.`,
+      answer: `Volia couvre toutes les entreprises géolocalisées par Google Places dans le département ${dept.name} (${dept.code}). En moyenne, nous référençons plusieurs dizaines de milliers d'entreprises par département.`,
     },
     {
       question: `Quels secteurs sont disponibles dans le ${dept.name} ?`,
@@ -108,7 +108,7 @@ export default async function DepartmentPage({ params }) {
         '@type': 'WebPage',
         name: title,
         description: intro,
-        url: `https://prospectia.cloud/prospection/dept/${slug}`,
+        url: `https://volia.fr/prospection/dept/${slug}`,
         inLanguage: 'fr-FR',
       },
       {

@@ -3,7 +3,7 @@ import PersonaPage from '@/components/PersonaPage';
 import { getPersona, getAllPersonas } from '@/lib/personas';
 import { breadcrumbSchema, productSchema } from '@/lib/seo-helpers';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export async function generateStaticParams() {
   return getAllPersonas().map((p) => ({ persona: p.slug }));
@@ -47,7 +47,7 @@ export default async function PersonaRoute({ params }) {
         inLanguage: 'fr-FR',
       },
       productSchema({
-        name: `Prospectia ${persona.badge}`,
+        name: `Volia ${persona.badge}`,
         description: persona.intro,
         url: `${SITE_URL}/pour/${slug}`,
         priceFrom: persona.idealPlan?.price || 19,

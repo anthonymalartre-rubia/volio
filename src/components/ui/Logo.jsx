@@ -1,18 +1,18 @@
 // ─────────────────────────────────────────────────────────────────────
-// Logo Prospectia — composant unifié
+// Logo Volia — composant unifié
 // ─────────────────────────────────────────────────────────────────────
 //
 // 2 sous-composants :
 //
-// 1. <Logo /> — wordmark complet (symbole P + texte "Prospectia")
-//    Utilise le SVG public/logos/prospectia-wordmark.svg, theme-aware
+// 1. <Logo /> — wordmark complet (symbole P + texte "Volia")
+//    Utilise le SVG public/logos/prospectia-wordmark.svg (à renommer Phase C), theme-aware
 //    via currentColor (le SVG hérite de la text color du parent).
 //
 // 2. <LogoIcon /> — symbole P seul (P + viseur intégré), fond gradient
 //    indigo→violet. Pour favicon-like, sidebar, hero, OG images.
 //
 // Le symbole évoque la prospection ciblée :
-// - Le P : initiale Prospectia
+// - Le P : initiale Volia
 // - Le cercle dans le P : radar/cible
 // - Le diamant au centre : point de mire (justesse, focus)
 //
@@ -38,7 +38,7 @@ export function LogoIcon({
   className = '',
   asLink = false,
   href = '/',
-  ariaLabel = 'Prospectia',
+  ariaLabel = 'Volia',
 }) {
   const s = SIZES[size] || SIZES.md;
   const icon = (
@@ -73,13 +73,13 @@ export function LogoIcon({
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Logo — wordmark complet (symbole + texte "Prospectia")
+// Logo — wordmark complet (symbole + texte "Volia")
 // ─────────────────────────────────────────────────────────────────────
 //
 // 2 SVG en swap CSS via la classe .light (qui est ajoutée sur <html>
 // par ThemeProvider en mode light) :
-// - prospectia-wordmark-dark.svg : fill blanc, visible sur fond sombre
-// - prospectia-wordmark-light.svg : fill noir, visible sur fond clair
+// - prospectia-wordmark-dark.svg : fill blanc, visible sur fond sombre (à renommer Phase C)
+// - prospectia-wordmark-light.svg : fill noir, visible sur fond clair (à renommer Phase C)
 //
 // Pourquoi 2 fichiers et pas fill="currentColor" : <Image> de next/image
 // traite le SVG comme un raster et NE propage PAS currentColor. Les
@@ -105,7 +105,7 @@ export default function Logo({
   const wordmark = (
     <span
       className={`inline-flex items-center ${className}`}
-      aria-label="Prospectia"
+      aria-label="Volia"
     >
       {/* Version dark mode (par défaut, fill blanc) — masquée en .light */}
       <Image

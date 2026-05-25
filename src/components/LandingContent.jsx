@@ -123,7 +123,7 @@ export default function LandingContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1.5">
             <LogoIcon size="sm" />
-            <span className="text-lg font-bold tracking-tight ml-1">Prospectia</span>
+            <span className="text-lg font-bold tracking-tight ml-1">Volia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
@@ -560,7 +560,7 @@ export default function LandingContent() {
                         <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-1">
                           <TrendingDown size={10} /> Le moins cher
                         </div>
-                        <div className="font-bold text-violet-400 text-base">Prospectia</div>
+                        <div className="font-bold text-violet-400 text-base">Volia</div>
                         <div className="text-violet-400/60 text-xs mt-0.5">dès 19&euro;/{t('landing.competition.month')}</div>
                       </th>
                       {COMPETITORS.map((c) => (
@@ -573,22 +573,22 @@ export default function LandingContent() {
                   </thead>
                   <tbody>
                     {[
-                      { label: t('landing.competition.enrichSources'), prospectia: t('landing.competition.sevenSources'), key: 'enrichments' },
-                      { label: t('landing.competition.confidenceScoring'), prospectia: true, key: 'scoring' },
-                      { label: t('landing.competition.aiSearch'), prospectia: true, key: 'ai' },
-                      { label: t('landing.competition.deptsFR'), prospectia: true, key: 'depts' },
-                      { label: t('landing.competition.b2bCategories'), prospectia: '150+', key: 'categories' },
-                      { label: t('landing.competition.googlePlaces'), prospectia: true, key: 'google', competitors: [false, false, false, false, false] },
+                      { label: t('landing.competition.enrichSources'), volia: t('landing.competition.sevenSources'), key: 'enrichments' },
+                      { label: t('landing.competition.confidenceScoring'), volia: true, key: 'scoring' },
+                      { label: t('landing.competition.aiSearch'), volia: true, key: 'ai' },
+                      { label: t('landing.competition.deptsFR'), volia: true, key: 'depts' },
+                      { label: t('landing.competition.b2bCategories'), volia: '150+', key: 'categories' },
+                      { label: t('landing.competition.googlePlaces'), volia: true, key: 'google', competitors: [false, false, false, false, false] },
                     ].map((row) => (
                       <tr key={row.label} className="border-b border-white/[0.04]">
                         <td className="py-3.5 px-4 text-zinc-400">{row.label}</td>
                         <td className="py-3.5 px-4 text-center">
-                          {typeof row.prospectia === 'boolean' ? (
+                          {typeof row.volia === 'boolean' ? (
                             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-violet-500/20">
                               <Check size={14} className="text-violet-400" />
                             </span>
                           ) : (
-                            <span className="font-semibold text-white">{row.prospectia}</span>
+                            <span className="font-semibold text-white">{row.volia}</span>
                           )}
                         </td>
                         {COMPETITORS.map((c) => {
@@ -766,7 +766,7 @@ export default function LandingContent() {
             {isYearly ? t('landing.pricing.yearlySave') : (
               <>
                 {t('landing.pricing.questions')}{' '}
-                <a href="mailto:hello@prospectia.cloud" className="text-violet-400 hover:underline">
+                <a href="mailto:hello@volia.fr" className="text-violet-400 hover:underline">
                   {t('landing.pricing.contactSupport')}
                 </a>
               </>
@@ -853,7 +853,7 @@ export default function LandingContent() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1.5">
               <LogoIcon size="xs" />
-              <span className="text-sm font-bold tracking-tight ml-1">Prospectia</span>
+              <span className="text-sm font-bold tracking-tight ml-1">Volia</span>
               <span className="text-violet-400 text-[10px] font-semibold">.cloud</span>
             </div>
             <div className="flex items-center gap-6 text-xs text-zinc-600">
@@ -863,7 +863,7 @@ export default function LandingContent() {
               <Link href="/opt-out" className="hover:text-zinc-400 transition">{t('landing.footer.optOut')}</Link>
             </div>
             <p className="text-[11px] text-zinc-700">
-              &copy; 2026 Prospectia.cloud
+              &copy; 2026 Volia.fr
             </p>
           </div>
         </div>

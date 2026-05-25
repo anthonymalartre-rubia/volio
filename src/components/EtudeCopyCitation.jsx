@@ -7,9 +7,9 @@ export default function EtudeCopyCitation({ studyUrl, publishedAt }) {
   const [copied, setCopied] = useState(null);
 
   const year = publishedAt ? publishedAt.slice(0, 4) : '2026';
-  const apa = `Malartre, A. (${year}). L'État de la Prospection B2B en France ${year}. Prospectia. ${studyUrl}`;
-  const html = `<p>Source : <a href="${studyUrl}">L'État de la Prospection B2B en France ${year}</a> — Prospectia (${year})</p>`;
-  const markdown = `[L'État de la Prospection B2B en France ${year}](${studyUrl}) — Prospectia (${year})`;
+  const apa = `Malartre, A. (${year}). L'État de la Prospection B2B en France ${year}. Volia. ${studyUrl}`;
+  const html = `<p>Source : <a href="${studyUrl}">L'État de la Prospection B2B en France ${year}</a> — Volia (${year})</p>`;
+  const markdown = `[L'État de la Prospection B2B en France ${year}](${studyUrl}) — Volia (${year})`;
 
   const handleCopy = (text, label) => {
     navigator.clipboard.writeText(text);

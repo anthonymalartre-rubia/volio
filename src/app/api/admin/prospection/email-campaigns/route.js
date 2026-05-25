@@ -29,8 +29,8 @@ export async function POST(request) {
   const subject = (body.subject || '').trim();
   const body_html = (body.body_html || '').trim();
   const list_id = body.list_id;
-  const from_name = (body.from_name || 'Prospectia').trim().slice(0, 80);
-  const from_email = (body.from_email || 'hello@prospectia.cloud').trim();
+  const from_name = (body.from_name || 'Volia').trim().slice(0, 80);
+  const from_email = (body.from_email || 'hello@volia.fr').trim();
   const reply_to = body.reply_to ? String(body.reply_to).trim() : null;
 
   if (!name || !subject || !body_html || !list_id) {

@@ -25,8 +25,8 @@ function NewCampaignContent() {
   // Form state
   const [listId, setListId] = useState(presetListId);
   const [name, setName] = useState('');
-  const [fromName, setFromName] = useState('Prospectia');
-  const [fromEmail, setFromEmail] = useState('hello@prospectia.cloud');
+  const [fromName, setFromName] = useState('Volia');
+  const [fromEmail, setFromEmail] = useState('hello@volia.fr');
   const [replyTo, setReplyTo] = useState('');
   const [subject, setSubject] = useState('');
   const [bodyHtml, setBodyHtml] = useState('');
@@ -228,7 +228,7 @@ Anthony</p>
                         className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm focus:outline-none focus:border-violet-500"
                       />
                       <p className="text-[10px] text-content-tertiary mt-1">
-                        Domaine prospectia.cloud vérifié sur Resend.
+                        Domaine volia.fr vérifié sur Resend.
                       </p>
                     </div>
                   </div>
@@ -310,7 +310,7 @@ Anthony</p>
                 </div>
                 <div className="p-4 text-xs">
                   <div className="space-y-1.5 mb-3 pb-3 border-b border-line">
-                    <div><span className="text-content-tertiary">De :</span> <strong>{fromName || 'Prospectia'}</strong> &lt;{fromEmail || 'hello@prospectia.cloud'}&gt;</div>
+                    <div><span className="text-content-tertiary">De :</span> <strong>{fromName || 'Volia'}</strong> &lt;{fromEmail || 'hello@volia.fr'}&gt;</div>
                     {replyTo && <div><span className="text-content-tertiary">Reply-To :</span> {replyTo}</div>}
                     <div><span className="text-content-tertiary">Objet :</span> <strong>{previewSubject || <em className="text-content-tertiary">(vide)</em>}</strong></div>
                   </div>

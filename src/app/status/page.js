@@ -50,7 +50,7 @@ export default function StatusPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
             <ArrowLeft size={14} />
-            Prospectia
+            Volia
           </Link>
           <button onClick={fetchStatus} disabled={loading} className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
@@ -65,9 +65,9 @@ export default function StatusPage() {
             <Activity size={12} />
             Status page
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3">État des services Prospectia</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3">État des services Volia</h1>
           <p className="text-sm text-zinc-400 leading-relaxed">
-            Health checks live (refresh toutes les 30 sec). Si vous constatez un incident non listé ici, contactez <a href="mailto:hello@prospectia.cloud" className="text-violet-300 hover:underline">hello@prospectia.cloud</a>.
+            Health checks live (refresh toutes les 30 sec). Si vous constatez un incident non listé ici, contactez <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a>.
           </p>
         </section>
 
@@ -143,7 +143,7 @@ export default function StatusPage() {
 
       <footer className="border-t border-white/[0.06] py-8 mt-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
-          <span>© 2026 Prospectia.cloud</span>
+          <span>© 2026 Volia.fr</span>
           <div className="flex gap-4">
             <Link href="/changelog" className="hover:text-zinc-300">Changelog</Link>
             <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>

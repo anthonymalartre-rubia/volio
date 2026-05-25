@@ -29,7 +29,7 @@ export function I18nProvider({ children }) {
   const [locale, setLocaleState] = useState('fr');
 
   useEffect(() => {
-    const saved = localStorage.getItem('prospectia_locale');
+    const saved = localStorage.getItem('volia_locale');
     if (saved === 'fr' || saved === 'en') {
       // Précharger la locale avant de switcher pour éviter un flash de FR.
       loadLocale(saved).then((loaded) => {
@@ -42,7 +42,7 @@ export function I18nProvider({ children }) {
     const loaded = await loadLocale(newLocale);
     if (loaded) {
       setLocaleState(newLocale);
-      try { localStorage.setItem('prospectia_locale', newLocale); } catch {}
+      try { localStorage.setItem('volia_locale', newLocale); } catch {}
     }
   }, []);
 

@@ -26,9 +26,9 @@ export async function generateMetadata({ params }) {
   const r = getResource(slug);
   if (!r) return {};
   return {
-    title: `${r.title} — Outil gratuit Prospectia`,
+    title: `${r.title} — Outil gratuit Volia`,
     description: r.shortDesc,
-    alternates: { canonical: `https://prospectia.cloud/ressources/${slug}/utiliser` },
+    alternates: { canonical: `https://volia.fr/ressources/${slug}/utiliser` },
     robots: { index: true, follow: true },
   };
 }

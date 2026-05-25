@@ -51,7 +51,7 @@ export async function applyReferralBonusToCustomer(userId) {
       percent_off: 100,
       duration: 'repeating',
       duration_in_months: 1,
-      name: `Parrainage Prospectia — ${profile.referral_bonus_months} mois bonus`,
+      name: `Parrainage Volia — ${profile.referral_bonus_months} mois bonus`,
       metadata: {
         source: 'referral_bonus',
         user_id: userId,

@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Gift, X, ArrowRight, Sparkles } from 'lucide-react';
 
-const DISMISS_KEY = 'prospectia_referral_banner_dismissed_at';
+const DISMISS_KEY = 'volia_referral_banner_dismissed_at';
 const DISMISS_DAYS = 7;
 
 export default function ReferralBanner() {

@@ -20,11 +20,11 @@ export async function generateMetadata({ params }) {
     title: guide.title,
     description: guide.description,
     keywords: guide.keywords,
-    alternates: { canonical: `https://prospectia.cloud/guide/${slug}` },
+    alternates: { canonical: `https://volia.fr/guide/${slug}` },
     openGraph: {
       title: guide.title,
       description: guide.description,
-      url: `https://prospectia.cloud/guide/${slug}`,
+      url: `https://volia.fr/guide/${slug}`,
       type: 'article',
       publishedTime: guide.publishedAt,
       authors: [guide.author],
@@ -134,9 +134,9 @@ export default async function GuidePage({ params }) {
         description: guide.description,
         datePublished: guide.publishedAt,
         author: { '@type': 'Person', name: guide.author },
-        publisher: { '@type': 'Organization', name: 'Prospectia', url: 'https://prospectia.cloud' },
-        url: `https://prospectia.cloud/guide/${slug}`,
-        mainEntityOfPage: `https://prospectia.cloud/guide/${slug}`,
+        publisher: { '@type': 'Organization', name: 'Volia', url: 'https://volia.fr' },
+        url: `https://volia.fr/guide/${slug}`,
+        mainEntityOfPage: `https://volia.fr/guide/${slug}`,
         wordCount: guide.wordCount || 4000,
       },
     ],
@@ -182,7 +182,7 @@ export default async function GuidePage({ params }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Mettez ce guide en pratique</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Prospectia trouve les entreprises de votre secteur et leurs emails partout en France.
+              Volia trouve les entreprises de votre secteur et leurs emails partout en France.
               <span className="text-violet-300 font-semibold"> Gratuit pour commencer · à partir de 19 €/mois.</span>
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">

@@ -11,13 +11,13 @@ import NewsletterCapture from '@/components/NewsletterCapture';
 export const revalidate = 1800;
 
 export const metadata = {
-  title: 'Blog Prospectia — Prospection B2B, cold emailing, RGPD',
+  title: 'Blog Volia — Prospection B2B, cold emailing, RGPD',
   description: 'Tous nos articles sur la prospection B2B en France : comment trouver des emails, cold emailing, conformité RGPD, comparatifs d\'outils.',
-  alternates: { canonical: 'https://prospectia.cloud/blog' },
+  alternates: { canonical: 'https://volia.fr/blog' },
   openGraph: {
-    title: 'Blog Prospectia — Prospection B2B en France',
+    title: 'Blog Volia — Prospection B2B en France',
     description: 'Conseils, comparatifs, guides RGPD pour la prospection B2B en France.',
-    url: 'https://prospectia.cloud/blog',
+    url: 'https://volia.fr/blog',
   },
 };
 
@@ -33,7 +33,7 @@ export default function BlogIndex() {
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-300 mb-6">
             <Tag size={12} />
-            Blog Prospectia
+            Blog Volia
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 text-content-primary">
             Conseils & guides prospection B2B

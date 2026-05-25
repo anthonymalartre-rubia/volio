@@ -124,7 +124,7 @@ export default function OnboardingChecklist({ isAdmin = false }) {
             </div>
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span className="text-xs font-semibold text-content-primary group-hover:text-violet-300 transition whitespace-nowrap">
-                Démarrage Prospectia
+                Démarrage Volia
               </span>
               <span className="hidden sm:inline text-[11px] text-content-tertiary tabular-nums">
                 {stepsDone}/{visibleSteps.length} · {pct}%

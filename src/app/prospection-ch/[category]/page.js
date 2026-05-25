@@ -6,7 +6,7 @@ import { breadcrumbSchema, productSchema } from '@/lib/seo-helpers';
 import { getCategoryData } from '@/lib/category-data';
 import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export async function generateStaticParams() {
   return getAllCategories().map((cat) => ({ category: cat.slug }));
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   const { category: catSlug } = await params;
   const category = getCategoryBySlug(catSlug);
   if (!category) return {};
-  const title = `Trouver l'email des ${category.labelPlural} en Suisse romande — Prospectia`;
+  const title = `Trouver l'email des ${category.labelPlural} en Suisse romande — Volia`;
   const description = `Email professionnel des ${category.labelPlural} en Suisse romande (6 cantons francophones). Scraping intelligent + Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,
@@ -60,20 +60,20 @@ export default async function CategoryChPage({ params }) {
   const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Trouver l'email des ${category.labelPlural} en Suisse romande`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} en Suisse romande ? Prospectia agrège les ${category.labelPlural} de Genève, Vaud, Valais, Neuchâtel, Fribourg et Jura, et trouve leur email professionnel grâce à notre cascade waterfall (scraping + Google). Marché premium B2B au 1er PIB/habitant d'Europe.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} en Suisse romande ? Volia agrège les ${category.labelPlural} de Genève, Vaud, Valais, Neuchâtel, Fribourg et Jura, et trouve leur email professionnel grâce à notre cascade waterfall (scraping + Google). Marché premium B2B au 1er PIB/habitant d'Europe.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} sont référencés en Suisse romande ?`,
-      answer: `Prospectia couvre tous les ${category.labelPlural} géolocalisés par Google Places dans les 6 cantons romands.`,
+      answer: `Volia couvre tous les ${category.labelPlural} géolocalisés par Google Places dans les 6 cantons romands.`,
     },
     {
-      question: `Comment Prospectia trouve-t-il les emails en Suisse ?`,
+      question: `Comment Volia trouve-t-il les emails en Suisse ?`,
       answer: `Le moteur scrape le site web de chaque entreprise suisse, puis effectue une recherche Google. Taux : 70-85 %.`,
     },
     {
       question: `La prospection B2B en Suisse est-elle conforme RGPD ?`,
-      answer: `La Suisse applique la nLPD (équivalent suisse du RGPD). Prospectia filtre les emails personnels et respecte les opt-out — compatible avec les 2 cadres.`,
+      answer: `La Suisse applique la nLPD (équivalent suisse du RGPD). Volia filtre les emails personnels et respecte les opt-out — compatible avec les 2 cadres.`,
     },
     {
       question: `Prix pour prospecter en Suisse romande ?`,

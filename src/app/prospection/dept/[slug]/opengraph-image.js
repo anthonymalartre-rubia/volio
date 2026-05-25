@@ -25,7 +25,7 @@ export default async function Image({ params }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 700, color: 'white' }}>P</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px' }}>
-            <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Prospectia</span>
+            <span style={{ fontSize: '32px', fontWeight: 700, color: 'white' }}>Volia</span>
             <span style={{ fontSize: '20px', fontWeight: 600, color: '#a78bfa' }}>.cloud</span>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default async function Image({ params }) {
             <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ 80% emails trouvés</div>
             <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', fontSize: '14px' }}>💶 À partir de 19 €/mois</div>
           </div>
-          <div style={{ fontSize: '18px', color: '#71717a' }}>prospectia.cloud</div>
+          <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr</div>
         </div>
       </div>
     ),

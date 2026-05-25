@@ -2,7 +2,7 @@
 // (les 2 coexistent OK, le statique reste comme fallback, mais ce
 // dynamique est plus propre et future-proof).
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export default function robots() {
   return {

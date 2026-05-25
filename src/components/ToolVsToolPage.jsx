@@ -11,7 +11,7 @@ import { LogoIcon } from '@/components/ui';
  * Composant rendu pour /outils/comparatif/[X]-vs-[Y].
  *
  * Affiche un comparatif côte-à-côte entre deux outils du dataset
- * competitors.js, sans Prospectia (Prospectia apparaît en bottom
+ * competitors.js, sans Volia (Volia apparaît en bottom
  * comme alternative française recommandée).
  *
  * Le calcul de l'écart de prix est fait côté serveur dans la page.
@@ -117,7 +117,7 @@ export default function ToolVsToolPage({ a, b }) {
                   {aIsFrench && !bIsFrench ? `${a.name} (équipe française)` :
                    bIsFrench && !aIsFrench ? `${b.name} (équipe française)` :
                    aIsFrench && bIsFrench ? `Les deux sont français` :
-                   `Aucun n'est positionné spécifiquement France (préférer Prospectia)`}
+                   `Aucun n'est positionné spécifiquement France (préférer Volia)`}
                 </span>
               </li>
               <li className="flex gap-2">
@@ -135,7 +135,7 @@ export default function ToolVsToolPage({ a, b }) {
               <li className="flex gap-2">
                 <span className="text-violet-400 flex-shrink-0">→</span>
                 <span>
-                  <strong className="text-content-primary">Alternative française</strong> : Prospectia à 19 €/mois, combine sourcing (Google Places) + enrichissement email + RGPD natif
+                  <strong className="text-content-primary">Alternative française</strong> : Volia à 19 €/mois, combine sourcing (Google Places) + enrichissement email + RGPD natif
                 </span>
               </li>
             </ul>
@@ -193,7 +193,7 @@ export default function ToolVsToolPage({ a, b }) {
               </h3>
               <p className="text-sm text-content-secondary leading-relaxed">
                 Choisissez <strong className="text-content-primary">{cheaper.name}</strong> à {cheaper.pricing} {cheaper.pricingUnit} {savingsPct > 0 && `(${savingsPct}% moins cher)`}.
-                Encore moins cher : Prospectia à 19 €/mois avec sourcing inclus.
+                Encore moins cher : Volia à 19 €/mois avec sourcing inclus.
               </p>
             </div>
             <div className="rounded-2xl border border-line bg-surface-card p-5">
@@ -204,7 +204,7 @@ export default function ToolVsToolPage({ a, b }) {
               <p className="text-sm text-content-secondary leading-relaxed">
                 {aIsFrench && !bIsFrench ? `${a.name} est plus adapté (équipe française).` :
                  bIsFrench && !aIsFrench ? `${b.name} est plus adapté (équipe française).` :
-                 `Aucun des deux n'est positionné France-first. Préférer Prospectia (équipe + base FR natives).`}
+                 `Aucun des deux n'est positionné France-first. Préférer Volia (équipe + base FR natives).`}
               </p>
             </div>
             <div className="rounded-2xl border border-line bg-surface-card p-5">
@@ -215,7 +215,7 @@ export default function ToolVsToolPage({ a, b }) {
               <p className="text-sm text-content-secondary leading-relaxed">
                 {aIsFrench && !bIsFrench ? `${a.name}` :
                  bIsFrench && !aIsFrench ? `${b.name}` :
-                 `Préférer Dropcontact ou Prospectia (RGPD-by-design natifs).`}
+                 `Préférer Dropcontact ou Volia (RGPD-by-design natifs).`}
               </p>
             </div>
             <div className="rounded-2xl border border-line bg-surface-card p-5">
@@ -231,17 +231,17 @@ export default function ToolVsToolPage({ a, b }) {
             </div>
           </div>
 
-          {/* Prospectia alternative card */}
+          {/* Volia alternative card */}
           <div className="rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.04] p-6 mb-12">
             <div className="flex items-start gap-4">
               <LogoIcon size="md" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                  <h3 className="text-lg font-bold text-content-primary">Prospectia, l&apos;alternative française aux deux</h3>
+                  <h3 className="text-lg font-bold text-content-primary">Volia, l&apos;alternative française aux deux</h3>
                   <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">🇫🇷 Recommandée</span>
                 </div>
                 <p className="text-sm text-content-secondary leading-relaxed mb-3">
-                  À partir de <strong className="text-content-primary">19 €/mois</strong>, Prospectia combine ce que {a.name} ET {b.name} ne font pas
+                  À partir de <strong className="text-content-primary">19 €/mois</strong>, Volia combine ce que {a.name} ET {b.name} ne font pas
                   individuellement : découverte d&apos;entreprises (Google Places, 150+ catégories, 101 départements) + enrichissement email
                   + conformité RGPD-by-design.
                 </p>
@@ -260,7 +260,7 @@ export default function ToolVsToolPage({ a, b }) {
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-3">Essayez Prospectia gratuitement</h2>
+            <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               100 prospects offerts pour découvrir l&apos;alternative française à {a.name} et {b.name}.
               À partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.

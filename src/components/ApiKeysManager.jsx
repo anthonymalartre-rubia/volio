@@ -193,7 +193,7 @@ export default function ApiKeysManager() {
 
       <p className="text-xs text-content-tertiary leading-relaxed">
         Les clés API permettent à des intégrations externes (Zapier, Make, scripts custom)
-        d&apos;accéder à votre compte Prospectia.
+        d&apos;accéder à votre compte Volia.
         <a href="/api" className="text-violet-400 hover:underline ml-1">Voir la documentation</a>.
         Max 5 clés actives par compte.
       </p>

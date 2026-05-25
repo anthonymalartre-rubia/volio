@@ -2,7 +2,7 @@ import LandingContent from '@/components/LandingContent';
 import { FAQ_ITEMS } from '@/lib/faq-data';
 import { getTrustpilotData, TRUSTPILOT_PROFILE_URL } from '@/lib/trustpilot-data';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 // aggregateRating Trustpilot — injecté uniquement si configuré + au moins
 // 1 avis. Sinon vaut undefined et est omis du schema (Object.assign skip).
@@ -18,7 +18,7 @@ const trustpilotAggregateRating = trustpilotData
   : null;
 
 export const metadata = {
-  title: 'Prospectia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
+  title: 'Volia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
   description: 'Le ticket d\'entrée le moins cher du marché français. Découverte de prospects via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 19 €/mois.',
   alternates: {
     canonical: SITE_URL,
@@ -28,16 +28,16 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Prospectia — Prospection B2B France à partir de 19 €/mois',
+    title: 'Volia — Prospection B2B France à partir de 19 €/mois',
     description: 'Le moins cher du marché français. Découverte (Google Places) + enrichissement email automatique. 150+ catégories, 101 départements, scoring de confiance.',
     url: SITE_URL,
-    siteName: 'Prospectia',
+    siteName: 'Volia',
     locale: 'fr_FR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Prospectia — Prospection B2B automatisée',
+    title: 'Volia — Prospection B2B automatisée',
     description: 'À partir de 19 €/mois. Trouvez emails & entreprises en France. 150+ catégories, 101 départements.',
   },
   robots: {
@@ -50,8 +50,8 @@ export const metadata = {
 const softwareApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Prospectia',
-  alternateName: ['Prospectia.ai', 'Prospectia.cloud'],
+  name: 'Volia',
+  alternateName: ['Volia.fr', 'Volia.fr'],
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
@@ -136,7 +136,7 @@ const softwareApplicationSchema = {
   ...(trustpilotAggregateRating ? { aggregateRating: trustpilotAggregateRating } : {}),
   publisher: {
     '@type': 'Organization',
-    name: 'Prospectia',
+    name: 'Volia',
     url: SITE_URL,
     // Lien vers Trustpilot pour permettre à Google de vérifier la source
     ...(trustpilotData ? { sameAs: [TRUSTPILOT_PROFILE_URL] } : {}),

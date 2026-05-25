@@ -30,19 +30,19 @@ export async function generateMetadata({ params }) {
   const region = getRegionBySlug(regionSlug);
   if (!category || !region) return {};
 
-  const title = `Email des ${category.labelPlural} en ${region.name} — Prospectia`;
+  const title = `Email des ${category.labelPlural} en ${region.name} — Volia`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés en ${region.name} (${region.depts.length} départements couverts). Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `https://prospectia.cloud/prospection/${catSlug}/region/${regionSlug}`,
+      canonical: `https://volia.fr/prospection/${catSlug}/region/${regionSlug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://prospectia.cloud/prospection/${catSlug}/region/${regionSlug}`,
+      url: `https://volia.fr/prospection/${catSlug}/region/${regionSlug}`,
     },
   };
 }
@@ -82,20 +82,20 @@ export default async function CategoryRegionPage({ params }) {
     }));
 
   const title = `Email des ${category.labelPlural} en ${region.name}`;
-  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés en région ${region.name} ? Prospectia identifie automatiquement tous les ${category.labelPlural} géolocalisés dans les ${region.depts.length} départements de ${region.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez la liste complète en CSV en moins de 5 minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
+  const intro = `Vous cherchez à contacter les ${category.labelPlural} situés en région ${region.name} ? Volia identifie automatiquement tous les ${category.labelPlural} géolocalisés dans les ${region.depts.length} départements de ${region.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez la liste complète en CSV en moins de 5 minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
 
   const faq = [
     {
       question: `Combien de ${category.labelPlural} y a-t-il en ${region.name} ?`,
-      answer: `La région ${region.name} regroupe ${region.depts.length} départements et plusieurs milliers à dizaines de milliers de ${category.labelPlural}, selon la densité économique locale. Prospectia couvre toutes les entreprises géolocalisées par Google Places dans la région.`,
+      answer: `La région ${region.name} regroupe ${region.depts.length} départements et plusieurs milliers à dizaines de milliers de ${category.labelPlural}, selon la densité économique locale. Volia couvre toutes les entreprises géolocalisées par Google Places dans la région.`,
     },
     {
       question: `Quels départements composent la région ${region.name} ?`,
-      answer: `${region.name} comprend ${region.depts.length} départements : ${regionDepts.map((d) => `${d.name} (${d.code})`).join(', ')}. Prospectia couvre tous ces départements sans supplément.`,
+      answer: `${region.name} comprend ${region.depts.length} départements : ${regionDepts.map((d) => `${d.name} (${d.code})`).join(', ')}. Volia couvre tous ces départements sans supplément.`,
     },
     {
       question: `Comment trouver l'email d'un ${category.label} en ${region.name} ?`,
-      answer: `Sur Prospectia, sélectionnez la catégorie "${category.label}" et tous les départements de ${region.name} en un clic via le filtre région. Notre IA scrape ensuite le site web de chaque entreprise et complète avec une recherche Google ciblée. Vous récupérez en quelques minutes tous les emails professionnels disponibles.`,
+      answer: `Sur Volia, sélectionnez la catégorie "${category.label}" et tous les départements de ${region.name} en un clic via le filtre région. Notre IA scrape ensuite le site web de chaque entreprise et complète avec une recherche Google ciblée. Vous récupérez en quelques minutes tous les emails professionnels disponibles.`,
     },
     {
       question: `Les emails des ${category.labelPlural} en ${region.name} sont-ils vérifiés ?`,
@@ -103,7 +103,7 @@ export default async function CategoryRegionPage({ params }) {
     },
     {
       question: `Puis-je exporter les ${category.labelPlural} de ${region.name} en CSV ?`,
-      answer: `Oui, exports illimités en CSV standard (nom, entreprise, email, téléphone, note Google, site web). Inclus dans tous les plans Prospectia. Compatible avec tous les CRM (HubSpot, Salesforce, Pipedrive…) et outils d'outreach (Lemlist, Apollo, Smartlead…).`,
+      answer: `Oui, exports illimités en CSV standard (nom, entreprise, email, téléphone, note Google, site web). Inclus dans tous les plans Volia. Compatible avec tous les CRM (HubSpot, Salesforce, Pipedrive…) et outils d'outreach (Lemlist, Apollo, Smartlead…).`,
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} en ${region.name} ?`,
@@ -126,17 +126,17 @@ export default async function CategoryRegionPage({ params }) {
         '@type': 'WebPage',
         name: title,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/region/${regionSlug}`,
+        url: `https://volia.fr/prospection/${catSlug}/region/${regionSlug}`,
         inLanguage: 'fr-FR',
-        isPartOf: { '@id': 'https://prospectia.cloud/#website' },
+        isPartOf: { '@id': 'https://volia.fr/#website' },
       },
       {
         '@type': 'Service',
         name: `Recherche email ${category.labelPlural} en ${region.name}`,
         provider: {
           '@type': 'Organization',
-          name: 'Prospectia',
-          url: 'https://prospectia.cloud',
+          name: 'Volia',
+          url: 'https://volia.fr',
         },
         areaServed: {
           '@type': 'AdministrativeArea',
@@ -167,7 +167,7 @@ export default async function CategoryRegionPage({ params }) {
       serviceSchema({
         name: `Recherche email ${category.labelPlural} en ${region.name}`,
         description: intro,
-        url: `https://prospectia.cloud/prospection/${catSlug}/region/${region.slug}`,
+        url: `https://volia.fr/prospection/${catSlug}/region/${region.slug}`,
         areaName: region.name,
       }),
       {

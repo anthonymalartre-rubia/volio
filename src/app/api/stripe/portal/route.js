@@ -38,7 +38,7 @@ export async function POST(request) {
 
     const origin = request.headers.get('origin')
       || process.env.NEXT_PUBLIC_APP_URL
-      || 'https://prospectia.cloud';
+      || 'https://volia.fr';
 
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,

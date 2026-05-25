@@ -42,7 +42,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           <div className="flex items-center gap-3">
             <LogoIcon size="sm" />
             <span className="text-sm font-semibold text-content-primary hidden sm:block tracking-tight">
-              Prospectia<span className="text-violet-400">.cloud</span>
+              Volia<span className="text-violet-400">.cloud</span>
             </span>
           </div>
         </div>

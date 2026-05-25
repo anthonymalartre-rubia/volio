@@ -39,7 +39,7 @@ En 2026, le cold emailing fonctionne toujours mais nécessite une approche très
 - Téléchargeable **immédiatement**
 - Démontre votre **expertise**
 
-Exemples Prospectia : "Template Excel : Plan de prospection 30 jours" ou "100 sujets cold email B2B testés".`,
+Exemples Volia : "Template Excel : Plan de prospection 30 jours" ou "100 sujets cold email B2B testés".`,
     related: ['icp', 'cold-emailing', 'inbound-marketing'],
     category: 'Inbound',
   },
@@ -135,7 +135,7 @@ Voir notre [guide complet RGPD prospection B2B](/blog/rgpd-prospection-b2b).`,
 
 En B2B, l'opt-out est suffisant (base légale "intérêt légitime"). En B2C, l'**opt-in explicite est obligatoire** (consentement préalable).
 
-Prospectia gère l'opt-out automatiquement : page publique [/opt-out](/opt-out) + blocklist + filtrage automatique des futurs enrichissements.`,
+Volia gère l'opt-out automatiquement : page publique [/opt-out](/opt-out) + blocklist + filtrage automatique des futurs enrichissements.`,
     related: ['rgpd', 'cnil', 'cold-emailing'],
     category: 'Légal',
   },
@@ -299,7 +299,7 @@ v=DMARC1; p=quarantine; rua=mailto:dmarc@votre-domaine.com
 
 **Outils B2B essentiels** :
 - **CRM** : Pipedrive, HubSpot, Salesforce
-- **Prospection** : Prospectia, Apollo, Hunter, Lusha
+- **Prospection** : Volia, Apollo, Hunter, Lusha
 - **Email marketing** : Lemlist, Instantly, Klenty
 - **Analytics** : Mixpanel, Amplitude, GA4`,
     related: ['icp', 'cold-emailing', 'crm'],
@@ -332,7 +332,7 @@ v=DMARC1; p=quarantine; rua=mailto:dmarc@votre-domaine.com
 
 **Conseil** : commencez **simple**. Notion ou Pipedrive suffisent jusqu'à 10 commerciaux. Migrez vers HubSpot/Salesforce quand vraiment nécessaire.
 
-Prospectia exporte en **CSV standard** (nom, email, téléphone, site web, adresse, département, catégorie) — compatible avec **n'importe quel CRM** : HubSpot, Salesforce, Zoho, Pipedrive, Notion. 1-clic depuis le dashboard.`,
+Volia exporte en **CSV standard** (nom, email, téléphone, site web, adresse, département, catégorie) — compatible avec **n'importe quel CRM** : HubSpot, Salesforce, Zoho, Pipedrive, Notion. 1-clic depuis le dashboard.`,
     related: ['b2b', 'icp', 'cold-emailing'],
     category: 'Outils',
   },
@@ -350,14 +350,14 @@ Prospectia exporte en **CSV standard** (nom, email, téléphone, site web, adres
 
 **Formule simple** : CAC = (Total dépenses marketing + sales) / Nombre de nouveaux clients
 
-**Benchmarks B2B France 2026** (source [étude Prospectia](/etude/prospection-b2b-france-2026)) :
+**Benchmarks B2B France 2026** (source [étude Volia](/etude/prospection-b2b-france-2026)) :
 - TPE/PME SaaS : 600 € à 1 500 € par client
 - Mid-market : 2 000 € à 8 000 €
 - Enterprise : 10 000 € à 50 000 €+
 
 **Ratio CAC/LTV** : doit être inférieur à 1/3 pour un business sain (chaque euro dépensé en acquisition doit en rapporter au moins 3 sur la durée de vie du client).
 
-Prospectia réduit le CAC en automatisant la phase la plus chère du funnel : la découverte + l'enrichissement (vs SDR humain à 38 k€/an + outils).`,
+Volia réduit le CAC en automatisant la phase la plus chère du funnel : la découverte + l'enrichissement (vs SDR humain à 38 k€/an + outils).`,
     related: ['ltv', 'mrr', 'icp', 'cold-emailing'],
     category: 'Métriques',
   },
@@ -610,7 +610,7 @@ Pour TPE/PME, préférez [BANT](/glossaire/bant) ou simplement un découverte st
 - **MQL** : lead qualifié par le marketing (mûr pour la sales)
 - **SQL** : MQL qualifié par la sales (vraie opportunité commerciale)
 
-**Coût moyen d'un MQL B2B en France** : 80-450 € selon [étude Prospectia 2026](/etude/prospection-b2b-france-2026), variable selon le secteur et la maturité du marché.`,
+**Coût moyen d'un MQL B2B en France** : 80-450 € selon [étude Volia 2026](/etude/prospection-b2b-france-2026), variable selon le secteur et la maturité du marché.`,
     related: ['sql', 'lead-scoring', 'lead-nurturing', 'pipeline'],
     category: 'Sales process',
   },
@@ -645,7 +645,7 @@ Pour TPE/PME, préférez [BANT](/glossaire/bant) ou simplement un découverte st
 - Qualification BANT des leads inbound
 - Booking de meetings avec AE
 
-**Salaire France 2026** (source [étude Prospectia](/etude/prospection-b2b-france-2026)) : 32-38 k€/an brut + variable (5-10 k€).
+**Salaire France 2026** (source [étude Volia](/etude/prospection-b2b-france-2026)) : 32-38 k€/an brut + variable (5-10 k€).
 
 **KPI principaux** : nombre de meetings qualifiés/mois (cible : 15-30), reply rate (cible : 8-15 %), pipeline généré.
 
@@ -668,7 +668,7 @@ Pour TPE/PME, préférez [BANT](/glossaire/bant) ou simplement un découverte st
 
 **Salaire France 2026** : 32-40 k€/an brut + variable.
 
-**Outils typiques** : Prospectia (sourcing + enrichissement), Lemlist/Smartlead (cadenceur), LinkedIn Sales Navigator, CRM (Pipedrive/HubSpot).`,
+**Outils typiques** : Volia (sourcing + enrichissement), Lemlist/Smartlead (cadenceur), LinkedIn Sales Navigator, CRM (Pipedrive/HubSpot).`,
     related: ['sdr', 'ae', 'cold-emailing', 'icp'],
     category: 'Rôles',
   },
@@ -805,7 +805,7 @@ Pour TPE/PME, préférez [BANT](/glossaire/bant) ou simplement un découverte st
 - **1-to-Few ABM** : 50-200 comptes par segments, personnalisation par segment
 - **1-to-Many ABM** : 200-1000 comptes, personnalisation par industrie/taille
 
-**Stack typique** : Prospectia (sourcing) + Clay (enrichissement) + Lemlist/La Growth Machine (multicanal) + CRM (HubSpot ABM) + LinkedIn Ads.
+**Stack typique** : Volia (sourcing) + Clay (enrichissement) + Lemlist/La Growth Machine (multicanal) + CRM (HubSpot ABM) + LinkedIn Ads.
 
 **Pertinent quand** : ACV > 20 k€/an, cycle > 60 jours, < 1000 comptes adressables. Inadapté pour TPE ou self-service.`,
     related: ['icp', 'lookalike', 'intent-data', 'retargeting'],
@@ -981,7 +981,7 @@ Pour TPE/PME, préférez [BANT](/glossaire/bant) ou simplement un découverte st
 
 **Formats efficaces B2B 2026** :
 - **Articles de blog SEO** (1500-3000 mots, sujets ciblés sur les questions de votre ICP)
-- **Études et benchmarks originaux** (génèrent des backlinks éditoriaux durables, ex : [étude Prospectia 2026](/etude/prospection-b2b-france-2026))
+- **Études et benchmarks originaux** (génèrent des backlinks éditoriaux durables, ex : [étude Volia 2026](/etude/prospection-b2b-france-2026))
 - **Comparatifs** (très bon CTR : "X vs Y vs Z")
 - **Guides experts** (lead magnet + autorité topique)
 - **Newsletter** (rétention)
@@ -1060,7 +1060,7 @@ Voir notre fiche détaillée [RGPD](/glossaire/rgpd) pour le cadre complet et le
 
 **Différences pratiques avec le terme "RGPD"** :
 - Quand on lit la doc d'un outil US (Apollo, Hunter, ZoomInfo), on parle de **GDPR compliance**
-- Quand on lit la doc d'un outil français/européen (Prospectia, Dropcontact), on parle de **conformité RGPD**
+- Quand on lit la doc d'un outil français/européen (Volia, Dropcontact), on parle de **conformité RGPD**
 
 C'est exactement la même chose.`,
     related: ['rgpd', 'cnil', 'opt-out', 'consent'],
@@ -1150,7 +1150,7 @@ Cela garantit que l'email appartient bien à l'inscrit (vs simple opt-in où on 
 **Vs modèles classiques** :
 - **License perpetual** : achat one-shot, à installer (Microsoft Office 2010)
 - **On-premise** : hébergé chez le client, maintenance par le client
-- **SaaS** : hébergé chez l'éditeur, mise à jour automatique, abonnement (Salesforce, HubSpot, Prospectia)
+- **SaaS** : hébergé chez l'éditeur, mise à jour automatique, abonnement (Salesforce, HubSpot, Volia)
 
 **Avantages clients** : pas d'install, mise à jour auto, accessible partout, prix prévisible (mensuel).
 
@@ -1173,7 +1173,7 @@ Cela garantit que l'email appartient bien à l'inscrit (vs simple opt-in où on 
 - **Pricing transparent** en ligne
 - **Upgrade contextuel** dans le produit (au moment où le user atteint une limite)
 
-**Exemples** : Notion, Figma, Slack, Calendly, Loom, Prospectia (Starter gratuit).
+**Exemples** : Notion, Figma, Slack, Calendly, Loom, Volia (Starter gratuit).
 
 **Avantages** : CAC très bas, scalable sans embauche, viralité naturelle.
 **Inconvénients** : ACV plus bas, conversion plus lente, moins adapté aux deals enterprise.`,
@@ -1194,7 +1194,7 @@ Cela garantit que l'email appartient bien à l'inscrit (vs simple opt-in où on 
 
 **Cadre légal en France** : autorisé pour les données publiquement accessibles, sous condition de respecter robots.txt, de ne pas surcharger les serveurs, et de respecter le RGPD pour les données personnelles (cf. [arrêt Cour de Cassation 2017](https://www.legifrance.gouv.fr/juri/id/JURITEXT000035419717)).
 
-Prospectia utilise un scraping intelligent éthique : respect de robots.txt, throttling, exclusion des données personnelles non professionnelles.`,
+Volia utilise un scraping intelligent éthique : respect de robots.txt, throttling, exclusion des données personnelles non professionnelles.`,
     related: ['enrichment', 'rgpd', 'crm'],
     category: 'Concepts',
   },
@@ -1206,12 +1206,12 @@ Prospectia utilise un scraping intelligent éthique : respect de robots.txt, thr
 
 **Méthodes** :
 - **Pattern matching** : devine l'email à partir du nom + domaine (prenom.nom@…) — Hunter
-- **Scraping waterfall** : combine plusieurs sources (site web → Google → LinkedIn → patterns) — Prospectia, Dropcontact
+- **Scraping waterfall** : combine plusieurs sources (site web → Google → LinkedIn → patterns) — Volia, Dropcontact
 - **Base de données B2B** : interroge une base massive précompilée — Apollo, ZoomInfo
 - **LinkedIn scraping** : extrait depuis les profils LinkedIn — Kaspr, Lusha
 
 **Critères de choix** :
-- Marché français : Prospectia (19 €/mo), Dropcontact (31 €/mo)
+- Marché français : Volia (19 €/mo), Dropcontact (31 €/mo)
 - Marché mondial : Apollo (49-99 €/mo), Hunter (49 €/mo)
 - LinkedIn-first : Kaspr, Lusha
 
@@ -1286,7 +1286,7 @@ Voir [comparatif détaillé](/comparatif-outils-prospection-b2b-france) des 11 o
 - **Niche** : HeyReach (LinkedIn-first), Reply.io (multi-channel)
 
 **Stack typique 2026** :
-- Sourcing : Prospectia, Apollo
+- Sourcing : Volia, Apollo
 - Enrichissement : Dropcontact, Findymail
 - Sales engagement : Lemlist, Smartlead, La Growth Machine
 - CRM : Pipedrive, HubSpot, Salesforce
@@ -1324,7 +1324,7 @@ Voir [comparatif détaillé](/comparatif-outils-prospection-b2b-france) des 11 o
 Exemple : 50 opps × 5 000 € × 25 % / 60 jours = **1 042 € de revenu / jour**
 
 **4 leviers pour accélérer la velocity** (par ordre de difficulté) :
-1. ⬆ **Nb d'opps** : plus facile via plus de prospection (Prospectia)
+1. ⬆ **Nb d'opps** : plus facile via plus de prospection (Volia)
 2. ⬆ **Deal size** : upsell, cross-sell, packages
 3. ⬆ **Win rate** : meilleure qualification (MEDDIC), demos personnalisées
 4. ⬇ **Sales cycle** : raccourcir via pricing transparent, multi-threading, trial

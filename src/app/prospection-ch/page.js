@@ -6,10 +6,10 @@ import { breadcrumbSchema } from '@/lib/seo-helpers';
 import { B2B_GROUPS } from '@/lib/constants';
 import { LogoIcon } from '@/components/ui';
 
-const SITE_URL = 'https://prospectia.cloud';
+const SITE_URL = 'https://volia.fr';
 
 export const metadata = {
-  title: 'Prospection B2B Suisse romande — Prospectia',
+  title: 'Prospection B2B Suisse romande — Volia',
   description: 'Trouvez les emails B2B des entreprises de Suisse romande (Genève, Vaud, Valais, Neuchâtel, Fribourg, Jura). 150 secteurs, 6 cantons francophones. À partir de 19 €/mois — RGPD européen.',
   alternates: {
     canonical: `${SITE_URL}/prospection-ch`,
@@ -21,7 +21,7 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Prospectia Suisse romande — Genève, Vaud, Valais, Fribourg, Neuchâtel, Jura',
+    title: 'Volia Suisse romande — Genève, Vaud, Valais, Fribourg, Neuchâtel, Jura',
     description: '150 secteurs, 6 cantons francophones, scraping intelligent + recherche Google. À partir de 19 €/mois.',
     url: `${SITE_URL}/prospection-ch`,
   },
@@ -59,7 +59,7 @@ export default function ProspectionChHub() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-1">
               <LogoIcon size="sm" className="mr-1.5" />
-              <span className="text-lg font-bold tracking-tight">Prospectia</span>
+              <span className="text-lg font-bold tracking-tight">Volia</span>
               <span className="text-violet-400 text-xs font-semibold">.cloud</span>
             </Link>
             <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export default function ProspectionChHub() {
               Trouvez les emails B2B des entreprises suisses romandes
             </h1>
             <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mb-6">
-              Prospectia couvre <strong className="text-white">6 cantons romands</strong> (Genève, Vaud, Valais, Neuchâtel, Fribourg, Jura) et <strong className="text-white">150 secteurs d&apos;activité</strong>. Marché ~2 M habitants à très fort pouvoir d&apos;achat (1er PIB/hab d&apos;Europe). Conforme RGPD européen.
+              Volia couvre <strong className="text-white">6 cantons romands</strong> (Genève, Vaud, Valais, Neuchâtel, Fribourg, Jura) et <strong className="text-white">150 secteurs d&apos;activité</strong>. Marché ~2 M habitants à très fort pouvoir d&apos;achat (1er PIB/hab d&apos;Europe). Conforme RGPD européen.
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20">
               <Zap size={16} />
@@ -160,7 +160,7 @@ export default function ProspectionChHub() {
 
         <footer className="border-t border-white/[0.06] py-8 mt-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-            <div>© 2026 Prospectia.cloud · <Link href="/prospection" className="hover:text-violet-300">France</Link> · <Link href="/prospection-be" className="hover:text-violet-300">Belgique</Link></div>
+            <div>© 2026 Volia.fr · <Link href="/prospection" className="hover:text-violet-300">France</Link> · <Link href="/prospection-be" className="hover:text-violet-300">Belgique</Link></div>
             <div className="flex gap-4">
               <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
               <Link href="/confidentialite" className="hover:text-zinc-300">Confidentialité</Link>

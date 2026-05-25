@@ -21,7 +21,7 @@ import { getAllResources } from '@/lib/resources';
  *   1+ →  pages programmatiques SEO (chunks de 5000 URLs)
  */
 
-const baseUrl = 'https://prospectia.cloud';
+const baseUrl = 'https://volia.fr';
 const CHUNK_SIZE = 5000;
 
 // Caches mémoire pour éviter de recalculer entre sub-sitemaps lors du build

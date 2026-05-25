@@ -56,7 +56,7 @@ const CHANGELOG = [
     title: 'Lead magnets + Ressources + API publique',
     items: [
       { type: 'feature', tag: 'Acquisition', text: '8 lead magnets téléchargeables : 20 templates cold email, scripts call, checklists RGPD/warmup, calculateurs ROI/CAC.' },
-      { type: 'feature', tag: 'Produit', text: 'API publique Prospectia (REST + clés API) + docs.' },
+      { type: 'feature', tag: 'Produit', text: 'API publique Volia (REST + clés API) + docs.' },
       { type: 'feature', tag: 'SEO', text: '91 pages comparatifs /outils/comparatif/[X-vs-Y].' },
     ],
   },

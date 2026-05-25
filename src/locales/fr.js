@@ -398,7 +398,7 @@ const fr = {
 
   // ─── Onboarding ────────────────────────────────────────────
   onboarding: {
-    welcome: 'Bienvenue sur Prospectia !',
+    welcome: 'Bienvenue sur Volia !',
     welcomeDesc: 'Generez des leads B2B qualifies partout en France en quelques clics.',
     step1Title: 'Choisissez vos departements et categories',
     step1Desc: 'Lancez une recherche automatique via Google Places pour trouver des prospects.',
@@ -504,13 +504,13 @@ const fr = {
     gdprWarningTitle: 'Avertissement RGPD',
     gdprWarningP1: "En desactivant ce filtre, vous recevrez des emails personnels (type @gmail.com, @hotmail.com) dans vos resultats d'enrichissement. Ces adresses sont des donnees personnelles au sens du RGPD.",
     gdprWarningP2: "Obligations legales : Vous n'avez pas le droit de contacter ces personnes sans avoir prealablement obtenu leur consentement explicite (opt-in). L'envoi d'emails commerciaux non sollicites a des adresses personnelles est une violation du RGPD (Art. 6) et de la directive ePrivacy, passible d'amendes pouvant atteindre 20 millions d'euros ou 4% du chiffre d'affaires annuel.",
-    gdprWarningP3: "Responsabilite : En desactivant ce filtre, vous devenez seul responsable de la conformite RGPD de vos campagnes de prospection. Prospectia.ai ne pourra en aucun cas etre tenu responsable de l'utilisation que vous faites de ces donnees personnelles.",
+    gdprWarningP3: "Responsabilite : En desactivant ce filtre, vous devenez seul responsable de la conformite RGPD de vos campagnes de prospection. Volia.fr ne pourra en aucun cas etre tenu responsable de l'utilisation que vous faites de ces donnees personnelles.",
     gdprAcceptConditions: 'Vous acceptez ces conditions en desactivant le filtre',
     // Onboarding guide
     gettingStarted: 'Guide de demarrage',
     gettingStartedDesc: 'Revisitez le tutoriel de prise en main',
     interactiveTutorial: 'Tutoriel interactif',
-    interactiveTutorialDesc: 'Redecouvrez les fonctionnalites de Prospectia.ai etape par etape.',
+    interactiveTutorialDesc: 'Redecouvrez les fonctionnalites de Volia.fr etape par etape.',
     reviewGuide: 'Revoir le guide',
     // Password section
     changePasswordDesc: 'Mettez a jour votre mot de passe de connexion',
@@ -642,7 +642,7 @@ const fr = {
     hero: {
       badge: 'Le moins cher du marche  -  Solo 19 EUR/mois  -  prospects illimites',
       title: 'Prospectez avec',
-      subtitle: 'Prospectia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. <strong class="text-zinc-200">150+ categories, 101 departements</strong>, scoring de confiance.',
+      subtitle: 'Volia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. <strong class="text-zinc-200">150+ categories, 101 departements</strong>, scoring de confiance.',
       price: 'A partir de 19 EUR/mois - le moins cher de France. Annulez a tout moment.',
       compare: 'Comparer avec la concurrence',
       sourcesLabel: 'Sources integrees :',
@@ -651,7 +651,7 @@ const fr = {
     why: {
       label: 'Pourquoi un agregateur ?',
       title: 'Scraping intelligent + recherche Google',
-      desc: 'Le scraping seul ne suffit pas — beaucoup de sites n\'affichent pas leur email. Prospectia combine le <strong class="text-zinc-300">scraping de sites web</strong> avec la <strong class="text-zinc-300">recherche Google</strong> pour maximiser le taux de couverture. Si le site n\'existe pas, on le decouvre automatiquement.',
+      desc: 'Le scraping seul ne suffit pas — beaucoup de sites n\'affichent pas leur email. Volia combine le <strong class="text-zinc-300">scraping de sites web</strong> avec la <strong class="text-zinc-300">recherche Google</strong> pour maximiser le taux de couverture. Si le site n\'existe pas, on le decouvre automatiquement.',
       stat1Label: 'Taux de couverture avec <strong class="text-zinc-400">scraping seul</strong>',
       stat2Label: 'Taux de couverture avec <strong class="text-violet-400">scraping + Google</strong>',
       stat3Label: 'Cout par lead vs. <strong class="text-zinc-400">abonnements separes</strong> a chaque outil',
@@ -678,11 +678,11 @@ const fr = {
     howItWorks: {
       label: 'Comment ca marche',
       title: '3 etapes, des centaines de leads qualifies',
-      desc: 'Pas de formulaires complexes. Decrivez ce que vous cherchez ou selectionnez vos criteres. Prospectia fait le reste.',
+      desc: 'Pas de formulaires complexes. Decrivez ce que vous cherchez ou selectionnez vos criteres. Volia fait le reste.',
       step1: 'Recherchez en langage naturel',
       step1Desc: 'Tapez "garages auto dans le Var" ou selectionnez departements et categories. L\'IA comprend votre intention et lance la recherche Google Places.',
       step2: 'Enrichissement waterfall automatique',
-      step2Desc: 'Prospectia scrape le site web et cherche sur Google pour trouver l\'email. S\'arrete au premier email trouve, avec un score de confiance.',
+      step2Desc: 'Volia scrape le site web et cherche sur Google pour trouver l\'email. S\'arrete au premier email trouve, avec un score de confiance.',
       step3: 'Exportez et prospectez',
       step3Desc: 'Filtrez par score, departement ou categorie. Exportez en CSV. Vos leads sont prets pour l\'outreach en quelques secondes.',
     },
@@ -690,7 +690,7 @@ const fr = {
     waterfall: {
       label: 'Enrichissement en cascade',
       title: 'Scraping + Google. Le meilleur email avec score de confiance.',
-      desc: 'Prospectia scrape automatiquement le site web de chaque entreprise, puis cherche sur Google si aucun email n\'est trouve. <strong class="text-zinc-300">Pas de site web ? On le decouvre via Google.</strong>',
+      desc: 'Volia scrape automatiquement le site web de chaque entreprise, puis cherche sur Google si aucun email n\'est trouve. <strong class="text-zinc-300">Pas de site web ? On le decouvre via Google.</strong>',
       confidence: 'Confiance',
       stopsFirst: 'S\'arrete au premier email trouve — vous ne payez que ce qui est necessaire.',
       free: 'Gratuit',
@@ -733,7 +733,7 @@ const fr = {
     competition: {
       label: 'Comparatif tarifaire',
       title: 'Le moins cher du marche, prouve par les chiffres',
-      desc: 'Prospectia <strong class="text-emerald-400">commence a 19 EUR/mois</strong> \u2014 c\'est le ticket d\'entree le moins cher du marche francais. Notre Pro a 49 EUR/mois fait <strong class="text-emerald-400">2x moins cher qu\'Apollo</strong> avec en bonus la decouverte Google Places integree.',
+      desc: 'Volia <strong class="text-emerald-400">commence a 19 EUR/mois</strong> \u2014 c\'est le ticket d\'entree le moins cher du marche francais. Notre Pro a 49 EUR/mois fait <strong class="text-emerald-400">2x moins cher qu\'Apollo</strong> avec en bonus la decouverte Google Places integree.',
       month: 'mois',
       enrichSources: 'Sources d\'enrichissement',
       confidenceScoring: 'Scoring de confiance',
@@ -744,7 +744,7 @@ const fr = {
       monthlyPrice: 'Prix mensuel',
       sevenSources: 'Multi-sources',
       calcTitle: 'Le calcul est simple',
-      calcDesc: 'Apollo coute 99 EUR/mois, Hunter 49 EUR, Snov.io 39 EUR \u2014 et vous devez deja avoir une liste de prospects. Prospectia Solo a <strong class="text-emerald-400">19 EUR/mois</strong> fait discovery + enrichment dans un seul outil. Pro a <strong class="text-violet-400">49 EUR/mois</strong> = 5x moins cher qu\'Apollo Basic equivalent.<br /><span class="text-emerald-400 font-semibold">Pas de credits caches, annulation a tout moment.</span>',
+      calcDesc: 'Apollo coute 99 EUR/mois, Hunter 49 EUR, Snov.io 39 EUR \u2014 et vous devez deja avoir une liste de prospects. Volia Solo a <strong class="text-emerald-400">19 EUR/mois</strong> fait discovery + enrichment dans un seul outil. Pro a <strong class="text-violet-400">49 EUR/mois</strong> = 5x moins cher qu\'Apollo Basic equivalent.<br /><span class="text-emerald-400 font-semibold">Pas de credits caches, annulation a tout moment.</span>',
       savings: 'Economisez jusqu\'a 80 EUR/mois (960 EUR/an) vs Apollo.',
     },
     // Pricing

@@ -77,7 +77,7 @@ Ce calculateur interactif vous permet d'obtenir en 2 minutes :
 - Votre **CAC payback** (combien de mois pour rentabiliser un client)
 - Le **benchmark** vs SaaS B2B français de votre segment (TPE / PME / Mid-market / Enterprise)
 
-Données utilisées pour les benchmarks : [étude Prospectia 2026](/etude/prospection-b2b-france-2026).
+Données utilisées pour les benchmarks : [étude Volia 2026](/etude/prospection-b2b-france-2026).
 
 Outil 100 % en ligne, données calculées côté client (rien n'est stocké).`,
     format: 'Web app',

@@ -22,7 +22,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Pour la v1, on pointe vers la page /ressources/[slug]/telecharger
 // qui sert le PDF stocké en /public/ressources/[slug].pdf.
 function downloadUrlFor(slug) {
-  return `https://prospectia.cloud/ressources/${slug}/telecharger`;
+  return `https://volia.fr/ressources/${slug}/telecharger`;
 }
 
 function thankYouEmailHtml({ firstName, resource }) {
@@ -34,7 +34,7 @@ function thankYouEmailHtml({ firstName, resource }) {
 <body style="margin:0;padding:0;background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1d1d1f;">
   <div style="max-width:560px;margin:40px auto;background:#fff;border-radius:16px;padding:32px;">
     <div style="display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(139,92,246,0.1);color:#7c3aed;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">
-      Ressource Prospectia
+      Ressource Volia
     </div>
     <h1 style="font-size:24px;font-weight:700;margin:0 0 16px;line-height:1.2;">
       ${resource.title}
@@ -54,12 +54,12 @@ function thankYouEmailHtml({ firstName, resource }) {
     </p>
     <hr style="border:none;border-top:1px solid #e5e5ea;margin:32px 0;">
     <p style="font-size:13px;line-height:1.6;color:#6e6e73;margin:0;">
-      Vous recevez ce mail parce que vous avez demandé à télécharger une ressource sur prospectia.cloud.
+      Vous recevez ce mail parce que vous avez demandé à télécharger une ressource sur volia.fr.
       Si vous souhaitez ne plus recevoir d'emails de notre part, vous pouvez vous
-      <a href="https://prospectia.cloud/opt-out" style="color:#7c3aed;">désinscrire en un clic</a>.
+      <a href="https://volia.fr/opt-out" style="color:#7c3aed;">désinscrire en un clic</a>.
     </p>
     <p style="font-size:12px;color:#86868b;margin:16px 0 0;text-align:center;">
-      Prospectia — Prospection B2B française · prospectia.cloud
+      Volia — Prospection B2B française · volia.fr
     </p>
   </div>
 </body>

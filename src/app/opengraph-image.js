@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France';
+export const alt = 'Volia.fr — Trouvez l\'email de n\'importe quelle entreprise en France';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -72,7 +72,7 @@ export default function Image() {
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
             <span style={{ fontSize: '36px', fontWeight: 700, color: 'white' }}>
-              Prospectia
+              Volia
             </span>
             <span style={{ fontSize: '24px', fontWeight: 600, color: '#a78bfa' }}>
               .ai

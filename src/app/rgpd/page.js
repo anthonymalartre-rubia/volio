@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { ArrowLeft, UserCheck, Pencil, Trash2, Download, ShieldCheck, Ban, Eye, AlertTriangle, Filter } from 'lucide-react';
 
 export const metadata = {
-  title: 'RGPD — Vos droits — Prospectia.ai',
-  description: 'Informations sur vos droits en matière de protection des données personnelles (RGPD) sur Prospectia.ai.',
+  title: 'RGPD — Vos droits — Volia.fr',
+  description: 'Informations sur vos droits en matière de protection des données personnelles (RGPD) sur Volia.fr.',
 };
 
 const USER_RIGHTS = [
@@ -11,7 +11,7 @@ const USER_RIGHTS = [
     icon: UserCheck,
     title: 'Droit d\'accès',
     description: 'Vous avez le droit d\'obtenir la confirmation que des données vous concernant sont ou ne sont pas traitées. Si elles le sont, vous pouvez obtenir une copie de l\'ensemble de vos données personnelles.',
-    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'accès aux données ». Nous vous répondrons sous 30 jours.',
+    how: 'Envoyez un email à contact@volia.fr avec l\'objet « Demande d\'accès aux données ». Nous vous répondrons sous 30 jours.',
   },
   {
     icon: Pencil,
@@ -41,7 +41,7 @@ const USER_RIGHTS = [
     icon: Ban,
     title: 'Droit d\'opposition',
     description: 'Vous pouvez vous opposer à tout moment au traitement de vos données personnelles fondé sur l\'intérêt légitime, y compris le profilage. Vous pouvez également vous opposer au traitement à des fins de prospection commerciale.',
-    how: 'Contactez-nous par email à contact@prospectia.cloud. Pour la prospection commerciale, cliquez sur le lien de désinscription dans nos emails.',
+    how: 'Contactez-nous par email à contact@volia.fr. Pour la prospection commerciale, cliquez sur le lien de désinscription dans nos emails.',
   },
 ];
 
@@ -49,32 +49,32 @@ const PROSPECT_RIGHTS = [
   {
     icon: Ban,
     title: 'Droit d\'opposition (opt-out)',
-    description: 'En tant que professionnel, vous pouvez demander à ne plus apparaître dans les résultats de recherche de Prospectia.ai. Votre demande sera appliquée pour l\'ensemble des utilisateurs du Service, de manière définitive.',
-    how: 'Rendez-vous sur notre page /opt-out ou envoyez un email à contact@prospectia.cloud avec l\'objet « Opt-out ». Traitement sous 72 heures.',
+    description: 'En tant que professionnel, vous pouvez demander à ne plus apparaître dans les résultats de recherche de Volia.fr. Votre demande sera appliquée pour l\'ensemble des utilisateurs du Service, de manière définitive.',
+    how: 'Rendez-vous sur notre page /opt-out ou envoyez un email à contact@volia.fr avec l\'objet « Opt-out ». Traitement sous 72 heures.',
   },
   {
     icon: Eye,
     title: 'Droit de savoir qui a vos données',
-    description: 'Vous avez le droit de savoir quels utilisateurs de Prospectia.ai ont accédé à vos données professionnelles et dans quel cadre. Nous maintenons des journaux d\'accès permettant de répondre à cette demande.',
-    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'information sur l\'accès à mes données ». Nous vous répondrons sous 30 jours.',
+    description: 'Vous avez le droit de savoir quels utilisateurs de Volia.fr ont accédé à vos données professionnelles et dans quel cadre. Nous maintenons des journaux d\'accès permettant de répondre à cette demande.',
+    how: 'Envoyez un email à contact@volia.fr avec l\'objet « Demande d\'information sur l\'accès à mes données ». Nous vous répondrons sous 30 jours.',
   },
   {
     icon: Trash2,
     title: 'Droit de suppression',
-    description: 'Vous pouvez demander la suppression complète de vos données professionnelles de notre système. Cette suppression sera effective dans toutes les bases de données de Prospectia.ai et vous serez ajouté à notre liste d\'opt-out pour empêcher toute collecte future.',
-    how: 'Via la page /opt-out ou par email à contact@prospectia.cloud. Suppression effective sous 72 heures.',
+    description: 'Vous pouvez demander la suppression complète de vos données professionnelles de notre système. Cette suppression sera effective dans toutes les bases de données de Volia.fr et vous serez ajouté à notre liste d\'opt-out pour empêcher toute collecte future.',
+    how: 'Via la page /opt-out ou par email à contact@volia.fr. Suppression effective sous 72 heures.',
   },
   {
     icon: Pencil,
     title: 'Droit de rectification',
     description: 'Si les données professionnelles vous concernant sont inexactes (mauvais email, mauvais téléphone, mauvaise adresse), vous pouvez demander leur correction.',
-    how: 'Envoyez un email à contact@prospectia.cloud en précisant les données à corriger.',
+    how: 'Envoyez un email à contact@volia.fr en précisant les données à corriger.',
   },
   {
     icon: UserCheck,
     title: 'Droit d\'accès',
-    description: 'Vous pouvez demander une copie de toutes les données professionnelles vous concernant traitées par Prospectia.ai, ainsi que les informations relatives aux traitements effectués (finalité, base légale, destinataires, durée de conservation).',
-    how: 'Envoyez un email à contact@prospectia.cloud avec l\'objet « Demande d\'accès — personne prospectée ». Réponse sous 30 jours.',
+    description: 'Vous pouvez demander une copie de toutes les données professionnelles vous concernant traitées par Volia.fr, ainsi que les informations relatives aux traitements effectués (finalité, base légale, destinataires, durée de conservation).',
+    how: 'Envoyez un email à contact@volia.fr avec l\'objet « Demande d\'accès — personne prospectée ». Réponse sous 30 jours.',
   },
 ];
 
@@ -90,7 +90,7 @@ export default function RGPDPage() {
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">Protection des données (RGPD)</h1>
         <p className="text-content-secondary text-sm mb-4">Dernière mise à jour : 28 mars 2026</p>
         <p className="text-content-secondary leading-relaxed mb-10">
-          Chez Prospectia.ai, nous prenons la protection des données personnelles très au sérieux.
+          Chez Volia.fr, nous prenons la protection des données personnelles très au sérieux.
           Cette page détaille les droits de toutes les personnes concernées — utilisateurs du Service
           et personnes dont les données professionnelles sont traitées — ainsi que les mesures de
           protection mises en place.
@@ -100,7 +100,7 @@ export default function RGPDPage() {
         <div className="p-4 rounded-xl bg-surface-card border border-line mb-8">
           <p className="text-content-primary font-semibold text-lg">Droits des utilisateurs du Service</p>
           <p className="text-content-secondary text-sm mt-1">
-            Vous êtes inscrit(e) sur Prospectia.ai ? Voici vos droits en vertu du RGPD.
+            Vous êtes inscrit(e) sur Volia.fr ? Voici vos droits en vertu du RGPD.
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default function RGPDPage() {
         <div className="p-4 rounded-xl bg-surface-card border border-line mb-8 mt-14">
           <p className="text-content-primary font-semibold text-lg">Droits des personnes prospectées</p>
           <p className="text-content-secondary text-sm mt-1">
-            Vous êtes un professionnel dont les données apparaissent dans Prospectia.ai ? Vous n&apos;avez pas de
+            Vous êtes un professionnel dont les données apparaissent dans Volia.fr ? Vous n&apos;avez pas de
             compte mais vos coordonnées professionnelles sont traitées ? Voici vos droits.
           </p>
         </div>
@@ -158,7 +158,7 @@ export default function RGPDPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">Analyse d&apos;intérêt légitime (article 6.1.f RGPD)</h2>
             <p>
-              Le traitement des données professionnelles B2B par Prospectia.ai repose sur l&apos;intérêt légitime.
+              Le traitement des données professionnelles B2B par Volia.fr repose sur l&apos;intérêt légitime.
               Conformément aux exigences du RGPD et aux lignes directrices de la CNIL, nous avons réalisé
               l&apos;analyse de mise en balance suivante :
             </p>
@@ -167,7 +167,7 @@ export default function RGPDPage() {
               <div className="p-5 rounded-xl border border-line bg-surface-card">
                 <h3 className="text-content-primary font-semibold mb-2">1. Identification de l&apos;intérêt légitime</h3>
                 <p className="text-sm">
-                  Prospectia.ai poursuit un intérêt légitime commercial : permettre la prospection commerciale B2B
+                  Volia.fr poursuit un intérêt légitime commercial : permettre la prospection commerciale B2B
                   en facilitant l&apos;identification et la prise de contact entre professionnels. La CNIL reconnaît
                   explicitement la légitimité de la prospection B2B dans ses recommandations (délibération n°2020-091
                   du 17 septembre 2020), sous réserve que les données utilisées soient professionnelles et que
@@ -224,7 +224,7 @@ export default function RGPDPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">Mesures de protection des données</h2>
             <p>
-              Prospectia.ai met en place des mesures techniques et organisationnelles proactives pour protéger
+              Volia.fr met en place des mesures techniques et organisationnelles proactives pour protéger
               les données des personnes concernées :
             </p>
 
@@ -271,7 +271,7 @@ export default function RGPDPage() {
                   <div>
                     <h3 className="text-content-primary font-semibold mb-1">Mécanisme d&apos;opt-out centralisé</h3>
                     <p className="text-sm">
-                      Prospectia.ai maintient une liste centralisée d&apos;opt-out. Toute personne ou entreprise
+                      Volia.fr maintient une liste centralisée d&apos;opt-out. Toute personne ou entreprise
                       ayant exercé son droit d&apos;opposition est automatiquement et définitivement exclue des
                       résultats de recherche pour l&apos;ensemble des utilisateurs du Service. La demande d&apos;opt-out
                       est traitée sous 72 heures maximum. Page dédiée :
@@ -319,7 +319,7 @@ export default function RGPDPage() {
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">Export de vos données</h2>
             <p>
-              Prospectia.ai vous permet d&apos;exporter facilement vos données :
+              Volia.fr vous permet d&apos;exporter facilement vos données :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>
@@ -359,7 +359,7 @@ export default function RGPDPage() {
             </p>
             <div className="mt-4 p-4 rounded-xl border border-line bg-surface-card">
               <p className="text-content-primary font-medium">Contact DPO</p>
-              <p className="text-sm mt-1">Email : <span className="text-content-primary">contact@prospectia.cloud</span></p>
+              <p className="text-sm mt-1">Email : <span className="text-content-primary">contact@volia.fr</span></p>
               <p className="text-sm mt-1">Délai de réponse : 30 jours maximum (72 heures pour les demandes d&apos;opt-out)</p>
             </div>
           </section>
@@ -384,7 +384,7 @@ export default function RGPDPage() {
             <Link href="/cgu" className="hover:text-content-primary transition">CGU</Link>
             <Link href="/confidentialite" className="hover:text-content-primary transition">Politique de confidentialité</Link>
           </div>
-          <p className="text-content-tertiary text-xs">&copy; 2026 Prospectia.ai</p>
+          <p className="text-content-tertiary text-xs">&copy; 2026 Volia.fr</p>
         </div>
       </div>
     </div>

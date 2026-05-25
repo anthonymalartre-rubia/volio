@@ -253,7 +253,7 @@ export default function CalculatorCacLtv() {
           </table>
         </div>
         <p className="text-xs text-content-tertiary mt-3">
-          Source : <a href="/etude/prospection-b2b-france-2026" className="text-violet-400 hover:underline">étude Prospectia 2026</a> +
+          Source : <a href="/etude/prospection-b2b-france-2026" className="text-violet-400 hover:underline">étude Volia 2026</a> +
           OpenView SaaS Benchmarks 2025 + Forrester 2025.
         </p>
       </section>

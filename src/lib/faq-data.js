@@ -3,9 +3,9 @@
 
 export const FAQ_ITEMS = [
   {
-    question: "Comment fonctionne Prospectia.ai ?",
+    question: "Comment fonctionne Volia.fr ?",
     answer:
-      "Prospectia utilise l'API Google Places pour identifier les entreprises correspondant a vos criteres (departement, categorie). Ensuite, notre systeme d'enrichissement en cascade scrape les sites web, pages contact et mentions legales pour extraire les emails professionnels. Tout est automatise : vous selectionnez vos cibles, on fait le reste.",
+      "Volia utilise l'API Google Places pour identifier les entreprises correspondant a vos criteres (departement, categorie). Ensuite, notre systeme d'enrichissement en cascade scrape les sites web, pages contact et mentions legales pour extraire les emails professionnels. Tout est automatise : vous selectionnez vos cibles, on fait le reste.",
   },
   {
     question: "Les donnees sont-elles fiables ?",
@@ -45,7 +45,7 @@ export const FAQ_ITEMS = [
   {
     question: "Quelle est la difference avec Apollo.io, Hunter ou Lusha ?",
     answer:
-      "Apollo, Hunter et Lusha sont des bases de donnees d'enrichissement : vous devez deja avoir une liste de prospects a enrichir. Prospectia fait les DEUX en un : decouverte des prospects via Google Places (150+ categories, 101 departements francais) + enrichissement email automatique. A partir de 19€/mois avec Solo (vs 39€ Snov, 49€ Hunter, 99€ Apollo), c'est le ticket d'entree le moins cher du marche francais.",
+      "Apollo, Hunter et Lusha sont des bases de donnees d'enrichissement : vous devez deja avoir une liste de prospects a enrichir. Volia fait les DEUX en un : decouverte des prospects via Google Places (150+ categories, 101 departements francais) + enrichissement email automatique. A partir de 19€/mois avec Solo (vs 39€ Snov, 49€ Hunter, 99€ Apollo), c'est le ticket d'entree le moins cher du marche francais.",
   },
   {
     question: "Comment fonctionne la recherche en langage naturel ?",

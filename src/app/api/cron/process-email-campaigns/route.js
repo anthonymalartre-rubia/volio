@@ -87,7 +87,7 @@ export async function GET(request) {
     let html = applyTemplate(campaign.body_html, contact, '');
 
     // Ajoute le lien opt-out RGPD
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://prospectia.cloud';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://volia.fr';
     const optOutUrl = `${baseUrl}/api/prospection/opt-out?c=${contact.id}&cmp=${campaign.id}`;
     html = appendOptOutFooter(html, optOutUrl, campaign.name);
 

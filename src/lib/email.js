@@ -3,23 +3,25 @@
 import { cleanEnv } from './envClean';
 
 // From address par défaut.
-// Le domaine `prospectia.cloud` est vérifié sur Resend (DKIM, SPF, MX sur
-// le sous-domaine `send` mais Resend valide bien le domaine racine pour
-// l'envoi). Donc on envoie depuis hello@prospectia.cloud.
+// TODO: migrate to send.volia.fr after Resend domain re-verification (Phase D).
+// Pour l'instant, le domaine `prospectia.cloud` reste vérifié sur Resend
+// (DKIM, SPF, MX sur le sous-domaine `send`). Tant que la migration DNS
+// n'est pas faite, le fallback `onboarding@resend.dev` prendra le relai
+// si Resend refuse l'envoi depuis hello@volia.fr.
 //
 // IMPORTANT : pour une délivrabilité optimale, il faudrait ajouter
 // `include:amazonses.com` au SPF racine du domaine (TXT @). Sans ça,
 // SPF check échoue côté destinataire mais DKIM compense (DMARC alignment).
 //
 // Surchargeable via RESEND_FROM_ADDRESS pour les déploiements preview/staging.
-const DEFAULT_FROM = 'Prospectia <hello@prospectia.cloud>';
-const FALLBACK_FROM = 'Prospectia <onboarding@resend.dev>';
+const DEFAULT_FROM = 'Volia <hello@volia.fr>';
+const FALLBACK_FROM = 'Volia <onboarding@resend.dev>';
 
 /**
  * Send a transactional email via Resend API.
  *
  * Comportement avec fallback automatique :
- *   1. Tentative depuis le domaine custom (hello@prospectia.cloud)
+ *   1. Tentative depuis le domaine custom (hello@volia.fr)
  *   2. Si Resend refuse avec "domain not verified" ou "validation_error" ou 403,
  *      retentative depuis onboarding@resend.dev (sandbox Resend qui marche
  *      toujours, mais limité à l'email du compte Resend en mode dev).

@@ -11,7 +11,7 @@
 // - Cap global : 5000 requêtes Google Places par jour total
 // - Cache Redis 24h sur les résultats Google Places (réduit coût ×5-20)
 // - Anonymisation côté backend (noms tronqués, emails masqués)
-// - CORS strict : seul prospectia.cloud peut appeler cette route
+// - CORS strict : seul volia.fr peut appeler cette route
 //
 // Réponses :
 // - 200 : { results, total, remaining_today, cached }
@@ -235,7 +235,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': 'https://prospectia.cloud',
+      'Access-Control-Allow-Origin': 'https://volia.fr',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     },

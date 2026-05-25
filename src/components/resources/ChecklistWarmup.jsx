@@ -219,8 +219,8 @@ export default function ChecklistWarmup() {
           Lemwarm / Smartlead / Instantly (warmup auto inclus).
         </p>
         <p>
-          © Prospectia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
-          Source : <a href="https://prospectia.cloud/ressources/checklist-warmup-domaine-cold-email" className="text-violet-500 hover:underline">prospectia.cloud/ressources/checklist-warmup-domaine-cold-email</a>
+          © Volia 2026 · Licence Creative Commons BY 4.0 · Libre de reproduction avec mention de la source.
+          Source : <a href="https://volia.fr/ressources/checklist-warmup-domaine-cold-email" className="text-violet-500 hover:underline">volia.fr/ressources/checklist-warmup-domaine-cold-email</a>
         </p>
       </footer>
     </div>

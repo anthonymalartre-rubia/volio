@@ -27,7 +27,7 @@ import {
   TRUSTPILOT_PROFILE_URL,
 } from '@/lib/trustpilot-data';
 
-const DISMISS_KEY = 'prospectia_trustpilot_solicitation_dismissed_v1';
+const DISMISS_KEY = 'volia_trustpilot_solicitation_dismissed_v1';
 const DISMISS_DURATION_DAYS = 30;
 
 // Template officiel Trustpilot "Review Collector" — 5 étoiles cliquables
@@ -79,7 +79,7 @@ export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
           <div className="flex items-start justify-between gap-2 mb-2">
             <div>
               <h3 className="text-sm font-bold text-white">
-                Vous aimez Prospectia ?
+                Vous aimez Volia ?
               </h3>
               <p className="text-[12px] text-zinc-400 leading-relaxed mt-0.5">
                 Notez-nous en 1 clic ci-dessous. 30 secondes pas plus.

@@ -589,14 +589,14 @@ export default function SearchPanel({
                   <div className="flex-1 min-w-0">
                     <input
                       type="text"
-                      list="prospectia-quick-cats"
+                      list="volia-quick-cats"
                       value={quickCat}
                       onChange={(e) => { setQuickCat(e.target.value); setQuickError(''); }}
                       placeholder="Restaurant, avocat, agence web…"
                       className="w-full rounded-lg border border-line bg-surface-card px-3 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition"
                       aria-label="Catégorie d'entreprise"
                     />
-                    <datalist id="prospectia-quick-cats">
+                    <datalist id="volia-quick-cats">
                       {[...B2B_CATS, ...COPRO_CATS].slice(0, 100).map((c) => (
                         <option key={c} value={c} />
                       ))}
@@ -605,14 +605,14 @@ export default function SearchPanel({
                   <div className="sm:w-40">
                     <input
                       type="text"
-                      list="prospectia-quick-depts"
+                      list="volia-quick-depts"
                       value={quickDept}
                       onChange={(e) => { setQuickDept(e.target.value); setQuickError(''); }}
                       placeholder="Paris, 75, Lyon…"
                       className="w-full rounded-lg border border-line bg-surface-card px-3 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition"
                       aria-label="Département ou ville"
                     />
-                    <datalist id="prospectia-quick-depts">
+                    <datalist id="volia-quick-depts">
                       {Object.entries(DEPTS).map(([code, name]) => (
                         <option key={code} value={`${code} - ${name}`} />
                       ))}

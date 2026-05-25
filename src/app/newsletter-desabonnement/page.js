@@ -27,7 +27,7 @@ function UnsubInner() {
             <p className="text-sm text-zinc-400 leading-relaxed mb-6 max-w-md mx-auto">
               {already
                 ? 'Vous n\'étiez déjà plus dans notre liste de diffusion. Aucune autre action requise.'
-                : 'Vous ne recevrez plus la newsletter mensuelle de Prospectia. Vos données ne sont pas supprimées (vous pouvez vous réinscrire à tout moment).'}
+                : 'Vous ne recevrez plus la newsletter mensuelle de Volia. Vos données ne sont pas supprimées (vous pouvez vous réinscrire à tout moment).'}
             </p>
             {email && (
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-zinc-300 mb-6">
@@ -50,7 +50,7 @@ function UnsubInner() {
             <div className="mt-8 pt-6 border-t border-white/[0.04]">
               <p className="text-xs text-zinc-500 leading-relaxed">
                 Une raison particulière de partir ?<br />
-                <a href="mailto:hello@prospectia.cloud?subject=Feedback newsletter" className="text-violet-300 hover:text-violet-200 transition underline underline-offset-2">
+                <a href="mailto:hello@volia.fr?subject=Feedback newsletter" className="text-violet-300 hover:text-violet-200 transition underline underline-offset-2">
                   Dites-le nous en 1 ligne
                 </a> — on s&apos;améliore grâce à vos retours.
               </p>
@@ -71,7 +71,7 @@ function UnsubInner() {
               </p>
             )}
             <p className="text-xs text-zinc-500 mb-5">
-              Contactez <a href="mailto:hello@prospectia.cloud" className="text-violet-300 hover:text-violet-200 transition underline">hello@prospectia.cloud</a> pour vous désinscrire manuellement (réponse sous 24h).
+              Contactez <a href="mailto:hello@volia.fr" className="text-violet-300 hover:text-violet-200 transition underline">hello@volia.fr</a> pour vous désinscrire manuellement (réponse sous 24h).
             </p>
             <Link href="/" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/[0.04] text-zinc-300 hover:text-white text-sm font-semibold transition">
               <ArrowLeft size={14} />

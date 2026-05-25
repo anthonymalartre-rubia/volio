@@ -6,13 +6,13 @@ import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
 export const metadata = {
-  title: 'Guides complets de prospection B2B par secteur — Prospectia',
+  title: 'Guides complets de prospection B2B par secteur — Volia',
   description: 'Guides longs (4000+ mots) pour prospecter efficacement chaque secteur : restaurants, BTP, avocats, immobilier, commerces locaux. Méthodes testées et chiffres réels.',
-  alternates: { canonical: 'https://prospectia.cloud/guide' },
+  alternates: { canonical: 'https://volia.fr/guide' },
   openGraph: {
     title: 'Guides Prospection B2B',
     description: 'Guides sectoriels complets pour prospecter en France.',
-    url: 'https://prospectia.cloud/guide',
+    url: 'https://volia.fr/guide',
   },
 };
 
@@ -31,7 +31,7 @@ export default function GuideIndex() {
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-300 mb-6">
             <BookOpen size={12} />
-            Guides Prospectia
+            Guides Volia
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 text-content-primary">
             Guides complets prospection B2B

@@ -5,21 +5,21 @@ import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
 export const metadata = {
-  title: 'API Prospectia v1 — Documentation (Zapier, Make, custom)',
+  title: 'API Volia v1 — Documentation (Zapier, Make, custom)',
   description:
-    "Documentation de l'API publique Prospectia v1 : authentification par clé API, endpoints /me, /prospects, /usage, intégrations Zapier et Make. REST + JSON.",
-  alternates: { canonical: 'https://prospectia.cloud/api' },
+    "Documentation de l'API publique Volia v1 : authentification par clé API, endpoints /me, /prospects, /usage, intégrations Zapier et Make. REST + JSON.",
+  alternates: { canonical: 'https://volia.fr/api' },
   keywords: [
-    'api prospectia',
+    'api volia',
     'api prospection b2b',
     'intégration zapier prospection',
     'intégration make prospection',
     'api rest prospection france',
   ],
   openGraph: {
-    title: 'API Prospectia v1 — Documentation',
-    description: 'Intégrez Prospectia à votre stack avec notre API REST. Compatible Zapier et Make.',
-    url: 'https://prospectia.cloud/api',
+    title: 'API Volia v1 — Documentation',
+    description: 'Intégrez Volia à votre stack avec notre API REST. Compatible Zapier et Make.',
+    url: 'https://volia.fr/api',
   },
 };
 
@@ -120,11 +120,11 @@ export default function ApiDocsPage() {
       breadcrumbSchema(breadcrumbs),
       {
         '@type': 'TechArticle',
-        headline: 'Documentation API Prospectia v1',
+        headline: 'Documentation API Volia v1',
         description: metadata.description,
-        author: { '@type': 'Organization', name: 'Prospectia' },
-        publisher: { '@type': 'Organization', name: 'Prospectia', url: 'https://prospectia.cloud' },
-        url: 'https://prospectia.cloud/api',
+        author: { '@type': 'Organization', name: 'Volia' },
+        publisher: { '@type': 'Organization', name: 'Volia', url: 'https://volia.fr' },
+        url: 'https://volia.fr/api',
         inLanguage: 'fr-FR',
       },
     ],
@@ -156,7 +156,7 @@ export default function ApiDocsPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6">
-            API <span className="text-violet-400">Prospectia v1</span>
+            API <span className="text-violet-400">Volia v1</span>
           </h1>
 
           <p className="text-lg text-content-secondary leading-relaxed mb-12">
@@ -197,7 +197,7 @@ export default function ApiDocsPage() {
                 Exemple cURL
               </div>
               <pre className="text-xs text-content-secondary font-mono p-4 overflow-x-auto whitespace-pre">
-{`curl https://prospectia.cloud/api/v1/me \\
+{`curl https://volia.fr/api/v1/me \\
   -H "Authorization: Bearer pk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"`}
               </pre>
             </div>
@@ -251,13 +251,13 @@ export default function ApiDocsPage() {
           <section id="zapier" className="mb-12 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4">Intégration Zapier</h2>
             <p className="text-content-secondary leading-relaxed mb-4">
-              Prospectia ne dispose pas encore d&apos;app native dans le Zapier directory.
+              Volia ne dispose pas encore d&apos;app native dans le Zapier directory.
               Vous pouvez néanmoins utiliser les <strong className="text-content-primary">Webhooks Premium</strong> de Zapier
               pour appeler nos endpoints :
             </p>
             <ol className="list-decimal list-inside space-y-1 text-content-secondary leading-relaxed mb-4">
               <li>Dans Zapier, créez un Zap avec action <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">Webhooks by Zapier → GET</code></li>
-              <li>URL : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">https://prospectia.cloud/api/v1/prospects?has_email=true&limit=10</code></li>
+              <li>URL : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">https://volia.fr/api/v1/prospects?has_email=true&limit=10</code></li>
               <li>Headers : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">Authorization: Bearer pk_votre_clé</code></li>
               <li>Mappez ensuite les champs <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">data[].email</code> vers votre action suivante</li>
             </ol>
@@ -271,7 +271,7 @@ export default function ApiDocsPage() {
             </p>
             <div className="rounded-2xl border border-line bg-surface-card p-4 mb-4">
               <ul className="space-y-1 text-sm text-content-secondary">
-                <li><strong className="text-content-primary">URL</strong> : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">https://prospectia.cloud/api/v1/prospects</code></li>
+                <li><strong className="text-content-primary">URL</strong> : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">https://volia.fr/api/v1/prospects</code></li>
                 <li><strong className="text-content-primary">Method</strong> : GET</li>
                 <li><strong className="text-content-primary">Headers</strong> : <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">Authorization: Bearer pk_votre_clé</code></li>
                 <li><strong className="text-content-primary">Parse response</strong> : Yes (auto-JSON)</li>
@@ -320,7 +320,7 @@ export default function ApiDocsPage() {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Prêt à intégrer ?</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Créez votre première clé API depuis votre compte Prospectia.
+              Créez votre première clé API depuis votre compte Volia.
             </p>
             <Link
               href="/settings#api"

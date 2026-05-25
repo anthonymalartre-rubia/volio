@@ -141,7 +141,7 @@ export function getCategoryBySlug(slug) {
  * Build sitemap entries for all programmatic pages
  * Returns array of { loc, priority, changefreq }
  */
-export function getAllSeoUrls(baseUrl = 'https://prospectia.cloud') {
+export function getAllSeoUrls(baseUrl = 'https://volia.fr') {
   const urls = [];
   const cats = getAllCategories();
   const depts = getAllDepartments();

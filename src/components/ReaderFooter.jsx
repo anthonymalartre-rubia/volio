@@ -4,7 +4,7 @@ export default function ReaderFooter() {
   return (
     <footer className="border-t border-line py-8 mt-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="text-xs text-content-muted">© 2026 Prospectia.cloud</div>
+        <div className="text-xs text-content-muted">© 2026 Volia.fr</div>
         <div className="flex flex-wrap justify-center gap-4 text-xs text-content-muted">
           <Link href="/ressources" className="hover:text-content-secondary transition">Ressources</Link>
           <Link href="/outils" className="hover:text-content-secondary transition">Outils</Link>

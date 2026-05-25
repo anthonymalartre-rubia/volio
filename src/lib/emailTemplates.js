@@ -1,10 +1,10 @@
 // src/lib/emailTemplates.js
-// HTML email templates pour Prospectia — design refondu (refresh 2026-05).
+// HTML email templates pour Volia — design refondu (refresh 2026-05).
 // Optimisé Gmail, Outlook, Apple Mail. Light-mode + dark-mode compatible.
 
 import { isTrustpilotEnabled, TRUSTPILOT_REVIEW_URL } from './trustpilot-data';
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://prospectia.cloud';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://volia.fr';
 const DASHBOARD_URL = `${APP_URL}/dashboard`;
 const SETTINGS_URL = `${APP_URL}/settings`;
 const PRICING_URL = `${APP_URL}/#pricing`;
@@ -54,7 +54,7 @@ function trustpilotPrompt() {
                 <tr>
                   <td style="padding:14px 18px;text-align:center;">
                     <p style="margin:0 0 6px;font-size:13px;color:#047857;font-weight:600;">
-                      Vous aimez Prospectia&nbsp;?
+                      Vous aimez Volia&nbsp;?
                     </p>
                     <p style="margin:0 0 10px;font-size:12px;color:#065f46;line-height:1.5;">
                       Votre avis Trustpilot nous aide énormément. 30 secondes, pas plus.
@@ -88,7 +88,7 @@ function layout({ preheader = '', content, accent = COLORS.brand }) {
   <meta name="x-apple-disable-message-reformatting" />
   <meta name="color-scheme" content="light" />
   <meta name="supported-color-schemes" content="light" />
-  <title>Prospectia</title>
+  <title>Volia</title>
   <style>
     @media (max-width: 600px) {
       .container { width: 100% !important; padding: 16px !important; }
@@ -115,7 +115,7 @@ function layout({ preheader = '', content, accent = COLORS.brand }) {
             <td style="text-align:center;padding:0 0 24px;">
               <a href="${APP_URL}" style="text-decoration:none;">
                 <span style="display:inline-block;vertical-align:middle;width:36px;height:36px;background:linear-gradient(135deg,${COLORS.brand} 0%,${COLORS.brandDark} 100%);border-radius:8px;line-height:36px;font-size:18px;font-weight:800;color:#ffffff;text-align:center;margin-right:10px;">P</span>
-                <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:${COLORS.text};letter-spacing:-0.3px;">Prospectia</span>
+                <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:${COLORS.text};letter-spacing:-0.3px;">Volia</span>
               </a>
             </td>
           </tr>
@@ -142,7 +142,7 @@ function layout({ preheader = '', content, accent = COLORS.brand }) {
                 <a href="${APP_URL}/blog" style="color:${COLORS.brand};text-decoration:none;font-weight:500;">Blog</a>
               </p>
               <p style="margin:0 0 6px;font-size:12px;color:${COLORS.textFaint};">
-                Prospectia &mdash; Prospection B2B automatisée en France
+                Volia &mdash; Prospection B2B automatisée en France
               </p>
               <p style="margin:0;font-size:11px;color:${COLORS.textFaint};">
                 <a href="${APP_URL}/cgu" style="color:${COLORS.textFaint};text-decoration:underline;">CGU</a>
@@ -242,9 +242,9 @@ function progressBar(percent, color = COLORS.brand) {
 /**
  * Quote / testimonial / signature
  */
-function signOff(text = 'L’équipe Prospectia') {
+function signOff(text = 'L’équipe Volia') {
   return `<p style="margin:32px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;border-top:1px solid ${COLORS.border};padding-top:24px;">
-    À bientôt sur Prospectia,<br />
+    À bientôt sur Volia,<br />
     <strong style="color:${COLORS.text};">${text}</strong>
   </p>`;
 }
@@ -257,7 +257,7 @@ function signOff(text = 'L’équipe Prospectia') {
 export function welcomeEmail(userName) {
   const name = userName || 'là';
   return {
-    subject: 'Bienvenue sur Prospectia 👋',
+    subject: 'Bienvenue sur Volia 👋',
     html: layout({
       preheader: 'Votre compte est prêt. Lancez votre première recherche en 30 secondes.',
       accent: COLORS.brand,
@@ -265,7 +265,7 @@ export function welcomeEmail(userName) {
         ${hero({
           emoji: '👋',
           title: `Bienvenue ${name} !`,
-          greeting: 'Votre compte Prospectia est prêt. Voici 3 choses à essayer dès maintenant.',
+          greeting: 'Votre compte Volia est prêt. Voici 3 choses à essayer dès maintenant.',
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
@@ -449,7 +449,7 @@ export function subscriptionCancelledEmail(userName) {
         ${hero({
           emoji: '👋',
           title: 'Abonnement annulé',
-          greeting: `Bonjour ${name}, votre abonnement Prospectia est désormais annulé. Votre compte est repassé sur le plan <strong style="color:${COLORS.text};">Starter (gratuit)</strong>.`,
+          greeting: `Bonjour ${name}, votre abonnement Volia est désormais annulé. Votre compte est repassé sur le plan <strong style="color:${COLORS.text};">Starter (gratuit)</strong>.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border-radius:12px;padding:18px 20px;margin:0 0 24px;">
@@ -471,7 +471,7 @@ export function subscriptionCancelledEmail(userName) {
         <div align="center">${ctaSecondary('Continuer en gratuit', DASHBOARD_URL)}</div>
 
         <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          On peut faire mieux ? <a href="mailto:hello@prospectia.cloud?subject=Feedback%20annulation" style="color:${COLORS.brand};text-decoration:none;">Dites-nous pourquoi</a> — on lit chaque message.
+          On peut faire mieux ? <a href="mailto:hello@volia.fr?subject=Feedback%20annulation" style="color:${COLORS.brand};text-decoration:none;">Dites-nous pourquoi</a> — on lit chaque message.
         </p>
 
         ${signOff()}
@@ -494,7 +494,7 @@ export function planChangedEmail(userName, oldPlanName, newPlanName) {
         ${hero({
           emoji: '🔄',
           title: 'Changement de plan',
-          greeting: `Bonjour ${name}, votre abonnement Prospectia a été mis à jour avec succès.`,
+          greeting: `Bonjour ${name}, votre abonnement Volia a été mis à jour avec succès.`,
         })}
 
         ${receiptCard([
@@ -529,7 +529,7 @@ export function paymentFailedEmail(userName, amountCents, hostedInvoiceUrl) {
         ${hero({
           emoji: '⚠️',
           title: 'Paiement échoué',
-          greeting: `Bonjour ${name}, le renouvellement de votre abonnement Prospectia (<strong style="color:${COLORS.text};">${formattedAmount}</strong>) n'a pas pu être effectué.`,
+          greeting: `Bonjour ${name}, le renouvellement de votre abonnement Volia (<strong style="color:${COLORS.text};">${formattedAmount}</strong>) n'a pas pu être effectué.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.dangerLight};border:1px solid ${COLORS.danger}30;border-radius:12px;padding:18px 20px;margin:0 0 20px;">
@@ -580,7 +580,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
   const isActive = prospectsFound > 0 || emailsEnriched > 0;
   const subject = isActive
     ? `${prospectsFound > 0 ? prospectsFound : emailsEnriched}× plus de prospects ce mois avec Pro ?`
-    : `Vous n'avez pas encore essayé Prospectia ?`;
+    : `Vous n'avez pas encore essayé Volia ?`;
 
   return {
     subject,
@@ -595,7 +595,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
           title: isActive ? `Bilan de ${monthName}` : 'On vous attend !',
           greeting: isActive
             ? `Bonjour ${name}, voici ce que vous avez accompli ce mois-ci sur le plan gratuit.`
-            : `Bonjour ${name}, votre compte Prospectia est prêt mais vous n'avez pas encore lancé de recherche. Voici comment démarrer en 30 secondes.`,
+            : `Bonjour ${name}, votre compte Volia est prêt mais vous n'avez pas encore lancé de recherche. Voici comment démarrer en 30 secondes.`,
         })}
 
         ${isActive ? `
@@ -661,7 +661,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
             <tr>
               <td style="padding:14px 16px;background-color:${COLORS.brandLight};border-radius:10px;margin-top:8px;">
                 <p style="margin:8px 0 0;font-size:14px;font-weight:600;color:${COLORS.text};">2. Lancez la recherche</p>
-                <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Prospectia interroge Google Places et ramène les prospects en 1-2 minutes.</p>
+                <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia interroge Google Places et ramène les prospects en 1-2 minutes.</p>
               </td>
             </tr>
             <tr>
@@ -702,7 +702,7 @@ export function referralRewardEmail(userName, totalBonusMonths) {
         ${hero({
           emoji: '🎉',
           title: `Vous venez de gagner 1 mois gratuit !`,
-          greeting: `Bonjour ${name}, un de vos filleuls vient de devenir client payant sur Prospectia. Votre bonus est crédité.`,
+          greeting: `Bonjour ${name}, un de vos filleuls vient de devenir client payant sur Volia. Votre bonus est crédité.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
@@ -728,7 +728,7 @@ export function referralRewardEmail(userName, totalBonusMonths) {
 }
 
 // ───────────────────────────────────────────────────────────────
-// newsletterMonthlyEmail — Édition mensuelle Prospectia
+// newsletterMonthlyEmail — Édition mensuelle Volia
 // Inclut : 1 article phare, 1 ressource gratuite, 1 stat marché,
 //          lien désinscription token-based.
 // ───────────────────────────────────────────────────────────────
@@ -745,7 +745,7 @@ export function newsletterMonthlyEmail({
 } = {}) {
   const unsubUrl = `${APP_URL}/api/newsletter/unsubscribe?token=${unsubscribeToken}`;
   return {
-    subject: `📬 Prospectia · L'édition ${monthLabel} · ${featuredArticleTitle || 'le meilleur du mois'}`,
+    subject: `📬 Volia · L'édition ${monthLabel} · ${featuredArticleTitle || 'le meilleur du mois'}`,
     html: layout({
       preheader: featuredArticleTeaser || 'Stats sectorielles, templates qui convertissent, retours d\'expérience.',
       accent: COLORS.brand,
@@ -791,10 +791,10 @@ export function newsletterMonthlyEmail({
           </tr>
         </table>
 
-        <div align="center">${ctaPrimary('Aller sur Prospectia', DASHBOARD_URL)}</div>
+        <div align="center">${ctaPrimary('Aller sur Volia', DASHBOARD_URL)}</div>
 
         <p style="margin:24px 0 0;font-size:11px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
-          Vous recevez cet email mensuel car vous êtes inscrit à la newsletter Prospectia.<br>
+          Vous recevez cet email mensuel car vous êtes inscrit à la newsletter Volia.<br>
           <a href="${unsubUrl}" style="color:${COLORS.brand};text-decoration:underline;">Se désinscrire en 1 clic</a>
         </p>
 
