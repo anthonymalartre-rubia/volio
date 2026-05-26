@@ -7,12 +7,12 @@
 // Body : { scheduled_at? } pour planification, sinon envoi immédiat.
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { trackOnboardingStep } from '@/lib/onboarding';
 
 export async function POST(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id } = await params;

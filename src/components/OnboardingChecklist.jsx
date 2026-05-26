@@ -26,6 +26,11 @@ import {
 // adminOnly: true → l'étape n'est montrée qu'aux admins (features /admin
 // non accessibles aux users standards aujourd'hui). À retirer le jour où
 // CSV import et campagnes deviennent self-serve.
+//
+// nonAdminHref: si défini, on garde l'étape visible pour les non-admins
+// mais on substitue le href vers une page marketing/présentation (au lieu
+// de masquer l'étape ou de l'envoyer vers une page gated qui renverra
+// une erreur d'accès).
 const STEPS = [
   {
     id: 'first_search',
@@ -62,7 +67,10 @@ const STEPS = [
     desc: 'Cold email avec templating {{first_name}} + footer RGPD auto',
     icon: Send,
     cta: { label: 'Créer une campagne', href: '/admin/prospection/campaigns/new' },
-    adminOnly: true,
+    // Pour les non-admins, on renvoie vers la page produit (pitch + upgrade)
+    // au lieu de masquer l'étape ou de buter sur un écran d'erreur d'accès.
+    nonAdminHref: '/produits/campagnes',
+    nonAdminLabel: 'Découvrir le module',
   },
 ];
 
@@ -93,8 +101,10 @@ export default function OnboardingChecklist({ isAdmin = false }) {
   if (loading || dismissed || !state) return null;
   if (state.completed_at) return null;
 
-  // Filtre admin-only pour les users standards
-  const visibleSteps = STEPS.filter((s) => !s.adminOnly || isAdmin);
+  // Filtre admin-only pour les users standards.
+  // Si l'étape a un nonAdminHref, on la garde mais on substituera le CTA
+  // plus bas pour pointer vers la page marketing au lieu de la page gated.
+  const visibleSteps = STEPS.filter((s) => !s.adminOnly || isAdmin || s.nonAdminHref);
   const stepsDone = visibleSteps.filter((s) => state.steps?.[s.id]).length;
   const pct = Math.round((stepsDone / visibleSteps.length) * 100);
 
@@ -176,6 +186,11 @@ export default function OnboardingChecklist({ isAdmin = false }) {
                 {visibleSteps.map((step) => {
                   const done = !!state.steps?.[step.id];
                   const Icon = step.icon;
+                  // Étape admin-only mais visible pour non-admin grâce à
+                  // nonAdminHref → on swap href + label.
+                  const useNonAdminFallback = step.adminOnly && !isAdmin && step.nonAdminHref;
+                  const ctaHref = useNonAdminFallback ? step.nonAdminHref : step.cta?.href;
+                  const ctaLabel = useNonAdminFallback ? (step.nonAdminLabel || 'En savoir plus') : step.cta?.label;
                   return (
                     <li
                       key={step.id}
@@ -199,13 +214,13 @@ export default function OnboardingChecklist({ isAdmin = false }) {
                         <div className="text-[11px] text-content-tertiary leading-snug mt-0.5">
                           {step.desc}
                         </div>
-                        {!done && step.cta && (
+                        {!done && ctaHref && (
                           <Link
-                            href={step.cta.href}
+                            href={ctaHref}
                             className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-400 hover:text-violet-300 mt-1.5 transition"
                           >
                             <Icon size={11} />
-                            {step.cta.label}
+                            {ctaLabel}
                             <ArrowRight size={10} />
                           </Link>
                         )}

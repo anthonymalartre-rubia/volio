@@ -6,12 +6,12 @@
 // Body : { scheduled_at? } pour planification.
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { isMobileE164Fr } from '@/lib/sms';
 
 export async function POST(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id } = await params;

@@ -9,14 +9,14 @@
 //             pagination: { total, limit, offset, has_more } }
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { checkCrmAccess } from '@/lib/crm';
 
 const LIMIT_DEFAULT = 200;
 const LIMIT_MAX = 200;
 
 export async function GET(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id: listId } = await params;

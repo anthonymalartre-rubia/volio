@@ -2,10 +2,10 @@
 // POST /api/admin/prospection/lists       → crée une nouvelle liste
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 
 export async function GET() {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
 
@@ -20,7 +20,7 @@ export async function GET() {
 }
 
 export async function POST(request) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
 

@@ -10,7 +10,7 @@ import NotificationBell from '@/components/NotificationBell';
 import ModuleSwitcher from '@/components/ModuleSwitcher';
 import { LogoIcon } from '@/components/ui';
 
-export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching }) {
+export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching, showHamburger = true }) {
   const router = useRouter();
   const supabase = getSupabase();
   const [loggingOut, setLoggingOut] = useState(false);
@@ -33,13 +33,15 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
       <div className="flex h-14 items-center justify-between px-4">
         {/* Left: hamburger + logo */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={onToggleSidebar}
-            className="md:hidden p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
-            aria-label={t('topbar.openMenu')}
-          >
-            <Menu size={20} />
-          </button>
+          {showHamburger && (
+            <button
+              onClick={onToggleSidebar}
+              className="md:hidden p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
+              aria-label={t('topbar.openMenu')}
+            >
+              <Menu size={20} />
+            </button>
+          )}
           <div className="flex items-center gap-3">
             <LogoIcon size="sm" />
             <span className="text-sm font-semibold text-content-primary hidden lg:block tracking-tight">

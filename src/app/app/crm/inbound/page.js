@@ -72,7 +72,7 @@ export default function InboundEventsPage() {
 
   return (
     <>
-      <TopBar />
+      <TopBar showHamburger={false} />
       <main className="min-h-screen bg-surface-base text-content-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex gap-6">
           <aside className="hidden lg:block w-64 flex-shrink-0">

@@ -37,7 +37,7 @@ export default function AppShell({ children }) {
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">
-      <TopBar user={user} />
+      <TopBar user={user} showHamburger={false} />
       {children}
     </div>
   );

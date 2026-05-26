@@ -219,6 +219,8 @@ export default function Dashboard() {
   // pour marquer la session comme 'stopped' si l'onglet est fermé pendant
   // un scraping en cours (audit P1 bug #9 — sessions zombies 'running').
   const activeSessionIdRef = useRef(null);
+  // Garde-fou pour l'auto-launch depuis /onboarding (idempotent, fire once)
+  const autoStartedRef = useRef(false);
 
   const supabase = getSupabase();
   const router = useRouter();
@@ -362,6 +364,33 @@ export default function Dashboard() {
         router.push('/login');
         return;
       }
+
+      // ─── Onboarding gate ──────────────────────────────────────────
+      // Si l'user n'a pas encore complété le wizard onboarding (et n'a pas
+      // explicitement skip via ?skip_onboarding=1 ou ?upgrade=...), on
+      // l'intercepte pour /onboarding. Garde-fou : on ne redirige PAS si :
+      //   - l'user vient de Stripe (?upgrade=success/cancelled) — sinon
+      //     on perd le post-checkout flow
+      //   - autostart=1 (déjà arrivé depuis /onboarding) — sinon boucle
+      //   - skip_onboarding=1 — bypass manuel
+      // Le check est cheap (1 round-trip qu'on aurait fait de toute façon
+      // dans le Promise.all ci-dessous, mais ici on l'isole pour redirect
+      // avant de lancer 7 autres queries en pure perte).
+      const skipGate = searchParams.get('upgrade')
+        || searchParams.get('autostart') === '1'
+        || searchParams.get('skip_onboarding') === '1';
+      if (!skipGate) {
+        const { data: ob } = await supabase
+          .from('user_profiles')
+          .select('onboarding_completed_at')
+          .eq('id', currentUser.id)
+          .maybeSingle();
+        if (ob && !ob.onboarding_completed_at) {
+          router.replace('/onboarding');
+          return;
+        }
+      }
+
       setUser(currentUser);
 
       // Load all data in parallel (instead of sequential — saves ~600ms)
@@ -791,6 +820,37 @@ export default function Dashboard() {
     stopSearchRef.current = true;
     setIsSearching(false);
   }, []);
+
+  // ─── Auto-launch search depuis /onboarding ───────────────────────
+  // Quand l'user finit le wizard /onboarding, on est redirigé ici avec
+  //   ?view=search&category=<cat>&dept=<code>&autostart=1
+  // On lance automatiquement la 1ère recherche pour transformer l'arrivée
+  // sur le dashboard en moment "wow" (50 prospects affichés en 30s) plutôt
+  // qu'un dashboard vide. Idempotent via autoStartedRef pour ne pas relancer
+  // en boucle si l'URL reste en place ou si user back-button.
+  useEffect(() => {
+    if (!user || !apiKeySet) return; // attend que l'init soit faite
+    if (isSearching) return; // déjà en cours
+    if (searchParams.get('autostart') !== '1') return;
+    if (autoStartedRef.current) return; // protection re-render
+
+    const category = searchParams.get('category');
+    const dept = searchParams.get('dept');
+    if (!category || !dept) return;
+    // Validation cheap : le dept doit être un code connu
+    if (!getDeptData(dept)) return;
+
+    autoStartedRef.current = true;
+
+    // Nettoie l'URL pour ne pas re-trigger au prochain render
+    const cleanUrl = '/dashboard?view=search';
+    router.replace(cleanUrl, { scroll: false });
+
+    // Petit délai pour laisser le SearchPanel se monter avant le scraping
+    setTimeout(() => {
+      startScraping([dept], [category], [], [], null);
+    }, 200);
+  }, [user, apiKeySet, isSearching, searchParams, startScraping, router]);
 
   // Enrichment
   const startEnrichment = useCallback(async () => {

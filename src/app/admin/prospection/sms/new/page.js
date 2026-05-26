@@ -8,7 +8,9 @@ import {
   Users, CheckCircle2, Sparkles, Euro, Hash,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
+import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 import { countSmsSegments, estimateSmsCostEur, appendSmsOptOutFooter } from '@/lib/sms';
+import NoAdminScreen from '@/components/NoAdminScreen';
 
 function NewSmsContent() {
   const router = useRouter();
@@ -38,8 +40,9 @@ function NewSmsContent() {
       setCurrentEmail(user.email);
 
       const { data: profile } = await supabase
-        .from('user_profiles').select('is_admin').eq('id', user.id).maybeSingle();
-      if (!profile?.is_admin) { setAuthState('no-admin'); setLoading(false); return; }
+        .from('user_profiles').select('plan').eq('id', user.id).maybeSingle();
+      const allowed = profile?.plan && CAMPAGNES_ALLOWED_PLANS.includes(profile.plan.toLowerCase());
+      if (!allowed) { router.push('/dashboard?upgrade=campagnes'); return; }
       setAuthState('ok');
 
       const [listsRes, sendersRes] = await Promise.all([
@@ -351,14 +354,4 @@ function GuestScreen() {
   );
 }
 
-function NoAdminScreen({ email, signOut }) {
-  return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
-        <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
-        <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>.</p>
-        <button onClick={signOut} className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"><LogIn size={14} />Changer de compte</button>
-      </div>
-    </div>
-  );
-}
+// NoAdminScreen partagé — voir src/components/NoAdminScreen.jsx (QW5).

@@ -2,10 +2,10 @@
 // Supprime un contact spécifique d'une liste.
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 
 export async function DELETE(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { supabase } = auth;
   const { id: listId, contactId } = await params;
@@ -22,7 +22,7 @@ export async function DELETE(request, { params }) {
 
 // PATCH pour marquer opt-out / unopt-out
 export async function PATCH(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { supabase } = auth;
   const { id: listId, contactId } = await params;

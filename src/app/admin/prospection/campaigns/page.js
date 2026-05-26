@@ -8,6 +8,8 @@ import {
   Send, Pause, Clock, CheckCircle2, XCircle, Eye, MousePointerClick,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
+import NoAdminScreen from '@/components/NoAdminScreen';
+import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={11} /> },
@@ -25,6 +27,7 @@ export default function CampaignsHubPage() {
   const [currentEmail, setCurrentEmail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
+  const [listsCount, setListsCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -35,16 +38,28 @@ export default function CampaignsHubPage() {
 
       const { data: profile } = await supabase
         .from('user_profiles')
-        .select('is_admin')
+        .select('plan')
         .eq('id', user.id)
         .maybeSingle();
-      if (!profile?.is_admin) { setAuthState('no-admin'); setLoading(false); return; }
+      const allowed = profile?.plan && CAMPAGNES_ALLOWED_PLANS.includes(profile.plan.toLowerCase());
+      if (!allowed) { router.push('/dashboard?upgrade=campagnes'); return; }
       setAuthState('ok');
 
-      const res = await fetch('/api/admin/prospection/email-campaigns');
-      if (res.ok) {
-        const data = await res.json();
+      // Fetch en parallèle : campagnes + listes (empty state contextuel).
+      // Si l'user n'a aucune liste, le CTA "Nouvelle campagne" mène à
+      // /campaigns/new qui exige obligatoirement un list_id → erreur garantie.
+      // On préfère alors proposer "Créer ma première liste".
+      const [campRes, listsRes] = await Promise.all([
+        fetch('/api/admin/prospection/email-campaigns'),
+        fetch('/api/admin/prospection/lists'),
+      ]);
+      if (campRes.ok) {
+        const data = await campRes.json();
         setCampaigns(data.campaigns || []);
+      }
+      if (listsRes.ok) {
+        const data = await listsRes.json();
+        setListsCount((data.lists || []).length);
       }
       setLoading(false);
     })();
@@ -81,17 +96,33 @@ export default function CampaignsHubPage() {
         </div>
 
         {campaigns.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-line p-12 text-center">
-            <Mail size={28} className="mx-auto mb-2 text-content-tertiary opacity-50" />
-            <p className="text-content-tertiary mb-1">Aucune campagne pour le moment.</p>
-            <p className="text-xs text-content-tertiary mb-4">
-              Importez d&apos;abord une liste de prospects, puis créez une campagne ciblée.
-            </p>
-            <Link href="/admin/prospection/campaigns/new" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
-              <Plus size={14} />
-              Créer ma première campagne
-            </Link>
-          </div>
+          listsCount === 0 ? (
+            // Pas encore de liste → on dirige d'abord vers la création de
+            // liste (sans liste, /campaigns/new échoue car list_id est requis).
+            <div className="rounded-2xl border border-dashed border-line p-12 text-center">
+              <Mail size={28} className="mx-auto mb-2 text-content-tertiary opacity-50" />
+              <p className="text-content-tertiary mb-1">Commencez par créer une liste de prospects.</p>
+              <p className="text-xs text-content-tertiary mb-4">
+                Une campagne email cible toujours une liste. Importez d&apos;abord vos contacts, puis créez votre campagne ciblée.
+              </p>
+              <Link href="/admin/prospection" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
+                <Plus size={14} />
+                Créer ma première liste
+              </Link>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-line p-12 text-center">
+              <Mail size={28} className="mx-auto mb-2 text-content-tertiary opacity-50" />
+              <p className="text-content-tertiary mb-1">Aucune campagne pour le moment.</p>
+              <p className="text-xs text-content-tertiary mb-4">
+                Vous avez déjà {listsCount} liste{listsCount > 1 ? 's' : ''} prête{listsCount > 1 ? 's' : ''}. Lancez votre première campagne ciblée.
+              </p>
+              <Link href="/admin/prospection/campaigns/new" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
+                <Plus size={14} />
+                Créer ma première campagne
+              </Link>
+            </div>
+          )
         ) : (
           <div className="rounded-2xl border border-line bg-surface-card overflow-hidden">
             <table className="w-full text-sm">
@@ -194,27 +225,4 @@ function GuestScreen() {
   );
 }
 
-function NoAdminScreen({ email, signOut }) {
-  return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
-        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4">
-          <ShieldOff size={20} className="text-amber-700" />
-        </div>
-        <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
-        <p className="text-sm text-content-secondary mb-2">
-          Connecté en tant que <strong className="text-content-primary">{email}</strong>, mais ce compte n&apos;a pas les droits.
-        </p>
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <Link href="/dashboard" className="px-4 py-2 rounded-xl border border-line text-content-secondary hover:text-content-primary text-sm font-medium transition">
-            Dashboard
-          </Link>
-          <button onClick={signOut} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
-            <LogIn size={14} />
-            Changer de compte
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+// NoAdminScreen partagé — voir src/components/NoAdminScreen.jsx (QW5).

@@ -3,11 +3,11 @@
 // DELETE /api/admin/prospection/email-campaigns/[id]  → supprime (seulement si draft / paused)
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 export async function GET(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id } = await params;
@@ -114,7 +114,7 @@ export async function GET(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id } = await params;

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
+import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 import ImportFromProspectionModal from '@/components/lists/ImportFromProspectionModal';
 import ImportFromCrmModal from '@/components/lists/ImportFromCrmModal';
 
@@ -52,8 +53,9 @@ export default function ListDetailPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login?return=' + encodeURIComponent(`/admin/prospection/lists/${listId}`)); return; }
 
-      const { data: profile } = await supabase.from('user_profiles').select('is_admin').eq('id', user.id).maybeSingle();
-      if (!profile?.is_admin) { router.push('/dashboard'); return; }
+      const { data: profile } = await supabase.from('user_profiles').select('plan').eq('id', user.id).maybeSingle();
+      const allowed = profile?.plan && CAMPAGNES_ALLOWED_PLANS.includes(profile.plan.toLowerCase());
+      if (!allowed) { router.push('/dashboard?upgrade=campagnes'); return; }
 
       setAuthorized(true);
       await loadList();

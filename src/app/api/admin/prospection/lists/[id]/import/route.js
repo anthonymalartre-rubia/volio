@@ -13,7 +13,7 @@
 // - Bulk insert par chunks de 500 (limite Supabase)
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { parseCsv, normalizeContact } from '@/lib/prospection';
 import { trackOnboardingStep } from '@/lib/onboarding';
 
@@ -21,7 +21,7 @@ const MAX_ROWS = 50_000;       // Anti-bombing
 const CHUNK_SIZE = 500;        // Bulk insert chunk
 
 export async function POST(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id: listId } = await params;

@@ -8,7 +8,7 @@
 // Réponse : { inserted, skipped, total }
 
 import { NextResponse } from 'next/server';
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 
 const CHUNK_SIZE = 500;
 
@@ -47,7 +47,7 @@ function mapProspectToContact(p, listId) {
 }
 
 export async function POST(request, { params }) {
-  const auth = await requireAdmin();
+  const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
   const { id: listId } = await params;
