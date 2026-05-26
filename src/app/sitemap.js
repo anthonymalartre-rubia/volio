@@ -51,6 +51,7 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/`, priority: 1.0, changeFrequency: 'weekly', lastModified: now },
       { url: `${baseUrl}/signup`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/login`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/produits/prospection`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/produits/campagnes`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/produits/crm`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },

@@ -11,6 +11,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from './auth';
 import { CAMPAGNES_ALLOWED_PLANS, isCampagnesAllowedPlan } from './campagnes-access';
+import { getEffectivePlan } from './trial';
 
 /**
  * Vérifie qu'un user a accès au module Campagnes (envoi de campagnes email).
@@ -23,10 +24,11 @@ export async function checkCampagnesAccess(supabase, userId) {
   if (!supabase || !userId) return false;
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('plan')
+    .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .maybeSingle();
-  return isCampagnesAllowedPlan(profile?.plan);
+  // Le trial Pro donne accès aux Campagnes (Pro = inclus dans la liste).
+  return isCampagnesAllowedPlan(getEffectivePlan(profile));
 }
 
 /**

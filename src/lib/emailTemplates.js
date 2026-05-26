@@ -299,6 +299,19 @@ export function welcomeEmail(userName) {
           Plan Starter offert : <strong style="color:${COLORS.text};">100 prospects/mois</strong>, sans carte bancaire requise.
         </p>
 
+        <!-- PS parrainage : touchpoint discret en bas du welcome (push #5) -->
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:24px 0 0;">
+          <tr>
+            <td style="padding:14px 18px;background-color:${COLORS.brandLight};border-left:3px solid ${COLORS.brand};border-radius:8px;">
+              <p style="margin:0;font-size:13px;color:${COLORS.text};line-height:1.5;">
+                <strong style="color:${COLORS.brand};">PS</strong> — Vous aimez Volia ? Invitez 3 amis et gagnez
+                <strong style="color:${COLORS.text};">3 mois Pro offerts</strong> (et 1 mois bonus pour eux).
+                <a href="${APP_URL}/parrainage" style="color:${COLORS.brand};font-weight:600;text-decoration:none;">Voir le programme →</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+
         ${signOff()}
       `,
     }),
@@ -687,6 +700,177 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
 }
 
 // ───────────────────────────────────────────────────────────────
+// trialStartedEmail — Envoyé immédiatement après le signup confirmé.
+// Annonce les 14j de Pro offerts. CTA dashboard. Pas d'agressivité de
+// vente — l'idée est de faire ressentir la valeur, l'upsell vient
+// naturellement quand le trial approche de sa fin (J-3 et J0).
+// ───────────────────────────────────────────────────────────────
+export function trialStartedEmail(userName, trialEndsAt) {
+  const name = userName || 'là';
+  const endDate = new Date(trialEndsAt).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  return {
+    subject: '🎉 14 jours de Pro offerts — bienvenue sur Volia',
+    html: layout({
+      preheader: `Votre trial Pro est actif jusqu'au ${endDate}. Aucune carte requise.`,
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🎉',
+          title: `${name}, vous avez 14 jours de Pro`,
+          greeting: `On vous offre <strong style="color:${COLORS.text};">l'accès complet au plan Pro</strong> pendant 14 jours pour explorer la vraie puissance de Volia. Aucune carte bancaire requise.`,
+        })}
+
+        ${receiptCard([
+          { label: 'Plan actif', value: 'Pro (trial)', color: COLORS.brand },
+          { label: 'Durée', value: '14 jours' },
+          { label: 'Expire le', value: endDate },
+          { label: 'Carte requise', value: 'Aucune', color: COLORS.success },
+        ])}
+
+        <p style="margin:24px 0 16px;font-size:13px;font-weight:600;color:${COLORS.text};">Ce qui est débloqué :</p>
+        <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
+          <li><strong style="color:${COLORS.text};">5 000 prospects/mois</strong> (vs 100 en gratuit)</li>
+          <li>Cascade waterfall complète (Apollo, Findymail, Enrichly…)</li>
+          <li>Vérification d'emails (MillionVerifier)</li>
+          <li>Module Campagnes email/SMS</li>
+          <li>Exports illimités vers HubSpot, Salesforce, Zoho…</li>
+        </ul>
+
+        <div align="center">${ctaPrimary('Lancer ma 1ère recherche Pro', DASHBOARD_URL)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          À la fin des 14 jours, votre compte repasse sur le plan Starter gratuit (vos données sont conservées). Aucun prélèvement, aucune surprise.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
+// trialExpiringEmail — Envoyé à J-3 de la fin du trial.
+// Crée l'urgence sans agresser. Met en avant ce que le user va PERDRE
+// (loss aversion > gain framing) : ses dossiers, ses enrichissements
+// en cours, l'accès Campagnes…
+// ───────────────────────────────────────────────────────────────
+export function trialExpiringEmail(userName, daysRemaining = 3) {
+  const name = userName || 'là';
+  return {
+    subject: `⏱️ Plus que ${daysRemaining} jours de Pro`,
+    html: layout({
+      preheader: `Conservez vos features Pro (cascade waterfall, campagnes, 5000 prospects/mois) en passant à Pro.`,
+      accent: COLORS.warning,
+      content: `
+        ${hero({
+          emoji: '⏱️',
+          title: `Plus que ${daysRemaining} jours de Pro`,
+          greeting: `Bonjour ${name}, votre trial Pro se termine dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong>. Voici ce que vous garderez ou perdrez à l'expiration.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.warningLight};border:1px solid ${COLORS.warning}30;border-radius:12px;padding:18px 20px;margin:0 0 20px;">
+          <tr>
+            <td>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Ce qui sera désactivé</p>
+              <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
+                <li>La cascade waterfall complète (vous reviendrez au scraping simple)</li>
+                <li>Le module Campagnes email/SMS</li>
+                <li>La vérification d'emails MillionVerifier</li>
+                <li>Votre quota repassera à 100 prospects/mois (vs 5 000)</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.successLight};border-radius:12px;padding:18px 20px;margin:0 0 24px;">
+          <tr>
+            <td>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">✅ Ce qui est gardé dans tous les cas</p>
+              <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+                Vos prospects collectés, vos dossiers, vos tags et vos exports restent intacts.
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+          Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
+        </p>
+
+        <div align="center">${ctaPrimary('Passer Pro maintenant', `${APP_URL}/pricing?plan=pro`)}</div>
+        <div align="center">${ctaSecondary('Comparer les plans', `${APP_URL}/pricing`)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
+// trialExpiredEmail — Envoyé à J0 (jour de l'expiration) par le cron
+// expire-trials, juste après le downgrade automatique vers free.
+// ───────────────────────────────────────────────────────────────
+export function trialExpiredEmail(userName) {
+  const name = userName || 'là';
+  return {
+    subject: '🛑 Votre trial Pro est terminé',
+    html: layout({
+      preheader: `Votre compte est repassé sur Starter. Réactivez Pro en 1 clic pour récupérer toutes vos features.`,
+      accent: COLORS.danger,
+      content: `
+        ${hero({
+          emoji: '🛑',
+          title: 'Trial Pro terminé',
+          greeting: `Bonjour ${name}, votre trial Pro de 14 jours est arrivé à son terme. Votre compte est désormais sur le plan <strong style="color:${COLORS.text};">Starter (gratuit)</strong>.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border-radius:12px;padding:18px 20px;margin:0 0 20px;">
+          <tr>
+            <td>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">📦 Vos données sont conservées</p>
+              <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+                Tous vos prospects, dossiers, tags et historiques de recherche restent accessibles. Vous pouvez continuer à les exporter dans la limite de 5 exports/mois du plan gratuit.
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.warningLight};border-radius:12px;padding:18px 20px;margin:0 0 24px;">
+          <tr>
+            <td>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Features désactivées</p>
+              <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
+                <li>Cascade waterfall complète (Apollo, Findymail, +5 sources)</li>
+                <li>Module Campagnes email/SMS</li>
+                <li>Vérification d'emails MillionVerifier</li>
+                <li>Quota mensuel : 100 prospects (vs 5 000 en Pro)</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+          Pour réactiver toutes vos features <strong style="color:${COLORS.text};">en 30 secondes</strong>, passez à l'abonnement Pro à 49€/mois.
+        </p>
+
+        <div align="center">${ctaPrimary('Réactiver Pro', `${APP_URL}/pricing?plan=pro`)}</div>
+        <div align="center">${ctaSecondary('Continuer en gratuit', DASHBOARD_URL)}</div>
+
+        <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Une question ? Répondez simplement à cet email — on lit chaque message.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
 // authSignupConfirm — Email de confirmation d'inscription envoyé
 // via Resend (remplace l'email plain text de Supabase Auth).
 // Supabase admin.generateLink() fournit l'URL, on l'embed dans notre
@@ -784,6 +968,72 @@ export function authResendConfirmation({ confirmUrl, email }) {
         <p style="margin:24px 0 0;font-size:12px;color:${COLORS.textFaint};text-align:center;line-height:1.5;word-break:break-all;">
           Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur&nbsp;:<br/>
           <a href="${confirmUrl}" style="color:${COLORS.brand};text-decoration:none;">${confirmUrl}</a>
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+// ───────────────────────────────────────────────────────────────
+// referralPushEmail — Push parrainage J+7. Envoyé une seule fois aux
+// users actifs créés entre 7 et 14 jours, qui ont au moins 1 search et
+// pas encore parrainé. Goal : faire découvrir le programme à un moment
+// où l'user a perçu de la valeur mais n'a pas encore l'habitude de
+// partager. CAC payé, mois bonus à gagner, win-win clair.
+// ───────────────────────────────────────────────────────────────
+export function referralPushEmail(userName, referralCode) {
+  const name = userName || 'là';
+  const referralUrl = `${APP_URL}/signup?ref=${referralCode}`;
+  return {
+    subject: '🎁 Et si Volia vous payait 3 mois gratuits ?',
+    html: layout({
+      preheader: 'Invitez 3 amis, gagnez 3 mois Pro offerts. Aucune limite, votre lien personnalisé est dedans.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🎁',
+          title: `${name}, vos amis adoreraient Volia`,
+          greeting: `Pour chaque ami qui devient client payant via votre lien, on vous offre <strong style="color:${COLORS.text};">1 mois gratuit</strong>. Et lui aussi reçoit <strong style="color:${COLORS.text};">+1 mois bonus</strong> à l'inscription.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 20px;">
+          <tr>
+            <td style="padding:24px 20px;background-color:${COLORS.brandLight};border-radius:12px;text-align:center;">
+              <p style="margin:0 0 8px;font-size:11px;color:${COLORS.brand};text-transform:uppercase;letter-spacing:1px;font-weight:600;">Votre lien personnalisé</p>
+              <p style="margin:0 0 12px;font-family:Menlo,Monaco,Consolas,monospace;font-size:14px;color:${COLORS.text};font-weight:600;word-break:break-all;">${referralUrl}</p>
+              <p style="margin:0;font-size:12px;color:${COLORS.textMuted};">Code parrain : <strong style="color:${COLORS.text};">${referralCode}</strong></p>
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
+          <tr>
+            <td style="padding:14px 18px;background-color:#ffffff;border:1px solid ${COLORS.border};border-radius:10px;">
+              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">3 amis payants = 3 mois Pro offerts (147 €)</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0;">
+          <tr>
+            <td style="padding:14px 18px;background-color:#ffffff;border:1px solid ${COLORS.border};border-radius:10px;">
+              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">5 amis = 5 mois (245 €), 10 amis = 10 mois…</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0;">
+          <tr>
+            <td style="padding:14px 18px;background-color:#ffffff;border:1px solid ${COLORS.border};border-radius:10px;">
+              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">Aucune limite, crédit Stripe automatique</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Voir mon programme de parrainage', `${APP_URL}/parrainage`)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Astuce : ajoutez votre lien dans votre signature email pro. Effort 30s, résultats permanents.
         </p>
 
         ${signOff()}

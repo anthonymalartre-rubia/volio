@@ -1,6 +1,7 @@
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { getPlan } from '@/lib/plans';
+import { getEffectivePlan } from '@/lib/trial';
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
@@ -44,14 +45,14 @@ export async function POST(request) {
       return Response.json({ error: 'Authentification requise' }, { status: 401 });
     }
 
-    // Enterprise-only feature
+    // Enterprise-only feature (mais ouvert au trial Pro pendant 14j)
     const { data: profile } = await supabase
       .from('user_profiles')
-      .select('plan')
+      .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
       .eq('id', user.id)
       .single();
 
-    if (profile?.plan === 'free') {
+    if (getEffectivePlan(profile) === 'free') {
       return Response.json(
         { error: 'Cette fonctionnalite est reservee aux plans Pro et Enterprise.' },
         { status: 403 }

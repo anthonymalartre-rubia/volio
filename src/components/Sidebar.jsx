@@ -13,6 +13,7 @@ import {
   Sparkles,
   ArrowUpRight,
   Lock,
+  Gift,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import UpgradeRequiredModal from '@/components/UpgradeRequiredModal';
@@ -193,6 +194,26 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
             <div className="flex-1 text-left">
               <div>{t('sidebar.settings')}</div>
               <div className="text-[10px] text-content-faint">{t('sidebar.settingsDesc')}</div>
+            </div>
+          </a>
+
+          {/* Parrainage link — visible mais discret (hover gradient violet/pink)
+              avec badge "+3 mois" pour signaler le levier. Push #3 du programme. */}
+          <a
+            href="/parrainage"
+            className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-primary hover:bg-gradient-to-r hover:from-violet-500/10 hover:to-pink-500/10 transition-all duration-200 group"
+          >
+            <div className="p-1.5 rounded-lg bg-gradient-to-br from-violet-500/15 to-pink-500/15 group-hover:from-violet-500/25 group-hover:to-pink-500/25 transition-colors">
+              <Gift size={16} className="text-pink-400" />
+            </div>
+            <div className="flex-1 text-left">
+              <div className="flex items-center gap-1.5">
+                <span>Parrainer</span>
+                <span className="inline-flex items-center text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-pink-500/15 text-pink-300 border border-pink-500/30">
+                  +3 mois
+                </span>
+              </div>
+              <div className="text-[10px] text-content-faint">Gagnez des mois gratuits</div>
             </div>
           </a>
 

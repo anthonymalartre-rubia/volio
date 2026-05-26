@@ -74,7 +74,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=free`,
         availability: 'https://schema.org/InStock',
-        description: '100 prospects/mois, 20 enrichissements, 5 exports, 3 dossiers — sans carte bancaire.',
+        description: '14 jours de Pro inclus (sans CB) puis 100 prospects/mois, 20 enrichissements, 5 exports, 3 dossiers.',
       },
       {
         '@type': 'Offer',
@@ -121,7 +121,7 @@ const FAQ_JSON_LD = {
       name: 'Y a-t-il un essai gratuit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui, le plan Starter (0 €) est disponible à vie, sans carte bancaire. 100 prospects/mois pour valider la qualité avant d\'upgrader.',
+        text: 'Oui : à l\'inscription, vous bénéficiez de 14 jours d\'accès complet au plan Pro sans carte bancaire (5 000 prospects, cascade waterfall, campagnes). À l\'expiration, votre compte passe automatiquement sur le plan Starter gratuit (100 prospects/mois, à vie) — aucun prélèvement.',
       },
     },
     {

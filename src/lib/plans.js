@@ -25,6 +25,7 @@ export const PLANS = {
       exports_per_month: 5,
     },
     features: [
+      '14 jours de Pro inclus (sans CB)',
       '100 prospects/mois',
       '20 enrichissements/mois',
       '5 exports/mois',

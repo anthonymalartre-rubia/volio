@@ -368,6 +368,12 @@ export default function AdminPage() {
           >
             <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> Leads ressources</span>
           </Link>
+          <Link
+            href="/admin/metrics"
+            className="px-5 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary"
+          >
+            <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Metrics business</span>
+          </Link>
         </div>
       </div>
 

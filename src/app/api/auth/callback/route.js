@@ -2,9 +2,12 @@ import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { sendEmail } from '@/lib/email';
-import { welcomeEmail } from '@/lib/emailTemplates';
+// Note : welcomeEmail remplacé par trialStartedEmail (msg plus engageant
+// qui annonce les 14j de Pro offerts au lieu du simple welcome neutre).
+import { trialStartedEmail } from '@/lib/emailTemplates';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { buildTrialPayload } from '@/lib/trial';
 
 // Validation anti open-redirect (P1 audit sécurité).
 // On n'accepte que des paths internes commençant par "/" mais pas "//"
@@ -69,29 +72,40 @@ export async function GET(request) {
       const supabaseAdmin = getSupabaseAdmin();
       const { data: existingProfile } = await supabaseAdmin
         .from('user_profiles')
-        .select('id')
+        .select('id, trial_started_at')
         .eq('id', user.id)
         .single();
+
+      // Trial Pro 14j sans CB : on l'attribue UNIQUEMENT si le user n'a
+      // jamais eu de trial (anti double-dip si jamais on recrée le profil).
+      // buildTrialPayload retourne { trial_plan, trial_started_at, trial_ends_at, plan }.
+      const trialPayload = buildTrialPayload('pro');
 
       if (!existingProfile) {
         await supabaseAdmin
           .from('user_profiles')
           .insert({
             id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-            plan: 'free',
+            ...trialPayload,
           });
+      } else if (!existingProfile.trial_started_at) {
+        // Profil existant sans trial → on l'active (cas edge : profil créé
+        // par un autre flow, par exemple un import legacy).
+        await supabaseAdmin
+          .from('user_profiles')
+          .update(trialPayload)
+          .eq('id', user.id);
       }
 
-      // Send welcome email (fire and forget — don't block the redirect)
+      // Send trial-started email (remplace l'ancien welcome — annonce les
+      // 14j Pro). Fire and forget pour ne pas bloquer la redirect.
       const userName = user.user_metadata?.full_name || user.user_metadata?.name || null;
-      const template = welcomeEmail(userName);
+      const template = trialStartedEmail(userName, trialPayload.trial_ends_at);
       sendEmail({
         to: user.email,
         subject: template.subject,
         html: template.html,
-      }).catch((err) => console.error('[auth/callback] Welcome email failed:', err));
+      }).catch((err) => console.error('[auth/callback] Trial-started email failed:', err));
     }
   } catch (emailErr) {
     // Never block auth flow for an email error

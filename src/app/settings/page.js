@@ -9,6 +9,7 @@ import {
   Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon,
   BookOpen, BarChart3, ArrowUpRight, ShieldAlert, Filter, Globe,
   ChevronRight, Settings as SettingsIcon, Sparkles, Zap, SlidersHorizontal,
+  Gift, Copy,
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
@@ -102,6 +103,7 @@ const Settings_Tabs = {
   preferences: SlidersHorizontal,
   security: Lock,
   plan: CreditCard,
+  referral: Gift,
   help: BookOpen,
   danger: AlertTriangle,
 };
@@ -147,8 +149,24 @@ export default function SettingsPage() {
   // Toggle Mensuel/Annuel pour le pricing dans la section Plan & Usage
   const [upgradePeriod, setUpgradePeriod] = useState('monthly');
 
+  // Stats parrainage chargées séparément (cheap, 1 API call) pour alimenter
+  // la section "Programme parrainage" — push #6 du programme.
+  const [referralStats, setReferralStats] = useState(null);
+  const [referralCopied, setReferralCopied] = useState(false);
+
   useEffect(() => {
     loadUserData();
+    // Charge les stats parrainage en parallèle (non bloquant pour le rest
+    // du settings). Si l'API échoue (user non auth), on garde null.
+    (async () => {
+      try {
+        const res = await fetch('/api/referrals/me');
+        if (res.ok) {
+          const data = await res.json();
+          setReferralStats(data.stats || null);
+        }
+      } catch {}
+    })();
   }, []);
 
   useEffect(() => {
@@ -161,7 +179,7 @@ export default function SettingsPage() {
   // Scrollspy : met à jour activeSection quand l'utilisateur scrolle
   useEffect(() => {
     if (loading) return;
-    const sectionIds = ['preferences', 'security', 'plan', 'help', 'danger'];
+    const sectionIds = ['preferences', 'security', 'plan', 'referral', 'help', 'danger'];
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -574,6 +592,7 @@ export default function SettingsPage() {
                   { id: 'preferences', label: t('settings.navPreferences') },
                   { id: 'security', label: t('settings.navSecurity') },
                   { id: 'plan', label: t('settings.navPlanUsage') },
+                  { id: 'referral', label: 'Parrainage' },
                   { id: 'help', label: t('settings.navHelp') },
                   { id: 'danger', label: t('settings.navDanger'), danger: true },
                 ].map(({ id, label, danger }) => {
@@ -948,6 +967,77 @@ export default function SettingsPage() {
                     );
                   })}
                 </div>
+              </div>
+            </section>
+
+            {/* ─── Programme parrainage ──────────────────────── */}
+            <section id="referral" className="scroll-mt-20">
+              <SectionHeader
+                icon={<Gift className="h-5 w-5 text-pink-500" />}
+                title="Programme parrainage"
+                subtitle="Invitez 3 amis = 3 mois Pro offerts (et +1 mois pour eux)."
+              />
+
+              <div className="mt-4 rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-500/[0.05] via-fuchsia-500/[0.04] to-pink-500/[0.05] p-5">
+                {referralStats?.code ? (
+                  <>
+                    {/* Stats compactes */}
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      <div className="rounded-lg border border-line bg-surface-card p-3">
+                        <p className="text-[10px] uppercase tracking-wider text-content-tertiary font-semibold">Filleuls</p>
+                        <p className="text-xl font-bold text-content-primary tabular-nums mt-0.5">{referralStats.total || 0}</p>
+                      </div>
+                      <div className="rounded-lg border border-line bg-surface-card p-3">
+                        <p className="text-[10px] uppercase tracking-wider text-content-tertiary font-semibold">Payants</p>
+                        <p className="text-xl font-bold text-emerald-400 tabular-nums mt-0.5">{referralStats.qualified || 0}</p>
+                      </div>
+                      <div className="rounded-lg border border-pink-500/30 bg-pink-500/[0.05] p-3">
+                        <p className="text-[10px] uppercase tracking-wider text-pink-300 font-semibold">Mois gagnés</p>
+                        <p className="text-xl font-bold text-pink-400 tabular-nums mt-0.5">{referralStats.bonus_months_earned || 0}</p>
+                      </div>
+                    </div>
+
+                    {/* Lien à copier */}
+                    <p className="text-[10px] uppercase tracking-wider text-violet-400 font-semibold mb-2">Votre lien de parrainage</p>
+                    <div className="flex items-center gap-2 mb-3">
+                      <code className="flex-1 px-3 py-2 rounded-lg bg-surface-base border border-line font-mono text-xs text-content-primary break-all">
+                        https://volia.fr/signup?ref={referralStats.code}
+                      </code>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(`https://volia.fr/signup?ref=${referralStats.code}`);
+                            setReferralCopied(true);
+                            setTimeout(() => setReferralCopied(false), 2000);
+                          } catch {}
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition flex-shrink-0"
+                      >
+                        {referralCopied ? <CheckCircle className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                        {referralCopied ? 'Copié' : 'Copier'}
+                      </button>
+                    </div>
+
+                    <Link
+                      href="/parrainage"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-violet-400 hover:text-violet-300 transition"
+                    >
+                      Voir le programme complet (FAQ, calculator, témoignages)
+                      <ChevronRight className="h-3 w-3" />
+                    </Link>
+                  </>
+                ) : (
+                  <div className="text-center py-2">
+                    <p className="text-sm text-content-tertiary mb-3">Découvrez le programme et récupérez votre lien personnalisé.</p>
+                    <Link
+                      href="/parrainage"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-pink-600 hover:from-violet-500 hover:to-pink-500 text-white text-xs font-semibold transition shadow-md"
+                    >
+                      <Gift className="h-3.5 w-3.5" />
+                      Découvrir le parrainage
+                    </Link>
+                  </div>
+                )}
               </div>
             </section>
 

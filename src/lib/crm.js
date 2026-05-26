@@ -3,6 +3,8 @@
 // Gating Business plan + utilitaires pipeline/stages/deals.
 // ─────────────────────────────────────────────────────────────────
 
+import { getEffectivePlan } from './trial';
+
 // Default pipeline stages template (créé au 1er accès /app/crm)
 export const DEFAULT_PIPELINE = {
   name: 'Pipeline commercial',
@@ -29,11 +31,14 @@ export async function checkCrmAccess(supabase, userId) {
   if (!supabase || !userId) return false;
   const { data: profile, error } = await supabase
     .from('user_profiles')
-    .select('plan')
+    .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .maybeSingle();
   if (error || !profile) return false;
-  return CRM_ALLOWED_PLANS.includes(profile.plan);
+  // getEffectivePlan : si trial Pro actif, le user est "pro" → mais le CRM
+  // est gated Business uniquement. Trial Pro ne donne donc PAS accès au CRM,
+  // ce qui est volontaire (le CRM est un upsell Business, pas Pro).
+  return CRM_ALLOWED_PLANS.includes(getEffectivePlan(profile));
 }
 
 /**

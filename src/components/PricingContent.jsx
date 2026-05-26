@@ -33,6 +33,7 @@ import { useForceLightTheme } from '@/lib/use-force-light-theme';
 import MotionInView from '@/components/MotionInView';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import BookDemoButton from '@/components/BookDemoButton';
 
 // ─── Helpers ────────────────────────────────────────────────────
 function formatPrice(cents) {
@@ -181,7 +182,7 @@ const STACK_COMPETITORS = [
 const FAQ_PRICING = [
   {
     q: 'Y a-t-il un essai gratuit ?',
-    a: 'Oui. Le plan Starter (0 €) est disponible à vie, sans carte bancaire. Vous pouvez prospecter jusqu’à 100 entreprises par mois pour valider la qualité avant d’upgrader.',
+    a: 'Oui : à l’inscription, vous bénéficiez de 14 jours d’accès complet au plan Pro sans carte bancaire (5 000 prospects, cascade waterfall, vérif emails, campagnes). À l’expiration, votre compte passe automatiquement sur le plan Starter gratuit à vie (100 prospects/mois) — aucun prélèvement, aucune surprise.',
   },
   {
     q: 'Puis-je changer de plan à tout moment ?',
@@ -417,6 +418,19 @@ export default function PricingContent() {
               );
             })}
           </div>
+
+          {/* Help line sous les cards — booking démo si hésitation */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <p className="text-sm text-content-secondary">
+              Vous hésitez sur le plan adapté à votre besoin ?
+            </p>
+            <BookDemoButton
+              label="Une question ? Réservez une démo"
+              variant="secondary"
+              size="sm"
+              source="pricing_cards"
+            />
+          </div>
         </section>
 
         {/* ─── 3. BANNER ÉCONOMIES ─────────────────────────── */}
@@ -530,6 +544,16 @@ export default function PricingContent() {
                   </MotionInView>
                 );
               })}
+            </div>
+
+            {/* CTA booking démo sous les personas — friction zéro pour le profil "pas sûr" */}
+            <div className="mt-10 flex justify-center">
+              <BookDemoButton
+                label="Pas sûr ? Réservez une démo perso"
+                variant="primary"
+                size="md"
+                source="pricing_personas"
+              />
             </div>
           </MotionInView>
         </section>
@@ -719,6 +743,13 @@ export default function PricingContent() {
                 >
                   Voir une démo en direct
                 </Link>
+                <BookDemoButton
+                  label="Réserver 15 min avec le founder"
+                  variant="dark"
+                  size="md"
+                  source="pricing_final_cta"
+                  className="w-full sm:w-auto"
+                />
               </div>
               <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-violet-100">
                 <span className="flex items-center gap-1.5"><Check size={11} /> Sans CB</span>

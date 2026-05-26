@@ -101,6 +101,20 @@ export async function POST(request) {
           break;
         }
 
+        // Trial conversion : si le user était en trial, on stamp
+        // trial_converted_at pour le marquer "consommé" (pas de re-trial)
+        // et pour les analytics.
+        const { data: trialProfile } = await supabaseAdmin
+          .from('user_profiles')
+          .select('trial_started_at, trial_converted_at')
+          .eq('id', userId)
+          .maybeSingle();
+
+        const trialConvertedAt =
+          trialProfile?.trial_started_at && !trialProfile.trial_converted_at
+            ? new Date().toISOString()
+            : trialProfile?.trial_converted_at || null;
+
         const { error: updateError } = await supabaseAdmin
           .from('user_profiles')
           .update({
@@ -108,6 +122,7 @@ export async function POST(request) {
             stripe_customer_id: session.customer,
             stripe_subscription_id: session.subscription,
             updated_at: new Date().toISOString(),
+            ...(trialConvertedAt ? { trial_converted_at: trialConvertedAt } : {}),
           })
           .eq('id', userId);
 

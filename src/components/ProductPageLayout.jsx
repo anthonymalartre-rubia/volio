@@ -35,6 +35,7 @@ import {
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
+import BookDemoButton from '@/components/BookDemoButton';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
 // Map nom string → composant Lucide. Permet de passer les icônes depuis
@@ -389,6 +390,16 @@ export default function ProductPageLayout({
                   )}
                 </div>
 
+                {/* CTA tertiaire — booking démo perso (ghost discret) */}
+                <div className="mb-8">
+                  <BookDemoButton
+                    label="Ou réserver 15 min avec le founder"
+                    variant="ghost"
+                    size="sm"
+                    source={`produit_${module}_hero`}
+                  />
+                </div>
+
                 {/* Trust line */}
                 {hero.trust && (
                   <div className="flex items-center gap-4 text-xs text-content-tertiary flex-wrap">
@@ -646,6 +657,12 @@ export default function ProductPageLayout({
                     {finalCta.secondary.label}
                   </Link>
                 )}
+                <BookDemoButton
+                  label="Voir si Volia est fait pour vous"
+                  variant="secondary"
+                  size="lg"
+                  source={`produit_${module}_final_cta`}
+                />
               </div>
             )}
 

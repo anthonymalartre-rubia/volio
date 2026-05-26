@@ -7,10 +7,14 @@ import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
 import UpgradeBanner from '@/components/UpgradeBanner';
-// OnboardingChecklist + ReferralBanner + ReviewSolicitationBanner :
+import TrialBanner from '@/components/TrialBanner';
+// OnboardingChecklist + ReferralPushBanner + ReviewSolicitationBanner :
 // lazy load (widgets non-critiques)
 const OnboardingChecklist = lazy(() => import('@/components/OnboardingChecklist'));
-const ReferralBanner = lazy(() => import('@/components/ReferralBanner'));
+// ReferralPushBanner remplace l'ancien ReferralBanner (mai 2026) : design
+// horizontal sticky-top plus visible avec copie de lien intégrée, gradient
+// violet→pink et 2 CTA. Dismiss 7j conservé.
+const ReferralPushBanner = lazy(() => import('@/components/ReferralPushBanner'));
 const ReviewSolicitationBanner = lazy(() => import('@/components/ReviewSolicitationBanner'));
 const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgroundDecor'));
 import LimitReachedModal from '@/components/LimitReachedModal';
@@ -191,6 +195,9 @@ export default function Dashboard() {
   const [userPlan, setUserPlan] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [userUsage, setUserUsage] = useState(null);
+  // Profil complet — nécessaire pour le TrialBanner (trial_ends_at, etc.)
+  // Séparé de userPlan car ce dernier est l'objet plan résolu (limits etc.).
+  const [userProfile, setUserProfile] = useState(null);
   // Toast post-Stripe (retour de checkout) — { type: 'success'|'cancelled', planName? }
   const [upgradeToast, setUpgradeToast] = useState(null);
   // Phase 3 — Send to CRM
@@ -444,7 +451,7 @@ export default function Dashboard() {
         prospectsRes,
         sessionsRes,
       ] = await Promise.all([
-        supabase.from('user_profiles').select('plan, stripe_customer_id, is_admin').eq('id', currentUser.id).single(),
+        supabase.from('user_profiles').select('plan, stripe_customer_id, is_admin, trial_plan, trial_started_at, trial_ends_at, trial_converted_at').eq('id', currentUser.id).single(),
         supabase.from('usage_tracking').select('searches, enrichments, exports').eq('user_id', currentUser.id).eq('month', month).single(),
         fetch('/api/places').then(r => r.ok).catch(() => false),
         supabase.from('lead_folders').select('*').order('created_at', { ascending: true }),
@@ -456,8 +463,12 @@ export default function Dashboard() {
 
       // Apply profile
       if (profileRes.data) {
-        setUserPlan(getPlan(profileRes.data.plan));
+        // Trial Pro 14j : le plan effectif tient compte du trial actif.
+        // Un user free en trial Pro a son userPlan = Pro pour le gating UI.
+        const { getEffectivePlan } = await import('@/lib/trial');
+        setUserPlan(getPlan(getEffectivePlan(profileRes.data)));
         setIsAdmin(!!profileRes.data.is_admin);
+        setUserProfile(profileRes.data);
       }
 
       // Apply usage
@@ -1447,14 +1458,18 @@ export default function Dashboard() {
         </div>
 
         <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)]">
+          {/* Trial Pro 14j — affiché en sticky top dès qu'un trial est actif ou
+              vient d'expirer. Discreet en mode normal, urgent à J-3, rouge si expiré. */}
+          <TrialBanner profile={userProfile} />
           <UpgradeBanner
             plan={userPlan}
             usage={userUsage}
             onUpgrade={(targetPlan) => handleUpgrade(targetPlan || 'pro')}
           />
-          {/* Banner parrainage (dismissable 7 jours, lazy) */}
+          {/* Banner parrainage push — design persistant horizontal,
+              copie lien intégrée, dismiss 7j (lazy) */}
           <Suspense fallback={null}>
-            <ReferralBanner />
+            <ReferralPushBanner />
           </Suspense>
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">

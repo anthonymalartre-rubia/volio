@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3, Sparkles } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
+import BookDemoButton from '@/components/BookDemoButton';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
@@ -205,6 +206,16 @@ export default function LandingContent() {
                 >
                   Voir une démo en direct
                 </a>
+              </div>
+
+              {/* CTA tertiaire — booking démo perso founder */}
+              <div className="mb-8">
+                <BookDemoButton
+                  label="Ou réserver 15 min avec le founder"
+                  variant="ghost"
+                  size="sm"
+                  source="landing_hero"
+                />
               </div>
 
               {/* Avatars stack + stat punchy (vs ancien "SDR, freelances...") */}
@@ -1512,17 +1523,28 @@ export default function LandingContent() {
             </div>
           </MotionInView>
 
-          {/* Footer note */}
-          <p className="mt-10 text-center text-sm text-content-tertiary">
-            {isYearly ? t('landing.pricing.yearlySave') : (
-              <>
-                {t('landing.pricing.questions')}{' '}
-                <a href="mailto:hello@volia.fr" className="text-violet-400 hover:underline">
-                  {t('landing.pricing.contactSupport')}
-                </a>
-              </>
-            )}
-          </p>
+          {/* Footer note + booking démo */}
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-sm text-content-tertiary text-center">
+              {isYearly ? t('landing.pricing.yearlySave') : (
+                <>
+                  {t('landing.pricing.questions')}{' '}
+                  <a href="mailto:hello@volia.fr" className="text-violet-400 hover:underline">
+                    {t('landing.pricing.contactSupport')}
+                  </a>
+                </>
+              )}
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <span className="text-sm text-content-secondary">Vous hésitez sur le plan ?</span>
+              <BookDemoButton
+                label="Réserver 15 min de démo"
+                variant="secondary"
+                size="md"
+                source="landing_pricing"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1573,6 +1595,12 @@ export default function LandingContent() {
             >
               Voir les tarifs
             </Link>
+            <BookDemoButton
+              label="Réserver 15 min de démo"
+              variant="secondary"
+              size="lg"
+              source="landing_final_cta"
+            />
           </div>
 
           {/* Trust signal final */}
@@ -1597,6 +1625,7 @@ export default function LandingContent() {
                 <li><Link href="/signup" className="text-content-tertiary hover:text-violet-400 transition">Inscription</Link></li>
                 <li><Link href="/login" className="text-content-tertiary hover:text-violet-400 transition">Connexion</Link></li>
                 <li><Link href="#pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>
+                <li><Link href="/demo" className="text-content-tertiary hover:text-violet-400 transition">Réserver une démo</Link></li>
               </ul>
             </div>
 

@@ -22,6 +22,7 @@ import {
   CheckCircle2, Circle, Search, Upload, Send, Download,
   User, ChevronDown, X, Sparkles, ArrowRight,
 } from 'lucide-react';
+import BookDemoButton from '@/components/BookDemoButton';
 
 // adminOnly: true → l'étape n'est montrée qu'aux admins (features /admin
 // non accessibles aux users standards aujourd'hui). À retirer le jour où
@@ -229,6 +230,20 @@ export default function OnboardingChecklist({ isAdmin = false }) {
                   );
                 })}
               </ul>
+
+              {/* Footer du popover — CTA booking démo perso (trial assist) */}
+              <div className="mt-3 pt-3 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p className="text-[11px] text-content-tertiary leading-snug">
+                  Besoin d&apos;un coup de main pour démarrer ? Anthony (founder) vous fait
+                  une démo perso en 15 min.
+                </p>
+                <BookDemoButton
+                  label="Réserver 15 min"
+                  variant="ghost"
+                  size="sm"
+                  source="dashboard_onboarding"
+                />
+              </div>
             </div>
           </div>
         )}

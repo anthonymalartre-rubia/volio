@@ -3,6 +3,7 @@ import { getPlan, isLimitReached } from './plans';
 import { sendEmail } from './email';
 import { createNotification, NOTIF_TYPES } from './notifications';
 import { usageWarningEmail, usageLimitReachedEmail } from './emailTemplates';
+import { getEffectivePlan } from './trial';
 
 function getCurrentMonth() {
   const now = new Date();
@@ -33,14 +34,17 @@ export async function getUsage(supabase, userId) {
 }
 
 // Get user plan
+// Inclut le trial : un user en trial 14j voit son plan Pro renvoyé tant que
+// trial_ends_at est dans le futur. À l'expiration (ou si converti déjà payant),
+// on retombe sur profile.plan.
 export async function getUserPlan(supabase, userId) {
   const { data } = await supabase
     .from('user_profiles')
-    .select('plan')
+    .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .single();
 
-  return getPlan(data?.plan || 'free');
+  return getPlan(getEffectivePlan(data));
 }
 
 // Check if user can perform an action

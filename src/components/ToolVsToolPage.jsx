@@ -6,6 +6,7 @@ import {
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import { LogoIcon } from '@/components/ui';
+import BookDemoButton from '@/components/BookDemoButton';
 
 /**
  * Composant rendu pour /outils/comparatif/[X]-vs-[Y].
@@ -265,13 +266,24 @@ export default function ToolVsToolPage({ a, b }) {
               100 prospects offerts pour découvrir l&apos;alternative française à {a.name} et {b.name}.
               À partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30"
-            >
-              <Zap size={16} />
-              Démarrer gratuitement
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30"
+              >
+                <Zap size={16} />
+                Démarrer gratuitement
+              </Link>
+              <BookDemoButton
+                label="Pas sûr ? Comparons en direct"
+                variant="secondary"
+                size="md"
+                source={`vs_${a.slug || 'a'}_${b.slug || 'b'}`}
+              />
+            </div>
+            <p className="mt-4 text-xs text-content-tertiary">
+              15 min avec le founder pour comparer Volia, {a.name} et {b.name} sur votre cas réel.
+            </p>
           </div>
         </article>
       </main>
