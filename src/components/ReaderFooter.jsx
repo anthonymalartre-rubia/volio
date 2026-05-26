@@ -9,6 +9,9 @@ export default function ReaderFooter() {
           <Link href="/ressources" className="hover:text-content-secondary transition">Ressources</Link>
           <Link href="/outils" className="hover:text-content-secondary transition">Outils</Link>
           <Link href="/comparatif-outils-prospection-b2b-france" className="hover:text-content-secondary transition">Comparatif</Link>
+          <Link href="/comparatif/apollo-vs-volia" className="hover:text-content-secondary transition">vs Apollo</Link>
+          <Link href="/comparatif/lemlist-vs-volia" className="hover:text-content-secondary transition">vs Lemlist</Link>
+          <Link href="/comparatif/hubspot-vs-volia" className="hover:text-content-secondary transition">vs HubSpot</Link>
           <Link href="/etude/prospection-b2b-france-2026" className="hover:text-content-secondary transition">Étude 2026</Link>
           <Link href="/glossaire" className="hover:text-content-secondary transition">Glossaire</Link>
           <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>

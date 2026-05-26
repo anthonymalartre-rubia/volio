@@ -1,5 +1,6 @@
 import { getAllSeoUrls } from '@/lib/slugs';
 import { getAllCompetitors, getAllPairs } from '@/lib/competitors';
+import { getAllComparatifSlugs } from '@/lib/comparatifs';
 import { getAllPosts } from '@/lib/blog';
 import { getAllGlossaryTerms } from '@/lib/glossary';
 import { getAllGuides } from '@/lib/guides';
@@ -82,6 +83,15 @@ export default async function sitemap({ id }) {
       lastModified: now,
     }));
 
+    // 3 pages comparatif long-form 1-vs-Volia (priority 0.9, contenu très
+    // travaillé ~2000-3000 mots SEO long-tail : apollo, lemlist, hubspot).
+    const comparatifLongForm = getAllComparatifSlugs().map((slug) => ({
+      url: `${baseUrl}/comparatif/${slug}`,
+      priority: 0.9,
+      changeFrequency: 'monthly',
+      lastModified: now,
+    }));
+
     const blog = [
       { url: `${baseUrl}/blog`, priority: 0.7, changeFrequency: 'weekly', lastModified: now },
       ...getAllPosts().map((p) => ({
@@ -126,7 +136,7 @@ export default async function sitemap({ id }) {
       }),
     ];
 
-    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...ressources, ...blog, ...glossary, ...guides];
+    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...comparatifLongForm, ...ressources, ...blog, ...glossary, ...guides];
   }
 
   // ─── Chunks SEO programmatiques ────────────────────────────────────

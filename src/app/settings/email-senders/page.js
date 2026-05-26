@@ -32,8 +32,17 @@ import {
   ChevronRight,
   Info,
   ExternalLink,
+  Flame,
+  Play,
 } from 'lucide-react';
 import { ConfirmModal, InfoTooltip } from '@/components/ui';
+import {
+  calculateCurrentDay,
+  getCurrentPhase,
+  getWarmupProgressPercent,
+  estimateCompletionDate,
+  WARMUP_DURATION_DAYS,
+} from '@/lib/warmup';
 
 // Définitions courtes pour expliquer les concepts DNS aux non-experts.
 const DNS_TYPE_HELP = {
@@ -195,6 +204,95 @@ function DnsTable({ records }) {
   );
 }
 
+// Section warmup affichée dans la card de chaque sender.
+// 3 états :
+//   - Sender pas verified           → on cache (warmup pas applicable)
+//   - Warmup absent ou completed    → badge "Warm" + bouton optionnel "Démarrer le warmup"
+//                                      (utile pour les senders legacy verified avant la feature)
+//   - Warmup active                 → progress bar + phase courante + date fin estimée
+function WarmupSection({ sender, onStart, starting }) {
+  if (sender.status !== 'verified') return null;
+
+  const warmup = sender.warmup;
+  const tooltip = 'Volia chauffe votre domaine progressivement pour atteindre 200 emails/jour sans tomber en spam. Process automatique pendant 28 jours qui respecte le protocole de warmup Gmail/Outlook.';
+
+  // Pas de session warmup OU déjà completed → considéré "warm"
+  if (!warmup || warmup.status === 'completed') {
+    return (
+      <div className="mt-3 pt-3 border-t border-line flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2 text-xs text-content-secondary">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold border bg-emerald-500/15 text-emerald-600 border-emerald-500/30">
+            <Flame className="h-3 w-3" />
+            {warmup ? 'Warmup terminé' : 'Warm'}
+          </span>
+          <span className="text-content-tertiary">
+            Domaine en régime nominal — pas de limite de volume.
+          </span>
+          <InfoTooltip content={tooltip} iconSize={11} />
+        </div>
+        {!warmup && (
+          <button
+            onClick={() => onStart(sender.id)}
+            disabled={starting}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium border border-line bg-surface-card hover:bg-surface-elevated text-content-secondary transition disabled:opacity-40"
+            title="Démarrer manuellement un warmup 28 jours (recommandé pour un nouveau domaine)"
+          >
+            {starting ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
+            Démarrer le warmup
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  // Warmup active : on calcule les infos d'affichage côté client (sans round-trip)
+  const currentDay = Math.min(calculateCurrentDay(warmup.started_at), WARMUP_DURATION_DAYS);
+  const phase = getCurrentPhase(currentDay);
+  const progress = getWarmupProgressPercent(currentDay);
+  const completionDate = estimateCompletionDate(warmup.started_at);
+
+  return (
+    <div className="mt-3 pt-3 border-t border-line space-y-2">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold border bg-amber-500/15 text-amber-600 border-amber-500/30">
+            <Flame className="h-3 w-3" />
+            Warmup en cours
+          </span>
+          {phase && (
+            <span className="text-xs text-content-secondary truncate">
+              {phase.label} — <strong>{phase.maxPerDay}</strong>/jour autorisés
+            </span>
+          )}
+          <InfoTooltip content={tooltip} iconSize={11} />
+        </div>
+        <span className="text-[11px] text-content-tertiary whitespace-nowrap">
+          Jour {currentDay} / {WARMUP_DURATION_DAYS}
+        </span>
+      </div>
+
+      <div className="h-1.5 w-full rounded-full bg-surface-elevated overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      <p className="text-[11px] text-content-tertiary">
+        Plein régime estimé le{' '}
+        <strong>
+          {completionDate.toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          })}
+        </strong>
+        .
+      </p>
+    </div>
+  );
+}
+
 export default function EmailSendersPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -203,6 +301,7 @@ export default function EmailSendersPage() {
   const [expandedDnsId, setExpandedDnsId] = useState(null);
   const [verifyingId, setVerifyingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [startingWarmupId, setStartingWarmupId] = useState(null);
   // Modal de confirmation pour la suppression (remplace confirm() natif)
   const [senderToDelete, setSenderToDelete] = useState(null);
 
@@ -277,6 +376,26 @@ export default function EmailSendersPage() {
       return null;
     } finally {
       setVerifyingId(null);
+    }
+  }
+
+  async function handleStartWarmup(senderId) {
+    setStartingWarmupId(senderId);
+    try {
+      const res = await fetch(`/api/email-senders/${senderId}/warmup`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast(data.error || 'Impossible de démarrer le warmup', 'error');
+        return;
+      }
+      setSenders((prev) =>
+        prev.map((s) => (s.id === senderId ? { ...s, warmup: data.warmup } : s))
+      );
+      showToast('Warmup 28 jours démarré.', 'success');
+    } catch {
+      showToast('Erreur réseau', 'error');
+    } finally {
+      setStartingWarmupId(null);
     }
   }
 
@@ -800,6 +919,12 @@ export default function EmailSendersPage() {
                       <DnsTable records={s.dns_records} />
                     </div>
                   )}
+
+                  <WarmupSection
+                    sender={s}
+                    onStart={handleStartWarmup}
+                    starting={startingWarmupId === s.id}
+                  />
                 </div>
               );
             })

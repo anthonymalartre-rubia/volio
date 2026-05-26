@@ -17,6 +17,12 @@ import { applyTemplate, appendOptOutFooter } from '@/lib/campaign-templates';
 import { cleanEnv } from '@/lib/envClean';
 import { logEmailSentToCrm } from '@/lib/crm-activity-logger';
 import { buildCampaignReplyAddress } from '@/lib/inbound-domain';
+import {
+  calculateCurrentDay,
+  getCurrentPhase,
+  countTodaySendsForSender,
+  WARMUP_DURATION_DAYS,
+} from '@/lib/warmup';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // Pro tier requis si > 10s sur free, mais 60 ici par sécurité
@@ -87,8 +93,108 @@ export async function GET(request) {
     senderMap = new Map((senders || []).map((s) => [s.id, s]));
   }
 
-  // 4) Envoie chaque send
-  const results = await Promise.all(sends.map(async (send) => {
+  // 3.ter) WARMUP — pour chaque sender concerné, on charge sa session de warmup
+  // active (s'il y en a une). On calcule le current_day et le quota restant
+  // pour aujourd'hui. Ce quota sera décrémenté à chaque envoi successful pour
+  // limiter les sends dans CE batch et éviter de dépasser la limite jour.
+  //
+  // Senders sans warmup_session = legacy ou jamais en warmup → quota infini.
+  const warmupQuotaBySender = new Map(); // senderId → remaining today (Infinity si pas de warmup)
+  const warmupSessionMap = new Map(); // senderId → row warmup_session active
+  const warmupSessionsToComplete = []; // ids des sessions à marquer 'completed'
+  const warmupSessionsToUpdateDay = []; // [{id, current_day}] à update si jour avancé
+
+  if (senderIds.length > 0) {
+    const { data: warmupSessions } = await supabase
+      .from('warmup_sessions')
+      .select('id, sender_id, started_at, current_day, status')
+      .in('sender_id', senderIds)
+      .eq('status', 'active');
+
+    for (const session of warmupSessions || []) {
+      const computedDay = calculateCurrentDay(session.started_at);
+
+      if (computedDay > WARMUP_DURATION_DAYS) {
+        // Warmup terminé → on marque la session completed et quota infini.
+        warmupSessionsToComplete.push(session.id);
+        warmupQuotaBySender.set(session.sender_id, Infinity);
+        continue;
+      }
+
+      if (computedDay !== session.current_day) {
+        warmupSessionsToUpdateDay.push({ id: session.id, current_day: computedDay });
+      }
+
+      const phase = getCurrentPhase(computedDay);
+      if (!phase) {
+        warmupQuotaBySender.set(session.sender_id, Infinity);
+        continue;
+      }
+
+      const alreadySent = await countTodaySendsForSender(supabase, session.sender_id);
+      const remaining = Math.max(0, phase.maxPerDay - alreadySent);
+      warmupQuotaBySender.set(session.sender_id, remaining);
+      warmupSessionMap.set(session.sender_id, { ...session, current_day: computedDay, phase });
+    }
+  }
+
+  // Persiste les updates de session warmup (best-effort, ne bloque pas).
+  if (warmupSessionsToComplete.length > 0) {
+    await supabase
+      .from('warmup_sessions')
+      .update({ status: 'completed', completed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .in('id', warmupSessionsToComplete);
+  }
+  for (const upd of warmupSessionsToUpdateDay) {
+    await supabase
+      .from('warmup_sessions')
+      .update({ current_day: upd.current_day, updated_at: new Date().toISOString() })
+      .eq('id', upd.id);
+  }
+
+  let warmupThrottled = 0; // compteur pour le log de retour
+
+  // 3.quater) Pre-filtre des sends pour respecter le warmup quota.
+  // On itère dans l'ordre (FIFO sur created_at) et on garde les sends tant que
+  // le sender a du quota. Le surplus reste 'pending' et sera retraité au prochain
+  // cron (le lendemain, quota frais).
+  const sendsToProcess = [];
+  const senderRemainingBatch = new Map(warmupQuotaBySender); // copie mutable
+
+  for (const send of sends) {
+    const campaign = campaignMap.get(send.campaign_id);
+    const senderId = campaign?.email_sender_id;
+
+    // Pas de sender configuré OU sender pas en warmup → on laisse passer.
+    // La logique de fail "no verified sender" s'appliquera dans la boucle d'envoi.
+    if (!senderId || !senderRemainingBatch.has(senderId)) {
+      sendsToProcess.push(send);
+      continue;
+    }
+
+    const remaining = senderRemainingBatch.get(senderId);
+    if (remaining === Infinity || remaining > 0) {
+      sendsToProcess.push(send);
+      if (remaining !== Infinity) {
+        senderRemainingBatch.set(senderId, remaining - 1);
+      }
+    } else {
+      // Quota épuisé pour ce sender → on skip ce send (reste pending).
+      warmupThrottled++;
+    }
+  }
+
+  if (sendsToProcess.length === 0) {
+    return NextResponse.json({
+      ok: true,
+      processed: 0,
+      warmup_throttled: warmupThrottled,
+      message: 'Tous les envois en queue sont throttlés par le warmup (quota jour atteint).',
+    });
+  }
+
+  // 4) Envoie chaque send (filtré par warmup quota)
+  const results = await Promise.all(sendsToProcess.map(async (send) => {
     const campaign = campaignMap.get(send.campaign_id);
     const contact = contactMap.get(send.contact_id);
 
@@ -229,9 +335,10 @@ export async function GET(request) {
 
   return NextResponse.json({
     ok: true,
-    processed: sends.length,
+    processed: sendsToProcess.length,
     succeeded,
     failed,
+    warmup_throttled: warmupThrottled,
     campaigns_affected: campaignIds.length,
     crm_activities_logged: crmActivitiesLogged,
   });

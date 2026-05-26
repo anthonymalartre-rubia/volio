@@ -42,7 +42,23 @@ export async function GET() {
     return NextResponse.json({ error: 'Erreur lecture' }, { status: 500 });
   }
 
-  return NextResponse.json({ senders: data || [] });
+  // Bulk fetch des warmup sessions liées pour enrichir la réponse (l'UI affiche
+  // une progress bar / phase courante par sender).
+  const senders = data || [];
+  if (senders.length > 0) {
+    const senderIds = senders.map((s) => s.id);
+    const { data: sessions } = await supabase
+      .from('warmup_sessions')
+      .select('id, sender_id, started_at, completed_at, current_day, status')
+      .in('sender_id', senderIds);
+
+    const sessionMap = new Map((sessions || []).map((sess) => [sess.sender_id, sess]));
+    for (const s of senders) {
+      s.warmup = sessionMap.get(s.id) || null;
+    }
+  }
+
+  return NextResponse.json({ senders });
 }
 
 export async function POST(request) {

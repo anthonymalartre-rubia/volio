@@ -42,7 +42,7 @@ export async function POST(_request, { params }) {
 
   const { data: sender, error: fetchErr } = await supabase
     .from('email_senders')
-    .select('id, resend_domain_id, status, verified_at')
+    .select('id, user_id, resend_domain_id, status, verified_at')
     .eq('id', id)
     .maybeSingle();
 
@@ -85,7 +85,8 @@ export async function POST(_request, { params }) {
     updated_at: now,
   };
   // verified_at est posé une seule fois (à la première bascule).
-  if (newStatus === 'verified' && !sender.verified_at) {
+  const isFirstVerification = newStatus === 'verified' && !sender.verified_at;
+  if (isFirstVerification) {
     updates.verified_at = now;
   }
 
@@ -101,6 +102,28 @@ export async function POST(_request, { params }) {
   if (error) {
     console.error('[api/email-senders/verify] update error', error);
     return NextResponse.json({ error: 'Erreur mise à jour' }, { status: 500 });
+  }
+
+  // Auto-start warmup session si on vient juste de passer en verified.
+  // Fire-and-forget : on log mais on NE casse PAS la verify si l'insert
+  // warmup fail (UNIQUE constraint = warmup déjà démarré, OK).
+  if (isFirstVerification && sender.user_id) {
+    try {
+      const { error: warmupErr } = await supabase
+        .from('warmup_sessions')
+        .insert({
+          sender_id: id,
+          user_id: sender.user_id,
+          current_day: 1,
+          status: 'active',
+        });
+      if (warmupErr && warmupErr.code !== '23505') {
+        // 23505 = unique_violation → déjà existant, on ignore.
+        console.error('[api/email-senders/verify] warmup insert error', warmupErr);
+      }
+    } catch (e) {
+      console.error('[api/email-senders/verify] warmup insert exception', e);
+    }
   }
 
   return NextResponse.json({ sender: data });

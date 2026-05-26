@@ -218,17 +218,23 @@ export default function NotificationBell() {
           </div>
 
           {/* Footer */}
-          {items.length > 0 && (
-            <div className="px-4 py-2 border-t border-line text-center">
-              <Link
-                href="/settings#notifications"
-                onClick={() => setOpen(false)}
-                className="text-xs text-content-tertiary hover:text-violet-400"
-              >
-                Préférences notifications →
-              </Link>
-            </div>
-          )}
+          <div className="px-4 py-2.5 border-t border-line flex items-center justify-between gap-3">
+            <Link
+              href="/notifications"
+              onClick={() => setOpen(false)}
+              className="text-xs font-medium text-violet-400 hover:text-violet-300 transition"
+            >
+              Voir toutes les notifications →
+            </Link>
+            <Link
+              href="/settings#notifications"
+              onClick={() => setOpen(false)}
+              className="text-xs text-content-tertiary hover:text-content-secondary transition"
+              aria-label="Préférences notifications"
+            >
+              Préférences
+            </Link>
+          </div>
         </div>
       )}
     </div>
