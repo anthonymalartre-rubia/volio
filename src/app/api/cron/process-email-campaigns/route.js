@@ -15,6 +15,7 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { applyTemplate, appendOptOutFooter } from '@/lib/campaign-templates';
 import { cleanEnv } from '@/lib/envClean';
+import { logEmailSentToCrm } from '@/lib/crm-activity-logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // Pro tier requis si > 10s sur free, mais 60 ici par sécurité
@@ -60,7 +61,7 @@ export async function GET(request) {
   const contactIds = [...new Set(sends.map((s) => s.contact_id))];
 
   const [{ data: campaigns }, { data: contacts }] = await Promise.all([
-    supabase.from('email_campaigns').select('id, name, subject, body_html, from_name, from_email, reply_to, status').in('id', campaignIds),
+    supabase.from('email_campaigns').select('id, owner_id, name, subject, body_html, from_name, from_email, reply_to, status').in('id', campaignIds),
     supabase.from('prospect_contacts').select('id, email, phone, first_name, last_name, company, position_title, custom_fields, opt_out').in('id', contactIds),
   ]);
 
@@ -105,10 +106,22 @@ export async function GET(request) {
       await supabase.from('prospect_contacts')
         .update({ last_email_at: new Date().toISOString() })
         .eq('id', contact.id);
-      return updateSendStatus(supabase, send.id, 'sent', {
+
+      // Bridge CRM : log de l'envoi dans la timeline du contact CRM s'il existe.
+      // Fire-and-forget : ne fait JAMAIS échouer l'envoi.
+      const crmLog = await logEmailSentToCrm({
+        supabaseAdmin: supabase,
+        ownerId: campaign.owner_id,
+        recipientEmail: contact.email,
+        campaign,
+        providerId: result.id,
+      });
+
+      const sendUpdate = await updateSendStatus(supabase, send.id, 'sent', {
         provider_id: result.id,
         sent_at: new Date().toISOString(),
       });
+      return { ...sendUpdate, crmLogged: !!crmLog?.logged };
     } else {
       return updateSendStatus(supabase, send.id, 'failed', {
         error: result.error || 'Unknown error',
@@ -118,6 +131,7 @@ export async function GET(request) {
 
   const succeeded = results.filter((r) => r?.ok).length;
   const failed = results.filter((r) => r && !r.ok).length;
+  const crmActivitiesLogged = results.filter((r) => r?.crmLogged).length;
 
   // 5) Recalcule les stats des campagnes touchées
   for (const cid of campaignIds) {
@@ -146,6 +160,7 @@ export async function GET(request) {
     succeeded,
     failed,
     campaigns_affected: campaignIds.length,
+    crm_activities_logged: crmActivitiesLogged,
   });
 }
 

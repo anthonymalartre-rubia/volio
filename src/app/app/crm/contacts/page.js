@@ -26,11 +26,13 @@ import {
   AlertCircle,
   X,
   KanbanSquare,
+  Megaphone,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import ContactsList from '@/components/crm/ContactsList';
 import NewContactModal from '@/components/crm/NewContactModal';
+import AddToCampagneModal from '@/components/crm/AddToCampagneModal';
 import { getSupabase } from '@/lib/supabase';
 
 const BUSINESS_PLANS = ['business', 'enterprise'];
@@ -61,6 +63,34 @@ export default function CrmContactsPage() {
   // ─── UI ───────────────────────────────────────────────────
   const [newContactOpen, setNewContactOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+
+  // ─── Bulk selection (CRM → Campagnes) ─────────────────────
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [campagneOpen, setCampagneOpen] = useState(false);
+  const [campagneToast, setCampagneToast] = useState('');
+
+  function toggleSelect(id) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+  function toggleSelectAll(checked, visibleIds) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        visibleIds.forEach((id) => next.add(id));
+      } else {
+        visibleIds.forEach((id) => next.delete(id));
+      }
+      return next;
+    });
+  }
+  function clearSelection() {
+    setSelectedIds(new Set());
+  }
 
   // ─── Auth check ──────────────────────────────────────────
   useEffect(() => {
@@ -181,6 +211,12 @@ export default function CrmContactsPage() {
       }
       setContacts((prev) => prev.filter((c) => c.id !== contact.id));
       setTotal((t) => Math.max(0, t - 1));
+      setSelectedIds((prev) => {
+        if (!prev.has(contact.id)) return prev;
+        const next = new Set(prev);
+        next.delete(contact.id);
+        return next;
+      });
     } catch (err) {
       console.error('[CRM contacts] delete error', err);
       setError('Erreur réseau');
@@ -282,6 +318,55 @@ export default function CrmContactsPage() {
             )}
           </header>
 
+          {/* Bulk toolbar */}
+          {selectedIds.size > 0 && (
+            <div className="sticky top-[7.5rem] z-20 px-4 sm:px-6 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-md">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  <span className="tabular-nums">{selectedIds.size}</span>
+                  contact{selectedIds.size > 1 ? 's' : ''} sélectionné
+                  {selectedIds.size > 1 ? 's' : ''}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setCampagneOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-violet-700 bg-white hover:bg-violet-50 shadow-sm transition-colors"
+                  >
+                    <Megaphone size={13} />
+                    Ajouter à séquence
+                  </button>
+                  <button
+                    type="button"
+                    onClick={clearSelection}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+                    aria-label="Désélectionner tout"
+                  >
+                    <X size={13} />
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {campagneToast && (
+            <div className="px-4 sm:px-6 pt-3">
+              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-violet-50 border border-violet-200 text-violet-700">
+                <Megaphone size={14} className="flex-shrink-0 mt-0.5" />
+                <p className="text-xs font-medium flex-1">{campagneToast}</p>
+                <button
+                  type="button"
+                  onClick={() => setCampagneToast('')}
+                  className="text-violet-500 hover:text-violet-700"
+                  aria-label="Fermer"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Content */}
           <section className="flex-1 p-4 sm:p-6 bg-gradient-to-br from-emerald-50/20 via-surface-base to-teal-50/10">
             <ContactsList
@@ -290,6 +375,10 @@ export default function CrmContactsPage() {
               onClick={handleContactClick}
               onEdit={handleContactEdit}
               onDelete={handleContactDelete}
+              selectable
+              selectedIds={selectedIds}
+              onToggleSelect={toggleSelect}
+              onToggleSelectAll={toggleSelectAll}
               emptyState={
                 debouncedSearch ? (
                   <div className="max-w-sm mx-auto">
@@ -364,6 +453,20 @@ export default function CrmContactsPage() {
         open={newContactOpen}
         onClose={() => setNewContactOpen(false)}
         onCreated={handleContactCreated}
+      />
+
+      <AddToCampagneModal
+        open={campagneOpen}
+        onClose={() => setCampagneOpen(false)}
+        contactIds={Array.from(selectedIds)}
+        onSuccess={(data) => {
+          const inserted = data?.inserted || 0;
+          const skipped = data?.skipped || 0;
+          const parts = [`${inserted} ajouté${inserted > 1 ? 's' : ''} à « ${data?.list_name} »`];
+          if (skipped > 0) parts.push(`${skipped} doublon${skipped > 1 ? 's' : ''}`);
+          setCampagneToast(parts.join(' · '));
+          clearSelection();
+        }}
       />
     </div>
   );

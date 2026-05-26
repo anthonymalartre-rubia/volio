@@ -10,6 +10,10 @@
 //   - onClick?(contact) : clic sur la ligne (ouvre détail)
 //   - loading : bool
 //   - emptyState : ReactNode (affiché si contacts.length === 0 && !loading)
+//   - selectable?: bool — affiche les checkboxes multi-select
+//   - selectedIds?: Set<string> — IDs sélectionnés (controlled)
+//   - onToggleSelect?(id) : toggle d'une ligne
+//   - onToggleSelectAll?(checked, visibleIds) : toggle global header
 //
 // Design : light mode, accent emerald/teal (cohérent CRM Phase 2),
 // avatars en gradient violet (initiales 2 lettres).
@@ -103,7 +107,18 @@ export default function ContactsList({
   onClick,
   loading = false,
   emptyState = null,
+  selectable = false,
+  selectedIds = null,
+  onToggleSelect,
+  onToggleSelectAll,
 }) {
+  const isSelectable = selectable && !!selectedIds && typeof onToggleSelect === 'function';
+  const visibleIds = contacts.map((c) => c.id);
+  const visibleSelectedCount = isSelectable
+    ? visibleIds.filter((id) => selectedIds.has(id)).length
+    : 0;
+  const allVisibleSelected = isSelectable && visibleIds.length > 0 && visibleSelectedCount === visibleIds.length;
+  const someVisibleSelected = isSelectable && visibleSelectedCount > 0 && !allVisibleSelected;
   if (loading && contacts.length === 0) {
     // ─── Skeleton table (Phase 4 polish) ───────────────────
     return (
@@ -168,6 +183,22 @@ export default function ContactsList({
         <table className="w-full text-sm">
           <thead className="bg-surface-card border-b border-line">
             <tr>
+              {isSelectable && (
+                <th className="w-10 pl-4 pr-1 py-3 text-left">
+                  <input
+                    type="checkbox"
+                    aria-label="Tout sélectionner"
+                    checked={allVisibleSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someVisibleSelected;
+                    }}
+                    onChange={(e) =>
+                      onToggleSelectAll?.(e.target.checked, visibleIds)
+                    }
+                    className="w-4 h-4 rounded text-violet-600 border-line focus:ring-violet-500 focus:ring-offset-0 cursor-pointer"
+                  />
+                </th>
+              )}
               <th className="w-12 px-4 py-3" />
               <th className="px-3 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-content-muted">
                 Nom
@@ -193,14 +224,29 @@ export default function ContactsList({
           <tbody>
             {contacts.map((c) => {
               const grad = avatarGradient(c.name || c.email || c.id);
+              const isChecked = isSelectable && selectedIds.has(c.id);
               return (
                 <tr
                   key={c.id}
                   onClick={() => onClick?.(c)}
-                  className="border-b border-line/70 last:border-b-0 hover:bg-zinc-50 transition-colors cursor-pointer group"
+                  className={`border-b border-line/70 last:border-b-0 transition-colors cursor-pointer group ${
+                    isChecked ? 'bg-violet-50/40 hover:bg-violet-50/60' : 'hover:bg-zinc-50'
+                  }`}
                 >
+                  {/* Checkbox */}
+                  {isSelectable && (
+                    <td className="pl-4 pr-1 py-3" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        aria-label={`Sélectionner ${c.name || c.email || 'contact'}`}
+                        checked={isChecked}
+                        onChange={() => onToggleSelect?.(c.id)}
+                        className="w-4 h-4 rounded text-violet-600 border-line focus:ring-violet-500 focus:ring-offset-0 cursor-pointer"
+                      />
+                    </td>
+                  )}
                   {/* Avatar */}
-                  <td className="pl-4 pr-1 py-3">
+                  <td className={isSelectable ? 'px-1 py-3' : 'pl-4 pr-1 py-3'}>
                     <div
                       className={`w-9 h-9 rounded-full bg-gradient-to-br ${grad} flex items-center justify-center shadow-sm ring-1 ring-white`}
                     >

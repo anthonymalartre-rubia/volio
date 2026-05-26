@@ -19,10 +19,11 @@ import { useEffect, useState } from 'react';
 import {
   X, Loader2, Trash2, Mail, Phone, Building2, User,
   Calendar, AlertCircle, Save, Check, StickyNote, CheckSquare,
-  Square, Users as UsersIcon,
+  Square, Users as UsersIcon, Megaphone,
 } from 'lucide-react';
 import { formatDealValue } from '@/lib/crm';
 import ActivityForm from './ActivityForm';
+import AddToCampagneModal from './AddToCampagneModal';
 
 // Icône par type d'activity
 const ACTIVITY_TYPE_META = {
@@ -71,6 +72,10 @@ export default function DealDetailDrawer({
 
   // Tasks toggle (Phase 4)
   const [togglingTaskId, setTogglingTaskId] = useState(null);
+
+  // Bridge CRM → Campagnes
+  const [campagneOpen, setCampagneOpen] = useState(false);
+  const [campagneSuccess, setCampagneSuccess] = useState(null);
 
   // Toggle completed_at sur une task (optimistic)
   async function toggleTask(activity) {
@@ -441,6 +446,28 @@ export default function DealDetailDrawer({
                     </a>
                   )}
                 </div>
+                {/* Bridge CRM → Campagnes */}
+                <div className="mt-3 pt-3 border-t border-line/70">
+                  <button
+                    type="button"
+                    onClick={() => setCampagneOpen(true)}
+                    disabled={!deal.contact?.email && !deal.contact?.phone}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 shadow-sm shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all w-full justify-center"
+                    title={
+                      !deal.contact?.email && !deal.contact?.phone
+                        ? 'Email ou téléphone requis pour ajouter à une séquence'
+                        : 'Ajouter ce contact à une séquence Campagnes'
+                    }
+                  >
+                    <Megaphone size={12} />
+                    Ajouter à une séquence
+                  </button>
+                  {campagneSuccess && (
+                    <p className="mt-2 text-[11px] text-violet-700">
+                      Ajouté à « {campagneSuccess.list_name} »
+                    </p>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="p-3 rounded-lg border border-dashed border-line bg-surface-card/50 text-center">
@@ -629,6 +656,37 @@ export default function DealDetailDrawer({
           </div>
         )}
       </div>
+
+      {/* Modal Bridge CRM → Campagnes */}
+      {deal?.contact?.id && (
+        <AddToCampagneModal
+          open={campagneOpen}
+          onClose={() => setCampagneOpen(false)}
+          contactIds={[deal.contact.id]}
+          dealId={deal.id}
+          onSuccess={(data) => {
+            setCampagneSuccess(data);
+            // Optimistic prepend de l'activity note dans la timeline
+            if (data?.activities_logged > 0 && data?.list_name) {
+              const optimistic = {
+                id: `tmp-${Date.now()}`,
+                type: 'note',
+                content: `Ajouté à la séquence "${data.list_name}"`,
+                deal_id: deal.id,
+                contact_id: deal.contact.id,
+                due_at: null,
+                completed_at: null,
+                created_at: new Date().toISOString(),
+              };
+              setDeal((prev) =>
+                prev
+                  ? { ...prev, activities: [optimistic, ...(prev.activities || [])] }
+                  : prev
+              );
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

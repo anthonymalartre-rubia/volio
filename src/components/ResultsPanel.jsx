@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useRef, memo } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import {
   Download,
@@ -37,12 +37,15 @@ import {
   Loader2,
   KanbanSquare,
   Lock,
+  Send,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 import { useI18n } from "@/lib/i18n";
 import { Info } from "lucide-react";
 import OnboardingHint from "@/components/OnboardingHint";
+// Modal Prospection → Campagnes (lazy : non-critique au render initial)
+const SendToCampagneModal = lazy(() => import("@/components/SendToCampagneModal"));
 
 // Reusable tooltip on hover — rendered via portal into document.body to escape all overflow containers
 function InfoTooltip({ text, wide }) {
@@ -448,6 +451,8 @@ export default memo(function ResultsPanel({
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [actionMenuId, setActionMenuId] = useState(null);
   const [selectedIds, setSelectedIds] = useState(new Set());
+  // Modal "Lancer une campagne" (pont Prospection → Campagnes)
+  const [showCampagneModal, setShowCampagneModal] = useState(false);
   const [showColumnPicker, setShowColumnPicker] = useState(false);
   const [showExportPreview, setShowExportPreview] = useState(false);
   // ⚠️ Ce useState DOIT rester avant tout early-return conditionnel.
@@ -1306,6 +1311,19 @@ export default memo(function ResultsPanel({
               </button>
             )}
 
+            {/* Pont Prospection → Campagnes : ouvre la modale pour pousser
+                la sélection dans une liste prospect_lists (cible campagne).
+                Même variant visuel que CRM, en violet (couleur Campagnes). */}
+            <button
+              onClick={() => setShowCampagneModal(true)}
+              disabled={selectedIds.size === 0}
+              title="Pousser ces prospects dans une liste pour lancer une campagne"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:from-violet-500 hover:to-purple-500 shadow-sm shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send size={12} />
+              Lancer une campagne
+            </button>
+
             <button
               onClick={() => setSelectedIds(new Set())}
               className="ml-auto text-[11px] text-content-muted hover:text-content-secondary transition"
@@ -1847,6 +1865,18 @@ export default memo(function ResultsPanel({
 
       {/* Bottom padding when banner is visible */}
       {(isAnyEnriching || justFinished) && <div className="h-20" />}
+
+      {/* Modale Prospection → Campagnes (lazy : non chargée tant que
+          l'user n'a pas cliqué "Lancer une campagne"). */}
+      {showCampagneModal && (
+        <Suspense fallback={null}>
+          <SendToCampagneModal
+            open={true}
+            onClose={() => setShowCampagneModal(false)}
+            prospects={prospects.filter((p) => selectedIds.has(p.id))}
+          />
+        </Suspense>
+      )}
     </div>
   );
 })
