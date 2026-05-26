@@ -6,6 +6,8 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { validateFormSchema } from '@/lib/forms';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
+import { cleanEnv } from '@/lib/envClean';
 
 export async function POST(request, { params }) {
   const { user, supabase } = await getAuthenticatedUser();
@@ -50,12 +52,29 @@ export async function POST(request, { params }) {
     .update({ status: 'published', published_at: new Date().toISOString() })
     .eq('id', id)
     .eq('user_id', user.id)
-    .select('id, slug, status, published_at')
+    .select('id, slug, name, status, published_at')
     .single();
 
   if (error) {
     console.error('[api/admin/forms/[id]/publish] error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+
+  // Webhook : form.published (best-effort)
+  try {
+    const baseUrl = cleanEnv(process.env.NEXT_PUBLIC_APP_URL) || 'https://volia.fr';
+    await emitWebhookEvent({
+      userId: user.id,
+      event: 'form.published',
+      data: {
+        form_id: data.id,
+        form_name: data.name,
+        slug: data.slug,
+        public_url: `${baseUrl}/f/${data.slug}`,
+      },
+    });
+  } catch (e) {
+    console.warn('[api/admin/forms/[id]/publish] webhook form.published failed', e.message);
   }
 
   return NextResponse.json({ success: true, data });

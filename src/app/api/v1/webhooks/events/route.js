@@ -52,6 +52,33 @@ const SAMPLES = {
   },
   'crm.deal.won': { deal_id: 'uuid', title: 'Salon Beauté - Abo Pro', value_cents: 49000, currency: 'EUR', closed_at: '2026-05-26T14:00:00Z' },
   'crm.deal.lost': { deal_id: 'uuid', title: 'Salon Beauté - Abo Pro', closed_at: '2026-05-26T14:00:00Z' },
+  'form.submitted': {
+    form_id: 'uuid',
+    form_name: 'Demande de devis',
+    response_id: 'uuid',
+    answers: { email: 'marie@salon-marie.fr', nom: 'Marie Dupont', message: 'Bonjour...' },
+    bridge_status: 'succeeded',
+    submitted_at: '2026-05-26T10:00:00Z',
+    metadata: { ip_hash: 'abc...', ua: 'Mozilla/5.0' },
+  },
+  'form.bridge_succeeded': {
+    form_id: 'uuid',
+    response_id: 'uuid',
+    crm_contact_id: 'uuid',
+    campagnes_contact_id: 'uuid',
+  },
+  'form.bridge_failed': {
+    form_id: 'uuid',
+    response_id: 'uuid',
+    error: { crm: 'ok', campagnes: 'error: list_not_found' },
+    retry_count: 3,
+  },
+  'form.published': {
+    form_id: 'uuid',
+    form_name: 'Demande de devis',
+    slug: 'demande-devis',
+    public_url: 'https://volia.fr/f/demande-devis',
+  },
 };
 
 export async function OPTIONS() {

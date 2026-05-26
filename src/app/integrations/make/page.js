@@ -178,7 +178,7 @@ Content-Type: application/json`}
 
           {/* Events disponibles */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">21 events disponibles</h2>
+            <h2 className="text-2xl font-bold mb-4">Events disponibles</h2>
             <p className="text-sm text-content-secondary leading-relaxed mb-3">
               La liste complète des events webhook (avec sample payload JSON pour chaque) est accessible publiquement :
             </p>
@@ -190,6 +190,7 @@ Content-Type: application/json`}
               <strong>Campagnes</strong> (campaign.completed, email.delivered/opened/clicked/replied),{' '}
               <strong>Séquences</strong> (sequence.enrolled),{' '}
               <strong>CRM</strong> (crm.contact.created, crm.deal.created, crm.deal.stage_changed, crm.deal.won, crm.deal.lost),{' '}
+              <strong>Formulaires</strong> (form.submitted, form.bridge_succeeded, form.bridge_failed, form.published),{' '}
               et le wildcard <code className="text-xs">*</code> pour tout recevoir.
               D&apos;autres events (campaign.sent, email.bounced, sms.*, sequence.completed, prospect.enriched/opt_out, search.completed) sont à venir.
             </p>

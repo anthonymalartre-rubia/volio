@@ -7,7 +7,7 @@ import ReaderFooter from '@/components/ReaderFooter';
 export const metadata = {
   title: 'Volia × Zapier — Triggers, Actions et exemples de Zaps',
   description:
-    "Documentation complète Volia × Zapier : 11 triggers (new_deal, reply_received, email.opened, email.clicked, sequence.enrolled…), 5 actions (créer contact, lancer campagne…), exemples concrets et setup pas-à-pas en 2 minutes.",
+    "Documentation complète Volia × Zapier : 15 triggers (new_deal, reply_received, email.opened, email.clicked, sequence.enrolled…), 5 actions (créer contact, lancer campagne…), exemples concrets et setup pas-à-pas en 2 minutes.",
   alternates: { canonical: 'https://volia.fr/integrations/zapier' },
   keywords: [
     'volia zapier',
@@ -18,7 +18,7 @@ export const metadata = {
     'webhook zapier prospection',
   ],
   openGraph: {
-    title: 'Volia × Zapier — 11 triggers + 5 actions documentés',
+    title: 'Volia × Zapier — 15 triggers + 5 actions documentés',
     description: "Connectez Volia à 5000+ apps via Zapier sans coder. Setup en 2 minutes.",
     url: 'https://volia.fr/integrations/zapier',
   },
@@ -219,6 +219,77 @@ const TRIGGERS = [
 }`,
     usecase: 'Notification Discord temps réel + tag automatique du contact en "hot" dans le CRM.',
   },
+  {
+    id: 'form.submitted',
+    label: 'Form submitted',
+    desc: 'Déclenché à chaque nouvelle soumission de formulaire Volia Forms.',
+    sample: `{
+  "event_type": "form.submitted",
+  "timestamp": "2026-05-26T10:00:00Z",
+  "data": {
+    "form_id": "uuid",
+    "form_name": "Demande de devis",
+    "response_id": "uuid",
+    "answers": {
+      "email": "marie@salon-marie.fr",
+      "nom": "Marie Dupont",
+      "message": "Bonjour..."
+    },
+    "bridge_status": "succeeded",
+    "submitted_at": "2026-05-26T10:00:00Z",
+    "metadata": { "ip_hash": "...", "ua": "..." }
+  }
+}`,
+    usecase: 'Notification Slack instantanée à chaque nouveau lead inbound + sync vers un Google Sheets.',
+  },
+  {
+    id: 'form.bridge_succeeded',
+    label: 'Form bridge succeeded',
+    desc: 'Bridge CRM/Campagnes de la soumission a réussi (soit au submit, soit après retry).',
+    sample: `{
+  "event_type": "form.bridge_succeeded",
+  "timestamp": "2026-05-26T10:00:01Z",
+  "data": {
+    "form_id": "uuid",
+    "response_id": "uuid",
+    "crm_contact_id": "uuid",
+    "campagnes_contact_id": "uuid"
+  }
+}`,
+    usecase: 'Confirmation de bonne intégration côté CRM tiers / monitoring du pipeline inbound.',
+  },
+  {
+    id: 'form.bridge_failed',
+    label: 'Form bridge failed (final)',
+    desc: 'Bridge CRM/Campagnes a définitivement échoué après 3 retries automatiques.',
+    sample: `{
+  "event_type": "form.bridge_failed",
+  "timestamp": "2026-05-26T10:30:00Z",
+  "data": {
+    "form_id": "uuid",
+    "response_id": "uuid",
+    "error": { "crm": "ok", "campagnes": "error: list_not_found" },
+    "retry_count": 3
+  }
+}`,
+    usecase: 'Alerte PagerDuty / création d\'un ticket support pour récupérer manuellement les leads perdus.',
+  },
+  {
+    id: 'form.published',
+    label: 'Form published',
+    desc: 'Déclenché quand un formulaire passe en status "published" (publication initiale ou re-publication).',
+    sample: `{
+  "event_type": "form.published",
+  "timestamp": "2026-05-26T09:00:00Z",
+  "data": {
+    "form_id": "uuid",
+    "form_name": "Demande de devis",
+    "slug": "demande-devis",
+    "public_url": "https://volia.fr/f/demande-devis"
+  }
+}`,
+    usecase: 'Auto-broadcast du nouveau formulaire sur LinkedIn ou notification interne #marketing.',
+  },
 ];
 
 const ACTIONS = [
@@ -344,7 +415,7 @@ export default function ZapierIntegrationPage() {
 
           <p className="text-lg text-content-secondary leading-relaxed mb-8">
             Connectez Volia à plus de 5 000 applications (Slack, HubSpot, Notion, Google Sheets, Stripe…)
-            sans écrire une ligne de code. 11 triggers, 5 actions, setup en 2 minutes via les Webhooks
+            sans écrire une ligne de code. 15 triggers, 5 actions, setup en 2 minutes via les Webhooks
             Premium de Zapier.
           </p>
 
@@ -364,7 +435,7 @@ export default function ZapierIntegrationPage() {
             <p className="text-xs font-semibold text-orange-500 uppercase tracking-wider mb-2">Sommaire</p>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm list-disc list-inside text-content-secondary">
               <li><a href="#setup" className="hover:text-orange-500">Setup pas-à-pas (2 min)</a></li>
-              <li><a href="#triggers" className="hover:text-orange-500">11 Triggers (Volia → Zapier)</a></li>
+              <li><a href="#triggers" className="hover:text-orange-500">15 Triggers (Volia → Zapier)</a></li>
               <li><a href="#actions" className="hover:text-orange-500">5 Actions (Zapier → Volia)</a></li>
               <li><a href="#popular-zaps" className="hover:text-orange-500">Zaps populaires</a></li>
               <li><a href="#security" className="hover:text-orange-500">Sécurité &amp; signature HMAC</a></li>
@@ -437,7 +508,7 @@ export default function ZapierIntegrationPage() {
               Triggers — Volia → Zapier
             </h2>
             <p className="text-content-secondary mb-6">
-              11 events Volia push'és vers Zapier dès qu&apos;ils surviennent. Chaque payload est signé
+              15 events Volia push'és vers Zapier dès qu&apos;ils surviennent. Chaque payload est signé
               HMAC-SHA256 (header <code className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated">X-Volia-Signature</code>).
             </p>
 
@@ -468,7 +539,7 @@ export default function ZapierIntegrationPage() {
 
             <p className="text-xs text-content-tertiary mt-4">
               Liste exhaustive et payloads : <Link href="/api/v1/webhooks/events" className="text-violet-400 hover:underline">GET /api/v1/webhooks/events</Link>.
-              D&apos;autres events (campaign.sent, email.bounced, sms.*, sequence.completed, prospect.enriched/opt_out, search.completed) sont prévus dans nos prochains sprints.
+              D&apos;autres events (campaign.sent, email.bounced, sms.*, sequence.completed, prospect.enriched/opt_out, search.completed) sont prévus dans nos prochains sprints. Les events Volia Forms (<code className="text-xs">form.submitted</code>, <code className="text-xs">form.bridge_succeeded</code>, <code className="text-xs">form.bridge_failed</code>, <code className="text-xs">form.published</code>) sont disponibles depuis le Sprint F6.
             </p>
           </section>
 

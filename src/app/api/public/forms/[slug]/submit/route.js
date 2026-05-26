@@ -26,6 +26,7 @@ import { incrementSubmissionCount, schemaFieldsToRendererFields, normalizeSchema
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -575,6 +576,41 @@ export async function POST(request, { params }) {
       campagnes_contact_id: campagnesContactId,
     })
     .eq('id', responseId);
+
+  // ──── 11bis. Webhooks sortants (best-effort) ────
+  try {
+    await emitWebhookEvent({
+      userId: form.user_id,
+      event: 'form.submitted',
+      data: {
+        form_id: form.id,
+        form_name: form.name,
+        response_id: responseId,
+        answers,
+        bridge_status: bridgeStatus,
+        submitted_at: new Date().toISOString(),
+        metadata,
+      },
+    });
+  } catch (e) {
+    console.warn('[forms/submit] webhook form.submitted failed', e.message);
+  }
+  if (bridgeStatus === 'succeeded') {
+    try {
+      await emitWebhookEvent({
+        userId: form.user_id,
+        event: 'form.bridge_succeeded',
+        data: {
+          form_id: form.id,
+          response_id: responseId,
+          crm_contact_id: crmContactId,
+          campagnes_contact_id: campagnesContactId,
+        },
+      });
+    } catch (e) {
+      console.warn('[forms/submit] webhook form.bridge_succeeded failed', e.message);
+    }
+  }
 
   // ──── 12. Notification email admin (best-effort) ────
   if (form.settings?.notify_email || (form.settings && form.settings.notify_owner)) {

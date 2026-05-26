@@ -45,6 +45,12 @@ export const WEBHOOK_EVENTS = [
   { id: 'crm.deal.stage_changed', label: 'Deal CRM : étape changée', module: 'CRM', description: 'Un deal a bougé dans le pipeline.', available: true },
   { id: 'crm.deal.won', label: 'Deal CRM gagné', module: 'CRM', description: 'Un deal est passé en stage "won".', available: true },
   { id: 'crm.deal.lost', label: 'Deal CRM perdu', module: 'CRM', description: 'Un deal est passé en stage "lost".', available: true },
+
+  // Formulaires
+  { id: 'form.submitted', label: 'Formulaire soumis', module: 'Formulaires', description: 'Une nouvelle soumission a été enregistrée.', available: true },
+  { id: 'form.bridge_succeeded', label: 'Bridge formulaire réussi', module: 'Formulaires', description: 'Le bridge CRM/Campagnes de la soumission a réussi.', available: true },
+  { id: 'form.bridge_failed', label: 'Bridge formulaire échoué', module: 'Formulaires', description: 'Le bridge CRM/Campagnes a définitivement échoué après 3 tentatives.', available: true },
+  { id: 'form.published', label: 'Formulaire publié', module: 'Formulaires', description: 'Un formulaire est passé en status "published".', available: true },
 ];
 
 // Helper : sous-ensemble des events réellement émis (UI/API publiques).
@@ -77,6 +83,8 @@ export function moduleColor(module) {
       return 'bg-orange-500/15 text-orange-600 border-orange-500/30';
     case 'CRM':
       return 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30';
+    case 'Formulaires':
+      return 'bg-pink-500/15 text-pink-600 border-pink-500/30';
     case 'Global':
     default:
       return 'bg-amber-500/15 text-amber-600 border-amber-500/30';
