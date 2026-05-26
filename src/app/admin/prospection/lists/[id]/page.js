@@ -6,9 +6,12 @@ import Link from 'next/link';
 import {
   ArrowLeft, Upload, Loader2, Users, Mail, Phone, Trash2, Ban,
   CheckCircle, AlertCircle, FileText, Search, Send, MessageSquare,
+  User as UserIcon, ChevronRight,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
+import ImportFromProspectionModal from '@/components/lists/ImportFromProspectionModal';
+import ImportFromCrmModal from '@/components/lists/ImportFromCrmModal';
 
 export default function ListDetailPage() {
   const router = useRouter();
@@ -26,6 +29,9 @@ export default function ListDetailPage() {
   const [importing, setImporting] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState(null);
+  const [showProspectionModal, setShowProspectionModal] = useState(false);
+  const [showCrmModal, setShowCrmModal] = useState(false);
+  const [importToast, setImportToast] = useState(null); // { source, inserted, skipped }
 
   // Charge la liste + contacts
   const loadList = useCallback(async () => {
@@ -171,6 +177,99 @@ export default function ListDetailPage() {
           <StatCard icon={<Phone size={14} className="text-indigo-400" />} label="Téléphones" value={list?.phone_count || 0} />
           <StatCard icon={<Ban size={14} className="text-amber-600" />} label="Opt-out" value={list?.opt_out_count || 0} />
         </div>
+
+        {/* Importer depuis Volia */}
+        <div className="mb-6">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-content-tertiary mb-3">
+            Importer depuis Volia
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Card Prospection (violet) */}
+            <button
+              type="button"
+              onClick={() => setShowProspectionModal(true)}
+              className="group text-left rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.06] to-purple-500/[0.04] hover:border-violet-500/40 hover:from-violet-500/[0.10] hover:to-purple-500/[0.08] transition-all p-5"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-violet-500/20">
+                  <Search size={18} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base font-bold text-content-primary">
+                      Volia Prospection
+                    </span>
+                    <ChevronRight
+                      size={14}
+                      className="text-violet-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+                    />
+                  </div>
+                  <p className="text-sm text-content-secondary mt-1">
+                    Importez vos prospects depuis une recherche
+                  </p>
+                </div>
+              </div>
+            </button>
+
+            {/* Card CRM (emerald) */}
+            <button
+              type="button"
+              onClick={() => setShowCrmModal(true)}
+              className="group text-left rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.06] to-teal-500/[0.04] hover:border-emerald-500/40 hover:from-emerald-500/[0.10] hover:to-teal-500/[0.08] transition-all p-5"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+                  <UserIcon size={18} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base font-bold text-content-primary">
+                      Volia CRM
+                    </span>
+                    <ChevronRight
+                      size={14}
+                      className="text-emerald-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all"
+                    />
+                  </div>
+                  <p className="text-sm text-content-secondary mt-1">
+                    Importez vos contacts CRM existants
+                  </p>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 my-5 text-[10px] uppercase tracking-wider text-content-tertiary font-semibold">
+            <div className="flex-1 h-px bg-line"></div>
+            <span>ou</span>
+            <div className="flex-1 h-px bg-line"></div>
+          </div>
+        </div>
+
+        {/* Toast import succès */}
+        {importToast && (
+          <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/[0.08] px-4 py-2.5 text-sm text-green-300 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <CheckCircle size={14} />
+              <span>
+                <strong>{importToast.inserted}</strong> contact
+                {importToast.inserted > 1 ? 's' : ''} importé
+                {importToast.inserted > 1 ? 's' : ''} depuis {importToast.source}
+                {importToast.skipped > 0 && (
+                  <span className="text-content-tertiary ml-1">
+                    · {importToast.skipped} doublon{importToast.skipped > 1 ? 's' : ''}
+                  </span>
+                )}
+              </span>
+            </div>
+            <button
+              onClick={() => setImportToast(null)}
+              className="text-content-tertiary hover:text-content-primary"
+            >
+              <Trash2 size={12} />
+            </button>
+          </div>
+        )}
 
         {/* Dropzone import */}
         <div
@@ -327,6 +426,34 @@ export default function ListDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Modals */}
+      <ImportFromProspectionModal
+        open={showProspectionModal}
+        onClose={() => setShowProspectionModal(false)}
+        listId={listId}
+        onSuccess={async (data) => {
+          setImportToast({
+            source: 'Volia Prospection',
+            inserted: data.inserted || 0,
+            skipped: data.skipped || 0,
+          });
+          await loadList();
+        }}
+      />
+      <ImportFromCrmModal
+        open={showCrmModal}
+        onClose={() => setShowCrmModal(false)}
+        listId={listId}
+        onSuccess={async (data) => {
+          setImportToast({
+            source: 'Volia CRM',
+            inserted: data.inserted || 0,
+            skipped: data.skipped || 0,
+          });
+          await loadList();
+        }}
+      />
     </div>
   );
 }
