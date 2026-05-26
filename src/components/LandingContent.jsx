@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3, Sparkles } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
+import ProductsMenu from '@/components/ProductsMenu';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
@@ -132,7 +133,7 @@ export default function LandingContent() {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
-            <Link href="/produits/prospection" className="text-sm text-content-tertiary hover:text-content-primary transition">Produits</Link>
+            <ProductsMenu label="Produits" locale="fr" />
             <Link href="#features" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.features')}</Link>
             <Link href="#pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>

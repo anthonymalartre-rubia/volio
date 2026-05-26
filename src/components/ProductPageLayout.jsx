@@ -36,6 +36,7 @@ import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
 import BookDemoButton from '@/components/BookDemoButton';
+import ProductsMenu from '@/components/ProductsMenu';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
 // Map nom string → composant Lucide. Permet de passer les icônes depuis
@@ -164,7 +165,6 @@ const DEFAULT_LABELS_FR = {
 function ProductTopNav({ labels = DEFAULT_LABELS_FR, locale = 'fr' }) {
   const isEn = locale === 'en';
   const home = isEn ? '/en' : '/';
-  const productsLink = isEn ? '/en/products/prospection' : '/produits/prospection';
   return (
     <header>
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
@@ -175,7 +175,7 @@ function ProductTopNav({ labels = DEFAULT_LABELS_FR, locale = 'fr' }) {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
-            <Link href={productsLink} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.products}</Link>
+            <ProductsMenu label={labels.products} locale={locale} />
             <Link href={`${home}#features`} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.features}</Link>
             <Link href={isEn ? '/en/pricing' : '/#pricing'} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.pricing}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.blog}</Link>
