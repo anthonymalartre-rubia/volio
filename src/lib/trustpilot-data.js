@@ -37,13 +37,18 @@
 // nécessaire (staging, test, etc.).
 export const TRUSTPILOT_BUSINESS_UNIT_ID =
   process.env.NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID ||
-  '6a1184b9bcabb859c867ccb1';
+  '6a1470b8fae77351e3ea4c5c';
+
+// Template ID du widget "Review Collector" Trustpilot — public, hardcoded.
+// Représente le type de widget (collecteur d'avis) à afficher.
+export const TRUSTPILOT_REVIEW_COLLECTOR_TEMPLATE_ID = '56278e9abfbbba0bdcd568bc';
 
 // Token public du Review Collector (widget officiel Trustpilot qui permet
 // aux users de laisser un avis depuis notre dashboard). Public, à garder
 // hardcoded — il authentifie ce widget spécifique pour le profil
-// volia.fr.
-export const TRUSTPILOT_REVIEW_COLLECTOR_TOKEN = '35703c39-4ee9-4524-a257-954a1c329973';
+// volia.fr. Mis à jour en mai 2026 lors de la création du nouveau
+// profil Trustpilot post-rebrand Prospectia → Volia.
+export const TRUSTPILOT_REVIEW_COLLECTOR_TOKEN = '67960fd3-cb9f-41b0-9357-7c7968193c68';
 
 // Note moyenne et nombre d'avis actuels — à updater MANUELLEMENT.
 // Sources : dashboard Trustpilot business.trustpilot.com → Reviews.

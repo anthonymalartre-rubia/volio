@@ -24,14 +24,12 @@ import { X } from 'lucide-react';
 import {
   TRUSTPILOT_BUSINESS_UNIT_ID,
   TRUSTPILOT_REVIEW_COLLECTOR_TOKEN,
+  TRUSTPILOT_REVIEW_COLLECTOR_TEMPLATE_ID,
   TRUSTPILOT_PROFILE_URL,
 } from '@/lib/trustpilot-data';
 
 const DISMISS_KEY = 'volia_trustpilot_solicitation_dismissed_v1';
 const DISMISS_DURATION_DAYS = 30;
-
-// Template officiel Trustpilot "Review Collector" — 5 étoiles cliquables
-const TRUSTPILOT_REVIEW_COLLECTOR_TEMPLATE_ID = '56278e9abfbbba0bdcd568bc';
 
 export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
   const [visible, setVisible] = useState(false);
