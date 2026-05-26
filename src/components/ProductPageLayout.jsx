@@ -34,6 +34,7 @@ import {
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
+import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
 // Map nom string → composant Lucide. Permet de passer les icônes depuis
 // les pages server components (qui ne peuvent pas passer de fonctions
@@ -306,6 +307,9 @@ export default function ProductPageLayout({
 }) {
   const theme = MODULE_THEMES[module];
   const statusBadge = STATUS_BADGES[status];
+
+  // Force light mode sur les pages produit (marketing = toujours light)
+  useForceLightTheme();
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">

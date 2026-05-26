@@ -90,6 +90,8 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
 
 export default function LandingContent() {
   const { t } = useI18n();
+  // Landing marketing = TOUJOURS en light (override user dark preference)
+  useForceLightTheme();
   // Pricing toggle Monthly / Yearly (UX 2026 standard)
   const [pricingPeriod, setPricingPeriod] = useState('monthly');
   const isYearly = pricingPeriod === 'yearly';
