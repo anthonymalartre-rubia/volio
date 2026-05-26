@@ -9,7 +9,7 @@
 //
 // Détection du module actif via usePathname() :
 //   - /dashboard*       OR /app/prospection* → Prospection (LIVE, violet)
-//   - /admin/prospection/campaigns* OR /admin/prospection/sms*
+//   - /admin/prospection/campaigns*
 //                       OR /app/campagnes*   → Campagnes (BETA, blue)
 //   - /app/crm*                              → CRM (BIENTÔT, emerald)
 //   - sinon (settings, admin home, ...)      → Prospection par défaut
@@ -55,7 +55,7 @@ const MODULES = [
   {
     id: 'campagnes',
     name: 'Campagnes',
-    description: 'Séquences email + SMS',
+    description: 'Séquences email automatisées',
     href: '/app/campagnes',
     icon: Mail,
     status: { label: 'BETA', className: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -91,7 +91,6 @@ function detectActiveModule(pathname) {
   // Campagnes : checked before /admin/prospection (qui matche aussi).
   if (
     pathname.startsWith('/admin/prospection/campaigns') ||
-    pathname.startsWith('/admin/prospection/sms') ||
     pathname.startsWith('/app/campagnes')
   ) {
     return MODULES[1];

@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────
 //
 // /app/campagnes est l'URL canonique 2026+ pour le module Volia
-// Campagnes (séquences email + SMS). On redirige vers
+// Campagnes (séquences email automatisées). On redirige vers
 // /admin/prospection/campaigns qui héberge actuellement le code des
 // campagnes (legacy nommage : "admin/prospection" est en réalité
 // le backend Campagnes).
@@ -12,8 +12,11 @@
 // /admin/prospection/campaigns ici et on supprimera l'alias.
 //
 // La détection dans ModuleSwitcher.jsx reconnaît /admin/prospection/
-// campaigns, /admin/prospection/sms ET /app/campagnes comme module
-// "Campagnes" actif.
+// campaigns ET /app/campagnes comme module "Campagnes" actif.
+//
+// Le module SMS (Twilio) est désactivé via SMS_CAMPAIGNS_ENABLED
+// dans lib/feature-flags.js. Le code SMS reste en place pour
+// réactivation future.
 // ─────────────────────────────────────────────────────────────────────
 
 import { redirect } from 'next/navigation';

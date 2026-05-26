@@ -452,7 +452,7 @@ export default function LandingContent() {
               },
               {
                 name: 'Campagnes',
-                tagline: 'Envoyez vos séquences email & SMS automatisées',
+                tagline: 'Séquences email automatisées avec warmup intégré',
                 status: 'BETA',
                 statusColor: 'bg-blue-100 text-blue-700 border-blue-300',
                 icon: Mail,
@@ -462,7 +462,7 @@ export default function LandingContent() {
                 iconBg: 'from-blue-500 to-cyan-600',
                 bullets: [
                   'Email cold + relances auto',
-                  'SMS Twilio intégré',
+                  'Warmup domaine automatique',
                   'Templates pré-écrits',
                 ],
                 href: '/produits/campagnes',

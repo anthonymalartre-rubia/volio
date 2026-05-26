@@ -6,7 +6,7 @@
 // Statut : BETA déjà fonctionnel en backend admin, polish UI public en cours.
 // ─────────────────────────────────────────────────────────────────────
 
-import { Mail, MessageSquare, Send, Play, Check, X, ArrowRight, TrendingUp, Zap, Sparkles } from 'lucide-react';
+import { Mail, MessageSquare, Send, Play, Check, X, ArrowRight, TrendingUp, Zap, Sparkles, Flame, Shield } from 'lucide-react';
 import ProductPageLayout from '@/components/ProductPageLayout';
 import MotionInView from '@/components/MotionInView';
 import { breadcrumbSchema, productSchema } from '@/lib/seo-helpers';
@@ -15,14 +15,17 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/produits/campagnes`;
 
 export const metadata = {
-  title: 'Volia Campagnes — Vos séquences email & SMS dans la même plateforme que vos prospects',
+  title: 'Volia Campagnes — Vos séquences email B2B automatisées avec votre prospection',
   description:
-    'Stop Lemlist + Instantly + Smartlead à 108€/mois. Volia Campagnes : email + SMS Twilio + templates par secteur, inclus dans Pro à 49€. 62% taux ouverture moyen.',
+    'Stop Lemlist + Instantly + Smartlead à 108€/mois. Volia Campagnes : séquences email automatisées + relances intelligentes + templates par secteur + tracking avancé, inclus dans Pro à 49€. 62% taux ouverture moyen.',
   alternates: { canonical: PAGE_URL },
   keywords: [
     'séquence email cold France',
     'campagne email b2b',
-    'sms marketing pro',
+    'cold email b2b',
+    'séquence email automatisée',
+    'warmup email',
+    'tracking ouverture email',
     'outil cold email RGPD',
     'Volia Campagnes',
     'alternative Lemlist France',
@@ -30,16 +33,16 @@ export const metadata = {
     'alternative Smartlead',
   ],
   openGraph: {
-    title: 'Volia Campagnes — Email + SMS dans la même plateforme que vos prospects',
+    title: 'Volia Campagnes — Séquences email B2B automatisées avec votre prospection',
     description:
-      'Séquences email + SMS, relances auto, templates par secteur, variables dynamiques, stats temps réel. 62% taux ouverture moyen. Inclus dans Pro (49 €).',
+      'Séquences email automatisées, relances intelligentes, templates par secteur, variables dynamiques, warmup auto, tracking temps réel. 62% taux ouverture moyen. Inclus dans Pro (49 €).',
     url: PAGE_URL,
     type: 'website',
   },
 };
 
 // ─────────────────────────────────────────────────────────────────────
-// Mockup hero : faux séquence email (D+0, D+3, SMS D+7) + stats
+// Mockup hero : faux séquence email 100% email (J+0, J+3, J+7, J+14) + stats
 // ─────────────────────────────────────────────────────────────────────
 function HeroMockup() {
   const steps = [
@@ -54,9 +57,14 @@ function HeroMockup() {
       preview: 'Je remonte ce message au cas où il aurait filé en bas de boîte…',
     },
     {
-      day: 'J+7', kind: 'SMS', icon: MessageSquare, color: 'indigo',
-      subject: 'SMS via Twilio',
-      preview: '{{prenom}}, est-ce que je vous appelle cette semaine pour 10 min ?',
+      day: 'J+7', kind: 'Relance finale', icon: Mail, color: 'indigo',
+      subject: 'Dernière tentative {{prenom}} ?',
+      preview: 'Je n\'insiste pas davantage, dites-moi simplement si le sujet vous intéresse…',
+    },
+    {
+      day: 'J+14', kind: 'Stop ou reconnect', icon: Mail, color: 'indigo',
+      subject: 'Je vous laisse tranquille {{prenom}}',
+      preview: 'Pas de réponse, je ferme la boucle. Si jamais ça change un jour, voici mon lien…',
     },
   ];
 
@@ -279,12 +287,12 @@ function UseCasesSection() {
               </div>
               <blockquote className="text-sm text-content-primary leading-relaxed mb-5">
                 <span className="text-cyan-400">“</span>
-                <span className="font-semibold">SMS Twilio intégré</span> = <span className="font-bold text-emerald-700">+40 % de réponses</span> vs email seul. Game changer pour les CEO ultra busy.
+                <span className="font-semibold">Multi-inbox + warmup auto</span> (J1 : 10/jour → J28 : 200/jour) + rotation domaines + tracking ouverture/clic temps réel = <span className="font-bold text-emerald-700">+60 % deliverability</span>. Variables <span className="font-mono text-xs bg-zinc-100 px-1 rounded">{'{{prenom}} {{entreprise}}'}</span>, A/B test des objets, scheduling 9h-17h heure du destinataire. Email automation comme un pro, sans Lemlist.
                 <span className="text-cyan-400">”</span>
               </blockquote>
               <div className="flex items-center gap-2 text-[11px] text-cyan-700 font-semibold">
-                <MessageSquare size={12} />
-                Email + SMS = combo gagnant
+                <Flame size={12} />
+                Warmup + tracking 360°
               </div>
             </div>
           </MotionInView>
@@ -317,7 +325,7 @@ function UseCasesSection() {
         <MotionInView delay={400}>
           <div className="text-center mt-12">
             <p className="text-sm text-content-tertiary">
-              Si vous passez votre journée à copier-coller entre Lemlist, Twilio et votre CRM, Volia Campagnes est pour vous.
+              Si vous passez votre journée à copier-coller entre Lemlist, Smartlead et votre CRM, Volia Campagnes est pour vous.
             </p>
           </div>
         </MotionInView>
@@ -333,14 +341,14 @@ function BeforeAfterSection() {
   const before = [
     'Lemlist 39 € + Instantly 30 $ + Smartlead 39 $ = 108 €/mois',
     '3 outils, 3 logins, 3 abonnements à gérer',
-    'Pas de SMS, juste l\'email',
+    'Outils mono-canal limités, warmup en option payante',
     'Export CSV puis import manuel dans chaque outil',
     'Tes prospects répliqués 3 fois (RGPD risqué)',
   ];
   const after = [
     '49 €/mois (Pro) — tout inclus, zéro add-on',
     '1 plateforme, 1 login, 1 facture',
-    'Email + SMS Twilio natif dans la même séquence',
+    'Email automation + warmup auto + tracking 360°',
     'Tes prospects Volia → Campagnes en 1 clic',
     'Données centralisées, opt-out RGPD unifié',
   ];
@@ -444,7 +452,7 @@ function BeforeAfterSection() {
 // ─────────────────────────────────────────────────────────────────────
 const FEATURES = {
   headline: 'envoyer vos campagnes',
-  subline: 'Pas besoin de Lemlist + Twilio + Apollo. Tout est intégré, déjà conforme RGPD, et inclus dans Pro.',
+  subline: 'Pas besoin de Lemlist + Instantly + Smartlead. Tout est intégré, déjà conforme RGPD, et inclus dans Pro.',
   items: [
     {
       icon: 'Mail', featured: true,
@@ -452,14 +460,14 @@ const FEATURES = {
       desc: 'Délais 100 % personnalisables (J+3, J+7, J+14…). Pause auto sur réponse. Limite quotidienne pour préserver la délivrabilité (10–200 envois/jour selon votre warm-up).',
     },
     {
-      icon: 'MessageSquare',
-      title: 'SMS Twilio intégré',
-      desc: 'Pas besoin d\'un compte Twilio à part : on a déjà un numéro français connecté. Mixez email + SMS dans la même séquence (J+0 mail, J+7 SMS de relance).',
+      icon: 'Flame',
+      title: 'Warmup domaine automatique',
+      desc: 'Chauffe progressivement votre domaine d\'envoi sur 28 jours (J1 : 10 mails, J28 : 200/jour) pour atteindre Inbox au lieu de Spam. Inclus, zéro config.',
     },
     {
       icon: 'FileText',
       title: 'Templates pré-écrits par secteur',
-      desc: 'Restauration, immobilier, BTP, agences web, e-commerce… Chaque template a été testé sur des milliers d\'envois. Tweakez ou repartez de zéro.',
+      desc: '20+ templates cold email B2B prêts à l\'emploi : restauration, immobilier, BTP, agences web, e-commerce… Tous testés sur du volume réel. Bibliothèque complète dans /ressources/templates-cold-email-b2b-fr.',
     },
     {
       icon: 'Tag',
@@ -481,18 +489,22 @@ const FEATURES = {
 
 const HOW_IT_WORKS = [
   { icon: 'Send', title: 'Importez vos prospects', desc: 'Depuis Volia Prospection en 1 clic ou par upload CSV. Les variables (prénom, ville, secteur) sont auto-mappées.' },
-  { icon: 'Settings', title: 'Configurez votre séquence', desc: 'Choisissez un template ou partez de zéro. Définissez les délais, l\'ordre email/SMS, les limites quotidiennes.' },
+  { icon: 'Settings', title: 'Configurez votre séquence', desc: 'Choisissez un template ou partez de zéro. Définissez les délais, les conditions de relance, l\'A/B test des objets et les limites quotidiennes.' },
   { icon: 'Zap', title: 'Lancez et suivez', desc: 'Les envois s\'enchaînent automatiquement. Stats live : taux d\'ouverture, clic, réponse. Vous arrêtez ou ajustez quand vous voulez.' },
 ];
 
 const FAQ = [
   {
     q: 'Pourquoi est-ce inclus dans Pro à 49 € alors que Lemlist seul coûte 39 € ?',
-    a: 'Trois choix techniques qui changent l\'équation économique : (1) on utilise Resend pour l\'email (acheminement à moitié prix vs Postmark/Sendgrid), (2) Twilio en pay-as-you-go (vs forfait fixe à 30 $/mois minimum), (3) on cible un volume réaliste pour des TPE/PME françaises (200 envois/jour max) au lieu des "unlimited" trompeurs qui finissent en blacklist. Résultat : on offre l\'équivalent de Lemlist + Instantly + un add-on SMS pour le prix d\'un seul concurrent — et le module Prospection est par-dessus.',
+    a: 'Trois choix techniques qui changent l\'équation économique : (1) on utilise Resend pour l\'email (acheminement à moitié prix vs Postmark/Sendgrid), (2) un warmup intelligent mutualisé qui réduit le coût d\'IP/de domaine vs un setup individuel, (3) une architecture multi-tenant Volia qui amortit l\'infra entre tous les comptes au lieu d\'un fixed cost par client. Résultat : on offre l\'équivalent de Lemlist + Instantly + Smartlead pour le prix d\'un seul concurrent — et le module Prospection est par-dessus.',
   },
   {
     q: 'Quels sont les quotas d\'envoi ?',
-    a: 'Les quotas dépendent de votre plan et de votre warm-up : 10 emails/jour la première semaine (warm-up), 30/jour la 2e semaine, jusqu\'à 200/jour à partir du mois 2 si votre délivrabilité reste propre (taux de bounce <2 %, plaintes <0.1 %). Pour le SMS : pas de quota strict mais facturation à l\'usage (Twilio ~0,08 €/SMS France).',
+    a: 'Les quotas dépendent de votre plan et de votre warm-up : 10 emails/jour la première semaine (warm-up), 30/jour la 2e semaine, jusqu\'à 200/jour à partir du mois 2 si votre délivrabilité reste propre (taux de bounce <2 %, plaintes <0.1 %). Le warmup est entièrement automatique : vous n\'avez rien à configurer, Volia gère la montée en charge progressive sur 28 jours.',
+  },
+  {
+    q: 'Vous prévoyez SMS multi-canal ?',
+    a: 'Oui, le module SMS via Twilio arrive en Q3 2026. La phase 1 se concentre sur l\'email pour atteindre une deliverability irréprochable. Les comptes Business auront accès en preview.',
   },
   {
     q: 'Comment vous gérez la délivrabilité ?',
@@ -508,7 +520,7 @@ const FAQ = [
   },
   {
     q: 'Combien de séquences en parallèle ?',
-    a: 'Plan Pro : 5 séquences actives. Plan Business : 25 séquences. Au-delà, contactez-nous pour un quota custom. Chaque séquence peut contenir jusqu\'à 10 étapes (email + SMS mixés) et autant de prospects que votre quota d\'envoi le permet.',
+    a: 'Plan Pro : 5 séquences actives. Plan Business : 25 séquences. Au-delà, contactez-nous pour un quota custom. Chaque séquence peut contenir jusqu\'à 10 étapes email (intro + relances + stop ou reconnect) et autant de prospects que votre quota d\'envoi le permet.',
   },
 ];
 
@@ -525,7 +537,7 @@ const product = {
   '@context': 'https://schema.org',
   ...productSchema({
     name: 'Volia Campagnes',
-    description: 'Séquences email cold + SMS automatisées, templates par secteur, opt-out RGPD unifié. 62 % taux ouverture moyen. Inclus dans Pro (49 €) et Business (99 €).',
+    description: 'Séquences email B2B automatisées, warmup domaine auto, templates par secteur, tracking ouverture/clic temps réel, opt-out RGPD unifié. 62 % taux ouverture moyen. Inclus dans Pro (49 €) et Business (99 €).',
     url: PAGE_URL,
     priceFrom: 49,
   }),
@@ -546,7 +558,7 @@ export default function CampagnesProductPage() {
           h1After: 'inclus dans Pro.',
           subtitle: (
             <>
-              Stop le bazar à 3 outils. Email cold + SMS Twilio + templates par secteur,{' '}
+              Stop le bazar à 3 outils. Séquences email automatisées + warmup auto + templates par secteur,{' '}
               <strong className="text-content-primary font-semibold">tout dans la même plateforme que vos prospects Volia</strong>.{' '}
               <strong className="text-emerald-700 font-semibold">62 % de taux d&apos;ouverture moyen</strong> sur la beta.
             </>
@@ -555,7 +567,7 @@ export default function CampagnesProductPage() {
           ctaSecondary: { label: 'Voir les tarifs', href: '/#pricing' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Inclus dans Pro &amp; Business</>),
-            'Email + SMS natifs',
+            'Warmup domaine automatique',
             'Opt-out RGPD automatique',
           ],
           mockup: <HeroMockup />,

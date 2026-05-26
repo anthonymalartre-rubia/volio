@@ -8,6 +8,7 @@ import {
   Mail, Phone, AlertCircle, MessageSquare,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
+import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 
 export default function ProspectionHubPage() {
   const router = useRouter();
@@ -89,7 +90,7 @@ export default function ProspectionHubPage() {
               Prospection — Listes de contacts
             </h1>
             <p className="text-sm text-content-secondary mt-1">
-              Importez vos listes (CSV) puis lancez des campagnes email / SMS multi-canal.
+              Importez vos listes (CSV) puis lancez des campagnes email automatisées.
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -100,13 +101,15 @@ export default function ProspectionHubPage() {
               <Mail size={14} />
               Campagnes email
             </Link>
-            <Link
-              href="/admin/prospection/sms"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-line hover:bg-surface-elevated text-content-secondary hover:text-content-primary text-sm font-semibold transition"
-            >
-              <MessageSquare size={14} />
-              Campagnes SMS
-            </Link>
+            {SMS_CAMPAIGNS_ENABLED && (
+              <Link
+                href="/admin/prospection/sms"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-line hover:bg-surface-elevated text-content-secondary hover:text-content-primary text-sm font-semibold transition"
+              >
+                <MessageSquare size={14} />
+                Campagnes SMS
+              </Link>
+            )}
             <button
               onClick={() => setShowCreate((s) => !s)}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"

@@ -15,6 +15,7 @@ import { useI18n } from '@/lib/i18n';
 import ApiKeysManager from '@/components/ApiKeysManager';
 import { Key, Phone } from 'lucide-react';
 import Link from 'next/link';
+import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 
 // ─── Composants UI réutilisables (refonte settings UX) ──────────────────
 function SectionHeader({ icon, title, subtitle }) {
@@ -964,26 +965,28 @@ export default function SettingsPage() {
                 <a href="/api" className="text-violet-400 hover:underline">📖 Documentation complète de l&apos;API v1 →</a>
               </div>
 
-              {/* Numéros SMS d'envoi (sous-page dédiée) */}
-              <div className="mt-4">
-                <Link
-                  href="/settings/sms-senders"
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-line bg-surface-card p-5 hover:border-violet-500/40 hover:bg-violet-500/[0.02] transition group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-violet-500/10 group-hover:bg-violet-500/20 transition">
-                      <Phone className="h-4 w-4 text-violet-500" />
+              {/* Numéros SMS d'envoi — masqué tant que SMS_CAMPAIGNS_ENABLED=false */}
+              {SMS_CAMPAIGNS_ENABLED && (
+                <div className="mt-4">
+                  <Link
+                    href="/settings/sms-senders"
+                    className="flex items-center justify-between gap-4 rounded-2xl border border-line bg-surface-card p-5 hover:border-violet-500/40 hover:bg-violet-500/[0.02] transition group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-violet-500/10 group-hover:bg-violet-500/20 transition">
+                        <Phone className="h-4 w-4 text-violet-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-content-primary">Numéros SMS d&apos;envoi</p>
+                        <p className="text-xs text-content-tertiary mt-0.5">
+                          Connectez un numéro Twilio (Volia ou BYO) pour lancer des campagnes SMS.
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-content-primary">Numéros SMS d&apos;envoi</p>
-                      <p className="text-xs text-content-tertiary mt-0.5">
-                        Connectez un numéro Twilio (Volia ou BYO) pour lancer des campagnes SMS.
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-content-tertiary group-hover:text-violet-500 transition" />
-                </Link>
-              </div>
+                    <ChevronRight className="h-4 w-4 text-content-tertiary group-hover:text-violet-500 transition" />
+                  </Link>
+                </div>
+              )}
             </section>
 
             {/* ─── Domaines d'envoi email ─────────────────────── */}
