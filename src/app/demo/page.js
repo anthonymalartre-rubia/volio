@@ -1,14 +1,15 @@
 // ─────────────────────────────────────────────────────────────────────
-// /demo — Page dédiée booking démo (Cal.com embed inline)
+// /demo — Page dédiée booking démo (Google Calendar appointments)
 // ─────────────────────────────────────────────────────────────────────
 // Public landing for booking a 15-min discovery call with Anthony,
-// founder of Volia. iframe Cal.com inline (le seul endroit où on charge
-// l'embed, partout ailleurs c'est juste un lien sortant via BookDemoButton).
+// founder of Volia. Google Calendar appointments ne propose pas d'embed
+// iframe officiel : on présente un gros CTA visuel qui ouvre le booking
+// dans un nouvel onglet (parité fonctionnelle avec /demo Cal.com d'avant).
 // ─────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
 import {
-  Check, ShieldCheck, Clock, Wallet, Users as UsersIcon,
+  Check, ShieldCheck, Clock, Wallet, Users as UsersIcon, CalendarCheck,
 } from 'lucide-react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
@@ -16,11 +17,9 @@ import ReaderFooter from '@/components/ReaderFooter';
 const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/demo`;
 
-const CAL_USERNAME = process.env.NEXT_PUBLIC_CAL_USERNAME || 'anthony-malartre';
-const CAL_EVENT_TYPE = process.env.NEXT_PUBLIC_CAL_EVENT_TYPE || '15min';
-// utm_source=volia&utm_medium=embed permet de séparer les bookings issus
-// de /demo (embed inline) vs ceux issus des CTAs sortants (utm_medium=cta).
-const CAL_EMBED_URL = `https://cal.com/${CAL_USERNAME}/${CAL_EVENT_TYPE}?embed=true&utm_source=volia&utm_medium=embed&utm_campaign=demo_page`;
+const BOOKING_URL =
+  process.env.NEXT_PUBLIC_BOOKING_URL ||
+  'https://calendar.app.google/AN4reEL1poDB6KmW8';
 
 export const metadata = {
   title: 'Réserver une démo Volia — 15 min avec Anthony, founder',
@@ -143,30 +142,41 @@ export default function DemoPage() {
             </div>
           </section>
 
-          {/* ─── EMBED CAL.COM ─────────────────────────────── */}
-          <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-20">
-            <div className="rounded-3xl border border-line bg-surface-card shadow-2xl shadow-violet-500/10 overflow-hidden">
-              <iframe
-                src={CAL_EMBED_URL}
-                title="Réserver une démo Volia avec Anthony"
-                width="100%"
-                height="720"
-                loading="lazy"
-                style={{ border: 0, display: 'block', minHeight: 720 }}
-                allow="camera; microphone; autoplay; encrypted-media; fullscreen"
-              />
+          {/* ─── CTA BOOKING GOOGLE CALENDAR ───────────────── */}
+          <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20">
+            <div className="relative rounded-3xl border border-line bg-gradient-to-br from-violet-50 to-indigo-50 shadow-2xl shadow-violet-500/10 overflow-hidden p-8 sm:p-12 text-center">
+              <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-violet-500/10 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+
+              <div className="relative">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white mb-5 shadow-xl shadow-violet-500/30">
+                  <CalendarCheck size={28} />
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-content-primary mb-3">
+                  Choisissez votre créneau
+                </h2>
+                <p className="text-content-secondary text-base mb-7 max-w-md mx-auto">
+                  Le calendrier s&apos;ouvre dans un nouvel onglet. Sélectionnez
+                  l&apos;horaire qui vous va, recevez la confirmation par email.
+                </p>
+
+                <a
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-base shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40 transition-all"
+                  data-cta="book-demo"
+                  data-cta-source="demo_page_main"
+                >
+                  <CalendarCheck size={18} />
+                  Voir les créneaux disponibles
+                </a>
+
+                <p className="mt-5 text-xs text-content-tertiary">
+                  Propulsé par Google Calendar · Gratuit, 15 minutes
+                </p>
+              </div>
             </div>
-            <p className="mt-4 text-center text-xs text-content-tertiary">
-              Si le calendrier ne s&apos;affiche pas,{' '}
-              <a
-                href={`https://cal.com/${CAL_USERNAME}/${CAL_EVENT_TYPE}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-violet-600 hover:underline font-medium"
-              >
-                ouvrez directement Cal.com ici
-              </a>.
-            </p>
           </section>
 
           {/* ─── CE QU'ON COUVRE ──────────────────────────── */}

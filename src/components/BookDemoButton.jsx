@@ -1,31 +1,33 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// BookDemoButton — CTA "Réserver 15 min de démo" vers Cal.com
+// BookDemoButton — CTA "Réserver 15 min de démo" vers Google Calendar
 // ─────────────────────────────────────────────────────────────────────
-// Lien direct vers la page Cal.com du founder Anthony (variant léger,
-// pas de script Cal.com chargé : on garde la landing rapide). Le tracking
-// UTM permet d'attribuer la source du booking (landing, pricing, vs/X…).
+// Lien direct vers la page de booking Google Calendar du founder Anthony.
+// On garde la landing rapide (pas de script externe). Le tracking se fait
+// via Vercel Analytics (custom event book_demo_clicked + source) — Google
+// Calendar appointments ne propage pas les query params, donc pas d'UTM.
 //
 // Variants : primary | secondary | ghost | dark
 // Sizes    : sm | md | lg
 //
-// Override le slug Cal.com via env vars NEXT_PUBLIC_CAL_USERNAME +
-// NEXT_PUBLIC_CAL_EVENT_TYPE (fallback : anthony-malartre/15min).
+// Override le lien via env var NEXT_PUBLIC_BOOKING_URL
+// (fallback : Google Calendar Anthony).
 // ─────────────────────────────────────────────────────────────────────
 
 import { CalendarCheck } from 'lucide-react';
 
-const CAL_USERNAME = process.env.NEXT_PUBLIC_CAL_USERNAME || 'anthony-malartre';
-const CAL_EVENT_TYPE = process.env.NEXT_PUBLIC_CAL_EVENT_TYPE || '15min';
+const BOOKING_URL =
+  process.env.NEXT_PUBLIC_BOOKING_URL ||
+  'https://calendar.app.google/AN4reEL1poDB6KmW8';
 
 /**
- * Construit l'URL Cal.com avec tracking UTM (source du clic).
- * Exposé pour réutilisation par /demo (iframe embed inline).
+ * Retourne l'URL de booking. Le source est passé pour le tracking Vercel
+ * Analytics côté onClick (les query params ne fonctionnent pas avec les
+ * URLs courtes calendar.app.google).
  */
-export function getCalUrl(source = 'unknown') {
-  const safeSource = String(source).replace(/[^a-z0-9_-]/gi, '_');
-  return `https://cal.com/${CAL_USERNAME}/${CAL_EVENT_TYPE}?utm_source=volia&utm_medium=cta&utm_campaign=${safeSource}`;
+export function getCalUrl(_source = 'unknown') {
+  return BOOKING_URL;
 }
 
 const VARIANT_STYLES = {

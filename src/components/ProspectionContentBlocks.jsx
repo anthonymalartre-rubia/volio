@@ -843,7 +843,7 @@ export function DemoCtaBlock({ category }) {
           </div>
           <div className="flex flex-col gap-2">
             <Link
-              href="https://cal.com/anthony-malartre/demo-volia"
+              href="https://calendar.app.google/AN4reEL1poDB6KmW8"
               target="_blank"
               rel="noopener"
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold transition shadow-lg shadow-violet-500/20"

@@ -40,7 +40,7 @@ export default function DocsContactFooter() {
         </a>
 
         <a
-          href="https://cal.com/volia/support"
+          href="https://calendar.app.google/AN4reEL1poDB6KmW8"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 p-4 rounded-xl border border-line bg-surface-base hover:border-violet-500/40 hover:bg-surface-elevated transition group"
