@@ -48,6 +48,25 @@ const nextConfig = {
       "upgrade-insecure-requests",
     ].join('; ');
 
+    // CSP spécifique aux forms publics (Volia Forms /f/*) :
+    // - frame-ancestors * → permet l'embed iframe cross-origin (mode embed)
+    // - On garde le reste de la CSP pour éviter les XSS dans le renderer.
+    // - X-Frame-Options DENY est volontairement omis ici (sinon les
+    //   navigateurs respectent X-Frame-Options par-dessus frame-ancestors).
+    const cspForms = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' data: https://fonts.gstatic.com",
+      "img-src 'self' data: blob: https:",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+      "frame-src 'self' https://www.google.com",
+      "frame-ancestors *",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+    ].join('; ');
+
     return [
       {
         source: '/(.*)',
@@ -58,6 +77,16 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(self "https://js.stripe.com")' },
           { key: 'Content-Security-Policy', value: csp },
+        ],
+      },
+      {
+        // Forms publics — override CSP pour autoriser embed iframe cross-origin.
+        // Cette règle est plus spécifique → Next.js merge/override les headers.
+        source: '/f/:slug*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Content-Security-Policy', value: cspForms },
         ],
       },
       {

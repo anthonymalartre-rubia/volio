@@ -112,6 +112,7 @@ export async function middleware(request) {
     pathname.startsWith('/confidentialite') ||
     pathname.startsWith('/rgpd') ||
     pathname.startsWith('/opt-out') ||
+    pathname.startsWith('/f/') ||             // Volia Forms — renderer public (/f/[slug]) + embed
     pathname.startsWith('/prospection') ||  // FR (matche aussi /prospection-be et /prospection-ch grâce au startsWith)
     pathname.startsWith('/pour') ||           // Pages personas
     pathname.startsWith('/parrainage') ||     // Programme parrainage (a son propre auth check côté client)

@@ -11,7 +11,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, FileText, Sparkles, Loader2 } from 'lucide-react';
+import { ArrowLeft, FileText, Sparkles, Loader2, Settings, Inbox, ExternalLink } from 'lucide-react';
 
 export default function FormBuilderPlaceholderPage() {
   const { id } = useParams();
@@ -78,6 +78,31 @@ export default function FormBuilderPlaceholderPage() {
             <p className="mt-2 text-[11px] text-content-faint">
               Slug : <code className="px-1.5 py-0.5 rounded bg-surface-card">/f/{form.slug}</code>
             </p>
+
+            {/* Quick actions Sprint F2 */}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <Link
+                href={`/admin/forms/${form.id}/responses`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+              >
+                <Inbox size={13} /> Réponses ({form.submission_count || 0})
+              </Link>
+              <Link
+                href={`/admin/forms/${form.id}/settings`}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+              >
+                <Settings size={13} /> Réglages
+              </Link>
+              {form.status === 'published' && (
+                <Link
+                  href={`/f/${form.slug}`}
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-100 hover:bg-pink-200 text-pink-700 text-xs font-medium transition-colors"
+                >
+                  <ExternalLink size={13} /> Aperçu /f/{form.slug}
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Placeholder builder */}
