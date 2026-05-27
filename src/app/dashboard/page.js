@@ -19,6 +19,7 @@ const ReviewSolicitationBanner = lazy(() => import('@/components/ReviewSolicitat
 const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgroundDecor'));
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 
 // Lazy load panels — only loaded when navigated to
 const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
@@ -685,6 +686,9 @@ export default function Dashboard() {
           setSearchProgress((prev) => addLog(prev, `API error (${response.status}): ${data.error || 'Unknown'}`));
           continue;
         }
+
+        // Achievement toast (first_search) — best-effort, no-op si pas d'achievement
+        maybeShowAchievement(data);
 
         const placesCount = data.places?.length || 0;
         setSearchProgress((prev) => addLog(prev, `→ ${placesCount} résultats trouvés`));
