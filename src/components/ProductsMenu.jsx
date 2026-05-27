@@ -125,11 +125,38 @@ const ACCENT_STYLES = {
 export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const closeTimerRef = useRef(null);
   const isEn = locale === 'en';
   const products = isEn ? PRODUCTS_EN : PRODUCTS_FR;
   const basePath = isEn ? '/en/products' : '/produits';
   const seeAllLabel = isEn ? 'See pricing' : 'Voir les tarifs';
   const seeAllHref = isEn ? '/en/pricing' : '/pricing';
+
+  // Annule un timer de fermeture en attente
+  const cancelClose = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const handleMouseEnter = () => {
+    cancelClose();
+    setOpen(true);
+  };
+
+  // Délai 150ms avant fermeture → gère les micro-mouvements souris
+  // (ex: traverser le gap entre bouton et dropdown items)
+  const handleMouseLeave = () => {
+    cancelClose();
+    closeTimerRef.current = setTimeout(() => {
+      setOpen(false);
+      closeTimerRef.current = null;
+    }, 150);
+  };
+
+  // Cleanup timer au unmount
+  useEffect(() => () => cancelClose(), []);
 
   // Click outside fermeture
   useEffect(() => {
@@ -154,8 +181,8 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
     <div
       ref={wrapperRef}
       className="relative"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
         type="button"
@@ -171,12 +198,18 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
         />
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown — wrapper avec pt-2 invisible qui BRIDGE le gap entre
+          le bouton et la card visible. La souris ne quitte jamais la zone
+          hoverable du wrapper. Combiné au délai 150ms, le menu est stable. */}
       {open && (
         <div
-          role="menu"
-          className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 sm:w-96 rounded-2xl border border-line bg-surface-base/95 backdrop-blur-xl shadow-2xl shadow-violet-500/10 overflow-hidden z-50 animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
+          onMouseEnter={cancelClose}
         >
+          <div
+            role="menu"
+            className="w-80 sm:w-96 rounded-2xl border border-line bg-surface-base/95 backdrop-blur-xl shadow-2xl shadow-violet-500/10 overflow-hidden relative"
+          >
           {/* Hint gradient */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent pointer-events-none" />
 
@@ -229,6 +262,7 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
               <span>{seeAllLabel}</span>
               <span aria-hidden="true">→</span>
             </Link>
+          </div>
           </div>
         </div>
       )}
