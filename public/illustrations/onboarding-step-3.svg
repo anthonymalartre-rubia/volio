@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+  <!-- Step 3 : on y va — rocket / launch -->
+  <defs>
+    <linearGradient id="rocketFlame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#EF4444" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+  <!-- Trail au sol -->
+  <ellipse cx="160" cy="200" rx="60" ry="4" fill="#7C3AED" fill-opacity="0.15"/>
+  <!-- Flames -->
+  <path d="M 142 168 Q 160 200 178 168 Q 170 155 160 158 Q 150 155 142 168 Z" fill="url(#rocketFlame)"/>
+  <!-- Body rocket -->
+  <g transform="translate(160,40)">
+    <path d="M 0 0 Q 18 12 18 60 L 18 130 L -18 130 L -18 60 Q -18 12 0 0 Z" fill="#7C3AED"/>
+    <path d="M 0 0 Q 18 12 18 60 L 18 130 L 0 130 Z" fill="#6366F1" fill-opacity="0.3"/>
+    <!-- Window -->
+    <circle cx="0" cy="48" r="9" fill="#fff" stroke="#fff" stroke-width="1.2"/>
+    <circle cx="0" cy="48" r="6" fill="#a78bfa"/>
+    <!-- Fins -->
+    <path d="M -18 100 L -32 130 L -18 130 Z" fill="#6366F1"/>
+    <path d="M 18 100 L 32 130 L 18 130 Z" fill="#6366F1"/>
+  </g>
+  <!-- Stars -->
+  <circle cx="60" cy="50" r="1.6" fill="#a78bfa"/>
+  <circle cx="270" cy="80" r="1.6" fill="#7C3AED"/>
+  <circle cx="40" cy="100" r="1.2" fill="#6366F1"/>
+  <circle cx="280" cy="140" r="1.2" fill="#a78bfa"/>
+</svg>

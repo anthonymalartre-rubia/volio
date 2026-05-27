@@ -11,13 +11,18 @@
 // - highlighted : ring violet + gradient accent (pricing featured)
 // - interactive : hover scale + cursor pointer (cards cliquables)
 
+// Brand Sprint 2 — micro-animation : hover violet/30 border + shadow violet/5
+// subtle sur toutes les cards (transition 200ms). 'interactive' garde son
+// scale subtle en plus.
 const VARIANTS = {
-  default: 'bg-surface-card border border-line',
-  marketing: 'bg-surface-elevated/40 border border-line',
+  default:
+    'bg-surface-card border border-line transition-all duration-200 hover:border-violet-500/30 hover:shadow-md hover:shadow-violet-500/5',
+  marketing:
+    'bg-surface-elevated/40 border border-line transition-all duration-200 hover:border-violet-500/30 hover:shadow-md hover:shadow-violet-500/5',
   highlighted:
-    'bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] border-2 border-violet-500/30',
+    'bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] border-2 border-violet-500/30 transition-all duration-200 hover:shadow-lg hover:shadow-violet-500/10',
   interactive:
-    'bg-surface-card border border-line hover:border-violet-500/40 hover:bg-surface-elevated cursor-pointer transition-all duration-150',
+    'bg-surface-card border border-line hover:border-violet-500/40 hover:bg-surface-elevated hover:shadow-md hover:shadow-violet-500/5 cursor-pointer transition-all duration-200',
 };
 
 const SIZES = {

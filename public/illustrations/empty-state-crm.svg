@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+  <!-- Pipeline kanban vide avec flèche qui pointe -->
+  <!-- 4 colonnes -->
+  <g>
+    <rect x="20" y="40" width="60" height="150" rx="8" fill="#fff" stroke="#e4e4e7" stroke-width="1.2"/>
+    <rect x="20" y="40" width="60" height="22" rx="8" fill="#7C3AED" fill-opacity="0.10"/>
+    <rect x="28" y="48" width="20" height="6" rx="2" fill="#7C3AED" fill-opacity="0.6"/>
+
+    <rect x="90" y="40" width="60" height="150" rx="8" fill="#fff" stroke="#e4e4e7" stroke-width="1.2"/>
+    <rect x="90" y="40" width="60" height="22" rx="8" fill="#6366F1" fill-opacity="0.10"/>
+    <rect x="98" y="48" width="20" height="6" rx="2" fill="#6366F1" fill-opacity="0.6"/>
+
+    <rect x="160" y="40" width="60" height="150" rx="8" fill="#fff" stroke="#e4e4e7" stroke-width="1.2"/>
+    <rect x="160" y="40" width="60" height="22" rx="8" fill="#a78bfa" fill-opacity="0.10"/>
+    <rect x="168" y="48" width="20" height="6" rx="2" fill="#a78bfa" fill-opacity="0.6"/>
+
+    <rect x="230" y="40" width="60" height="150" rx="8" fill="#fff" stroke="#e4e4e7" stroke-width="1.2"/>
+    <rect x="230" y="40" width="60" height="22" rx="8" fill="#10B981" fill-opacity="0.10"/>
+    <rect x="238" y="48" width="20" height="6" rx="2" fill="#10B981" fill-opacity="0.6"/>
+  </g>
+  <!-- Carte deal (1 seule, dans la 1ère colonne, placeholder dashed) -->
+  <rect x="28" y="76" width="44" height="32" rx="6" fill="#fff" stroke="#7C3AED" stroke-width="1.4" stroke-dasharray="3 3"/>
+  <!-- Flèche violette qui invite à ajouter -->
+  <path d="M 50 120 L 50 145 M 44 139 L 50 145 L 56 139" stroke="#7C3AED" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="155" r="4" fill="#7C3AED"/>
+</svg>

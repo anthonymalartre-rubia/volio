@@ -6,6 +6,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // Body — Inter (utilitaire, lisibilité absolue)
+        sans: ['var(--font-inter)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        // Headlines marketing — Fraunces (Brand Sprint 2, alternative à Recoleta)
+        display: ['var(--font-display)', 'Fraunces', 'Recoleta', 'Charter', 'Georgia', 'serif'],
+        // Code / data
+        mono: ['var(--font-mono)', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
       colors: {
         // Semantic surface colors (backgrounds)
         surface: {

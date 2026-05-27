@@ -175,7 +175,7 @@ export default function LandingContent() {
               </div>
 
               {/* H1 MASSIVE — Trouvez. Contactez. Convertissez. — 3 modules en un seul claim */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tight leading-[1.02] mb-6">
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tight leading-[1.02] mb-6">
                 <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouvez.</span>{' '}
                 <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Contactez.</span>{' '}
                 <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent">Convertissez.</span>
@@ -400,7 +400,7 @@ export default function LandingContent() {
               <Sparkles size={12} />
               ESSAYEZ EN DIRECT
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-content-primary mb-2">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-2">
               Trouvez vos premiers prospects en 10 secondes
             </h2>
             <p className="text-content-tertiary">Aucune inscription requise.</p>
@@ -424,7 +424,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La suite Volia</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 4 modules connectés pour automatiser votre growth B2B
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
@@ -583,7 +583,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wider">Comparatif Stack</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 1 outil au prix d&apos;1. Pas de 3 outils au prix de 3.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
@@ -721,7 +721,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Workflows croisés</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 Les 3 modules se parlent. Vous, vous arrêtez de copier-coller.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
@@ -887,7 +887,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-16">
               <p className="text-sm font-semibold text-violet-600 mb-3">{t('landing.why.label')}</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 {t('landing.why.title')}
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.desc') }} />
@@ -936,7 +936,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-16">
               <p className="text-sm font-semibold text-violet-600 mb-3">{t('landing.features.label')}</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 {t('landing.features.title')}
               </h2>
               <p className="text-content-tertiary text-lg max-w-xl mx-auto">
@@ -1038,7 +1038,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-20">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.howItWorks.label')}</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 {t('landing.howItWorks.title')}
               </h2>
               <p className="text-content-tertiary text-lg max-w-xl mx-auto">
@@ -1107,7 +1107,7 @@ export default function LandingContent() {
         <div className="max-w-5xl mx-auto">
           <div className="mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.waterfall.label')}</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 max-w-lg" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.title') }} />
+            <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4 max-w-lg" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.title') }} />
             <p className="text-content-tertiary text-lg max-w-xl" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.desc') }} />
           </div>
 
@@ -1168,7 +1168,7 @@ export default function LandingContent() {
                 <Shield size={12} />
                 Enterprise
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
                 {t('landing.emailVerif.title')}
               </h2>
               <p className="text-content-secondary text-lg mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.emailVerif.desc') }} />
@@ -1284,7 +1284,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-16">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.competition.label')}</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 {t('landing.competition.title')}
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.competition.desc') }} />
@@ -1416,7 +1416,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="text-center mb-12">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.pricing.label')}</p>
-              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 {t('landing.pricing.title')}
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto mb-6">
@@ -1590,7 +1590,7 @@ export default function LandingContent() {
             <span className="text-violet-700">Démarrage en 30 secondes</span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight tracking-tight">
             <span className="text-content-primary">{t('landing.cta.title')}</span>
           </h2>
           <p className="text-content-secondary text-lg sm:text-xl mb-3 max-w-xl mx-auto">
