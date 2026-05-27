@@ -123,10 +123,12 @@ export async function POST(request) {
 
       // Achievement : first_search (best-effort, ne JAMAIS bloquer la réponse)
       try {
-        const ach = await unlockAchievement(user.id, 'first_search', {
-          first_query: query,
-          first_dept: dept,
-        });
+        const ach = await unlockAchievement(
+          user.id,
+          'first_search',
+          { first_query: query, first_dept: dept },
+          { markToastShown: true } // toast affiché live côté dashboard
+        );
         if (ach?.newly_unlocked) achievement = ach.achievement;
       } catch (err) {
         console.warn('[achievement] unlock failed:', err.message);

@@ -118,11 +118,16 @@ export async function POST(request, { params }) {
 
     // Achievement : first_campaign_sent (best-effort)
     try {
-      const ach = await unlockAchievement(user.id, 'first_campaign_sent', {
-        campaign_id: id,
-        campaign_name: campaign.name,
-        recipient_count: totalQueued,
-      });
+      const ach = await unlockAchievement(
+        user.id,
+        'first_campaign_sent',
+        {
+          campaign_id: id,
+          campaign_name: campaign.name,
+          recipient_count: totalQueued,
+        },
+        { markToastShown: true } // toast affiché live côté page campaign send
+      );
       if (ach?.newly_unlocked) achievement = ach.achievement;
     } catch (err) {
       console.warn('[achievement] unlock failed:', err.message);

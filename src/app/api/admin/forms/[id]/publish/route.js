@@ -81,11 +81,16 @@ export async function POST(request, { params }) {
   // Achievement : first_form_created (best-effort)
   let achievement = null;
   try {
-    const ach = await unlockAchievement(user.id, 'first_form_created', {
-      form_id: data.id,
-      form_name: data.name,
-      slug: data.slug,
-    });
+    const ach = await unlockAchievement(
+      user.id,
+      'first_form_created',
+      {
+        form_id: data.id,
+        form_name: data.name,
+        slug: data.slug,
+      },
+      { markToastShown: true } // toast affiché live côté BuilderLayout publish
+    );
     if (ach?.newly_unlocked) achievement = ach.achievement;
   } catch (err) {
     console.warn('[achievement] unlock failed:', err.message);

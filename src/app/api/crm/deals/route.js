@@ -174,11 +174,16 @@ export async function POST(request) {
   // Achievement : first_crm_deal (best-effort)
   let achievement = null;
   try {
-    const ach = await unlockAchievement(user.id, 'first_crm_deal', {
-      deal_id: data.id,
-      deal_name: data.title,
-      stage: data.stage?.name || null,
-    });
+    const ach = await unlockAchievement(
+      user.id,
+      'first_crm_deal',
+      {
+        deal_id: data.id,
+        deal_name: data.title,
+        stage: data.stage?.name || null,
+      },
+      { markToastShown: true } // toast affiché live côté NewDealModal
+    );
     if (ach?.newly_unlocked) achievement = ach.achievement;
   } catch (err) {
     console.warn('[achievement] unlock failed:', err.message);
