@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+  <!-- Un V tordu / désaxé — humour visuel -->
+  <!-- Ombre au sol -->
+  <ellipse cx="160" cy="195" rx="60" ry="5" fill="rgba(0,0,0,0.12)"/>
+  <!-- V cassé : 2 morceaux désalignés -->
+  <g transform="translate(160,110)">
+    <!-- Aile gauche (légèrement tombée) -->
+    <g transform="rotate(8) translate(-2,4)">
+      <path d="M 0 -50 L -45 50 L 0 30 Z" fill="#7C3AED"/>
+      <path d="M 0 -50 L 0 30" stroke="rgba(255,255,255,0.55)" stroke-width="1.4" stroke-linecap="round"/>
+    </g>
+    <!-- Aile droite (encore plus désaxée) -->
+    <g transform="rotate(-22) translate(10,-2)">
+      <path d="M 0 -50 L 50 55 L 0 30 Z" fill="#6366F1"/>
+    </g>
+    <!-- Étincelles autour -->
+    <path d="M -60 -30 L -64 -34 M -64 -30 L -60 -34" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 65 -10 L 72 -10 M 68.5 -14 L 68.5 -6" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+  <!-- "404" en bas -->
+  <text x="160" y="180" text-anchor="middle" font-size="22" font-weight="800" fill="#4338CA" font-family="Inter, sans-serif" letter-spacing="2">404</text>
+</svg>

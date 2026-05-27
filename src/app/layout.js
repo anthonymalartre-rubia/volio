@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Fraunces } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/lib/theme';
 import { I18nProvider } from '@/lib/i18n';
@@ -16,6 +16,20 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
+});
+
+// Brand Sprint 2 — typo headline signature.
+// Choix : Fraunces (alternative open-source à Recoleta, dispo Google Fonts).
+// Serif moderne chaleureuse — sophistiquée mais friendly, parfaite pour un
+// SaaS qui veut sortir du sea-of-sans-serif tech. Inter reste sur le body.
+// Appliquée uniquement aux pages marketing (landing, produits, pricing),
+// l'app interne garde Inter pour la consistency utilitaire.
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  axes: ['SOFT', 'opsz'],
 });
 
 export const metadata = {
@@ -111,7 +125,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable} ${fraunces.variable}`} suppressHydrationWarning>
       <head>
         {/* Preconnect aux domaines tiers présents sur quasi toutes les pages.
             Note: Stripe (js.stripe.com, api.stripe.com) déplacé sur /settings
